@@ -4,25 +4,25 @@
 #define CSVELEMENT_H
 
 
-template<class T>
 class CSVElement
 {
 public:
-	using Type = T;
-	virtual T* DoCreate() = 0;
-	virtual void Test() = 0;
-	virtual ~CSVElement(){} 
+	virtual CSVElement* DoCreate() = 0;
+	virtual ~CSVElement(){}
+	
+	CSVElement(std::string s):stringValue(s), Value(s){};
+	const std::string Value;
 private:
-	String_ Value;
+	const String_ stringValue;
 };
 
-template<class ConcreteProduct>
+template<class ConcreteProduct, typename T = std::string>
 class CreateCSVElementNewPolicy
 {
 public:
-	static ConcreteProduct* DoCreate()
+	static ConcreteProduct* DoCreate(T param)
 	{
-		return new ConcreteProduct;
+		return new ConcreteProduct(param);
 	}
 };
 
@@ -30,52 +30,35 @@ public:
 //--------------------------------TYPES------------------------------------------------
 
 
-class Key: public virtual FactoryUnit<Key>
+class Key: public CSVElement
 {
 public:
-// 	FactoryUnit<Key>* DoCreate(){return this;};
+	Key(std::string s): CSVElement(s){};
 	Key* DoCreate(){return this;};
-	void Test(){ std::cout<<"KEY"<<std::endl; };
 };
 
-class Value: public virtual FactoryUnit<Value>
+class Value: public CSVElement
 {
 public:
+	Value(std::string s): CSVElement(s){};
 	Value* DoCreate(){return this;};
-	void Test(){ std::cout<<"VALUE"<<std::endl;};
 };
 
 //--------------------------------Factory------------------------------------------------
 
 
-template<class TList, template<class> class Unit = CSVElement, template<class> class CreatePolicy = CreateCSVElementNewPolicy>
+template<class TList, class Unit = CSVElement, template<class> class CreatePolicy = CreateCSVElementNewPolicy>
 class CSVElementFactory
 {
 public:
 	using ProductList = TList;
 	
-	template<class T> 
-	T* Create()
+	template<class Type, typename T = std::string> 
+	Unit* Create(T param)
 	{
-		Unit<T>* unit = CreatePolicy<T>::DoCreate();
+		Unit* unit = CreatePolicy<Type>::DoCreate(param);
 		return unit->DoCreate();
 	}
 };
-
-/*
-template<class TList, class Factory = CSVElementFactory<TList>, template<class,class> class Creator = CreateCSVElementNewPolicy>
-class ConcreteFactory
-{
-public:
-	using ProductList = TList;
-	
-	template<class T> 
-	T* Create()
-	{
-		Unit<T>* unit = new T();
-		return unit->DoCreate();
-	}	
-};*/
-
 
 #endif

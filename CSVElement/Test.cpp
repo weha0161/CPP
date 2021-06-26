@@ -5,19 +5,15 @@
 int main()
 {       
     std::cout<<"START"<<std::endl;
+	std::string test = "Test";
 	using Types = Typelist<Key,Value>;
-	AbstractFactory<Types> a;
-	Key* k = new Key();
-	Value* v = new Value();
+
+	CSVElementFactory<Types> a;
+
+	std::cout<<"Create Key"<<std::endl;
+	CSVElement* e = a.Create<Key>(test);
 	
- 	k->Test();
-	v->Test();
-	
-    std::cout<<"AbstractFactory"<<std::endl;
-	FactoryUnit<Key>* k2 = a.Create<Key>();
-	k2->Test();
-// 	k2::Type k3;
-	
+    std::cout<<"Key: "<<e->Value<<std::endl;
    
 	
     std::cout<<"END"<<std::endl;
