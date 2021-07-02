@@ -5,6 +5,7 @@
 #define CSVELEMENT_H
 
 
+//--------------------------------CSVElement------------------------------------------------
 class CSVElement
 {
 public:
@@ -18,6 +19,7 @@ private:
 	const String_ stringValue;
 };
 
+//--------------------------------CreateCSVElementNewPolicy------------------------------------------------
 template<class ConcreteProduct, typename T = std::string>
 class CreateCSVElementNewPolicy
 {
@@ -56,45 +58,36 @@ class CSVElementFactory
 {
 public:
 	using ProductList = TList;
-	typedef Unit* (*Creator)(T);
-// 	using Creator = Unit* (*)(T);
+	using Creator = Unit* (*)(T);
 	
 	CSVElementFactory()
 	{
-// 		Register(1, &Create<Key, std::string>);
 		IdentifierType id = 0;
-		associations_.insert(std::make_pair(id, &CreatePolicy<Key>::DoCreate));
-		
-// 		associations_[id] = &CreatePolicy<Key>::DoCreate;
+		Register(id, CreatePolicy<Key>::DoCreate);
+		id = 1;
+		Register(id, CreatePolicy<Value>::DoCreate);		
 	}
 	
-	bool Register(const IdentifierType& id,Creator creator)
+	bool Register(const IdentifierType& id, const Creator& creator)
 	{
-		return associations_.insert(id,creator).second;
+		return associations_.insert(std::make_pair(id,creator)).second;
 	}
 	
 	bool Unregister(const IdentifierType& id)
 	{
 		return associations_.erase(id) == 1;
 	}
-	
-	template<class Type> 
-	Unit* Create(T param)
-	{
-		Unit* unit = CreatePolicy<Type>::DoCreate(param);
-		return unit->DoCreate();
-	}
-	
+		
 	Unit* Create(const IdentifierType& id,T param)
 	{
-// 		typename AssocMap::const_iterator i = associations_.find(id);
-// 		
-// 		if(i != associations_.end)
-// 		{
-// 			return (id->second)(param);
-// 		}
+		typename AssocMap::const_iterator i = associations_.find(id);
 		
-			return (associations_.find(id)->second)(param);
+		if(i != associations_.end())
+		{
+			return (i->second)(param);
+		}
+		
+		return (associations_.find(id)->second)(param);
 	}
 	
 	

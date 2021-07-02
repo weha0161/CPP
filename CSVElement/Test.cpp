@@ -9,19 +9,21 @@ int main()
 	using Types = Typelist<Key,Value>;
 
 	CSVElementFactory<Types> a;
+	
+	auto p = a.Create(0,test);
+	auto p1 = a.Create(1,test);
 
-	std::cout<<"Create Key"<<std::endl;
-	CSVElement* e = a.Create<Key>(test);
-	CSVElement* e1 = a.Create<Value>(test);
+	std::cout<<"Pointer Test Key "<<p->Value<<std::endl;
+	p->Do();
+	std::cout<<"Pointer Test Value "<<p1->Value<<std::endl;
+	p1->Do();
 	
-// 	a.Register(1,  &Key::Create);
-    std::cout<<"Key: "<<e->Value<<std::endl;
-	e->Do();
-	e1->Do();
+	std::cout<<"Test Unregister Value "<<std::endl;
+	a.Unregister(1);
+// 	auto p2 = a.Create(1,test);
+// 	std::cout<<"Pointer Test Value "<<p2->Value<<std::endl;
+// 	p2->Do();
 	
-	auto p = a.Create(0,"TEST");
-    std::cout<<"Key2: "<<p->Value<<std::endl;
-   
 	
     std::cout<<"END"<<std::endl;
 
