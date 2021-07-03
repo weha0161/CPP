@@ -1,30 +1,30 @@
 #include "../String/String_.h"
 #include <map>
 
-#ifndef CSVELEMENT_H
-#define CSVELEMENT_H
+#ifndef CSV_H
+#define CSV_H
 
 
-//--------------------------------CSVElement------------------------------------------------
-class CSVElement
+//--------------------------------Element------------------------------------------------
+class Element
 {
 public:
-	virtual CSVElement* DoCreate() = 0;
+	virtual Element* DoCreate() = 0;
 	virtual void Do() = 0;
-	virtual ~CSVElement(){}
+	virtual ~Element(){}
 	
-	CSVElement(std::string s):stringValue(s), Value(s){};
+	Element(std::string s):stringValue(s), Value(s){};
 	const std::string Value;
 private:
 	const String_ stringValue;
 };
 
-//--------------------------------CreateCSVElementNewPolicy------------------------------------------------
+//--------------------------------CreateElementNewPolicy------------------------------------------------
 template<class ConcreteProduct, typename T = std::string>
-class CreateCSVElementNewPolicy
+class CreateElementNewPolicy
 {
 public:
-	static CSVElement* DoCreate(T param)
+	static Element* DoCreate(T param)
 	{
 		return new ConcreteProduct(param);
 	}
@@ -34,18 +34,18 @@ public:
 //--------------------------------TYPES------------------------------------------------
 
 
-class Key: public CSVElement
+class Key: public Element
 {
 public:
-	Key(std::string s): CSVElement(s){};
+	Key(std::string s): Element(s){};
 	Key* DoCreate(){return this;};
 	void Do(){ std::cout<<"Key"<<std::endl; };
 };
 
-class Value: public CSVElement
+class Value: public Element
 {
 public:
-	Value(std::string s): CSVElement(s){};
+	Value(std::string s): Element(s){};
 	Value* DoCreate(){return this;};
 	void Do(){ std::cout<<"Value"<<std::endl; };
 };
@@ -53,14 +53,14 @@ public:
 //--------------------------------Factory------------------------------------------------
 
 
-template<class TList, class Unit = CSVElement,typename T = std::string,class IdentifierType = int, template<class> class CreatePolicy = CreateCSVElementNewPolicy>
-class CSVElementFactory
+template<class TList, class Unit = Element,typename T = std::string,class IdentifierType = int, template<class> class CreatePolicy = CreateElementNewPolicy>
+class ElementFactory
 {
 public:
 	using ProductList = TList;
 	using Creator = Unit* (*)(T);
 	
-	CSVElementFactory()
+	ElementFactory()
 	{
 		IdentifierType id = 0;
 		Register(id, CreatePolicy<Key>::DoCreate);
