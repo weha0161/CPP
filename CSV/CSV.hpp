@@ -1,9 +1,11 @@
 #include "../String/String_.h"
+#include "../Logger/Logger.h"
+#include <boost/mpl/for_each.hpp>
+#include <boost/mpl/vector.hpp>
 #include <map>
 
 #ifndef CSV_H
 #define CSV_H
-
 
 //--------------------------------Element------------------------------------------------
 class Element
@@ -38,8 +40,9 @@ public:
 class Key: public Element
 {
 public:
-	inline static const std::string Identifier = "";
-	Key(std::string s): Element(s) {};
+	inline static const std::string Identifier = "Key";
+	Key(std::string s = ""): Element(s) {};
+// 	Key(std::string s): Element(s) {};
 	Key* DoCreate(){return this;};
 	void Do(){ std::cout<<"Key"<<std::endl; };
 };
@@ -47,8 +50,8 @@ public:
 class Value: public Element
 {
 public:
-	inline static const std::string Identifier = "";
-	Value(std::string s): Element(s){};
+	inline static const std::string Identifier = "Value";
+	Value(std::string s = ""): Element(s){};
 	Value* DoCreate(){return this;};
 	void Do(){ std::cout<<"Value"<<std::endl; };
 };
@@ -70,6 +73,8 @@ public:
 	void Do(){ std::cout<<"Value"<<std::endl; };
 };
 
+using Elements = boost::mpl::vector<Key, Value, Entry, Date>;
+
 class Item: public Element
 {
 public:
@@ -85,25 +90,42 @@ public:
 //--------------------------------Factory------------------------------------------------
 
 
-template<class TList, class Unit = Element,typename T = std::string,class IdentifierType = int, template<class> class CreatePolicy = CreateElementNewPolicy>
+template<class TList = Elements, class Unit = Element,typename T = std::string,class IdentifierType = std::string, template<class> class CreatePolicy = CreateElementNewPolicy>
 class ElementFactory
 {
-public:
 	using ProductList = TList;
 	using Creator = Unit* (*)(T);
 	
-	ElementFactory()
-	{
-		IdentifierType id = 0;
-		Register(id, CreatePolicy<Key>::DoCreate);
-		id = 1;
-		Register(id, CreatePolicy<Value>::DoCreate);		
-	}
+private:
+	using AssocMap = std::map<IdentifierType,Creator>;
+	inline static AssocMap associations_ = std::map<IdentifierType,Creator>();
 	
-	bool Register(const IdentifierType& id, const Creator& creator)
+	struct Register
+	{
+		template<class Type>
+		void operator()(Type) const
+		{
+			RegisterImpl(Type::Identifier, CreatePolicy<Type>::DoCreate);
+			Logger::Instance().Log<Debug>(std::string("Register: " + Type::Identifier));
+		};
+	};
+	
+	static bool RegisterImpl(const IdentifierType& id, const Creator& creator)
 	{
 		return associations_.insert(std::make_pair(id,creator)).second;
 	}
+	
+public:
+	ElementFactory()
+	{
+		/*IdentifierType id = 0;
+		Register(id, CreatePolicy<Key>::DoCreate);
+		id = 1;
+		Register(id, CreatePolicy<Value>::DoCreate);	*/	
+		
+		boost::mpl::for_each<ProductList>(Register());
+	}
+	
 	
 	bool Unregister(const IdentifierType& id)
 	{
@@ -121,31 +143,6 @@ public:
 		
 		return (associations_.find(id)->second)(param);
 	}
-	
-	
-private:
-	using AssocMap = std::map<IdentifierType,Creator>;
-	AssocMap associations_;
-	
-	
-// 	template<typename List>
-// 	Element* Get(const IdentifierType& id)
-// 	{
-// 		using Type = Front<List>;
-// 		
-// 		if(Type::ID == id)
-// 			return id;
-// 		
-// 		return Get<PopFront<List>>(id);
-// 	};
-// 	
-// 	template<typename List>
-// 	Element* Get<>(const IdentifierType& id)
-// 	{
-// 		if(Type::ID == id)
-// 			return id;
-// 		
-// 	}
 };
 
 #endif
