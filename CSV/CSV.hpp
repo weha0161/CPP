@@ -13,7 +13,6 @@ class Element
 public:
 	inline static const std::string Identifier = "";
 	virtual Element* DoCreate() = 0;
-	virtual void Do() = 0;
 	virtual ~Element(){}
 	
 	Element(std::string s):stringValue(s), Value(s) {};
@@ -23,6 +22,7 @@ private:
 };
 
 //--------------------------------CreateElementNewPolicy------------------------------------------------
+
 template<class ConcreteProduct, typename T = std::string>
 class CreateElementNewPolicy
 {
@@ -42,9 +42,7 @@ class Key: public Element
 public:
 	inline static const std::string Identifier = "Key";
 	Key(std::string s = ""): Element(s) {};
-// 	Key(std::string s): Element(s) {};
 	Key* DoCreate(){return this;};
-	void Do(){ std::cout<<"Key"<<std::endl; };
 };
 
 class Value: public Element
@@ -53,7 +51,6 @@ public:
 	inline static const std::string Identifier = "Value";
 	Value(std::string s = ""): Element(s){};
 	Value* DoCreate(){return this;};
-	void Do(){ std::cout<<"Value"<<std::endl; };
 };
 
 class Entry: public Element
@@ -62,7 +59,6 @@ public:
 	inline static const std::string Identifier = "";
 	Entry(std::string s): Element(s){};
 	Entry* DoCreate(){return this;};
-	void Do(){ std::cout<<"Value"<<std::endl; };
 };
 
 class Date: public Element
@@ -70,10 +66,8 @@ class Date: public Element
 public:
 	Date(std::string s): Element(s){};
 	Date* DoCreate(){return this;};
-	void Do(){ std::cout<<"Value"<<std::endl; };
 };
 
-using Elements = boost::mpl::vector<Key, Value, Entry, Date>;
 
 class Item: public Element
 {
@@ -82,13 +76,13 @@ public:
 	Key key;
 	Item(std::string s): Element(s), key(s){};
 	Item* DoCreate(){return this;};
-	void Do(){ std::cout<<"Value"<<std::endl; };
 };
 
 
 
 //--------------------------------Factory------------------------------------------------
 
+using Elements = boost::mpl::vector<Key, Value, Entry, Date>;
 
 template<class TList = Elements, class Unit = Element,typename T = std::string,class IdentifierType = std::string, template<class> class CreatePolicy = CreateElementNewPolicy>
 class ElementFactory
@@ -117,12 +111,7 @@ private:
 	
 public:
 	ElementFactory()
-	{
-		/*IdentifierType id = 0;
-		Register(id, CreatePolicy<Key>::DoCreate);
-		id = 1;
-		Register(id, CreatePolicy<Value>::DoCreate);	*/	
-		
+	{		
 		boost::mpl::for_each<ProductList>(Register());
 	}
 	

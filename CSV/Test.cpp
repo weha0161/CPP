@@ -17,9 +17,7 @@ int main()
 	auto pv = a.Create("Value",test);
 
 	std::cout<<"Pointer Test Key "<<pk->Value<<std::endl;
-	pk->Do();
 	std::cout<<"Pointer Test Value "<<pv->Value<<std::endl;
-	pv->Do();
 	
 	std::cout<<"Test Unregister Value "<<std::endl;
 	
