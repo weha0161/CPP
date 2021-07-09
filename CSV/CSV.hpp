@@ -56,7 +56,7 @@ public:
 class Entry: public Element
 {
 public:
-	inline static const std::string Identifier = "";
+	inline static const std::string Identifier = "Entry";
 	Entry(std::string s): Element(s){};
 	Entry* DoCreate(){return this;};
 };
@@ -64,6 +64,7 @@ public:
 class Date: public Element
 {
 public:
+	inline static const std::string Identifier = "Date";
 	Date(std::string s): Element(s){};
 	Date* DoCreate(){return this;};
 };
@@ -72,7 +73,7 @@ public:
 class Item: public Element
 {
 public:
-	inline static const std::string Identifier = "";
+	inline static const std::string Identifier = "Item";
 	Key key;
 	Item(std::string s): Element(s), key(s){};
 	Item* DoCreate(){return this;};
