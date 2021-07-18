@@ -16,18 +16,78 @@ struct FORMAT_NON_ZERO
 	using Type = T::TrueType;
 };
 
-//--------------------------------BoundsChecker------------------------------------------------
+//--------------------------------Array------------------------------------------------
+
+template<class Generator>
+class Array 
+{
+public:
+	using Config = Array::Config;
+	using IndexType = Config::IndexType;
+	using ElementType = Config::ElementType;
+	using Container = Config::Container;
+
+protected:
+	IndexType row, col;
+	Container* elements;
+	Container* rows;
+
+public:
+	Array(const IndexType& row, const IndexType& col): row(row), col( col) 
+	{ 
+		assert(row > 0);
+		assert(col > 0);
+		elements = new Container();
+	}
+	
+	~Array()
+	{
+		delete elements;
+		delete rows;
+	}
+	
+	const IndexType& Rows() const { return row; }
+	const IndexType& Cols() const { return col; }
+	
+	void Set(const IndexType& i, const IndexType& j, const ElementType& v)
+	{
+		checkBounds(i, j);
+	}
+	
+	ElementType Get(const IndexType& i, const IndexType& j) const 
+	{
+		checkBounds(i, j);
+		return elements->ElementAt(i);
+	}
+	
+	void InitElements(const ElementType& v){}
+};
+
+//--------------------------------Format------------------------------------------------
 
 template<class Array>
 class ArrayFormat 
 {
-private:
-	Array elemnts_;
+	
 public:
 	using Config = Array::Config;
 	using IndexType = Config::IndexType;
 	using ElementType = Config::ElementType;
 	using MatrixType = Config::MatrixType;
+private:
+	Array elemnts_;
+	
+protected:
+	void checkBounds(const IndexType& i, const IndexType& j) const
+	{
+		assert(i < rows());
+		assert(j < cols());
+	}
+	
+	bool nonZero(const IndexType& i, const IndexType& j) const
+	{
+		return FORMAT_NON_ZERO<MatrixType>::Type::Value;
+	}
 	
 	ArrayFormat(const IndexType& rows, const IndexType& cols): elemnts_(rows, cols) { }
 	
@@ -48,18 +108,6 @@ public:
 	}
 	
 	void InitElements(const ElementType& v){elemnts_.InitElements(v);}
-	
-protected:
-	void checkBounds(const IndexType& i, const IndexType& j) const
-	{
-		assert(i < rows());
-		assert(j < cols());
-	}
-	
-	bool nonZero(const IndexType& i, const IndexType& j) const
-	{
-		return FORMAT_NON_ZERO<MatrixType>::Type::Value;
-	}
 };
 
 //--------------------------------BoundsChecker------------------------------------------------
