@@ -16,21 +16,41 @@ struct FORMAT_NON_ZERO
 	using Type = T::TrueType;
 };
 
+template<typename IndexT = int,
+			typename ElementT = std::string,
+			template<typename> class ContainerType = std::vector,
+			typename RowT = ContainerType<ElementT>,
+			typename ContainerT = ContainerType<RowT>>
+struct Generator
+{
+private:
+	struct Configuration
+	{
+		using IndexType = IndexT;
+		using ElementType = ElementT;
+		using Container = ContainerT;
+		using Row = RowT;
+	};
+	
+	using Config = Configuration;
+};
+
 //--------------------------------Array------------------------------------------------
 
 template<class Generator>
 class Array 
 {
 public:
-	using Config = Array::Config;
+	using Config = Generator::Config;
 	using IndexType = Config::IndexType;
 	using ElementType = Config::ElementType;
 	using Container = Config::Container;
+	using Row = Config::Row;
 
 protected:
 	IndexType row, col;
 	Container* elements;
-	Container* rows;
+	Row* rows;
 
 public:
 	Array(const IndexType& row, const IndexType& col): row(row), col( col) 
