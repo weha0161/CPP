@@ -4,6 +4,7 @@
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/vector.hpp>
 #include <map>
+#include <cassert>
 
 #ifndef CSV_H
 #define CSV_H
@@ -31,7 +32,7 @@ private:
 		using Container = ContainerT;
 		using Row = RowT;
 	};
-	
+public:
 	using Config = Configuration;
 };
 
@@ -77,10 +78,23 @@ public:
 	ElementType Get(const IndexType& i, const IndexType& j) const 
 	{
 		checkBounds(i, j);
-		return elements->ElementAt(i);
+		return (elements->at(i)).at(j);
 	}
 	
-	void InitElements(const ElementType& v){}
+	
+	void InitElements(const ElementType& v)
+	{
+		for(IndexType i = Rows(); --i;)
+			for(IndexType j = Cols(); --j;)
+				Set(i,j,v);
+	}
+	
+private:
+	void checkBounds(const IndexType& i, const IndexType& j) const
+	{
+		assert(i < Rows());
+		assert(j < Cols());
+	}
 };
 
 //--------------------------------Format------------------------------------------------
