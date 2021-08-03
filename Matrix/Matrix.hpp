@@ -21,7 +21,7 @@ template<typename IndexT = int,
 			typename ElementT = std::string,
 			template<typename> class ContainerType = std::vector,
 			typename RowT = ContainerType<ElementT>,
-			typename ContainerT = ContainerType<RowT>>
+			typename ContainerT = ContainerType<RowT*>>
 struct Generator
 {
 private:
@@ -58,7 +58,6 @@ public:
 	{ 
 		assert(row > 0);
 		assert(col > 0);
-		elements = new Container();
 	}
 	
 	~Array()
@@ -73,20 +72,25 @@ public:
 	void Set(const IndexType& i, const IndexType& j, const ElementType& v)
 	{
 		checkBounds(i, j);
+		elements->at(i)->at(j) = v; 
 	}
 	
 	ElementType Get(const IndexType& i, const IndexType& j) const 
 	{
 		checkBounds(i, j);
-		return (elements->at(i)).at(j);
+		return elements->at(i)->at(j);
 	}
 	
 	
 	void InitElements(const ElementType& v)
 	{
-		for(IndexType i = Rows(); --i;)
-			for(IndexType j = Cols(); --j;)
+		this->elements = new Container(row);
+		for(IndexType i = 0;i < Rows() ; ++i)
+		{
+			this->elements->at(i) =new Row(Cols());
+			for(IndexType j = 0; j < Cols() ; ++j)
 				Set(i,j,v);
+		}
 	}
 	
 private:
