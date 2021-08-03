@@ -9,6 +9,13 @@
 #ifndef CSV_H
 #define CSV_H
 
+struct delete_ptr { // Helper function to ease cleanup of container
+    template <typename P>
+    void operator () (P p) {
+        delete p;
+    }
+};
+
 //--------------------------------FORMAT_NON_ZERO------------------------------------------------
 
 template<class Matrix>
@@ -58,12 +65,18 @@ public:
 	{ 
 		assert(row > 0);
 		assert(col > 0);
+		
+		this->elements = new Container(row);
+		for(IndexType i = 0;i < Rows() ; ++i)
+		{
+			this->elements->at(i) =new Row(Cols());
+		}
 	}
 	
 	~Array()
 	{
-		delete elements;
-		delete rows;
+		std::for_each(this->elements->begin(), this->elements->end(), delete_ptr());
+		this->elements->clear();
 	}
 	
 	const IndexType& Rows() const { return row; }
@@ -84,13 +97,10 @@ public:
 	
 	void InitElements(const ElementType& v)
 	{
-		this->elements = new Container(row);
 		for(IndexType i = 0;i < Rows() ; ++i)
-		{
-			this->elements->at(i) =new Row(Cols());
 			for(IndexType j = 0; j < Cols() ; ++j)
 				Set(i,j,v);
-		}
+	
 	}
 	
 private:

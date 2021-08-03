@@ -13,7 +13,6 @@ int main()
 	
 	Array<Gen> a = Array<Gen>(5,5);
 
-    std::cout<<"START2"<<std::endl;
 	a.InitElements("Test");
   
     std::cout<<"(3,3) :"<<a.Get(3,3)<<std::endl;
