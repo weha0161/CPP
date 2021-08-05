@@ -183,7 +183,7 @@ public:
 protected:
 	void checkBounds(const IndexType& i, const IndexType& j) const
 	{
-		if(i < 0 || i >= OptMatrix::rows() || j < 0 || j >= OptMatrix::cols())
+		if(i < 0 || i >= OptMatrix::Rows() || j < 0 || j >= OptMatrix::Cols())
 			throw "Indices out of bounds";
 	}
 };

@@ -16,7 +16,20 @@ int main()
 	a.InitElements("Test");
   
     std::cout<<"(3,3) :"<<a.Get(3,3)<<std::endl;
-    std::cout<<"END"<<std::endl;
+    
+	auto b = BoundsChecker<Array<Gen>>(3,3);
+	
+	try
+	{
+		std::cout<<"(4,4) :"<<b.Get(4,3)<<std::endl;
+	}
+	catch(const char* c)
+	{
+		std::cout<<*c<<std::endl;
+	}
+	
+	
+	std::cout<<"END"<<std::endl;
 
     return 0;
 }
