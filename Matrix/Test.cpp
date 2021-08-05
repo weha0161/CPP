@@ -28,6 +28,11 @@ int main()
 		std::cout<<*c<<std::endl;
 	}
 	
+	using GenInt = Generator<int,int>;
+	auto m = Matrix<Array<GenInt>>(5,5);
+	m.InitElements(5);
+	
+	std::cout<<m<<std::endl;
 	
 	std::cout<<"END"<<std::endl;
 

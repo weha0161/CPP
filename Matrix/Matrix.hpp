@@ -197,11 +197,42 @@ public:
 	using Config = CheckedMatrix::Config;
 	using IndexType = Config::IndexType;
 	using ElementType = Config::ElementType;
-	using CommaInitializer = Config::CommaInitializer;
+// 	using CommaInitializer = Config::CommaInitializer;
 	
-	Matrix(IndexType rows = 0, IndexType cols = 0, ElementType InitElement = ElementType(0)): CheckedMatrix(rows, cols) { InitElements(InitElement); }
-	CommaInitializer operator=(const ElementType& v){ return CommaInitializer(*this,v); }
+	Matrix(IndexType rows = 0, IndexType cols = 0, ElementType InitElement = ElementType()): CheckedMatrix(rows, cols) { this->InitElements(InitElement); }
+// 	CommaInitializer operator=(const ElementType& v){ return CommaInitializer(*this,v); }
+
+// 	template<class Expr>
+// 	Matrix& operator=(const BinaryExpression& b)
+// 	{ 
+// 		expr.assign(this);
+// 		return *this; 
+// 	}
+// 	
+// 	template<class A>
+// 	Matrix& operator=(const Matrix<A>& m)
+// 	{ 
+// 		MATRIX_ASSIGMENT<A>::RET::assign(this, &m)
+// 		return *this; 
+// 	}
+	
+	std::ostream& display(std::ostream& out) const
+	{
+		for(IndexType i = 0;i < this->Rows() ; ++i)
+		{
+			for(IndexType j = 0; j < this->Cols() ; ++j)
+				out<<this->Get(i,j)<<" ";
+			out<<std::endl;
+		}
+
+		return out;
+	}
 };
 
+template<class A>
+std::ostream& operator<<(std::ostream& out, const Matrix<A> m)
+{
+	return m.display(out);
+}
 
 #endif
