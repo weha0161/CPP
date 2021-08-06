@@ -229,10 +229,109 @@ public:
 	}
 };
 
+template<class A, class B>
+struct ADD_RESULT_TYPE
+{
+	using RET = A;
+};
+
+template<class A>
+struct MATRIX_ASSIGMENT
+{
+	using RET = A;
+};
+
+template<class A, class B>
+struct MATRIX_ADD_GET_ELEMENT
+{
+	using RET = A;
+};
+
+template<class A, class B>
+class AdditionExpression
+{
+public: 
+	using LeftType = A;
+	using RightType = B;
+	
+	using Config = ADD_RESULT_TYPE<LeftType,RightType>::RET::Config;
+	using ElementType = Config::ElementType;
+	using IndexType = Config::IndexType;
+	
+private:
+	const LeftType& left_;
+	const RightType& right_;
+	
+protected:
+	const IndexType rows_, cols_;
+	
+public:
+	AdditionExpression(const LeftType& m1, const RightType& m2): left_(m1), right_(m2), rows_(m1.Rows()), cols_(m1.Cols())
+	{
+		if(m1.cols() != m2.cols() || m1.rows() != m2.rows()) throw "argument matrices are incompatible";
+	}
+	
+	ElementType Get(const IndexType& i, const IndexType& j) const
+	{
+		return MATRIX_ADD_GET_ELEMENT<LeftType, RightType>::RET::getElement(i, j, this, left_, right_);
+	}
+	
+	IndexType Rows() const { return rows_ ;}
+	IndexType Cols() const { return cols_ ;}
+};
+
+template<class ExpressionType>
+class BinaryExpression : public ExpressionType
+{
+	using LeftType = ExpressionType::LeftType;
+	using RightType = ExpressionType::RightType;
+	using MatrixType = ExpressionType::Config::MatrixType;
+	using IndexType = ExpressionType::IndexType;
+	
+	BinaryExpression(const LeftType& op1, const RightType& op2): ExpressionType(op1, op2){};
+	
+	template<class Res>
+	Matrix<Res> assign(Matrix<Res> const result) const
+	{
+		MATRIX_ASSIGMENT<MatrixType>::RET::assign(result, this);
+		return result;
+	}
+	
+	std::ostream& display(std::ostream& out) const
+	{
+		for(IndexType i = 0;i < this->Rows() ; ++i)
+		{
+			for(IndexType j = 0; j < this->Cols() ; ++j)
+				out<<this->Get(i,j)<<" ";
+			out<<std::endl;
+		}
+
+		return out;
+	}
+};
+
 template<class A>
 std::ostream& operator<<(std::ostream& out, const Matrix<A> m)
 {
 	return m.display(out);
+}
+
+template<class M1, class M2> 
+inline BinaryExpression<AdditionExpression<Matrix<M1>, Matrix<M2>>> operator+(const Matrix<M1>& m1, const Matrix<M2>& m2)
+{
+	return BinaryExpression<AdditionExpression<Matrix<M1>, Matrix<M2>>>(m1, m2);
+}
+
+template<class Expr, class M> 
+inline BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>> operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
+{
+	return BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
+}
+
+template<class Expr1, class Expr2> 
+inline BinaryExpression<AdditionExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>> operator+(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2>& expr2)
+{
+	return BinaryExpression<AdditionExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>>(expr1, expr2);
 }
 
 #endif
