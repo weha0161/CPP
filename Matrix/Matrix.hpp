@@ -188,6 +188,42 @@ protected:
 	}
 };
 
+template<class Generator>
+class DenseCCommaInitializer
+{
+public:
+	using Config = Generator::Config;
+	using MatrixType = Config::MatrixType;
+	using IndexType = Config::IndexType;
+	using ElementType = Config::ElementType;
+	
+private:
+	MatrixType& matrix_;
+	IndexType& i_, j_;
+	
+public:
+	DenseCCommaInitializer(MatrixType& m, const ElementType& first): matrix_(m), i_(0), j_(0) { insert(first);}
+	DenseCCommaInitializer& operator,(const ElementType& val)
+	{ 
+		insert(val);
+		return *this;
+	}
+	
+protected:
+	void insert(const ElementType& v)
+	{
+		assert(j_ < matrix_.Rows());
+		assert(i_ < matrix_.Cols());
+		matrix_.Set(i_, j_, v);
+		++j_;
+		if(j_==matrix_.Cols())
+		{
+			j_=0;
+			++i_;
+		}
+	}
+};
+
 //--------------------------------Matrix------------------------------------------------
 
 template<class CheckedMatrix>
