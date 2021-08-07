@@ -265,16 +265,39 @@ public:
 	}
 };
 
+struct RectAddGetElement
+{
+	template<class IndexType, class ResultType, class LeftType, class RightType>
+	
+	static typename ResultType::ElementType Get(const IndexType& i, const IndexType& j, const ResultType* res, const LeftType& leftType, const RightType& rightType)
+	{
+		return leftType.Get(i,j) + rightType.GetType(i,j);
+	}
+};
+
 template<class A, class B>
 struct ADD_RESULT_TYPE
 {
 	using RET = A;
 };
 
+struct RectAssignment
+{
+	template<class Res, class M>
+	static void assign(Res* res, M* m)
+	{
+		using IndexType = Res::Config::IndexType;
+		for(IndexType i = 0;i < m->Rows() ; ++i)
+			for(IndexType j = 0; j < m->Cols() ; ++j)
+				res-Set(i,j,m->Get(i,j));
+	}
+};
+
+
 template<class A>
 struct MATRIX_ASSIGMENT
 {
-	using RET = A;
+	using RET = RectAssignment;
 };
 
 template<class A, class B>
