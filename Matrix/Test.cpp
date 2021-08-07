@@ -29,10 +29,16 @@ int main()
 	}
 	
 	using GenInt = Generator<int,int>;
-	auto m = Matrix<Array<GenInt>>(5,5);
-	m.InitElements(5);
 	
-	std::cout<<m<<std::endl;
+	auto m1 = Matrix<Array<GenInt>>(5,5);
+	m1.InitElements(5);
+	
+	std::cout<<m1<<std::endl;
+	
+	auto m2 = Matrix<Array<GenInt>>(5,5);
+	m2.InitElements(3);
+	
+	std::cout<<m2<<std::endl;
 	
 	std::cout<<"END"<<std::endl;
 

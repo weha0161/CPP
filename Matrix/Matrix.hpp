@@ -206,6 +206,9 @@ protected:
 };
 
 
+template<class CheckedMatrix>
+class Matrix;
+
 template<typename IndexT = int,
 			typename ElementT = std::string,
 			template<typename> class ContainerType = std::vector,
@@ -224,6 +227,7 @@ private:
 	};
 public:
 	using Config = Configuration;
+	using RET =  Matrix<BoundsChecker<Array<Generator>>>;
 };
 
 
@@ -303,9 +307,6 @@ public:
 	IndexType Cols() const { return cols_ ;}
 };
 
-template<class CheckedMatrix>
-class Matrix;
-
 template<class ExpressionType>
 class BinaryExpression : public ExpressionType
 {
@@ -356,13 +357,13 @@ public:
 		expr.assign(this);
 		return *this; 
 	}
-// 	
-// 	template<class A>
-// 	Matrix& operator=(const Matrix<A>& m)
-// 	{ 
-// 		MATRIX_ASSIGMENT<A>::RET::assign(this, &m)
-// 		return *this; 
-// 	}
+	
+	template<class A>
+	Matrix& operator=(const Matrix<A>& m)
+	{ 
+		MATRIX_ASSIGMENT<A>::RET::assign(this, &m);
+		return *this; 
+	}
 	
 	std::ostream& display(std::ostream& out) const
 	{
