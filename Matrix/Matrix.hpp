@@ -24,25 +24,6 @@ struct FORMAT_NON_ZERO
 	using Type = T::TrueType;
 };
 
-template<typename IndexT = int,
-			typename ElementT = std::string,
-			template<typename> class ContainerType = std::vector,
-			typename RowT = ContainerType<ElementT>,
-			typename ContainerT = ContainerType<RowT*>>
-struct Generator
-{
-private:
-	struct Configuration
-	{
-		using IndexType = IndexT;
-		using ElementType = ElementT;
-		using Container = ContainerT;
-		using Row = RowT;
-	};
-public:
-	using Config = Configuration;
-};
-
 //--------------------------------Array------------------------------------------------
 
 template<class Generator>
@@ -224,61 +205,34 @@ protected:
 	}
 };
 
-//--------------------------------Matrix------------------------------------------------
 
-template<class CheckedMatrix>
-class Matrix: public CheckedMatrix
+template<typename IndexT = int,
+			typename ElementT = std::string,
+			template<typename> class ContainerType = std::vector,
+			typename RowT = ContainerType<ElementT>,
+			typename ContainerT = ContainerType<RowT*>>
+struct Generator
 {
+private:
+	struct Configuration
+	{
+		using IndexType = IndexT;
+		using ElementType = ElementT;
+		using Container = ContainerT;
+		using Row = RowT;
+		using CommaInitializer = DenseCCommaInitializer<Generator>;
+	};
 public:
-	using Config = CheckedMatrix::Config;
-	using IndexType = Config::IndexType;
-	using ElementType = Config::ElementType;
-// 	using CommaInitializer = Config::CommaInitializer;
-	
-	Matrix(IndexType rows = 0, IndexType cols = 0, ElementType InitElement = ElementType()): CheckedMatrix(rows, cols) { this->InitElements(InitElement); }
-// 	CommaInitializer operator=(const ElementType& v){ return CommaInitializer(*this,v); }
-
-// 	template<class Expr>
-// 	Matrix& operator=(const BinaryExpression& b)
-// 	{ 
-// 		expr.assign(this);
-// 		return *this; 
-// 	}
-// 	
-// 	template<class A>
-// 	Matrix& operator=(const Matrix<A>& m)
-// 	{ 
-// 		MATRIX_ASSIGMENT<A>::RET::assign(this, &m)
-// 		return *this; 
-// 	}
-	
-	std::ostream& display(std::ostream& out) const
-	{
-		for(IndexType i = 0;i < this->Rows() ; ++i)
-		{
-			for(IndexType j = 0; j < this->Cols() ; ++j)
-				out<<this->Get(i,j)<<" ";
-			out<<std::endl;
-		}
-
-		return out;
-	}
+	using Config = Configuration;
 };
 
-struct RectAddGetElement
-{
-	template<class IndexType, class ResultType, class LeftType, class RightType>
-	
-	static typename ResultType::ElementType Get(const IndexType& i, const IndexType& j, const ResultType* res, const LeftType& leftType, const RightType& rightType)
-	{
-		return leftType.Get(i,j) + rightType.GetType(i,j);
-	}
-};
+
+
 
 template<class A, class B>
 struct ADD_RESULT_TYPE
 {
-	using RET = A;
+	using RET = Generator<int>;
 };
 
 struct RectAssignment
@@ -300,10 +254,20 @@ struct MATRIX_ASSIGMENT
 	using RET = RectAssignment;
 };
 
+struct RectAddGetElement
+{
+	template<class IndexType, class ResultType, class LeftType, class RightType>
+	
+	static typename ResultType::ElementType Get(const IndexType& i, const IndexType& j, const ResultType* res, const LeftType& leftType, const RightType& rightType)
+	{
+		return leftType.Get(i,j) + rightType.GetType(i,j);
+	}
+};
+
 template<class A, class B>
 struct MATRIX_ADD_GET_ELEMENT
 {
-	using RET = A;
+	using RET = RectAddGetElement;
 };
 
 template<class A, class B>
@@ -339,6 +303,9 @@ public:
 	IndexType Cols() const { return cols_ ;}
 };
 
+template<class CheckedMatrix>
+class Matrix;
+
 template<class ExpressionType>
 class BinaryExpression : public ExpressionType
 {
@@ -355,6 +322,47 @@ class BinaryExpression : public ExpressionType
 		MATRIX_ASSIGMENT<MatrixType>::RET::assign(result, this);
 		return result;
 	}
+	
+	std::ostream& display(std::ostream& out) const
+	{
+		for(IndexType i = 0;i < this->Rows() ; ++i)
+		{
+			for(IndexType j = 0; j < this->Cols() ; ++j)
+				out<<this->Get(i,j)<<" ";
+			out<<std::endl;
+		}
+
+		return out;
+	}
+};
+
+//--------------------------------Matrix------------------------------------------------
+
+template<class CheckedMatrix>
+class Matrix: public CheckedMatrix
+{
+public:
+	using Config = CheckedMatrix::Config;
+	using IndexType = Config::IndexType;
+	using ElementType = Config::ElementType;
+	using CommaInitializer = Config::CommaInitializer;
+	
+	Matrix(IndexType rows = 0, IndexType cols = 0, ElementType InitElement = ElementType()): CheckedMatrix(rows, cols) { this->InitElements(InitElement); }
+	CommaInitializer operator=(const ElementType& v){ return CommaInitializer(*this,v); }
+
+	template<class Expr>
+	Matrix& operator=(const BinaryExpression<Expr>& expr)
+	{ 
+		expr.assign(this);
+		return *this; 
+	}
+// 	
+// 	template<class A>
+// 	Matrix& operator=(const Matrix<A>& m)
+// 	{ 
+// 		MATRIX_ASSIGMENT<A>::RET::assign(this, &m)
+// 		return *this; 
+// 	}
 	
 	std::ostream& display(std::ostream& out) const
 	{
