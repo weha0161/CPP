@@ -1,6 +1,7 @@
 #include <iostream>
 #include <boost/mpl/vector.hpp>
 #include "Matrix.hpp"
+#include "MatrixOperators.hpp"
 #include "../Traits/Traits.h"
 
 namespace mpl=boost::mpl;
