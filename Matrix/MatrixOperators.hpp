@@ -1,6 +1,3 @@
-#include "../String/String_.h"
-#include "../Logger/Logger.h"
-#include "../Wrapper/Wrapper.h"
 #include "MatrixExpressionTemplates.hpp"
 #include "Matrix.hpp"
 
@@ -12,6 +9,8 @@ std::ostream& operator<<(std::ostream& out, const Matrix<A> m)
 {
 	return m.display(out);
 }
+
+//AdditionExpression
 
 template<class M1, class M2> 
 inline BinaryExpression<AdditionExpression<Matrix<M1>, Matrix<M2>>> operator+(const Matrix<M1>& m1, const Matrix<M2>& m2)
@@ -35,6 +34,32 @@ template<class Expr1, class Expr2>
 inline BinaryExpression<AdditionExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>> operator+(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2>& expr2)
 {
 	return BinaryExpression<AdditionExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>>(expr1, expr2);
+}
+
+//MultiplicationExpression
+
+template<class M1, class M2> 
+inline BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)
+{
+	return BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>>(m1, m2);
+}
+
+template<class Expr, class M> 
+inline BinaryExpression<MultiplicationExpression<BinaryExpression<Expr>, Matrix<M>>> operator*(const Matrix<M>& m, const BinaryExpression<Expr>& expr)
+{
+	return BinaryExpression<MultiplicationExpression<Matrix<M>,BinaryExpression<Expr>>>(expr, m);
+}
+
+template<class M, class Expr> 
+inline BinaryExpression<MultiplicationExpression<Matrix<M>, BinaryExpression<Expr>>> operator*(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
+{
+	return BinaryExpression<MultiplicationExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
+}
+
+template<class Expr1, class Expr2> 
+inline BinaryExpression<MultiplicationExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>> operator*(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2>& expr2)
+{
+	return BinaryExpression<MultiplicationExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>>(expr1, expr2);
 }
 
 #endif
