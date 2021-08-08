@@ -11,11 +11,11 @@ int main()
 	
 	using Gen = Generator<int>;
 	
-	Array<Gen> a = Array<Gen>(5,5);
-
-	a.InitElements("Test");
-  
-    std::cout<<"(3,3) :"<<a.Get(3,3)<<std::endl;
+// 	Array<Gen> a = Array<Gen>(5,5);
+// 
+// 	a.InitElements("Test");
+//   
+//     std::cout<<"(3,3) :"<<a.Get(3,3)<<std::endl;
     
 	auto b = BoundsChecker<Array<Gen>>(3,3);
 	
@@ -39,6 +39,9 @@ int main()
 	m2.InitElements(3);
 	
 	std::cout<<m2<<std::endl;
+
+	auto m3 = m1 + m2;	
+	std::cout<<m3.Get(1,2)<<std::endl;
 	
 	std::cout<<"END"<<std::endl;
 

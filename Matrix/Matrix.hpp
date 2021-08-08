@@ -164,6 +164,7 @@ public:
 protected:
 	void checkBounds(const IndexType& i, const IndexType& j) const
 	{
+		std::cout<<"GET"<<" i:"<<i<<" j:"<<j<<std::endl;
 		if(i < 0 || i >= OptMatrix::Rows() || j < 0 || j >= OptMatrix::Cols())
 			throw "Indices out of bounds";
 	}
@@ -210,7 +211,7 @@ template<class CheckedMatrix>
 class Matrix;
 
 template<typename IndexT = int,
-			typename ElementT = std::string,
+			typename ElementT = int,
 			template<typename> class ContainerType = std::vector,
 			typename RowT = ContainerType<ElementT>,
 			typename ContainerT = ContainerType<RowT*>>
@@ -224,10 +225,11 @@ private:
 		using Container = ContainerT;
 		using Row = RowT;
 		using CommaInitializer = DenseCCommaInitializer<Generator>;
+		using MatrixType =  Matrix<BoundsChecker<Array<Generator>>>;
 	};
 public:
 	using Config = Configuration;
-	using RET =  Matrix<BoundsChecker<Array<Generator>>>;
+	using RET =  Config::MatrixType;
 };
 
 
@@ -244,10 +246,11 @@ struct RectAssignment
 	template<class Res, class M>
 	static void assign(Res* res, M* m)
 	{
+		std::cout<<"ASSIGN";
 		using IndexType = Res::Config::IndexType;
 		for(IndexType i = 0;i < m->Rows() ; ++i)
 			for(IndexType j = 0; j < m->Cols() ; ++j)
-				res-Set(i,j,m->Get(i,j));
+				res->Set(i,j,m->Get(i,j));
 	}
 };
 
@@ -264,7 +267,8 @@ struct RectAddGetElement
 	
 	static typename ResultType::ElementType Get(const IndexType& i, const IndexType& j, const ResultType* res, const LeftType& leftType, const RightType& rightType)
 	{
-		return leftType.Get(i,j) + rightType.GetType(i,j);
+		std::cout<<"Rect GET"<<" i:"<<i<<" j:"<<j<<std::endl;
+		return leftType.Get(i,j) + rightType.Get(i,j);
 	}
 };
 
@@ -295,12 +299,12 @@ protected:
 public:
 	AdditionExpression(const LeftType& m1, const RightType& m2): left_(m1), right_(m2), rows_(m1.Rows()), cols_(m1.Cols())
 	{
-		if(m1.cols() != m2.cols() || m1.rows() != m2.rows()) throw "argument matrices are incompatible";
+		if(m1.Cols() != m2.Cols() || m1.Rows() != m2.Rows()) throw "argument matrices are incompatible";
 	}
 	
 	ElementType Get(const IndexType& i, const IndexType& j) const
 	{
-		return MATRIX_ADD_GET_ELEMENT<LeftType, RightType>::RET::getElement(i, j, this, left_, right_);
+		return MATRIX_ADD_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_);
 	}
 	
 	IndexType Rows() const { return rows_ ;}
@@ -310,6 +314,7 @@ public:
 template<class ExpressionType>
 class BinaryExpression : public ExpressionType
 {
+public:
 	using LeftType = ExpressionType::LeftType;
 	using RightType = ExpressionType::RightType;
 	using MatrixType = ExpressionType::Config::MatrixType;
@@ -391,7 +396,13 @@ inline BinaryExpression<AdditionExpression<Matrix<M1>, Matrix<M2>>> operator+(co
 }
 
 template<class Expr, class M> 
-inline BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>> operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
+inline BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>> operator+(const Matrix<M>& m, const BinaryExpression<Expr>& expr)
+{
+	return BinaryExpression<AdditionExpression<Matrix<M>,BinaryExpression<Expr>>>(expr, m);
+}
+
+template<class M, class Expr> 
+inline BinaryExpression<AdditionExpression<Matrix<M>, BinaryExpression<Expr>>> operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
 {
 	return BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
 }
