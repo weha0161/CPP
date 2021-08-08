@@ -38,8 +38,8 @@ public:
 
 protected:
 	IndexType row, col;
-	Container* elements;
-	Row* rows;
+	Container elements;
+	Row rows;
 
 public:
 	Array(const IndexType& row, const IndexType& col): row(row), col( col) 
@@ -47,17 +47,16 @@ public:
 		assert(row > 0);
 		assert(col > 0);
 		
-		this->elements = new Container(row);
+		this->elements = Container(row);
 		for(IndexType i = 0;i < Rows() ; ++i)
 		{
-			this->elements->at(i) =new Row(Cols());
+			this->elements.at(i) = Row(Cols());
 		}
 	}
 	
 	~Array()
 	{
-		std::for_each(this->elements->begin(), this->elements->end(), delete_ptr());
-		this->elements->clear();
+		this->elements.clear();
 	}
 	
 	const IndexType& Rows() const { return row; }
@@ -66,13 +65,13 @@ public:
 	void Set(const IndexType& i, const IndexType& j, const ElementType& v)
 	{
 		checkBounds(i, j);
-		elements->at(i)->at(j) = v; 
+		elements.at(i).at(j) = v; 
 	}
 	
 	ElementType Get(const IndexType& i, const IndexType& j) const 
 	{
 		checkBounds(i, j);
-		return elements->at(i)->at(j);
+		return elements.at(i).at(j);
 	}
 	
 	
@@ -164,7 +163,6 @@ public:
 protected:
 	void checkBounds(const IndexType& i, const IndexType& j) const
 	{
-		std::cout<<"GET"<<" i:"<<i<<" j:"<<j<<std::endl;
 		if(i < 0 || i >= OptMatrix::Rows() || j < 0 || j >= OptMatrix::Cols())
 			throw "Indices out of bounds";
 	}
@@ -214,7 +212,7 @@ template<typename IndexT = int,
 			typename ElementT = int,
 			template<typename> class ContainerType = std::vector,
 			typename RowT = ContainerType<ElementT>,
-			typename ContainerT = ContainerType<RowT*>>
+			typename ContainerT = ContainerType<RowT>>
 struct Generator
 {
 private:
@@ -267,7 +265,6 @@ struct RectAddGetElement
 	
 	static typename ResultType::ElementType Get(const IndexType& i, const IndexType& j, const ResultType* res, const LeftType& leftType, const RightType& rightType)
 	{
-		std::cout<<"Rect GET"<<" i:"<<i<<" j:"<<j<<std::endl;
 		return leftType.Get(i,j) + rightType.Get(i,j);
 	}
 };
