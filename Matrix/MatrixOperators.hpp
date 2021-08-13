@@ -19,15 +19,15 @@ inline BinaryExpression<AdditionExpression<Matrix<M1>, Matrix<M2>>> operator+(co
 }
 
 template<class Expr, class M> 
-inline BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>> operator+(const Matrix<M>& m, const BinaryExpression<Expr>& expr)
+inline BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>> operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
 {
-	return BinaryExpression<AdditionExpression<Matrix<M>,BinaryExpression<Expr>>>(expr, m);
+	return BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
 }
 
 template<class M, class Expr> 
-inline BinaryExpression<AdditionExpression<Matrix<M>, BinaryExpression<Expr>>> operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
+inline BinaryExpression<AdditionExpression<Matrix<M>, BinaryExpression<Expr>>> operator+(const Matrix<M>& m, const BinaryExpression<Expr>& expr)
 {
-	return BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
+	return BinaryExpression<AdditionExpression<Matrix<M>,BinaryExpression<Expr>>>(m, expr);
 }
 
 template<class Expr1, class Expr2> 
