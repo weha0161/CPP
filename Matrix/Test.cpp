@@ -45,7 +45,7 @@ int main()
 	auto m4 = m1 + m3 + m3;	
 	
 	std::cout<<m3.Get(1,2)<<std::endl;
-// 	std::cout<<m4.Get(1,2)<<std::endl;
+	std::cout<<m4.Get(1,2)<<std::endl;
 	
 	std::cout<<"END"<<std::endl;
 

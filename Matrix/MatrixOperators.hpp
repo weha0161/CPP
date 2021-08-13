@@ -7,7 +7,7 @@
 template<class A>
 std::ostream& operator<<(std::ostream& out, const Matrix<A> m)
 {
-	return m.display(out);
+	return m.Display(out);
 }
 
 //AdditionExpression

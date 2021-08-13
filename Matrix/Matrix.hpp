@@ -224,7 +224,7 @@ public:
 		return *this; 
 	}
 	
-	std::ostream& display(std::ostream& out) const
+	std::ostream& Display(std::ostream& out) const
 	{
 		for(IndexType i = 0;i < this->Rows() ; ++i)
 		{
