@@ -40,5 +40,20 @@ private:
 template<class A>
 ostream& operator<<(ostream& ou, const CacheElementType<A> elem) { return elem.Display(out;) }
 
+template<class MatrixType>
+class CACHE_MATRIX_TYPE
+{
+	using Config = MatrixType::Config;
+	using DSLFeatures = Config::DSLFeatures;
+	
+	struct CachedMatrixDSL//: public DSLFeatures
+	{
+		using CacheElementType<ElementType> ElementType;
+	}
+	
+public:
+	using Generator<CachedMatrixDSL>::RET RET;
+}
+
 
 #endif
