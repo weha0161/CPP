@@ -45,15 +45,15 @@ inline BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operat
 }
 
 template<class Expr, class M> 
-inline BinaryExpression<MultiplicationExpression<BinaryExpression<Expr>, Matrix<M>>> operator*(const Matrix<M>& m, const BinaryExpression<Expr>& expr)
+inline BinaryExpression<MultiplicationExpression<BinaryExpression<Expr>, Matrix<M>>> operator*(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
 {
-	return BinaryExpression<MultiplicationExpression<Matrix<M>,BinaryExpression<Expr>>>(expr, m);
+	return BinaryExpression<MultiplicationExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
 }
 
 template<class M, class Expr> 
-inline BinaryExpression<MultiplicationExpression<Matrix<M>, BinaryExpression<Expr>>> operator*(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
+inline BinaryExpression<MultiplicationExpression<Matrix<M>, BinaryExpression<Expr>>> operator*(const Matrix<M>& m, const BinaryExpression<Expr>& expr)
 {
-	return BinaryExpression<MultiplicationExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
+	return BinaryExpression<MultiplicationExpression<Matrix<M>,BinaryExpression<Expr>>>(m, expr);
 }
 
 template<class Expr1, class Expr2> 
