@@ -5,8 +5,8 @@
 #include "Generator.hpp"
 #include <cassert>
 
-#ifndef CSV_H
-#define CSV_H
+#ifndef MATRIX_H
+#define MATRIX_H
 
 //--------------------------------FORMAT_NON_ZERO------------------------------------------------
 
