@@ -1,11 +1,18 @@
 #include "MatrixExpressionTemplates.hpp"
+#include "../Logger/Logger.h"
 #include "Matrix.hpp"
 
 #ifndef MATRIXOPERATORS_H
 #define MATRIXOPERATORS_H
 
 template<class A>
-std::ostream& operator<<(std::ostream& out, const Matrix<A> m)
+std::ostream& operator<<(std::ostream& out, const Matrix<A>& m)
+{
+	return m.Display(out);
+}
+
+template<class A>
+std::ostream& operator<<(std::ostream& out, const BinaryExpression<A>& m)
 {
 	return m.Display(out);
 }
@@ -15,12 +22,15 @@ std::ostream& operator<<(std::ostream& out, const Matrix<A> m)
 template<class M1, class M2> 
 inline BinaryExpression<AdditionExpression<Matrix<M1>, Matrix<M2>>> operator+(const Matrix<M1>& m1, const Matrix<M2>& m2)
 {
+	Logger::Instance().Log<Debug>("operator+(const Matrix<M1>& m1, const Matrix<M2>& m2)");
 	return BinaryExpression<AdditionExpression<Matrix<M1>, Matrix<M2>>>(m1, m2);
 }
 
 template<class Expr, class M> 
 inline BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>> operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
 {
+	Logger::Instance().Log<Debug>("operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)");
+	std::cout<<expr<<std::endl;
 	return BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
 }
 

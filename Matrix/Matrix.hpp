@@ -213,6 +213,7 @@ public:
 	template<class Expr>
 	Matrix& operator=(const BinaryExpression<Expr>& expr)
 	{ 
+		Logger::Instance().Log<Debug>("Matrix& operator=(const BinaryExpression<Expr>& expr)");
 		expr.assign(this);
 		return *this; 
 	}
@@ -220,6 +221,7 @@ public:
 	template<class A>
 	Matrix& operator=(const Matrix<A>& m)
 	{ 
+		Logger::Instance().Log<Debug>("Matrix& operator=(const Matrix<A>& m)");
 		MATRIX_ASSIGMENT<A>::RET::assign(this, &m);
 		return *this; 
 	}

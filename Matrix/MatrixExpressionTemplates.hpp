@@ -43,6 +43,7 @@ struct RectAddGetElement
 	
 	static typename ResultType::ElementType Get(const IndexType& i, const IndexType& j, const ResultType* res, const LeftType& leftType, const RightType& rightType)
 	{
+		std::cout<<"RectAddGetElement left: "<<leftType.Get(i,j)<<" right: "<<rightType.Get(i,j)<<std::endl;
 		return leftType.Get(i,j) + rightType.Get(i,j);
 	}
 };
@@ -74,11 +75,14 @@ protected:
 public:
 	AdditionExpression(const LeftType& m1, const RightType& m2): left_(m1), right_(m2), rows_(m1.Rows()), cols_(m1.Cols())
 	{
+		std::cout<<"AdditionExpression left: "<<m1.Get(1,1)<<" right: "<<m2.Get(1,1)<<std::endl;
+		std::cout<<m1<<std::endl;
 		if(m1.Cols() != m2.Cols() || m1.Rows() != m2.Rows()) throw "argument matrices are incompatible";
 	}
 	
 	ElementType Get(const IndexType& i, const IndexType& j) const
 	{
+		std::cout<<"MATRIX_ADD_GET_ELEMENT left: "<<left_.Get(i,j)<<" right: "<<right_.Get(i,j)<<std::endl;
 		return MATRIX_ADD_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_);
 	}
 	
@@ -228,16 +232,21 @@ public:
 	using MatrixType = ExpressionType::Config::MatrixType;
 	using IndexType = ExpressionType::IndexType;
 	
-	BinaryExpression(const LeftType& op1, const RightType& op2): ExpressionType(op1, op2){};
+	BinaryExpression(const LeftType& op1, const RightType& op2): ExpressionType(op1, op2)
+	{
+		std::cout<<"BinaryExpression left: "<<op1.Get(1,1)<<" right: "<<op2.Get(1,1)<<std::endl;
+		std::cout<<op1<<std::endl;
+	};
 	
 	template<class Res>
-	Matrix<Res> assign(Matrix<Res> const result) const
+	Matrix<Res> Assign(Matrix<Res> const result) const
 	{
+		std::cout<<"ASSIGN";
 		MATRIX_ASSIGMENT<MatrixType>::RET::assign(result, this);
 		return result;
 	}
 	
-	std::ostream& display(std::ostream& out) const
+	std::ostream& Display(std::ostream& out) const
 	{
 		for(IndexType i = 0;i < this->Rows() ; ++i)
 		{
