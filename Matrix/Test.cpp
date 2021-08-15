@@ -46,7 +46,8 @@ int main()
 	
 // 	std::cout<<m3.Get(1,2)<<std::endl;
 	std::cout<<m3<<std::endl;
-// 	std::cout<<m4.Get(1,2)<<std::endl;
+	std::cout<<m4<<std::endl;
+	std::cout<<m4.Get(0,1)<<std::endl;
 	
 	std::cout<<"END"<<std::endl;
 

@@ -1,5 +1,5 @@
 #include "../String/String_.h"
-#include "../Logger/Logger.h"
+#include "../Logger/Logger.hpp"
 #include "../Wrapper/Wrapper.h"
 #include "MatrixExpressionTemplates.hpp"
 #include "Generator.hpp"
@@ -36,10 +36,12 @@ protected:
 public:
 	Array(const IndexType& row, const IndexType& col): row(row), col( col) 
 	{ 
+		Logger::Log()<<"Array Contructor"<<std::endl;
 		assert(row > 0);
 		assert(col > 0);
 		
 		this->elements = Container(row);
+		std::cout<<this->elements.size()<<std::endl;
 		for(IndexType i = 0;i < Rows() ; ++i)
 		{
 			this->elements.at(i) = Row(Cols());
@@ -48,7 +50,8 @@ public:
 	
 	~Array()
 	{
-		this->elements.clear();
+		Logger::Log<Debug>()<<"Array Destructor"<<std::endl;
+		//this->elements.clear();
 	}
 	
 	const IndexType& Rows() const { return row; }
@@ -62,6 +65,8 @@ public:
 	
 	ElementType Get(const IndexType& i, const IndexType& j) const 
 	{
+// 		Logger::Instance().Log<Debug>("Get");
+// 		std::cout<<this->elements.size()<<std::endl;
 		checkBounds(i, j);
 		return elements.at(i).at(j);
 	}
@@ -148,6 +153,7 @@ public:
 	}
 	ElementType Get(const IndexType& i, const IndexType& j) const 
 	{
+		Logger::Log<Debug>()<<"Get"<<std::endl;
 		checkBounds(i, j);
 		return OptMatrix::Get(i,j);
 	}
@@ -213,7 +219,7 @@ public:
 	template<class Expr>
 	Matrix& operator=(const BinaryExpression<Expr>& expr)
 	{ 
-		Logger::Instance().Log<Debug>("Matrix& operator=(const BinaryExpression<Expr>& expr)");
+		Logger::Log<Debug>()<<"Matrix& operator=(const BinaryExpression<Expr>& expr)"<<std::endl;
 		expr.assign(this);
 		return *this; 
 	}
@@ -221,7 +227,7 @@ public:
 	template<class A>
 	Matrix& operator=(const Matrix<A>& m)
 	{ 
-		Logger::Instance().Log<Debug>("Matrix& operator=(const Matrix<A>& m)");
+		Logger::Log<Debug>()<<"Matrix& operator=(const Matrix<A>& m)"<<std::endl;
 		MATRIX_ASSIGMENT<A>::RET::assign(this, &m);
 		return *this; 
 	}

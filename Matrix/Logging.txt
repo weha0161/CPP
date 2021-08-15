@@ -1,3 +1,7 @@
+Array Contructor
+Get
+Array Contructor
+Array Contructor
 operator+(const Matrix<M1>& m1, const Matrix<M2>& m2)
 operator+(const Matrix<M1>& m1, const Matrix<M2>& m2)
 operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
