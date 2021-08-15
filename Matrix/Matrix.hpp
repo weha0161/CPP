@@ -153,7 +153,7 @@ public:
 	}
 	ElementType Get(const IndexType& i, const IndexType& j) const 
 	{
-		Logger::Log<Debug>()<<"Get"<<std::endl;
+// 		Logger::Log<Debug>()<<"Get"<<std::endl;
 		checkBounds(i, j);
 		return OptMatrix::Get(i,j);
 	}
@@ -177,7 +177,7 @@ public:
 	
 private:
 	MatrixType& matrix_;
-	IndexType& i_, j_;
+	IndexType i_, j_;
 	
 public:
 	DenseCCommaInitializer(MatrixType& m, const ElementType& first): matrix_(m), i_(0), j_(0) { insert(first);}
@@ -219,7 +219,7 @@ public:
 	template<class Expr>
 	Matrix& operator=(const BinaryExpression<Expr>& expr)
 	{ 
-		Logger::Log<Debug>()<<"Matrix& operator=(const BinaryExpression<Expr>& expr)"<<std::endl;
+// 		Logger::Log<Debug>()<<"Matrix& operator=(const BinaryExpression<Expr>& expr)"<<std::endl;
 		expr.assign(this);
 		return *this; 
 	}
@@ -227,7 +227,7 @@ public:
 	template<class A>
 	Matrix& operator=(const Matrix<A>& m)
 	{ 
-		Logger::Log<Debug>()<<"Matrix& operator=(const Matrix<A>& m)"<<std::endl;
+// 		Logger::Log<Debug>()<<"Matrix& operator=(const Matrix<A>& m)"<<std::endl;
 		MATRIX_ASSIGMENT<A>::RET::assign(this, &m);
 		return *this; 
 	}
