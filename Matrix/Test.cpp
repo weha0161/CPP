@@ -56,9 +56,14 @@ int main()
 	std::cout<<m6<<std::endl;
 	
 	auto m7 = m5 + m6;
+	auto m8 = m5 + m6 + m7;
 	std::cout<<m7<<std::endl;
+	std::cout<<m8<<std::endl;
 	
-	std::cout<<m4.Get(0,1)<<std::endl;
+	auto m9 = m5 * m6;
+// 	std::cout<<"Multiplication: \n"<<m9<<std::endl;
+	
+	std::cout<<"Get: \n"<<m4.Get(0,1)<<std::endl;
 	
 	std::cout<<"END"<<std::endl;
 

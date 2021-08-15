@@ -91,35 +91,16 @@ public:
 
 //----------------------------------------------------------------------------------------------------MultiplicationExpression--------------------------------------
 
-// template<class A, class B>
-// struct ADD_RESULT_TYPE
-// {
-// 	using RET = Generator<int>;
-// };
-// 
-// struct RectAssignment
-// {
-// 	template<class Res, class M>
-// 	static void assign(Res* res, M* m)
-// 	{
-// 		std::cout<<"ASSIGN";
-// 		using IndexType = Res::Config::IndexType;
-// 		for(IndexType i = 0;i < m->Rows() ; ++i)
-// 			for(IndexType j = 0; j < m->Cols() ; ++j)
-// 				res->Set(i,j,m->Get(i,j));
-// 	}
-// };
-/*
-
-template<class A>
-struct MATRIX_ASSIGMENT
+template<class A, class B>
+struct MULTIPLY_RESULT_TYPE
 {
-	using RET = RectAssignment;
-};*/
+	using RET = Generator<int>;
+};
 
 template<class MatrixType>
 class CACHE_MATRIX_TYPE
 {
+public:
 	using Config = MatrixType::Config;
 	using RET = Generator<int>;
 };
@@ -158,7 +139,7 @@ public:
 	using LeftMatrixType = LeftType::Config::MatrixType;
 	using RightMatrixType = RightType::Config::MatrixType;
 	
-	using Config = ADD_RESULT_TYPE<LeftType,RightType>::RET::Config;
+	using Config = MULTIPLY_RESULT_TYPE<LeftType,RightType>::RET::Config;
 	using ElementType = Config::ElementType;
 	using IndexType = Config::IndexType;
 	
@@ -206,7 +187,7 @@ public:
 	
 	ElementType Get(const IndexType& i, const IndexType& j) const
 	{
-		return MATRIX_ADD_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_);
+		return MATRIX_MULTIPLY_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_);
 	}
 	
 	IndexType Rows() const { return rows_ ;}
