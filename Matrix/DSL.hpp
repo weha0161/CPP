@@ -12,12 +12,12 @@ struct whatever
 		array_id, vector_id,
 		c_like_id, fortran_like_id,
 		id = whatever_id
-	}
-}
+	};
+};
 
 template<class T = whatever> struct rect : whatever { enum {id = rect_id}; };
 
-template<class T = whatever> struct array: whatever { enum {id = array_id}; using ArrayOrder = T};
+template<class T = whatever> struct array: whatever { enum {id = array_id}; using ArrayOrder = T; };
 template<class T = whatever> struct vector: whatever { enum {id = vector_id}; };
 
 template<class T = whatever>struct symm: whatever { enum {id = symm_id}; };
@@ -33,12 +33,12 @@ template<class T = whatever>struct fortran_like: whatever { enum {id = fortran_l
 
 
 template<
-	class ElementT = whatever, 
+	class ElementType = whatever, 
 	class Shape  = whatever,
 	class OptFlag  = whatever,
 	class BoundsChecking  = whatever, 
 	class Format  = whatever, 
-	class Index  = whatever> 
+	class IndexType  = whatever> 
 struct matrix
 {
 	using elementType = ElementType;
@@ -116,13 +116,16 @@ public:
 	};
 
 	using RET =  DSLFeatures;
-}
+};
+
+template<typename> struct Matrix;
+
 template<typename CompletedDSLDescription>
 struct MATRIX_ASSEMBLE_COMPONENTS
 {
 private:
 	using Generator = MATRIX_ASSEMBLE_COMPONENTS<CompletedDSLDescription>;
-	using DSLFeatures_ = CompletedDSLDescription;
+	using DSLFeatures = CompletedDSLDescription;
 
 // 	using Format_ = typename CompletedDSLDescription::Format;
 	using Array = typename DSLFeatures::Format;
@@ -138,7 +141,7 @@ private:
 		symmetric = DSLFeatures::Shape::symm_id,
 		formatID = DSLFeatures::Format::id,
 		vector = DSLFeatures::Format::vector_id
-	}
+	};
 
 public:
 	struct Config
@@ -152,13 +155,15 @@ public:
 	using RET =  MatrixType_;
 };
 
+int do_all = 1;
+
 template<class InputDSL = matrix<>, int whatToDo = do_all>
 struct MATRIX_GENERATOR
 {
 private:
 	using ParsedDSL__ = MATRIX_DSL_PARSER<InputDSL>::RET;
 	using CompletedDSL__ = MATRIX_ASSIGN_DEFAULTS<ParsedDSL__>::RET;
-	using Result = MATRIX_ASSEMBLE_COMPONENTS<ParsedDSL>;
+	using Result = MATRIX_ASSEMBLE_COMPONENTS<CompletedDSL__>;
 public:
 	using RET =  Result::RET;
 };

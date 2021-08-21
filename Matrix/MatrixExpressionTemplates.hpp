@@ -1,4 +1,6 @@
+#include "../Logger/Logger.hpp"
 #include "Generator.hpp"
+#include "MatrixCache.hpp"
 
 #ifndef MATRIXEXPRESSIONTEMPLATES_H
 #define MATRIXEXPRESSIONTEMPLATES_H
@@ -9,12 +11,14 @@ class Matrix;
 template<class ExpressionType>
 class BinaryExpression; 
 
+using GeneratorT = Generator<int,int>;
+
 //----------------------------------------------------------------------------------------------------AdditionExpression--------------------------------------
 
 template<class A, class B>
 struct ADD_RESULT_TYPE
 {
-	using RET = Generator<int>;
+	using RET = GeneratorT;
 };
 
 struct RectAssignment
@@ -39,10 +43,9 @@ struct MATRIX_ASSIGMENT
 struct RectAddGetElement
 {
 	template<class IndexType, class ResultType, class LeftType, class RightType>
-	
 	static typename ResultType::ElementType Get(const IndexType& i, const IndexType& j, const ResultType* res, const LeftType& leftType, const RightType& rightType)
 	{
-// 		std::cout<<"RectAddGetElement left: "<<leftType.Get(i,j)<<" right: "<<rightType.Get(i,j)<<std::endl;
+		Logger::Log<Debug>()<<"RectAddGetElement"<<std::endl;
 		return leftType.Get(i,j) + rightType.Get(i,j);
 	}
 };
@@ -74,14 +77,12 @@ protected:
 public:
 	AdditionExpression(const LeftType& m1, const RightType& m2): left_(m1), right_(m2), rows_(m1.Rows()), cols_(m1.Cols())
 	{
-// 		std::cout<<"AdditionExpression left: "<<m1.Get(1,1)<<" right: "<<m2.Get(1,1)<<std::endl;
-// 		std::cout<<m1<<std::endl;
 		if(m1.Cols() != m2.Cols() || m1.Rows() != m2.Rows()) throw "argument matrices are incompatible";
 	}
 	
 	ElementType Get(const IndexType& i, const IndexType& j) const
 	{
-// 		std::cout<<"MATRIX_ADD_GET_ELEMENT left: "<<left_.Get(i,j)<<" right: "<<right_.Get(i,j)<<std::endl;
+		Logger::Log<Debug>()<<"AdditionExpression GET"<<std::endl;
 		return MATRIX_ADD_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_);
 	}
 	
@@ -94,25 +95,28 @@ public:
 template<class A, class B>
 struct MULTIPLY_RESULT_TYPE
 {
-	using RET = Generator<int>;
+	using RET = GeneratorT;
 };
 
-template<class MatrixType>
-class CACHE_MATRIX_TYPE
-{
-public:
-	using Config = MatrixType::Config;
-	using RET = Generator<int>;
-};
+// template<class MatrixType>
+// class CACHE_MATRIX_TYPE
+// {
+// public:
+// 	using Config = MatrixType::Config;
+// 	using RET = MatrixType;
+// // 	using RET = GeneratorT::RET;
+// };
 
 struct RectMultiplyGetElement
 {
 	template<class IndexType_, class ResultType, class LeftType, class RightType, class LeftCacheMatrixType, class RightCacheMatrixType>
-	static typename ResultType::ElementType Get(const IndexType_& i, const IndexType_& j, const ResultType* res, const LeftType& leftType, const RightType& rightType, LeftCacheMatrixType leftCache = 0, RightCacheMatrixType rightCache = 0)
+	static typename ResultType::ElementType Get(const IndexType_& i, const IndexType_& j, const ResultType* res, const LeftType& leftType, const RightType& rightType, LeftCacheMatrixType* leftCache = 0, RightCacheMatrixType* rightCache = 0)
 	{
 		using Config = ResultType::Config;
 		using ElementType = Config::ElementType;
 		using IndexType = Config::IndexType;
+		
+		Logger::Log<Debug>()<<"RectMultiplyGetElement"<<std::endl;
 		
 		ElementType result = ElementType(0);
 		
@@ -121,6 +125,20 @@ struct RectMultiplyGetElement
 		
 		return leftType.Get(i,j) + rightType.Get(i,j);
 	}
+	
+private:
+	template<class IndexType_, class MatrixType, class CacheType>
+	static typename MatrixType::ElementType getCachedElement(const IndexType_& i, const IndexType_& j, const MatrixType& matrix, CacheType* cache)
+	{
+		if(cache == 0) return matrix.Get(i,j);
+		else
+		{
+			typename CacheType::ElementType& tmp = cache->Get(i,j);
+			if(!tmp.isHit())
+				tmp.Set(matrix.Get(i,j));
+			return tmp.Get();
+		}
+	}	
 };
 
 template<class A, class B>
@@ -160,12 +178,14 @@ public:
 	template<class M1, class M2>
 	MultiplicationExpression(const Matrix<M1>& m1, const Matrix<M2>& m2): left_(m1), leftCacheMatrix_(0), rightCacheMatrix_(0),right_(m2), rows_(m1.Rows()), cols_(m2.Cols())
 	{
+		Logger::Log<Debug>()<<"MultiplicationExpression(const Matrix<M1>& m1, const Matrix<M2>& m2): left_(m1), leftCacheMatrix_(0), rightCacheMatrix_(0),right_(m2), rows_(m1.Rows()), cols_(m2.Cols())"<<std::endl;
 		ParameterCheck(m1, m2);
 	}
 	
 	template<class Expr, class M2>
 	MultiplicationExpression(const BinaryExpression<Expr>& expr, const Matrix<M2>& m2): left_(expr), right_(m2), rightCacheMatrix_(0) , rows_(expr.Rows()), cols_(m2.Cols())
 	{
+		Logger::Log<Debug>()<<"MultiplicationExpression GET"<<std::endl;
 		ParameterCheck(expr, m2);
 		leftCacheMatrix_=new LeftMatrixType(expr.Rows(), expr.Cols());
 	}
@@ -174,20 +194,22 @@ public:
 	MultiplicationExpression(const Matrix<M1>& m1, const BinaryExpression<Expr> expr): left_(m1), leftCacheMatrix_(0), right_(expr), rows_(m1.Rows()), cols_(expr.Cols())
 	{
 		ParameterCheck(m1, expr);
-		leftCacheMatrix_=new LeftMatrixType(expr.Rows(), expr.Cols());
+		rightCacheMatrix_= new RightMatrixType(expr.Rows(), expr.Cols());
 	}
 	
 	template<class Expr1, class Expr2>
 	MultiplicationExpression(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2> expr2): left_(expr1), right_(expr2), rows_(expr1.Rows()), cols_(expr2.Cols())
 	{
 		ParameterCheck(expr1, expr2);
-		leftCacheMatrix_=new LeftMatrixType(expr1.Rows(), expr1.Cols());
-		rightCacheMatrix_=new RightCacheMatrixType(expr2.Rows(), expr2.Cols());
+		leftCacheMatrix_= new LeftMatrixType(expr1.Rows(), expr1.Cols());
+		rightCacheMatrix_= new RightCacheMatrixType(expr2.Rows(), expr2.Cols());
 	}	
 	
 	ElementType Get(const IndexType& i, const IndexType& j) const
 	{
-		return MATRIX_MULTIPLY_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_);
+		Logger::Log<Debug>()<<"MultiplicationExpression GET"<<std::endl;
+		return MATRIX_MULTIPLY_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_, leftCacheMatrix_, rightCacheMatrix_);
+// 		return 0;
 	}
 	
 	IndexType Rows() const { return rows_ ;}
@@ -213,14 +235,14 @@ public:
 	using IndexType = ExpressionType::IndexType;
 	
 	BinaryExpression(const LeftType& op1, const RightType& op2): ExpressionType(op1, op2)
-	{
-// 		std::cout<<"BinaryExpression left: "<<op1.Get(1,1)<<" right: "<<op2.Get(1,1)<<std::endl;
-// 		std::cout<<op1<<std::endl;
+	{	
+		Logger::Log<Debug>()<<"BinaryExpression(const LeftType& op1, const RightType& op2): ExpressionType(op1, op2)"<<std::endl;
 	};
 	
 	template<class Res>
 	Matrix<Res> Assign(Matrix<Res> const result) const
 	{
+		Logger::Log<Debug>()<<"Matrix<Res> Assign(Matrix<Res> const result) const"<<std::endl;
 		MATRIX_ASSIGMENT<MatrixType>::RET::assign(result, this);
 		return result;
 	}

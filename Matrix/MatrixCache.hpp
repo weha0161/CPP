@@ -1,59 +1,62 @@
 #include "../String/String_.h"
-#include "../Logger/Logger.h"
+// #include "../Logger/Logger.h"
 #include "../Wrapper/Wrapper.h"
-#include "MatrixExpressionTemplates.hpp"
+// #include "MatrixExpressionTemplates.hpp"
 #include "Generator.hpp"
 #include <cassert>
 
 #ifndef MATRIXCACHE_H
 #define MATRIXCACHE_H
 
-template<class ElementType>
+template<class ElementT>
 class CacheElementType
 {
 public:
-	CacheElementType() : element(ElementType(0)), valid(false) {};
+	using ElementType = ElementT;
+	CacheElementType() : element(ElementT(0)), valid(false) {};
 	
-	CacheElementType(const ElementType& elem) : element(elem), valid(false) {};
+	CacheElementType(const ElementT& elem) : element(elem), valid(false) {};
 	
 	const bool& IsHit() const {return valid;}
 	
-	const ElementType& Get() const {return element;}
+	const ElementT& Get() const {return element;}
 	
-	void Set(const ElementType& elem)
+	void Set(const ElementT& elem)
 	{
 		valid = true;
 		element = elem;
-	}
+	};
 	
-	ostream& Display(ostream& out) const
+	std::ostream& Display(std::ostream& out) const
 	{
 		out<<"("<<element<<"; "<<valid<<")";
 		return out;
-	}
+	};
 	
 private:
 	bool valid;
-	ElementType element;
-}
+	ElementT element;
+};
 
 template<class A>
-ostream& operator<<(ostream& ou, const CacheElementType<A> elem) { return elem.Display(out;) }
+std::ostream& operator<<(std::ostream& out, const CacheElementType<A> elem) { return elem.Display(out); }
 
 template<class MatrixType>
 class CACHE_MATRIX_TYPE
 {
-	using Config = MatrixType::Config;
-	using DSLFeatures = Config::DSLFeatures;
+	using Config = typename MatrixType::Config;
+	using DSLFeatures = typename Config::DSLFeatures;
 	
 	struct CachedMatrixDSL//: public DSLFeatures
 	{
-		using CacheElementType<ElementType> ElementType;
-	}
+		using ElementType = CacheElementType<typename DSLFeatures::ElementType>;
+	};
 	
 public:
-	using Generator<CachedMatrixDSL>::RET RET;
-}
+// 	using RET = Generator<CachedMatrixDSL>::RET;
+	using RET = CachedMatrixDSL::ElementType;
+	using ElementType = CachedMatrixDSL::ElementType;
+};
 
 
 #endif

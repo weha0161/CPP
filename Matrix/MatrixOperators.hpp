@@ -50,24 +50,28 @@ inline BinaryExpression<AdditionExpression<BinaryExpression<Expr1>, BinaryExpres
 template<class M1, class M2> 
 inline BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)
 {
+	Logger::Log<Debug>()<<"BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
 	return BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>>(m1, m2);
 }
 
 template<class Expr, class M> 
 inline BinaryExpression<MultiplicationExpression<BinaryExpression<Expr>, Matrix<M>>> operator*(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
 {
+	Logger::Log<Debug>()<<"BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
 	return BinaryExpression<MultiplicationExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
 }
 
 template<class M, class Expr> 
 inline BinaryExpression<MultiplicationExpression<Matrix<M>, BinaryExpression<Expr>>> operator*(const Matrix<M>& m, const BinaryExpression<Expr>& expr)
 {
+	Logger::Log<Debug>()<<"BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
 	return BinaryExpression<MultiplicationExpression<Matrix<M>,BinaryExpression<Expr>>>(m, expr);
 }
 
 template<class Expr1, class Expr2> 
 inline BinaryExpression<MultiplicationExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>> operator*(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2>& expr2)
 {
+	Logger::Log<Debug>()<<"BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
 	return BinaryExpression<MultiplicationExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>>(expr1, expr2);
 }
 
