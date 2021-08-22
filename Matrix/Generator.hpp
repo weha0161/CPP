@@ -32,15 +32,27 @@ private:
 		using IndexType = IndexT;
 		using ElementType = ElementT;
 		using Container = ContainerT;
-		using Shape = Rect<IndexT>;
-		using OptFlag = Rect<IndexT>;
-		using Format = Array<Generator>;
-		using BoundsChecking = BoundsChecker<Array<Generator>>;
+		using Shape = rect<IndexT>;
+		using OptFlag = rect<IndexT>;
+		using Format = array<Generator>;
+		using BoundsChecking = BoundsChecker<array<Generator>>;
 		using Row = RowT;
 		using CommaInitializer = DenseCCommaInitializer<Generator>;
 		using MatrixType =  Matrix<BoundsChecker<Array<Generator>>>;
 	};
 	
+	struct DSLDescription
+	{
+		using ElementType = ElementT;
+		using Shape = rect<IndexT>;
+		using OptFlag = rect<IndexT>;
+		using BoundsChecking = BoundsChecker<Array<Generator>>;
+		using Format = array<Generator>;
+		using ArrayFormat = Array<Generator>;
+		using IndexType = IndexT;
+	};
+	
+	using ParsedDSL = MATRIX_GENERATOR<DSLDescription,1>::RET;
 	
 public:
 	using Config = Configuration;

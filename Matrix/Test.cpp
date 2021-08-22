@@ -25,10 +25,10 @@ int main()
 	using GenInt = Generator<int,int>;
 	using M = GenInt::Config::MatrixType;
 	
-	auto m1 = M(5,5);
-	auto m10 = M(5,5);
-	m1.InitElements(5);
-	m10.InitElements(7);
+	auto m1 = M(2,2);
+	auto m10 = M(2,2);
+	m1.InitElements(1);
+	m10.InitElements(2);
 	
 // 	std::cout<<m1<<std::endl;
 // 	std::cout<<m10<<std::endl;
@@ -40,18 +40,18 @@ int main()
 // 	m6 = 1,2,3,4;
 // 	m2.InitElements(4);
 	
-// 	std::cout<<m2<<std::endl;
+	std::cout<<m1<<std::endl;
 
-// 	auto m3 = m1 + m2;	
-	auto m4 = m1 + m1 + m1;	
+	auto m3 = m1 + m1;	
+// 	auto m4 = m1 + m1 + m1;	
 	
 // 	std::cout<<m3.Get(1,2)<<std::endl;
 // 	std::cout<<m3<<std::endl;
 // 	std::cout<<"M4: \n"<<m4<<std::endl;
-	auto m9 = m10 * m10;
+// 	auto m9 = m10 * m10;
 // 	std::cout<<m9<<std::endl;
 // 	std::cout<<"M4 Get: \n"<<m4.Get(1,1)<<std::endl;
-	std::cout<<"M9 Get: \n"<<m9.Get(1,1)<<std::endl;
+// 	std::cout<<"M9 Get: \n"<<m9.Get(1,1)<<std::endl;
 	
 // 	std::cout<<m5<<std::endl;
 // 	std::cout<<m6<<std::endl;
