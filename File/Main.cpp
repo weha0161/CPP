@@ -6,16 +6,16 @@
 #include <vector>
 #include <cstdlib>
 #include <unordered_map>
-// #include "File.h"
 #include "Directory.hpp"
-// #include "Controller.h"
+#include "FileSystem.hpp"
 
 int main()
 {
 
     const fs::path pathToShow{ fs::current_path() };
-    FS::Directory dir = FS::Directory();
-//     dir.Map(pathToShow);
+    FS::Directory dir = FS::Directory("");
+
+	FileSystem::List("//home//markus//Dokumente//cpp//");
     
     return 0;
 }

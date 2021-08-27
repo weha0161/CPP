@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <boost/filesystem.hpp>
 #include <filesystem>
-#include "Logger.h"
+#include "../Logger/Logger.hpp"
 
 
 #ifndef DIRECTORY_HPP
@@ -23,7 +23,7 @@ namespace FS
 	protected:
 		const std::string name;
 		const std::string path;
-		Node(){  };
+		Node(std::string n):name(n){  };
 		virtual Node* GetChild(int n) { return 0; }
 	public:
 		virtual long Size() { return 0; }
@@ -37,17 +37,16 @@ namespace FS
 		const std::string extension;
 		const fs::file_time_type lastModification;
 	public:
-		File(){};
+		File(std::string n):Node(n){};
 	};
 
-	class Directory: Node
+	class Directory: public Node
 	{   
 	private:
 		std::vector<Node*> nodes;
 	public: 
-		Directory(){};
+		Directory(std::string n):Node(n){};
 		
-		Directory(std::string fp){};
 		long Size()
 		{
 			long result = 0;

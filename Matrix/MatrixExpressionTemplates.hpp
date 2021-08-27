@@ -45,7 +45,9 @@ struct RectAddGetElement
 	template<class IndexType, class ResultType, class LeftType, class RightType>
 	static typename ResultType::ElementType Get(const IndexType& i, const IndexType& j, const ResultType* res, const LeftType& leftType, const RightType& rightType)
 	{
-		Logger::Log<Debug>()<<"RectAddGetElement"<<std::endl;
+		Logger::Log<Debug>()<<"RectAddGetElement:"<<i<<","<<j<<std::endl;
+		Logger::Log<Debug>()<<"RectAddGetElement left"<<leftType.Cols()<<","<<leftType.Rows()<<std::endl;
+		Logger::Log<Debug>()<<"RectAddGetElement right"<<rightType.Cols()<<","<<rightType.Rows()<<std::endl;
 		return leftType.Get(i,j) + rightType.Get(i,j);
 	}
 };
@@ -77,12 +79,13 @@ protected:
 public:
 	AdditionExpression(const LeftType& m1, const RightType& m2): left_(m1), right_(m2), rows_(m1.Rows()), cols_(m1.Cols())
 	{
+		Logger::Log<Debug>()<<"AdditionExpression Constructor: "<<rows_<<","<<cols_<<std::endl;
 		if(m1.Cols() != m2.Cols() || m1.Rows() != m2.Rows()) throw "argument matrices are incompatible";
 	}
 	
 	ElementType Get(const IndexType& i, const IndexType& j) const
 	{
-		Logger::Log<Debug>()<<"AdditionExpression GET"<<std::endl;
+		Logger::Log<Debug>()<<"AdditionExpression GET: "<<i<<","<<j<<std::endl;
 		return MATRIX_ADD_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_);
 	}
 	
@@ -97,15 +100,6 @@ struct MULTIPLY_RESULT_TYPE
 {
 	using RET = GeneratorT;
 };
-
-// template<class MatrixType>
-// class CACHE_MATRIX_TYPE
-// {
-// public:
-// 	using Config = MatrixType::Config;
-// 	using RET = MatrixType;
-// // 	using RET = GeneratorT::RET;
-// };
 
 struct RectMultiplyGetElement
 {
@@ -228,6 +222,10 @@ private:
 template<class ExpressionType>
 class BinaryExpression : public ExpressionType
 {
+// 	~BinaryExpression()
+// 	{	
+// 		Logger::Log<Debug>()<<"!!!!BinaryExpression Destructor!!!"<<std::endl;
+// 	};
 public:
 	using LeftType = ExpressionType::LeftType;
 	using RightType = ExpressionType::RightType;
@@ -239,16 +237,33 @@ public:
 		Logger::Log<Debug>()<<"BinaryExpression(const LeftType& op1, const RightType& op2): ExpressionType(op1, op2)"<<std::endl;
 	};
 	
+	
 	template<class Res>
-	Matrix<Res> Assign(Matrix<Res> const result) const
+	Matrix<Res>* Assign(Matrix<Res>* const result) const
 	{
 		Logger::Log<Debug>()<<"Matrix<Res> Assign(Matrix<Res> const result) const"<<std::endl;
 		MATRIX_ASSIGMENT<MatrixType>::RET::assign(result, this);
 		return result;
 	}
 	
+	template<class Expr>
+	BinaryExpression<Expr> operator=(const BinaryExpression<Expr>& expr)
+	{ 
+		Logger::Log<Debug>()<<"Matrix& operator=(const BinaryExpression<Expr>& expr)"<<std::endl;
+		expr.Assign(this);
+		return *this; 
+	}
+	
+	template<class Expr>
+	BinaryExpression(const BinaryExpression<Expr>& expr)
+	{ 
+		Logger::Log<Debug>()<<"BinaryExpression(const BinaryExpression<Expr>& expr)"<<std::endl;
+		this->assign(expr);
+	}
+	
 	std::ostream& Display(std::ostream& out) const
 	{
+		Logger::Log<Debug>()<<"BinaryExpression Display"<<std::endl;
 		for(IndexType i = 0;i < this->Rows() ; ++i)
 		{
 			for(IndexType j = 0; j < this->Cols() ; ++j)

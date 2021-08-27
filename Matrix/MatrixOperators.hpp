@@ -22,14 +22,14 @@ std::ostream& operator<<(std::ostream& out, const BinaryExpression<A>& m)
 template<class M1, class M2> 
 inline BinaryExpression<AdditionExpression<Matrix<M1>, Matrix<M2>>> operator+(const Matrix<M1>& m1, const Matrix<M2>& m2)
 {
-	Logger::Log<Debug>()<<"operator+(const Matrix<M1>& m1, const Matrix<M2>& m2)";
+	Logger::Log<Debug>()<<"operator+(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
 	return BinaryExpression<AdditionExpression<Matrix<M1>, Matrix<M2>>>(m1, m2);
 }
 
 template<class Expr, class M> 
 inline BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>> operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
 {
-	Logger::Log<Debug>()<<"operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)";
+	Logger::Log<Debug>()<<"operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)"<<std::endl;
 	return BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
 }
 
