@@ -13,9 +13,9 @@ int main()
 {
 
     const fs::path pathToShow{ fs::current_path() };
-    FS::Directory dir = FS::Directory("");
+//     FS::Directory dir = FS::Directory("");
 
-	FileSystem::List("//home//markus//Dokumente//cpp//");
+	FileSystem::List(pathToShow);
     
     return 0;
 }

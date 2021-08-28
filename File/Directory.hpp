@@ -2,6 +2,8 @@
 #include <functional>
 #include <iostream>
 #include <fstream>
+#include <chrono>
+#include <ctime>
 #include <iterator>
 #include <vector>
 #include <cstdlib>
@@ -18,18 +20,39 @@ namespace fs = std::filesystem;
 
 namespace FS
 {
+	std::string to_string(std::filesystem::file_time_type const& ftime) 
+	{
+// 		std::time_t cftime = std::chrono::system_clock::to_time_t(
+// 			std::chrono::file_clock::to_sys(ftime));
+// 		std::string str = std::asctime(std::localtime(&cftime));
+// 		str.pop_back();  // rm the trailing '\n' put by `asctime`
+// 		return str;
+		
+		return"";
+	}
+	
 	class Node
 	{
 	protected:
 		const std::string name;
 		const std::string path;
-		Node(std::string n):name(n){  };
+		const std::filesystem::file_time_type lastModification;
+		std::uintmax_t size;
+		Node(std::string p, std::uintmax_t s, std::filesystem::file_time_type lm):path(p), size(s), lastModification(lm){  };
 		virtual Node* GetChild(int n) { return 0; }
 	public:
-		virtual long Size() { return 0; }
-		const std::string& Name(){ return name; };
-		const std::string& Path(){ return path; };
+		virtual long Size() const { return size; }
+		const std::string& Name() const{ return name; };
+		const std::string& Path() const { return path; };
+		const std::string LastModification()const { return to_string(this->lastModification); };
+		const std::string virtual Info() const { return this->Path() + std::string("\t") + std::to_string(this->Size()) + std::string("\t") + this->LastModification() ; };
 	};
+	
+	std::ostream& operator<<(std::ostream& out, const Node* n)
+	{
+		return out<<n->Info();
+	}
+
 
 	class File: public Node
 	{
@@ -37,7 +60,9 @@ namespace FS
 		const std::string extension;
 		const fs::file_time_type lastModification;
 	public:
-		File(std::string n):Node(n){};
+		File(std::string p, std::uintmax_t s, std::filesystem::file_time_type lm):Node(p,s,lm)
+		{
+		};
 	};
 
 	class Directory: public Node
@@ -45,7 +70,10 @@ namespace FS
 	private:
 		std::vector<Node*> nodes;
 	public: 
-		Directory(std::string n):Node(n){};
+		Directory(std::string p, std::uintmax_t s, std::filesystem::file_time_type lm):Node(p,s,lm)
+		{
+			this->size = this->Size();
+		};
 		
 		long Size()
 		{
