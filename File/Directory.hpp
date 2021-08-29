@@ -44,15 +44,16 @@ namespace FS
 		const std::string name;
 		const std::string path;
 		const std::filesystem::file_time_type lastModification;
+		std::filesystem::path fs_path;
 		std::uintmax_t size;
-		Node(std::string p, std::uintmax_t s, std::filesystem::file_time_type lm):path(p), size(s), lastModification(lm){  };
+		Node(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm): fs_path(p), name(p.filename()), path(p), size(s), lastModification(lm){  };
 		virtual Node* GetChild(int n) { return 0; }
 	public:
 		virtual long Size() const { return size; }
 		const std::string& Name() const{ return name; };
 		const std::string& Path() const { return path; };
 		const std::time_t LastModification()const { return to_time_t(this->lastModification); };
-		const std::string virtual Info() const { return this->Path() + std::string("\t") + std::to_string(this->Size()) + std::string("\t") + to_timestring(this->LastModification()) ; };
+		const std::string virtual Info() const { return this->Name() + std::string("\t") + std::to_string(this->Size()) + std::string("\t") + to_timestring(this->LastModification()) ; };
 	};
 	
 	std::ostream& operator<<(std::ostream& out, const Node* n)
@@ -67,7 +68,7 @@ namespace FS
 		const std::string extension;
 		const fs::file_time_type lastModification;
 	public:
-		File(std::string p, std::uintmax_t s, std::filesystem::file_time_type lm):Node(p,s,lm)
+		File(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm):Node(p,s,lm)
 		{
 		};
 	};
@@ -77,7 +78,7 @@ namespace FS
 	private:
 		std::vector<Node*> nodes;
 	public: 
-		Directory(std::string p, std::uintmax_t s, std::filesystem::file_time_type lm):Node(p,s,lm)
+		Directory(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm):Node(p,s,lm)
 		{
 			this->size = this->Size();
 		};
