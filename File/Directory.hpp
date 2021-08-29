@@ -43,13 +43,13 @@ namespace FS
 	protected:
 		const std::string name;
 		const std::string path;
-		const std::filesystem::file_time_type lastModification;
 		std::filesystem::path fs_path;
+		const std::filesystem::file_time_type lastModification;
 		std::uintmax_t size;
 		Node(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm): fs_path(p), name(p.filename()), path(p), size(s), lastModification(lm){  };
-		virtual Node* GetChild(int n) { return 0; }
+		virtual Node* Child(int n) { return 0; }
 	public:
-		virtual long Size() const { return size; }
+		virtual long Size() const {return size; };
 		const std::string& Name() const{ return name; };
 		const std::string& Path() const { return path; };
 		const std::time_t LastModification()const { return to_time_t(this->lastModification); };
@@ -68,8 +68,9 @@ namespace FS
 		const std::string extension;
 		const fs::file_time_type lastModification;
 	public:
-		File(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm):Node(p,s,lm)
+		File(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s):Node(p,s,lm), extension(p.extension())
 		{
+			
 		};
 	};
 
@@ -78,7 +79,7 @@ namespace FS
 	private:
 		std::vector<Node*> nodes;
 	public: 
-		Directory(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm):Node(p,s,lm)
+		Directory(std::filesystem::path p, std::filesystem::file_time_type lm, std::vector<Node*> n):Node(p,0,lm), nodes(n)
 		{
 			this->size = this->Size();
 		};
@@ -87,11 +88,14 @@ namespace FS
 		{
 			long result = 0;
 			Node* child;
-			for(int i = 0; child = GetChild(i); ++i)
-				result += child->Size();
+			for(auto it = nodes.cbegin(); it != nodes.cend(); ++it)
+				result += (*it)->Size();
+			
+// 			Logger::Log<Debug>()<<this->nodes.size()<<"\t"<<result<<std::endl;
 				
 			return result;
 		}
+		
 	//         void ReadLines(std::string file);        
 		void Map(const fs::path& pathToScan);
 	//     static std::vector<std::string> GetAllFiles(std::string pattern, std::string dir = ".");

@@ -12,10 +12,13 @@
 int main()
 {
 
-    const fs::path pathToShow{ fs::current_path() };
+    const fs::path pathToShow{ "//home//markus//Dokumente//cpp" };
 //     FS::Directory dir = FS::Directory("");
 
-	FileSystem::List(pathToShow);
+	auto nodes = FileSystem::List(pathToShow);
     
+	for(auto it = nodes.cbegin(); it != nodes.cend(); ++it)
+		Logger::Log<Debug>()<<*it<<std::endl;
+	
     return 0;
 }
