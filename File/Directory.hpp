@@ -20,15 +20,22 @@ namespace fs = std::filesystem;
 
 namespace FS
 {
-	std::string to_string(std::filesystem::file_time_type const& ftime) 
+	template <typename TP>
+	std::time_t to_time_t(TP tp)
 	{
-// 		std::time_t cftime = std::chrono::system_clock::to_time_t(
-// 			std::chrono::file_clock::to_sys(ftime));
-// 		std::string str = std::asctime(std::localtime(&cftime));
-// 		str.pop_back();  // rm the trailing '\n' put by `asctime`
-// 		return str;
-		
-		return"";
+		using namespace std::chrono;
+		auto sctp = time_point_cast<system_clock::duration>(tp - TP::clock::now()
+				+ system_clock::now());
+		return system_clock::to_time_t(sctp);
+	}
+	
+	std::string to_timestring(std::time_t tt)
+	{
+		std::tm *gmt = std::gmtime(&tt);
+		std::stringstream buffer;
+		buffer << std::put_time(gmt, "%A, %d %B %Y %H:%M");
+		std::string formattedFileTime = buffer.str();
+		return formattedFileTime;
 	}
 	
 	class Node
@@ -44,8 +51,8 @@ namespace FS
 		virtual long Size() const { return size; }
 		const std::string& Name() const{ return name; };
 		const std::string& Path() const { return path; };
-		const std::string LastModification()const { return to_string(this->lastModification); };
-		const std::string virtual Info() const { return this->Path() + std::string("\t") + std::to_string(this->Size()) + std::string("\t") + this->LastModification() ; };
+		const std::time_t LastModification()const { return to_time_t(this->lastModification); };
+		const std::string virtual Info() const { return this->Path() + std::string("\t") + std::to_string(this->Size()) + std::string("\t") + to_timestring(this->LastModification()) ; };
 	};
 	
 	std::ostream& operator<<(std::ostream& out, const Node* n)
