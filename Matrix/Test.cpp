@@ -31,8 +31,8 @@ int main()
 	M m10 = M(2,2);
 	auto m2 = m10;
 	m1.InitElements(1);
-	m3.InitElements(1);
-	m4.InitElements(1);
+	m3.InitElements(2);
+	m4.InitElements(4);
 	m10.InitElements(2);
 	
 // 	std::cout<<m1<<std::endl;
@@ -40,27 +40,30 @@ int main()
 	
 // 	auto m2 = M(5,5);
 	M m5 = M(2,2);
-	m5 = 1,2,3,4;
+// 	m5 = 1,2,3,4;
 // 	auto m6 = M(2,2);
 // 	m6 = 1,2,3,4;
 // 	m2.InitElements(4);
 	
 // 	std::cout<<m1<<std::endl;
 
-	auto m6 = m1 + m3 +m4;	
+// 	auto m6 = (m1 + m3) + m4;	
+	M m6 = (m1 + m3) + m4 + m4;	
+// 	BinaryExpression<AdditionExpression<Matrix<M>, Matrix<M>>> m6 = (m1 + m3);	
+// 	M m6 = (m1 + m3);	
 // 	std::cout<<"\n"<<std::endl;
 // 	std::cout<<m3<<std::endl;
 // 	BinaryExpression<AdditionExpression<BinaryExpression<AdditionExpression<Matrix<BoundsChecker<Array<Generator<int, int> > > >, Matrix<BoundsChecker<Array<Generator<int, int> > > > > >, Matrix<BoundsChecker<Array<Generator<int, int> > > > > > m4 = m1 + m1 + m1;	
 	
-	M m = M(m3);
-	M mA = M(2,2);	
-	M mB = M(2,2);	
+// 	M m = M(m3);
+// 	M mA = M(2,2);	
+// 	M mB = M(2,2);	
 	
-	mA = m3;
+// 	mA = m3;
 	std::cout<<"ASSIGNMENT"<<std::endl;
 	std::cout<<"Get m3 (1,1): "<<m6.Get(1,1)<<std::endl;
-	std::cout<<"Get m=m3 (1,1): "<<m.Get(1,1)<<std::endl;
-	mB = mA;
+// 	std::cout<<"Get m=m3 (1,1): "<<m.Get(1,1)<<std::endl;
+// 	mB = mA;
 	
 // 	std::cout<<m4<<std::endl;
 // 	auto m9 = m10 * m10;

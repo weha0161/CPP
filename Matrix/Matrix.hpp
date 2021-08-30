@@ -47,6 +47,19 @@ public:
 		}
 	}
 	
+	template<class A>
+	Array(const Array<A>& a)
+	{ 
+		Logger::Log<Debug>()<<"Array(const Array<A>& a)"<<std::endl;
+	}
+	
+	template<class A>
+	Array& operator=(const Array<A>& a)
+	{ 
+		Logger::Log<Debug>()<<"Array& operator=(const Array<A>& a)"<<std::endl;
+		return *this; 
+	}
+	
 	~Array()
 	{
 		Logger::Log<Debug>()<<"Array Destructor"<<std::endl;
@@ -63,7 +76,7 @@ public:
 	
 	ElementType Get(const IndexType& i, const IndexType& j) const 
 	{
-		Logger::Log<Debug>()<<"Get i:"<<i<<" j: "<<j<<std::endl;
+// 		Logger::Log<Debug>()<<"Get i:"<<i<<" j: "<<j<<std::endl;
 		checkBounds(i, j);
 		return elements.at(i).at(j);
 	}
@@ -219,11 +232,16 @@ public:
 		Logger::Log<Debug>()<<"Matrix(const Matrix<A>& m)"<<std::endl;
 	}
 	
+	~Matrix()
+	{ 
+		Logger::Log<Debug>()<<"DESTRUCTOR Matrix"<<std::endl;
+	}
+	
 	template<class Expr>
 	Matrix(const BinaryExpression<Expr>& expr): CheckedMatrix(expr.Rows(), expr.Cols())
 	{ 
 		Logger::Log<Debug>()<<"Matrix(const BinaryExpression<Expr>& expr)"<<std::endl;
-// 		expr.Assign(this);
+		expr.Assign(this);
 	}
 	
 	CommaInitializer operator=(const ElementType& v)
@@ -235,8 +253,15 @@ public:
 	template<class Expr>
 	Matrix& operator=(const BinaryExpression<Expr>& expr)
 	{ 
-		Logger::Log<Debug>()<<"Matrix& operator=(const BinaryExpression<Expr>& expr)"<<std::endl;
+		Logger::Log<Debug>()<<"Matrix& operator=(const BinaryExpression<Expr>& expr): "<<expr.Get(1,1)<<std::endl;
 		expr.Assign(this);
+		return *this; 
+	}
+	
+	template<class C, class D>
+	Matrix& operator=(const AdditionExpression<C,D> expr)
+	{ 
+		Logger::Log<Debug>()<<"AdditionExpression<C,D> operator=(const AdditionExpression<C,D> expr)"<<std::endl;
 		return *this; 
 	}
 	
