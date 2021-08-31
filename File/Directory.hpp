@@ -34,11 +34,11 @@ namespace FS
 		std::tm *gmt = std::gmtime(&tt);
 		std::stringstream buffer;
 		buffer << std::put_time(gmt, "%A, %d %B %Y %H:%M");
-		std::string formattedFileTime = buffer.str();
-		return formattedFileTime;
+		std::string formattedFileInfoTime = buffer.str();
+		return formattedFileInfoTime;
 	}
 	
-	class Node
+	class Info
 	{
 	protected:
 		const std::string name;
@@ -46,40 +46,40 @@ namespace FS
 		std::filesystem::path fs_path;
 		const std::filesystem::file_time_type lastModification;
 		std::uintmax_t size;
-		Node(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm): fs_path(p), name(p.filename()), path(p), size(s), lastModification(lm){  };
-		virtual Node* Child(int n) { return 0; }
+		Info(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm): fs_path(p), name(p.filename()), path(p), size(s), lastModification(lm){  };
+		virtual Info* Child(int n) { return 0; }
 	public:
 		virtual long Size() const {return size; };
 		const std::string& Name() const{ return name; };
 		const std::string& Path() const { return path; };
 		const std::time_t LastModification()const { return to_time_t(this->lastModification); };
-		const std::string virtual Info() const { return this->Name() + std::string("\t") + std::to_string(this->Size()) + std::string("\t") + to_timestring(this->LastModification()) ; };
+		const std::string virtual PrintInfo() const { return this->Name() + std::string("\t") + std::to_string(this->Size()) + std::string("\t") + to_timestring(this->LastModification()) ; };
 	};
 	
-	std::ostream& operator<<(std::ostream& out, const Node* n)
+	std::ostream& operator<<(std::ostream& out, const Info* n)
 	{
-		return out<<n->Info();
+		return out<<n->PrintInfo();
 	}
 
 
-	class File: public Node
+	class FileInfo: public Info
 	{
 	private:
 		const std::string extension;
 		const fs::file_time_type lastModification;
 	public:
-		File(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s):Node(p,s,lm), extension(p.extension())
+		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s):Info(p,s,lm), extension(p.extension())
 		{
 			
 		};
 	};
 
-	class Directory: public Node
+	class DirectoryInfo: public Info
 	{   
 	private:
-		std::vector<Node*> nodes;
+		std::vector<Info*> nodes;
 	public: 
-		Directory(std::filesystem::path p, std::filesystem::file_time_type lm, std::vector<Node*> n):Node(p,0,lm), nodes(n)
+		DirectoryInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::vector<Info*> n):Info(p,0,lm), nodes(n)
 		{
 			this->size = this->Size();
 		};
@@ -87,7 +87,7 @@ namespace FS
 		long Size()
 		{
 			long result = 0;
-			Node* child;
+			Info* child;
 			for(auto it = nodes.cbegin(); it != nodes.cend(); ++it)
 				result += (*it)->Size();
 			
@@ -98,35 +98,35 @@ namespace FS
 		
 	//         void ReadLines(std::string file);        
 		void Map(const fs::path& pathToScan);
-	//     static std::vector<std::string> GetAllFiles(std::string pattern, std::string dir = ".");
+	//     static std::vector<std::string> GetAllFileInfos(std::string pattern, std::string dir = ".");
 		
 	//         std::vector<std::string> GetAllLines() const;
-	//         std::vector<std::string> GetAllFiles(std::string pattern, std::string dir = ".") const;
+	//         std::vector<std::string> GetAllFileInfos(std::string pattern, std::string dir = ".") const;
 	};
 	
 }
 
 
-// void Directory::Map(const fs::path& pathToScan) {
+// void DirectoryInfo::Map(const fs::path& pathToScan) {
 //     for (const auto& entry : fs::directory_iterator(pathToScan)) {
 //         const auto filenameStr = entry.path().filename().string();
 //         if (entry.is_directory()) {
-//             Directory dir = Directory(entry.path());
+//             DirectoryInfo dir = DirectoryInfo(entry.path());
 //             dir.Map(entry.path());
 //             this->directories.push_back(dir);
 //         }
 //         else
 //         {
-//             auto file = File(entry.path());
-//             this->files.push_back(File(entry.path()));
+//             auto file = FileInfo(entry.path());
+//             this->files.push_back(FileInfo(entry.path()));
 //             Logger::Instance().Log("Create: "+ file.Name());
 //         }
 //     }
 // }
 
-// std::vector<std::string> Directory::GetAllFiles(std::string pattern, std::string dir)
+// std::vector<std::string> DirectoryInfo::GetAllFileInfos(std::string pattern, std::string dir)
 // {
-//     Logger::Instance()<<"GetAllFiles with pattern: " + pattern + " in directory: " + dir;
+//     Logger::Instance()<<"GetAllFileInfos with pattern: " + pattern + " in directory: " + dir;
 //     std::vector<std::string> result;
 //     int num_entries, i;
 //     struct dirent **namelist, **list;
@@ -148,18 +148,18 @@ namespace FS
 //     int (*staticSelector)( const struct dirent* ) = []( const struct dirent* a ) { return static_variable( a ) ;};
 // 
 //     if ((num_entries=scandir(ptr, &namelist, staticSelector, alphasort)) < 0) {
-//             Logger::Instance()<<"Error in FileService GetAllFiles.";
+//             Logger::Instance()<<"Error in FileInfoService GetAllFileInfos.";
 //             exit (EXIT_FAILURE);
 //     }
-//     Logger::Instance()<<"GetAllFiles found: "+std::to_string(result.size());
+//     Logger::Instance()<<"GetAllFileInfos found: "+std::to_string(result.size());
 // 
 //     if (num_entries) {
-//         std::cout<<"GetAllFiles found: "+std::to_string(result.size());
+//         std::cout<<"GetAllFileInfos found: "+std::to_string(result.size());
 //         for(i=0, list=namelist; i < num_entries; i++, list++) 
 //         {
 //             result.push_back( (*list)->d_name);
-//             Logger::Instance()<<"GetAllFiles found file: "+std::string((*list)->d_name);
-//             std::cout<<"GetAllFiles found file: "+std::string((*list)->d_name)<<std::endl;
+//             Logger::Instance()<<"GetAllFileInfos found file: "+std::string((*list)->d_name);
+//             std::cout<<"GetAllFileInfos found file: "+std::string((*list)->d_name)<<std::endl;
 //             free (*list);
 //         }
 //         free (namelist);
