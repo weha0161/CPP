@@ -53,7 +53,7 @@ namespace FS
 		std::filesystem::path fs_path;
 		const std::filesystem::file_time_type lastModification;
 		std::uintmax_t size;
-		Info(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm);
+		Info(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm): fs_path(p), name(p.filename()), path(p), size(s), lastModification(lm){};
 		virtual Info* Child(int n) { return 0; }
 	public:
 		virtual long Size() const {return size; };
@@ -83,7 +83,8 @@ namespace FS
 		
 		FileInfo(){};
 		~FileInfo(){};
-		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s);
+		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s):Info(p,s,lm), extension(p.extension()){};
+		const std::string& Extension() { return this->extension; };
 	};
 //---------------------------------------------------------------------------------------------------DirectoryInfo----------------------------------------------------------------------------------------
 
@@ -95,8 +96,10 @@ namespace FS
 		DEFINE_VISITABLE();
 		
 		~DirectoryInfo(){};
-		DirectoryInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::vector<Info*> n);
-		
+		DirectoryInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::vector<Info*> n):Info(p,0,lm), nodes(n)
+                {
+                        this->size = this->Size();
+                };
 		long Size()
 		{
 			long result = 0;
@@ -147,10 +150,14 @@ namespace FS
 	};
 	
 	struct CPP: public FileTypeBase<CPP>{};
-	struct HPP: public FileTypeBase<CPP>{};
-// 	struct H: public FileTypeBase<CPP>{};
-	struct CSV: public FileTypeBase<CPP>{};
+	struct HPP: public FileTypeBase<HPP>{};
+	struct H: public FileTypeBase<H>{};
+	struct CSV: public FileTypeBase<CSV>{};
 
+	template<> const char* FileTypeBase<CPP>::Extension = ".cpp";
+	template<> const char* FileTypeBase<HPP>::Extension = ".hpp";
+	template<> const char* FileTypeBase<H>::Extension = ".h";
+	template<> const char* FileTypeBase<CSV>::Extension = ".csv";
 	
 	//---------------------------------------------------------------------------------------------------Directory----------------------------------------------------------------------------------------
 
