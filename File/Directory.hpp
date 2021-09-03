@@ -8,15 +8,21 @@
 #include <vector>
 #include <cstdlib>
 #include <unordered_map>
+#include <boost/mpl/vector.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/mpl/for_each.hpp>
+#include <boost/mpl/placeholders.hpp>
 #include <filesystem>
 #include "../Logger/Logger.hpp"
+#include "../Visitor/Visitor.hpp"
+#include "../Typelist/Typelist.h"
 
-
-#ifndef DIRECTORY_HPP
-#define DIRECTORY_HPP
+#ifndef DIRECTORY_H
+#define DIRECTORY_H
 
 namespace fs = std::filesystem;
+namespace mpl = boost::mpl;
+using namespace mpl::placeholders;
 
 namespace FS
 {
@@ -38,7 +44,8 @@ namespace FS
 		return formattedFileInfoTime;
 	}
 	
-	class Info
+//---------------------------------------------------------------------------------------------------Info----------------------------------------------------------------------------------------
+	class Info : public BaseVisitable<>
 	{
 	protected:
 		const std::string name;
@@ -46,10 +53,13 @@ namespace FS
 		std::filesystem::path fs_path;
 		const std::filesystem::file_time_type lastModification;
 		std::uintmax_t size;
-		Info(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm): fs_path(p), name(p.filename()), path(p), size(s), lastModification(lm){  };
+		Info(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm);
 		virtual Info* Child(int n) { return 0; }
 	public:
 		virtual long Size() const {return size; };
+		DEFINE_VISITABLE();
+		Info(){};
+		virtual ~Info(){};
 		const std::string& Name() const{ return name; };
 		const std::string& Path() const { return path; };
 		const std::time_t LastModification()const { return to_time_t(this->lastModification); };
@@ -61,28 +71,31 @@ namespace FS
 		return out<<n->PrintInfo();
 	}
 
+//---------------------------------------------------------------------------------------------------FileInfo----------------------------------------------------------------------------------------
 
-	class FileInfo: public Info
+	class FileInfo : public Info
 	{
 	private:
 		const std::string extension;
 		const fs::file_time_type lastModification;
 	public:
-		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s):Info(p,s,lm), extension(p.extension())
-		{
-			
-		};
+		DEFINE_VISITABLE();
+		
+		FileInfo(){};
+		~FileInfo(){};
+		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s);
 	};
+//---------------------------------------------------------------------------------------------------DirectoryInfo----------------------------------------------------------------------------------------
 
-	class DirectoryInfo: public Info
+	class DirectoryInfo : public Info
 	{   
 	private:
 		std::vector<Info*> nodes;
 	public: 
-		DirectoryInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::vector<Info*> n):Info(p,0,lm), nodes(n)
-		{
-			this->size = this->Size();
-		};
+		DEFINE_VISITABLE();
+		
+		~DirectoryInfo(){};
+		DirectoryInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::vector<Info*> n);
 		
 		long Size()
 		{
@@ -91,21 +104,105 @@ namespace FS
 			for(auto it = nodes.cbegin(); it != nodes.cend(); ++it)
 				result += (*it)->Size();
 			
-// 			Logger::Log<Debug>()<<this->nodes.size()<<"\t"<<result<<std::endl;
+			Logger::Log<Debug>()<<this->nodes.size()<<"\t"<<result<<std::endl;
 				
 			return result;
 		}
-		
-	//         void ReadLines(std::string file);        
-		void Map(const fs::path& pathToScan);
-	//     static std::vector<std::string> GetAllFileInfos(std::string pattern, std::string dir = ".");
-		
-	//         std::vector<std::string> GetAllLines() const;
-	//         std::vector<std::string> GetAllFileInfos(std::string pattern, std::string dir = ".") const;
 	};
 	
-}
+	class TreeParserVisitor: 
+		public BaseVisitor,
+		public Visitor<DirectoryInfo>,
+		public Visitor<FileInfo>
+	{
+	public:
+		virtual void Visit(DirectoryInfo& di) { Logger::Log<Debug>()<<"DirectoryInfo"<<std::endl; };
+		virtual void Visit(FileInfo& fi) { Logger::Log<Debug>()<<"FileInfo"<<std::endl; };
+	};	
+	//---------------------------------------------------------------------------------------------------File<T>----------------------------------------------------------------------------------------
 
+	template<typename FileType>
+	struct File
+	{
+		const FileInfo fileInfo;
+		File(const FileInfo& fi): fileInfo(fi){};
+		File(){};
+		const FileInfo& Info() const {return fileInfo;}
+	};
+
+	//---------------------------------------------------------------------------------------------------FileTypes----------------------------------------------------------------------------------------
+
+	template<typename T>
+	struct FileTypeBase
+	{
+		using Type = T;
+		using FileType = File<Type>;
+		using Cont = std::vector<FileType>;
+		static const char* Extension;
+		
+		void Add(FileInfo fi){};
+		FileType Get(FileInfo fi){return FileType();};
+	private:
+		Cont cont;
+	};
+	
+	struct CPP: public FileTypeBase<CPP>{};
+	struct HPP: public FileTypeBase<CPP>{};
+// 	struct H: public FileTypeBase<CPP>{};
+	struct CSV: public FileTypeBase<CPP>{};
+
+	
+	//---------------------------------------------------------------------------------------------------Directory----------------------------------------------------------------------------------------
+
+	struct Visit_Type
+	{
+		FileInfo fileInfo;
+		
+		Visit_Type(FileInfo fi): fileInfo(fi){};
+		
+		template<class Visitor>
+		void operator()(Visitor)
+		{
+			Visitor::visit();
+		};
+	};
+	struct Directory
+	{
+// 		using types = mpl::vector<CPP,HPP>;
+		using types = mpl::vector<std::vector<Directory>, std::vector<File<CPP>>, std::vector<File<HPP>>>;
+		
+		void Add()
+		{
+// 			auto f = FileInfo();
+// 			auto a = Visit_Type(f);
+// 			mpl::for_each<types, Add_Visitor<_1>>(a);
+			
+		}
+	};
+	
+// 	template<typename Types>
+// 	void Pasre(const FileInfo& fi)
+// 	{
+// 		if(Types::Empty)
+// 			return;
+// 		
+// 		using Head = Front<Types>;
+// 		using Tail = PopFront<Types>;
+// 		
+// 		Head::Extension == fi.extension ? Head::Add(fi) : Pasre<Tail>(fi);
+// 	}
+
+}
+	
+// 	template<class T>
+// 	struct Add_Visitor
+// 	{
+// 		static void visit()
+// 		{
+// 			std::cout<<"Test"<<std::endl;
+// 		};
+// 	};
+// 	
 
 // void DirectoryInfo::Map(const fs::path& pathToScan) {
 //     for (const auto& entry : fs::directory_iterator(pathToScan)) {

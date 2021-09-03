@@ -27,20 +27,6 @@ template<typename IndexT = int,
 struct Generator
 {
 private:
-	struct Configuration
-	{
-		using IndexType = IndexT;
-		using ElementType = ElementT;
-		using Container = ContainerT;
-		using Shape = rect<IndexT>;
-		using OptFlag = rect<IndexT>;
-		using Format = array<Generator>;
-		using BoundsChecking = BoundsChecker<array<Generator>>;
-		using Row = RowT;
-		using CommaInitializer = DenseCCommaInitializer<Generator>;
-		using MatrixType =  Matrix<BoundsChecker<Array<Generator>>>;
-	};
-	
 	struct DSLDescription
 	{
 		using ElementType = ElementT;
@@ -53,6 +39,21 @@ private:
 	};
 	
 	using ParsedDSL = MATRIX_GENERATOR<DSLDescription,1>::RET;
+	
+	struct Configuration
+	{
+		using IndexType = IndexT;
+		using ElementType = ElementT;
+		using Container = ContainerT;
+		using Shape = rect<IndexT>;
+		using OptFlag = rect<IndexT>;
+		using Format = array<Generator>;
+		using BoundsChecking = BoundsChecker<Array<Generator>>;
+		using Row = RowT;
+		using CommaInitializer = DenseCCommaInitializer<Generator>;
+		using MatrixType =  Matrix<BoundsChecker<Array<Generator>>>;
+		using DSLFeatures = ParsedDSL;
+	};
 	
 public:
 	using Config = Configuration;

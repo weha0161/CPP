@@ -14,7 +14,7 @@ Release: $(OBJECTS)
 Debug: $(OBJECTS)
 	$(CXX) -o $@ $(OBJECTS) 
 
-%.o: 	%.hpp %.cpp %.h
+%.o: 	%.cpp %.h %.hpp 
 	$(CXX) $(DEBUGFLAGS) $<
 
 clean:

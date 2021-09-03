@@ -25,6 +25,7 @@ public:
 	{
 		valid = true;
 		element = elem;
+		Logger::Log<Debug>()<<"Set: "<<elem<<std::endl;
 	};
 	
 	std::ostream& Display(std::ostream& out) const

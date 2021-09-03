@@ -142,6 +142,7 @@ private:
 	template<class IndexType_, class MatrixType, class CacheType>
 	static typename MatrixType::ElementType getCachedElement(const IndexType_& i, const IndexType_& j, const MatrixType& matrix, CacheType* cache)
 	{
+		Logger::Log<Debug>()<<"cache == 0: "<<(cache == 0)<<std::endl;
 		if(cache == 0) return matrix.Get(i,j);
 		else
 		{
@@ -220,6 +221,8 @@ public:
 	ElementType Get(const IndexType& i, const IndexType& j) const
 	{
 		Logger::Log<Debug>()<<"MultiplicationExpression GET"<<std::endl;
+		Logger::Log<Debug>()<<(this->leftCacheMatrix_ == 0)<<std::endl;
+		Logger::Log<Debug>()<<(this->rightCacheMatrix_ == 0)<<std::endl;
 		return MATRIX_MULTIPLY_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_, leftCacheMatrix_, rightCacheMatrix_);
 // 		return 0;
 	}
