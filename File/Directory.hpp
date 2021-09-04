@@ -76,15 +76,15 @@ namespace FS
 	class FileInfo : public Info
 	{
 	private:
-		const std::string extension;
+		const char* extension;
 		const fs::file_time_type lastModification;
 	public:
 		DEFINE_VISITABLE();
 		
 		FileInfo(){};
 		~FileInfo(){};
-		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s):Info(p,s,lm), extension(p.extension()){};
-		const std::string& Extension() { return this->extension; };
+		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s):Info(p,s,lm), extension(p.extension().c_str()){};
+		const char*  Extension() const { return this->extension; };
 	};
 //---------------------------------------------------------------------------------------------------DirectoryInfo----------------------------------------------------------------------------------------
 
@@ -143,7 +143,7 @@ namespace FS
 		using Cont = std::vector<FileType>;
 		static const char* Extension;
 		
-		void Add(FileInfo fi){};
+		static void Add(FileInfo* fi){Logger::Log<Debug>()<<fi->Extension()<<std::endl; };
 		FileType Get(FileInfo fi){return FileType();};
 	private:
 		Cont cont;
@@ -187,17 +187,31 @@ namespace FS
 		}
 	};
 	
-// 	template<typename Types>
-// 	void Pasre(const FileInfo& fi)
-// 	{
-// 		if(Types::Empty)
-// 			return;
-// 		
-// 		using Head = Front<Types>;
-// 		using Tail = PopFront<Types>;
-// 		
-// 		Head::Extension == fi.extension ? Head::Add(fi) : Pasre<Tail>(fi);
+// 	template<typename Head, typename... Tail>
+// 	void Parse(FileInfo* fi, Typelist<> t)
+// 	{		
+// 		return;
 // 	}
+// 	
+// 	template<typename Head, typename... Tail>
+// 	void Parse(FileInfo* fi, Typelist<Head,Tail...> tl)
+// 	{	
+// 		Typelist<Tail...> t;
+// 		Head::Extension == fi->Extension() ? Head::Add(fi) : Parse(fi, t);
+// 	}
+// 	
+	
+	template<typename Types>
+	void Parse(FileInfo* fi)
+	{
+		if(Types::Empty)
+			return;
+		
+		using Head = Front<Types>;
+		using Tail = PopFront<Types>;
+		
+		strcmp(Head::Extension, fi->Extension()) == 0 ? Head::Add(fi) : Parse<Tail>(fi);
+	}
 
 }
 	
