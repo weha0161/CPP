@@ -15,31 +15,47 @@
 #include <filesystem>
 #include "../Logger/Logger.hpp"
 #include "Directory.hpp"
+#include "../Typelist/Typelist.h"
+#include "../Visitor/Visitor.hpp"
 
 
 #ifndef REPOSITORY_HPP
 #define REPOSITORY_HPP
 
 namespace fs = std::filesystem;
-namespace mpl = boost::mpl;
-using namespace mpl::placeholders;
+// namespace mpl = boost::mpl;
+// using namespace mpl::placeholders;
 
 namespace Backup
 {
+	class TreeParserVisitor: 
+		public BaseVisitor,
+		public Visitor<FS::DirectoryInfo>,
+		public Visitor<FS::FileInfo>
+	{
+	public:
+		virtual void Visit(FS::DirectoryInfo& di) { Logger::Log<Debug>()<<"DirectoryInfo"<<std::endl; };
+		virtual void Visit(FS::FileInfo& fi) { Logger::Log<Debug>()<<"FileInfo"<<std::endl; };
+	};	
+	
 	struct Repository
 	{
-		using types = mpl::vector<std::vector<Directory>, std::vector<File<CPP>>, std::vector<File<HPP>>>;
+		using FileTypes = Typelist<FS::HPP,FS::H,FS::CSV,FS::CPP>::Type;
+		using TypeContainer = FS::FileTypeContainer<FileTypes>;
+		
 		
 		template<typename Iterator>
 		static void Map(const Iterator& begin, const Iterator& end)
 		{
 			for(Iterator it = begin; begin != end; ++it)
-				
-			auto f = FileInfo();
-			auto a = Visit_Type(f);
-			mpl::for_each<types, Add_Visitor<_1>>(a);
-			
+			{
+				Logger::Log<Debug>()<<*it<<std::endl;
+			}			
 		}
+		
+	private:
+		static inline TypeContainer typeContainer = TypeContainer();
+		TreeParserVisitor treeParser = TreeParserVisitor();
 	};
 }
 

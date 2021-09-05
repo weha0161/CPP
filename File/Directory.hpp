@@ -14,8 +14,8 @@
 #include <boost/mpl/placeholders.hpp>
 #include <filesystem>
 #include "../Logger/Logger.hpp"
-#include "../Visitor/Visitor.hpp"
 #include "../Typelist/Typelist.h"
+#include "../Visitor/Visitor.hpp"
 
 #ifndef DIRECTORY_H
 #define DIRECTORY_H
@@ -26,6 +26,7 @@ using namespace mpl::placeholders;
 
 namespace FS
 {
+//---------------------------------------------------------------------------------------------------time_Conversion----------------------------------------------------------------------------------------
 	template <typename TP>
 	std::time_t to_time_t(TP tp)
 	{
@@ -94,6 +95,11 @@ namespace FS
 		const char*  Extension() const { return this->extension; };
 	};
 	
+	std::ostream& operator<<(std::ostream& out, const FileInfo* n)
+	{
+		return out<<n->PrintInfo();
+	}
+	
 //---------------------------------------------------------------------------------------------------DirectoryInfo----------------------------------------------------------------------------------------
 
 	class DirectoryInfo : public Info
@@ -115,22 +121,11 @@ namespace FS
 			Info* child;
 			for(auto it = nodes.cbegin(); it != nodes.cend(); ++it)
 				result += (*it)->Size();
-			
-			Logger::Log<Debug>()<<this->nodes.size()<<"\t"<<result<<std::endl;
-				
+							
 			return result;
 		}
 	};
 	
-	class TreeParserVisitor: 
-		public BaseVisitor,
-		public Visitor<DirectoryInfo>,
-		public Visitor<FileInfo>
-	{
-	public:
-		virtual void Visit(DirectoryInfo& di) { Logger::Log<Debug>()<<"DirectoryInfo"<<std::endl; };
-		virtual void Visit(FileInfo& fi) { Logger::Log<Debug>()<<"FileInfo"<<std::endl; };
-	};	
 	//---------------------------------------------------------------------------------------------------File<T>----------------------------------------------------------------------------------------
 
 	template<typename FileType>
@@ -152,7 +147,7 @@ namespace FS
 		using Cont = std::vector<FileType>;
 		static const char* Extension;
 		
-		static void Add(FileInfo* fi){Logger::Log<Debug>()<<std::string(fi->Extension())<<std::endl; };
+		static void Add(FileInfo* fi){ };
 		FileType Get(FileInfo fi){return FileType();};
 	private:
 		Cont cont;
@@ -170,36 +165,13 @@ namespace FS
 	
 	//---------------------------------------------------------------------------------------------------Directory----------------------------------------------------------------------------------------
 
-	struct Visit_Type
-	{
-		FileInfo fileInfo;
-		
-		Visit_Type(FileInfo fi): fileInfo(fi){};
-		
-		template<class Visitor>
-		void operator()(Visitor)
-		{
-			Visitor::visit();
-		};
-	};
 	struct Directory
 	{
-// 		using types = mpl::vector<CPP,HPP>;
-		using types = mpl::vector<std::vector<Directory>, std::vector<File<CPP>>, std::vector<File<HPP>>>;
-		
-		void Add()
-		{
-// 			auto f = FileInfo();
-// 			auto a = Visit_Type(f);
-// 			mpl::for_each<types, Add_Visitor<_1>>(a);
-			
-		}
 	};
 	
 	//---------------------------------------------------------------------------------------------------FileTypeContainer----------------------------------------------------------------------------------------
 	template<typename List>
-	class FileTypeContainer
-	{};
+	class FileTypeContainer	{};
 	
 	template<typename Head>
 	class FileTypeContainer<Typelist<Head>>
@@ -209,68 +181,40 @@ namespace FS
 		
 		void Add(FileInfo* fi)
 		{
-// 			if(strcmp(Type::Extension, fi->Extension()) == 0)
-// 			{
-// 				Head::Add(fi); 
-// 				Logger::Log<Debug>()<<fi->Extension()<<" "<<Head::Extension<<std::endl;
-// 			}
+			if(strcmp(Type::Extension, fi->Extension()) == 0)
+			{
+				Head::Add(fi); 
+				Logger::Log<Debug>()<<Head::Extension<<" "<<fi<<std::endl;
+			}
 		}
 		
-		FileTypeContainer()	{Logger::Log<Debug>()<<Type::Extension<<std::endl;}
+		FileTypeContainer()	{ }
 	};
 	
 	template<typename Head, typename... Tail>
 	class FileTypeContainer<Typelist<Head,Tail...>>: FileTypeContainer<Typelist<Tail...>>
 	{
-		using Type = Head;
 	public:
-// 				
+		using Type = Head;
+
 		void Add(FileInfo* fi)
 		{
 			if(strcmp(Type::Extension, fi->Extension()) == 0)
 			{
 				Head::Add(fi); 
-				Logger::Log<Debug>()<<fi->Extension()<<" "<<Head::Extension<<std::endl;
+				Logger::Log<Debug>()<<Head::Extension<<" "<<fi<<std::endl;
 			}
 			else
 			{
-				Logger::Log<Debug>()<<std::string(fi->Extension())<<std::endl;
 				FileTypeContainer<Typelist<Tail...>>::Add(fi);
-			}
-				
+			}				
 		}
 		
-		FileTypeContainer() { Logger::Log<Debug>()<<Type::Extension<<std::endl; };
+		FileTypeContainer() { };
 	};
 
 }
-	
-// 	template<class T>
-// 	struct Add_Visitor
-// 	{
-// 		static void visit()
-// 		{
-// 			std::cout<<"Test"<<std::endl;
-// 		};
-// 	};
-// 	
 
-// void DirectoryInfo::Map(const fs::path& pathToScan) {
-//     for (const auto& entry : fs::directory_iterator(pathToScan)) {
-//         const auto filenameStr = entry.path().filename().string();
-//         if (entry.is_directory()) {
-//             DirectoryInfo dir = DirectoryInfo(entry.path());
-//             dir.Map(entry.path());
-//             this->directories.push_back(dir);
-//         }
-//         else
-//         {
-//             auto file = FileInfo(entry.path());
-//             this->files.push_back(FileInfo(entry.path()));
-//             Logger::Instance().Log("Create: "+ file.Name());
-//         }
-//     }
-// }
 
 // std::vector<std::string> DirectoryInfo::GetAllFileInfos(std::string pattern, std::string dir)
 // {

@@ -6,7 +6,6 @@
 #include <vector>
 #include <cstdlib>
 #include <memory>
-// #include "Directory.h"
 
 #ifndef FILESYSTEM_HPP
 #define FILESYSTEM_HPP
@@ -34,7 +33,6 @@ public:
 			{
 				FS::FileInfo* file = new FS::FileInfo(entry.path(), entry.last_write_time(), entry.file_size());
 				nodes.push_back(file);
-				Logger::Log<Debug>()<<"Create: "<<file->Extension()<<std::endl;
 			}
 		}
 		
