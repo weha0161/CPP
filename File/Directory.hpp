@@ -53,13 +53,15 @@ namespace FS
 		std::filesystem::path fs_path;
 		const std::filesystem::file_time_type lastModification;
 		std::uintmax_t size;
-		Info(std::filesystem::path p, std::uintmax_t s, std::filesystem::file_time_type lm): fs_path(p), name(p.filename()), path(p), size(s), lastModification(lm){};
+
+		Info(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s): fs_path(p), name(p.filename()), path(p), size(s), lastModification(lm){ };
+
 		virtual Info* Child(int n) { return 0; }
 	public:
-		virtual long Size() const {return size; };
 		DEFINE_VISITABLE();
-		Info(){};
 		virtual ~Info(){};
+		
+		virtual long Size() const {return size; };
 		const std::string& Name() const{ return name; };
 		const std::string& Path() const { return path; };
 		const std::time_t LastModification()const { return to_time_t(this->lastModification); };
@@ -76,16 +78,22 @@ namespace FS
 	class FileInfo : public Info
 	{
 	private:
-		const char* extension;
+		char* extension;
 		const fs::file_time_type lastModification;
 	public:
 		DEFINE_VISITABLE();
-		
-		FileInfo(){};
 		~FileInfo(){};
-		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s):Info(p,s,lm), extension(p.extension().c_str()){};
+
+		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s): Info(p,lm, s)
+		{ 
+			size_t length = strlen( p.extension().c_str() );
+			extension = new char[ length + 1 ];
+			strcpy( extension, p.extension().c_str() );
+		};
+		
 		const char*  Extension() const { return this->extension; };
 	};
+	
 //---------------------------------------------------------------------------------------------------DirectoryInfo----------------------------------------------------------------------------------------
 
 	class DirectoryInfo : public Info
@@ -94,13 +102,14 @@ namespace FS
 		std::vector<Info*> nodes;
 	public: 
 		DEFINE_VISITABLE();
-		
 		~DirectoryInfo(){};
-		DirectoryInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::vector<Info*> n):Info(p,0,lm), nodes(n)
-                {
-                        this->size = this->Size();
-                };
-		long Size()
+		
+		DirectoryInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::vector<Info*> n):Info(p,lm, 0), nodes(n)
+		{
+				this->size = this->Size();
+		};
+		
+		long Size() const
 		{
 			long result = 0;
 			Info* child;
@@ -143,7 +152,7 @@ namespace FS
 		using Cont = std::vector<FileType>;
 		static const char* Extension;
 		
-		static void Add(FileInfo* fi){Logger::Log<Debug>()<<fi->Extension()<<std::endl; };
+		static void Add(FileInfo* fi){Logger::Log<Debug>()<<std::string(fi->Extension())<<std::endl; };
 		FileType Get(FileInfo fi){return FileType();};
 	private:
 		Cont cont;
@@ -187,31 +196,52 @@ namespace FS
 		}
 	};
 	
-// 	template<typename Head, typename... Tail>
-// 	void Parse(FileInfo* fi, Typelist<> t)
-// 	{		
-// 		return;
-// 	}
-// 	
-// 	template<typename Head, typename... Tail>
-// 	void Parse(FileInfo* fi, Typelist<Head,Tail...> tl)
-// 	{	
-// 		Typelist<Tail...> t;
-// 		Head::Extension == fi->Extension() ? Head::Add(fi) : Parse(fi, t);
-// 	}
-// 	
+	//---------------------------------------------------------------------------------------------------FileTypeContainer----------------------------------------------------------------------------------------
+	template<typename List>
+	class FileTypeContainer
+	{};
 	
-	template<typename Types>
-	void Parse(FileInfo* fi)
+	template<typename Head>
+	class FileTypeContainer<Typelist<Head>>
 	{
-		if(Types::Empty)
-			return;
+	public:
+		using Type = Head;
 		
-		using Head = Front<Types>;
-		using Tail = PopFront<Types>;
+		void Add(FileInfo* fi)
+		{
+// 			if(strcmp(Type::Extension, fi->Extension()) == 0)
+// 			{
+// 				Head::Add(fi); 
+// 				Logger::Log<Debug>()<<fi->Extension()<<" "<<Head::Extension<<std::endl;
+// 			}
+		}
 		
-		strcmp(Head::Extension, fi->Extension()) == 0 ? Head::Add(fi) : Parse<Tail>(fi);
-	}
+		FileTypeContainer()	{Logger::Log<Debug>()<<Type::Extension<<std::endl;}
+	};
+	
+	template<typename Head, typename... Tail>
+	class FileTypeContainer<Typelist<Head,Tail...>>: FileTypeContainer<Typelist<Tail...>>
+	{
+		using Type = Head;
+	public:
+// 				
+		void Add(FileInfo* fi)
+		{
+			if(strcmp(Type::Extension, fi->Extension()) == 0)
+			{
+				Head::Add(fi); 
+				Logger::Log<Debug>()<<fi->Extension()<<" "<<Head::Extension<<std::endl;
+			}
+			else
+			{
+				Logger::Log<Debug>()<<std::string(fi->Extension())<<std::endl;
+				FileTypeContainer<Typelist<Tail...>>::Add(fi);
+			}
+				
+		}
+		
+		FileTypeContainer() { Logger::Log<Debug>()<<Type::Extension<<std::endl; };
+	};
 
 }
 	
