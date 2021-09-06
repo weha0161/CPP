@@ -133,12 +133,10 @@ namespace FS
 	
 	//---------------------------------------------------------------------------------------------------File<T>----------------------------------------------------------------------------------------
 
-	template<typename FileType>
 	struct File
 	{
 		const FileInfo fileInfo;
 		File(const FileInfo& fi): fileInfo(fi){};
-		File(){};
 		const FileInfo& Info() const {return fileInfo;}
 	};
 
@@ -148,12 +146,11 @@ namespace FS
 	struct FileTypeBase
 	{
 		using Type = T;
-		using FileType = File<Type>;
-		using Cont = std::vector<FileType>;
+		using Cont = std::vector<File>;
 		static const char* Extension;
 		
 		static void Add(FileInfo* fi){ };
-		FileType Get(FileInfo fi){return FileType();};
+		File Get(FileInfo fi){return File();};
 	private:
 		Cont cont;
 	};
