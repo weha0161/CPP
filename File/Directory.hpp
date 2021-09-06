@@ -155,10 +155,10 @@ namespace FS
 		Cont cont;
 	};
 	
-	struct CPP: public FileTypeBase<CPP>{};
-	struct HPP: public FileTypeBase<HPP>{};
-	struct H: public FileTypeBase<H>{};
-	struct CSV: public FileTypeBase<CSV>{};
+	struct CPP: public FileTypeBase<CPP>, public File{};
+	struct HPP: public FileTypeBase<HPP>, public File{};
+	struct H: public FileTypeBase<H>, public File{};
+	struct CSV: public FileTypeBase<CSV>, public File{};
 
 	template<> const char* FileTypeBase<CPP>::Extension = ".cpp";
 	template<> const char* FileTypeBase<HPP>::Extension = ".hpp";

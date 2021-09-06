@@ -38,16 +38,9 @@ namespace Backup
 		template<typename Iterator>
 		static void Map(const Iterator& begin, const Iterator& end)
 		{
-			for(Iterator it = begin; begin != end; ++it)
+			for(Iterator it = begin; it != end; ++it)
 			{
-				try
-				{
-					(*it)->Accept(treeParser);
-				}
-				catch(...)
-				{
-					Logger::Log()<<"Map end"<<std::endl;
-				}
+				(*it)->Accept(treeParser);
 			}
 			
 		}
