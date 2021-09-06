@@ -28,15 +28,6 @@ namespace fs = std::filesystem;
 
 namespace Backup
 {
-	class TreeParserVisitor: 
-		public BaseVisitor,
-		public Visitor<FS::DirectoryInfo>,
-		public Visitor<FS::FileInfo>
-	{
-	public:
-		virtual void Visit(FS::DirectoryInfo& di) { Logger::Log<Debug>()<<"DirectoryInfo"<<std::endl; };
-		virtual void Visit(FS::FileInfo& fi) { Logger::Log<Debug>()<<"FileInfo"<<std::endl; };
-	};	
 	
 	struct Repository
 	{
@@ -49,13 +40,32 @@ namespace Backup
 		{
 			for(Iterator it = begin; begin != end; ++it)
 			{
-				Logger::Log<Debug>()<<*it<<std::endl;
-			}			
+				try
+				{
+					(*it)->Accept(treeParser);
+				}
+				catch(...)
+				{
+					Logger::Log()<<"Map end"<<std::endl;
+				}
+			}
+			
 		}
 		
 	private:
 		static inline TypeContainer typeContainer = TypeContainer();
-		TreeParserVisitor treeParser = TreeParserVisitor();
+		
+		class TreeParserVisitor: 
+			public BaseVisitor,
+			public Visitor<FS::DirectoryInfo>,
+			public Visitor<FS::FileInfo>
+		{
+		public:
+			virtual void Visit(FS::DirectoryInfo& di) { Logger::Log<Debug>()<<"DirectoryInfo"<<std::endl; };
+			virtual void Visit(FS::FileInfo& fi) { typeContainer.Add(&fi); };
+		};	
+		
+		static inline TreeParserVisitor treeParser = TreeParserVisitor();
 	};
 }
 

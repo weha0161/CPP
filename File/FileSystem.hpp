@@ -6,6 +6,7 @@
 #include <vector>
 #include <cstdlib>
 #include <memory>
+#include "../Logger/Logger.hpp"
 
 #ifndef FILESYSTEM_HPP
 #define FILESYSTEM_HPP
@@ -27,10 +28,12 @@ public:
 			if (entry.is_directory()) {
 				auto dirnodes = FileSystem::List(entry.path());
 				FS::DirectoryInfo* dir = new FS::DirectoryInfo(entry.path(),entry.last_write_time(),dirnodes);
+				Logger::Log()<<entry.path().string()<<std::endl;
 				nodes.push_back(dir);
 			}
 			else
 			{
+// 				Logger::Log()<<entry.path().string()<<std::endl;
 				FS::FileInfo* file = new FS::FileInfo(entry.path(), entry.last_write_time(), entry.file_size());
 				nodes.push_back(file);
 			}

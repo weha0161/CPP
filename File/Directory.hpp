@@ -57,7 +57,7 @@ namespace FS
 
 		Info(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s): fs_path(p), name(p.filename()), path(p), size(s), lastModification(lm){ };
 
-		virtual Info* Child(int n) { return 0; }
+		virtual Info* Child(int n) = 0;
 	public:
 		DEFINE_VISITABLE();
 		virtual ~Info(){};
@@ -81,6 +81,9 @@ namespace FS
 	private:
 		char* extension;
 		const fs::file_time_type lastModification;
+		
+	protected:
+		virtual Info* Child(int n) { return 0; }
 	public:
 		DEFINE_VISITABLE();
 		~FileInfo(){};
@@ -106,13 +109,15 @@ namespace FS
 	{   
 	private:
 		std::vector<Info*> nodes;
+	protected:
+		virtual Info* Child(int n) { return 0; }
 	public: 
 		DEFINE_VISITABLE();
 		~DirectoryInfo(){};
 		
 		DirectoryInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::vector<Info*> n):Info(p,lm, 0), nodes(n)
 		{
-				this->size = this->Size();
+			this->size = this->Size();
 		};
 		
 		long Size() const
