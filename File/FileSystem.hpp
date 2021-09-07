@@ -41,6 +41,11 @@ public:
 		
 		return nodes;
 	}
+	
+	static void CreateDiectories()
+	{
+		
+	}
 };
 
 #endif

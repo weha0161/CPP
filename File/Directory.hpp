@@ -133,7 +133,27 @@ namespace FS
 		const std::vector<Info*>& Nodes() { return this->nodes; }
 	};
 	
-	//---------------------------------------------------------------------------------------------------File<T>----------------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------Node----------------------------------------------------------------------------------------
+	template<typename Derived, typename T = Derived>
+	struct Node
+	{
+		using Type = Derived;
+		using ELementType = T;
+		using Cont = std::vector<ELementType>;
+		
+		static void Add(Info* fi){ };
+		ELementType Get(Info* fi){return ELementType();};
+	protected:
+		Cont cont;
+	};
+	
+	//---------------------------------------------------------------------------------------------------Directory----------------------------------------------------------------------------------------
+
+	struct Directory: Node<Directory>
+	{
+	};
+	
+	//---------------------------------------------------------------------------------------------------File----------------------------------------------------------------------------------------
 
 	struct File
 	{
@@ -145,16 +165,9 @@ namespace FS
 	//---------------------------------------------------------------------------------------------------FileTypes----------------------------------------------------------------------------------------
 
 	template<typename T>
-	struct FileTypeBase
+	struct FileTypeBase: Node<FileTypeBase<T>, File>
 	{
-		using Type = T;
-		using Cont = std::vector<File>;
-		static const char* Extension;
-		
-		static void Add(FileInfo* fi){ };
-		File Get(FileInfo fi){return File();};
-	private:
-		Cont cont;
+		static const char* Extension;		
 	};
 	
 	struct CPP: public FileTypeBase<CPP>, public File{};
@@ -167,11 +180,6 @@ namespace FS
 	template<> const char* FileTypeBase<H>::Extension = ".h";
 	template<> const char* FileTypeBase<CSV>::Extension = ".csv";
 	
-	//---------------------------------------------------------------------------------------------------Directory----------------------------------------------------------------------------------------
-
-	struct Directory
-	{
-	};
 	
 	//---------------------------------------------------------------------------------------------------FileTypeContainer----------------------------------------------------------------------------------------
 	template<typename List>
