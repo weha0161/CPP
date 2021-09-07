@@ -33,7 +33,7 @@ public:
 			}
 			else
 			{
-// 				Logger::Log()<<entry.path().string()<<std::endl;
+				Logger::Log()<<entry.path().string()<<std::endl;
 				FS::FileInfo* file = new FS::FileInfo(entry.path(), entry.last_write_time(), entry.file_size());
 				nodes.push_back(file);
 			}
