@@ -45,6 +45,7 @@ namespace FS
 		return formattedFileInfoTime;
 	}
 	
+	
 //---------------------------------------------------------------------------------------------------Info----------------------------------------------------------------------------------------
 	class Info : public BaseVisitable<>
 	{
@@ -134,23 +135,31 @@ namespace FS
 	};
 	
 	//---------------------------------------------------------------------------------------------------Node----------------------------------------------------------------------------------------
-	template<typename Derived, typename T = Derived>
+	template<typename Derived, typename DerivedInfo,typename T = Derived>
 	struct Node
 	{
 		using Type = Derived;
-		using ELementType = T;
-		using Cont = std::vector<ELementType>;
-		
-		static void Add(Info* fi){ };
-		ELementType Get(Info* fi){return ELementType();};
+		using ElementType = T;
+		using Cont = std::vector<ElementType>;
 	protected:
-		Cont cont;
+		static inline Cont cont = Cont();
+	public:
+		
+		static void Add(Info* fi)
+		{ 
+			cont.push_back(ElementType(static_cast<DerivedInfo*>(fi))); 
+			Logger::Log<Debug>()<<cont.size()<<" "<<fi<<std::endl;
+		};
+		static ElementType Get(Info* fi){return ElementType();};
 	};
 	
 	//---------------------------------------------------------------------------------------------------Directory----------------------------------------------------------------------------------------
 
-	struct Directory: Node<Directory>
+	struct Directory: Node<Directory, DirectoryInfo>
 	{
+		const DirectoryInfo directoryInfo;
+		Directory(DirectoryInfo* fi): directoryInfo(*fi){};
+		const DirectoryInfo& Info() const {return directoryInfo;}
 	};
 	
 	//---------------------------------------------------------------------------------------------------File----------------------------------------------------------------------------------------
@@ -158,14 +167,14 @@ namespace FS
 	struct File
 	{
 		const FileInfo fileInfo;
-		File(const FileInfo& fi): fileInfo(fi){};
+		File(FileInfo* fi): fileInfo(*fi){};
 		const FileInfo& Info() const {return fileInfo;}
 	};
 
 	//---------------------------------------------------------------------------------------------------FileTypes----------------------------------------------------------------------------------------
 
 	template<typename T>
-	struct FileTypeBase: Node<FileTypeBase<T>, File>
+	struct FileTypeBase: Node<FileTypeBase<T>, FileInfo, File>
 	{
 		static const char* Extension;		
 	};
@@ -196,7 +205,7 @@ namespace FS
 			if(strcmp(Type::Extension, fi->Extension()) == 0)
 			{
 				Head::Add(fi); 
-				Logger::Log<Debug>()<<Head::Extension<<" "<<fi<<std::endl;
+// 				Logger::Log<Debug>()<<Head::Extension<<" "<<fi<<std::endl;
 			}
 		}
 		
@@ -214,7 +223,7 @@ namespace FS
 			if(strcmp(Type::Extension, fi->Extension()) == 0)
 			{
 				Head::Add(fi); 
-				Logger::Log<Debug>()<<Head::Extension<<" "<<fi<<std::endl;
+// 				Logger::Log<Debug>()<<Head::Extension<<" "<<fi<<std::endl;
 			}
 			else
 			{

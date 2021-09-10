@@ -8,14 +8,17 @@ SRCDIR := src
 OBJDIR := obj
 BINDIR := bin
 
-Release: $(OBJECTS)
+Release:	$(OBJECTS)
 	$(CXX) -o $@ $(OBJECTS) 
 	
-Debug: $(OBJECTS)
+Debug:	$(OBJECTS)
 	$(CXX) -o $@ $(OBJECTS) 
 
-%.o: 	%.cpp %.h %.hpp 
-	$(CXX) $(DEBUGFLAGS) $<
+%.o: 	%.hpp %.cpp
+	$(CXX) $(DEBUGFLAGS) $*.cpp
+	
+Regex: 	RegexTest.cpp
+	g++ -std=c++11 -o Regex RegexTest.cpp
 
 clean:
 	rm *.o test
