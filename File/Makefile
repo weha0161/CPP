@@ -2,7 +2,7 @@ CXX      = g++
 CXXC      = clang
 OBJECTS = *.o
 CXXFLAGS  = -c -std=c++2a
-DEBUGFLAGS  = -c -g -std=c++17
+DEBUGFLAGS  = -c -g -std=c++2a
 
 SRCDIR := src
 OBJDIR := obj

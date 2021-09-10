@@ -7,6 +7,7 @@ int main()
 {       
 
 	using a = T::char_<'a'> ;
+	using del = T::char_<'/'> ;
 	
 	T::Is_<a> isA;
 	T::IsNot_<a> isNA;
@@ -17,7 +18,7 @@ int main()
 	
 	const std::string pathToShow{ "/home/markus/Dokumente/cpp/File" };
 
-    auto c = String_::Split(pathToShow);
+    auto c = String_::Split<del>(pathToShow);
     
     for(auto d : c)
     	std::cout<<d<<std::endl;

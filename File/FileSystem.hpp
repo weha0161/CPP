@@ -7,22 +7,21 @@
 #include <cstdlib>
 #include <memory>
 #include "../Logger/Logger.hpp"
+#include "../String/String_.hpp"
+#include "../Wrapper/Wrapper.hpp"
 
 #ifndef FILESYSTEM_HPP
 #define FILESYSTEM_HPP
 
 class FileSystem
 {
+	using Delimiter = T::char_<'/'> ;
+	inline static std::vector<FS::Info*> nodes;
+		
 public:
-// 	static std::vector<FS::Info*> nodes;
-// 	
-// 	static FileSystem()
-// 	{
-// 		nodes = new std::vector<FS::Info*>();
-// 	}
 
 	static std::vector<FS::Info*> List(const fs::path& pathToScan) {
-		auto nodes = std::vector<FS::Info*>();
+
 		for (const auto& entry : fs::directory_iterator(pathToScan)) {
 			const auto filenameStr = entry.path().filename().string();
 			if (entry.is_directory()) {
@@ -42,9 +41,15 @@ public:
 		return nodes;
 	}
 	
-	static void CreateDiectories()
+	static void CreateDirectories()
 	{
-		
+		for(auto n : nodes)
+		{
+			auto c = String_::Split<Delimiter>(n->Path());
+	    
+			for(auto d : c)
+				std::cout<<d<<std::endl;	
+		}
 	}
 };
 

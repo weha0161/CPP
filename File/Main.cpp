@@ -31,15 +31,7 @@ int main()
 	
 	Backup::Repository::Map(nodes.cbegin(), nodes.cend());
 	
-// 	using fileTypes = Typelist<HPP,H,CSV,CPP>::Type;
-	
-// 	auto a = Parse<fileTypes>((FileInfo*)n);
-// 	auto a = FileTypeContainer<fileTypes>();
-// 	a.Add((FileInfo*)n);
-	/*
-	auto fi = FS::FileInfo();
-	auto t = FS::TreeParserVisitor();
-	t.Visit(fi)*/;
+	FileSystem::CreateDirectories();
 	
     return 0;
 };
