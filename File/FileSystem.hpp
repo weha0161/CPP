@@ -27,12 +27,12 @@ public:
 			if (entry.is_directory()) {
 				auto dirnodes = FileSystem::List(entry.path());
 				FS::DirectoryInfo* dir = new FS::DirectoryInfo(entry.path(),entry.last_write_time(),dirnodes);
-				Logger::Log()<<entry.path().string()<<std::endl;
+// 				Logger::Log()<<entry.path().string()<<std::endl;
 				nodes.push_back(dir);
 			}
 			else
 			{
-				Logger::Log()<<entry.path().string()<<std::endl;
+// 				Logger::Log()<<entry.path().string()<<std::endl;
 				FS::FileInfo* file = new FS::FileInfo(entry.path(), entry.last_write_time(), entry.file_size());
 				nodes.push_back(file);
 			}
@@ -41,15 +41,22 @@ public:
 		return nodes;
 	}
 	
-	static void CreateDirectories()
+	static void CreateDirectories(std::string src, std::string dest)
 	{
-		for(auto n : nodes)
+		int length = src.size();
+		
+		auto all = find_if(nodes.cbegin(), nodes.cend(), [&src](auto d){ return String_::Contains(d->Path(),src);} );
+		
+		for(auto n : FS::Directory::Nodes())
 		{
-			auto c = String_::Split<Delimiter>(n->Path());
+// 			auto c = String_::Split<Delimiter>(n->Path());
 	    
-			for(auto d : c)
-				std::cout<<d<<std::endl;	
-		}
+			std::string srcPath = n.Info().Path();
+			std::cout<<srcPath<<std::endl;	
+			std::string destPath = srcPath.replace(0,length,dest);
+			std::cout<<destPath<<std::endl;	
+			fs::create_directories(destPath);	
+		}			
 	}
 };
 

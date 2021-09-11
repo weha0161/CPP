@@ -148,9 +148,11 @@ namespace FS
 		static void Add(Info* fi)
 		{ 
 			cont.push_back(ElementType(static_cast<DerivedInfo*>(fi))); 
-			Logger::Log<Debug>()<<cont.size()<<" "<<fi<<std::endl;
+// 			Logger::Log<Debug>()<<cont.size()<<" "<<fi<<std::endl;
 		};
+		
 		static ElementType Get(Info* fi){return ElementType();};
+		static const Cont& Nodes() { return cont; };
 	};
 	
 	//---------------------------------------------------------------------------------------------------Directory----------------------------------------------------------------------------------------
