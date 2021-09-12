@@ -62,7 +62,12 @@ namespace FS
 		const FileInfo fileInfo;
 		File(FileInfo* fi): fileInfo(*fi){};
 		const FileInfo& Info() const {return fileInfo;}
-		void CopyTo(std::string dest) const { Logger::Log<Debug>()<<fileInfo.Path()<<std::endl; };
+		void CopyTo(std::string dest) const 
+		{ 
+			Logger::Log<Debug>()<<fileInfo.Path()<<std::endl; 
+			auto destinationName = dest + "/" + fs::path(this->fileInfo.Path()).filename().string();
+			fs::copy(this->fileInfo.Path(), destinationName);
+		};
 	};
 
 	//---------------------------------------------------------------------------------------------------FileTypes----------------------------------------------------------------------------------------
