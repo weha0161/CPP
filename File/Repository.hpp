@@ -45,6 +45,11 @@ namespace Backup
 			
 		}
 		
+		static void CopyTo(std::string dest)
+		{
+			typeContainer.CopyTo(dest);
+		}
+		
 	private:
 		static inline TypeContainer typeContainer = TypeContainer();
 		

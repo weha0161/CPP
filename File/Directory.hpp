@@ -166,11 +166,12 @@ namespace FS
 	
 	//---------------------------------------------------------------------------------------------------File----------------------------------------------------------------------------------------
 
-	struct File
+	struct File //public Node<File, FileInfo>
 	{
 		const FileInfo fileInfo;
 		File(FileInfo* fi): fileInfo(*fi){};
 		const FileInfo& Info() const {return fileInfo;}
+		void CopyTo(std::string dest) const { Logger::Log<Debug>()<<fileInfo.Path()<<std::endl; };
 	};
 
 	//---------------------------------------------------------------------------------------------------FileTypes----------------------------------------------------------------------------------------
@@ -211,11 +212,17 @@ namespace FS
 			}
 		}
 		
+		void CopyTo(std::string dest)
+		{
+			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
+				it->CopyTo(dest);
+		}
+		
 		FileTypeContainer()	{ }
 	};
 	
 	template<typename Head, typename... Tail>
-	class FileTypeContainer<Typelist<Head,Tail...>>: FileTypeContainer<Typelist<Tail...>>
+	class FileTypeContainer<Typelist<Head,Tail...>>: public FileTypeContainer<Typelist<Tail...>>
 	{
 	public:
 		using Type = Head;
@@ -231,6 +238,14 @@ namespace FS
 			{
 				FileTypeContainer<Typelist<Tail...>>::Add(fi);
 			}				
+		}
+		
+		void CopyTo(std::string dest)
+		{
+			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
+				it->CopyTo(dest);
+			
+			FileTypeContainer<Typelist<Tail...>>::CopyTo(dest);
 		}
 		
 		FileTypeContainer() { };
