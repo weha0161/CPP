@@ -14,7 +14,9 @@
 #include <boost/mpl/placeholders.hpp>
 #include <filesystem>
 #include "../Logger/Logger.hpp"
-#include "Directory.hpp"
+#include "FileTypeContainer.hpp"
+#include "Info.hpp"
+#include "Node.hpp"
 #include "../Typelist/Typelist.h"
 #include "../Visitor/Visitor.hpp"
 
