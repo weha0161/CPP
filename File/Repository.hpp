@@ -8,10 +8,6 @@
 #include <vector>
 #include <cstdlib>
 #include <unordered_map>
-#include <boost/mpl/vector.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/mpl/for_each.hpp>
-#include <boost/mpl/placeholders.hpp>
 #include <filesystem>
 #include "../Logger/Logger.hpp"
 #include "FileTypeContainer.hpp"
@@ -23,10 +19,6 @@
 
 #ifndef REPOSITORY_HPP
 #define REPOSITORY_HPP
-
-namespace fs = std::filesystem;
-// namespace mpl = boost::mpl;
-// using namespace mpl::placeholders;
 
 namespace Backup
 {

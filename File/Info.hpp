@@ -4,14 +4,11 @@
 #include <fstream>
 #include <chrono>
 #include <ctime>
+#include <cstring>
 #include <iterator>
 #include <vector>
 #include <cstdlib>
 #include <unordered_map>
-#include <boost/mpl/vector.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/mpl/for_each.hpp>
-#include <boost/mpl/placeholders.hpp>
 #include <filesystem>
 #include "../Logger/Logger.hpp"
 #include "../Typelist/Typelist.h"
@@ -21,8 +18,6 @@
 #define INFO_H
 
 namespace fs = std::filesystem;
-namespace mpl = boost::mpl;
-using namespace mpl::placeholders;
 
 namespace FS
 {

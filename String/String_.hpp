@@ -4,7 +4,6 @@
 #include <vector>
 #include "../Wrapper/Wrapper.hpp"
 #include "../Traits/Traits.h"
-// #include "../AbstractFactory/AbstractFactory.hpp"
 #include "../Typelist/Typelist.h"
 
 #ifndef STRING_H
