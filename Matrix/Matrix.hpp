@@ -1,6 +1,6 @@
-#include "../String/String_.h"
+#include "../String/String_.hpp"
 #include "../Logger/Logger.hpp"
-#include "../Wrapper/Wrapper.h"
+#include "../Wrapper/Wrapper.hpp"
 #include "MatrixExpressionTemplates.hpp"
 #include "Generator.hpp"
 #include <cassert>
