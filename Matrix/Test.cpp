@@ -62,7 +62,7 @@ int main()
 // 	std::cout<<"Get m=m3 (1,1): "<<m.Get(1,1)<<std::endl;
 // 	mB = mA;
 	
-// 	auto m9 = m10 * m10;
+	auto m9 = m10 * m10;
 // 	std::cout<<"Get m3 (1,1): "<<m9.Get(1,1)<<std::endl;
 	
 // 	std::cout<<m3<<std::endl;

@@ -11,15 +11,15 @@ class CacheElementType
 {
 public:
 	using ElementType = ElementT;
-	CacheElementType() : element(ElementT(0)), valid(false) {};
+	CacheElementType() : element(ElementType(0)), valid(false) {};
 	
-	CacheElementType(const ElementT& elem) : element(elem), valid(false) {};
+	CacheElementType(const ElementType& elem) : element(elem), valid(false) {};
 	
 	const bool& IsHit() const {return valid;}
 	
-	const ElementT& Get() const {return element;}
+	const ElementType& Get() const {return element;}
 	
-	void Set(const ElementT& elem)
+	void Set(const ElementType& elem)
 	{
 		valid = true;
 		element = elem;
@@ -34,7 +34,7 @@ public:
 	
 private:
 	bool valid;
-	ElementT element;
+	ElementType element;
 };
 
 template<class A>
@@ -46,15 +46,16 @@ class CACHE_MATRIX_TYPE
 	using Config = typename MatrixType::Config;
 	using DSLFeatures = typename Config::DSLFeatures;
 	
-	struct CachedMatrixDSL//: public DSLFeatures
+	struct CachedMatrixDSL: public DSLFeatures
 	{
-		using ElementType = CacheElementType<typename DSLFeatures::ElementType>;
+// 		using ElementType = CacheElementType<typename Config::MatrixType>;
+		using ElementType = CacheElementType<typename Config::ElementType>;
 	};
 	
 public:
-// 	using RET = Generator<CachedMatrixDSL>::RET;
-	using RET = CachedMatrixDSL::ElementType;
-	using ElementType = CachedMatrixDSL::ElementType;
+	using RET = Generator<CachedMatrixDSL>::RET;
+// 	using RET = CachedMatrixDSL::ElementType;
+// 	using ElementType = CachedMatrixDSL::ElementType;
 };
 
 
