@@ -28,8 +28,8 @@ namespace Backup
 		using FileTypes = Typelist<FS::HPP,FS::H,FS::CSV,FS::CPP>::Type;
 		using TypeContainer = FS::FileTypeContainer<FileTypes>;
 	
-		inline static std::string Source = ""; 
-		inline static std::string Dest = ""; 
+		inline static std::string Root = "//home//markus//Dokumente//cpp//File"; 
+		inline static std::string Dest = "//home//markus//Downloads"; 
 		
 		template<typename Iterator>
 		static void Map(const Iterator& begin, const Iterator& end)
@@ -43,17 +43,13 @@ namespace Backup
 		
 		static void CopyTo(std::string dest)
 		{
+			typeContainer.SetRootPath(Repository::Root);
 			typeContainer.CopyTo(dest);
 		}
 		
 	private:
 		static inline TypeContainer typeContainer = TypeContainer();
-		
-		static std::string BuildDestPath(std::string& src)
-		{
-			return src.replace(0, src.size(), Dest);
-		}
-		
+				
 		class TreeParserVisitor: 
 			public BaseVisitor,
 			public Visitor<FS::DirectoryInfo>,

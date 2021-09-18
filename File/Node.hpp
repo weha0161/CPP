@@ -66,7 +66,9 @@ namespace FS
 		{ 
 			Logger::Log<Debug>()<<fileInfo.Path()<<std::endl; 
 			auto destinationName = dest + "/" + fs::path(this->fileInfo.Path()).filename().string();
-			fs::copy(this->fileInfo.Path(), destinationName);
+			auto srcName = this->fileInfo.Path() +"/"+ this->fileInfo.Name();
+			Logger::Log<Debug>()<<srcName<<" "<<destinationName<<std::endl; 
+			fs::copy(srcName, destinationName);
 		};
 	};
 
