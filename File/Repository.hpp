@@ -27,7 +27,9 @@ namespace Backup
 	{
 		using FileTypes = Typelist<FS::HPP,FS::H,FS::CSV,FS::CPP>::Type;
 		using TypeContainer = FS::FileTypeContainer<FileTypes>;
-		
+	
+		inline static std::string Source = ""; 
+		inline static std::string Dest = ""; 
 		
 		template<typename Iterator>
 		static void Map(const Iterator& begin, const Iterator& end)
@@ -46,6 +48,11 @@ namespace Backup
 		
 	private:
 		static inline TypeContainer typeContainer = TypeContainer();
+		
+		static std::string BuildDestPath(std::string& src)
+		{
+			return src.replace(0, src.size(), Dest);
+		}
 		
 		class TreeParserVisitor: 
 			public BaseVisitor,
