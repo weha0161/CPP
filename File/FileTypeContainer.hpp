@@ -28,10 +28,22 @@ namespace FS
 	{
 	protected:
 		std::string rootPath;
-		std::string BuildDestPath(const std::string& src, const std::string &dst)
+		std::filesystem::path BuildDestPath(const std::string& src, const std::string &dst)
 		{
-			std::string result = src;
-			return result.replace(0, this->rootPath.size(), dst);
+			auto srcPath = std::filesystem::path(src);
+			auto rootP = std::filesystem::path(rootPath);
+			auto dstPath = std::filesystem::path(dst);
+			std::string result = dst;
+
+			auto it2 = rootP.begin();
+
+			for (auto it = srcPath.begin() ; it != srcPath.end(); ++it, ++it2)
+			{
+				if((*(--rootP.end())) == *it || *it != *it2)
+					result = result + "/" + (*it).string();
+			}
+				
+			return std::filesystem::path(result);
 		}
 	public:
 		void SetRootPath(std::string p){ this->rootPath = p;}
@@ -40,16 +52,16 @@ namespace FS
 		void Add(FileInfo* fi)
 		{
 			if(strcmp(Type::Extension, fi->Extension()) == 0)
-			{
 				Head::Add(fi); 
-// 				Logger::Log<Debug>()<<Head::Extension<<" "<<fi<<std::endl;
-			}
 		}
 		
 		void CopyTo(std::string dest)
 		{
 			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
+			{
+				std::string dst = this->BuildDestPath(it->Info().Path(),dest);
 				it->CopyTo(dest);
+			}
 		}
 		
 		FileTypeContainer()	{ }
@@ -78,7 +90,6 @@ namespace FS
 			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
 			{
 				std::string dst = this->BuildDestPath(it->Info().Path(),dest);
-				Logger::Log<Debug>()<<"CopyTo"<<this->rootPath<<" "<<it->Info().Path()<<" "<<dst<<std::endl;
 				it->CopyTo(dst);
 			}
 			

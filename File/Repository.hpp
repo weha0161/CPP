@@ -56,11 +56,7 @@ namespace Backup
 			public Visitor<FS::FileInfo>
 		{
 		public:
-			virtual void Visit(FS::DirectoryInfo& di) 
-			{ 
-				FS::Directory::Add(&di);
-				Backup::Repository::Map(di.Nodes().cbegin(), di.Nodes().cend()); 
-			};
+			virtual void Visit(FS::DirectoryInfo& di) {	FS::Directory::Add(&di); };
 			virtual void Visit(FS::FileInfo& fi) { typeContainer.Add(&fi); };
 		};	
 		

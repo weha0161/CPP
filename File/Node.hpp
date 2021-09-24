@@ -39,7 +39,6 @@ namespace FS
 		static void Add(Info* fi)
 		{ 
 			cont.push_back(ElementType(static_cast<DerivedInfo*>(fi))); 
-// 			Logger::Log<Debug>()<<cont.size()<<" "<<fi<<std::endl;
 		};
 		
 		static ElementType Get(Info* fi){return ElementType();};
@@ -64,10 +63,8 @@ namespace FS
 		const FileInfo& Info() const {return fileInfo;}
 		void CopyTo(std::string dest) const 
 		{ 
-			Logger::Log<Debug>()<<fileInfo.Path()<<std::endl; 
-			auto destinationName = dest + "/" + fs::path(this->fileInfo.Path()).filename().string();
+			auto destinationName = dest;// + "/" + fs::path(this->fileInfo.Path()).string();
 			auto srcName = this->fileInfo.Path() +"/"+ this->fileInfo.Name();
-			Logger::Log<Debug>()<<srcName<<" "<<destinationName<<std::endl; 
 			fs::copy(srcName, destinationName);
 		};
 	};

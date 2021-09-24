@@ -21,6 +21,10 @@ int main()
 //     FS::Directory dir = FS::Directory("");
 
 	auto nodes = FileSystem::List(pathToShow);
+	auto root = fs::directory_entry(pathToShow);
+	FS::DirectoryInfo* dir = new FS::DirectoryInfo(root.path(),root.last_write_time(),nodes);
+	
+	nodes.push_back(dir);
 	
 	for(auto it = nodes.cbegin(); it != nodes.cend(); ++it)
 			{
@@ -32,7 +36,7 @@ int main()
 	Backup::Repository::Map(nodes.cbegin(), nodes.cend());
 	
 	FileSystem::CreateDirectories("/home/markus/Dokumente/cpp/File","/home/markus/Downloads/");
-	Backup::Repository::CopyTo("/home/markus/Downloads/");
+// 	Backup::Repository::CopyTo("/home/markus/Downloads/");
 	
     return 0;
 };
