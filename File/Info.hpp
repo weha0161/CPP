@@ -51,7 +51,7 @@ namespace FS
 		const std::filesystem::file_time_type lastModification;
 		std::uintmax_t size;
 
-		Info(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s): fs_path(p), name(p.filename()), path(p.parent_path()), size(s), lastModification(lm){ };
+		Info(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s): fs_path(p), name(p.filename()), path(p), size(s), lastModification(lm){ };
 
 		virtual Info* Child(int n) = 0;
 	public:
@@ -84,7 +84,7 @@ namespace FS
 		DEFINE_VISITABLE();
 		~FileInfo(){};
 
-		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s): Info(p,lm, s)
+		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s): Info(p.parent_path(),lm, s)
 		{ 
 			size_t length = strlen( p.extension().c_str() );
 			extension = new char[ length + 1 ];
