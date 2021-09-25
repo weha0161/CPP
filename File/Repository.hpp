@@ -47,6 +47,11 @@ namespace Backup
 			typeContainer.CopyTo(dest);
 		}
 		
+		static void List()
+		{
+			typeContainer.List();
+		}
+		
 	private:
 		static inline TypeContainer typeContainer = TypeContainer();
 				

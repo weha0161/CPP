@@ -36,6 +36,7 @@ int main()
 	Backup::Repository::Map(nodes.cbegin(), nodes.cend());
 	
 	FileSystem::CreateDirectories("/home/markus/Dokumente/cpp/File","/home/markus/Downloads/");
+	Backup::Repository::List();
 // 	Backup::Repository::CopyTo("/home/markus/Downloads/");
 	
     return 0;

@@ -64,6 +64,14 @@ namespace FS
 			}
 		}
 		
+		void List()
+		{
+			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
+			{				
+				Logger::Log()<<it->Info()<<std::endl;
+			}			
+		}
+		
 		FileTypeContainer()	{ }
 	};
 	
@@ -90,10 +98,21 @@ namespace FS
 			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
 			{
 				std::string dst = this->BuildDestPath(it->Info().Path(),dest);
+// 				Logger::Log()<<"Destination in CopyTO: "<<dst<<std::endl;
 				it->CopyTo(dst);
 			}
 			
 			FileTypeContainer<Typelist<Tail...>>::CopyTo(dest);
+		}
+		
+		void List()
+		{
+			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
+			{				
+				Logger::Log()<<it->Info()<<std::endl;
+			}
+			
+			FileTypeContainer<Typelist<Tail...>>::List();
 		}
 		
 		FileTypeContainer() { };

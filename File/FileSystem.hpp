@@ -27,7 +27,6 @@ public:
 			if (entry.is_directory()) {
 				auto dirnodes = FileSystem::List(entry.path());
 				FS::DirectoryInfo* dir = new FS::DirectoryInfo(entry.path(),entry.last_write_time(),dirnodes);
-				Logger::Log()<<"MAP Directory: "<<entry.path().string()<<std::endl;
 				nodes.push_back(dir);
 			}
 			else
@@ -47,10 +46,7 @@ public:
 		auto all = find_if(nodes.cbegin(), nodes.cend(), [&src](auto d){ return String_::Contains(d->Path(),src);} );
 		
 		for(auto n : FS::Directory::Nodes())
-		{
-			Logger::Log()<<n.Info().Name()<<std::endl;
-// 			auto c = String_::Split<Delimiter>(n->Path());
-	    
+		{	    
 			std::string srcPath = n.Info().Path();
 			std::string destPath = srcPath.replace(0,length,dest);
 			fs::create_directories(destPath);	

@@ -52,6 +52,7 @@ namespace FS
 		std::uintmax_t size;
 
 		Info(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s): fs_path(p), name(p.filename()), path(p), size(s), lastModification(lm){ };
+		Info(std::filesystem::path p, std::filesystem::path pp, std::filesystem::file_time_type lm, std::uintmax_t s): fs_path(pp), name(p.filename()), path(p), size(s), lastModification(lm){ };
 
 		virtual Info* Child(int n) = 0;
 	public:
@@ -62,12 +63,12 @@ namespace FS
 		const std::string& Name() const{ return name; };
 		const std::string& Path() const { return path; };
 		const std::time_t LastModification()const { return to_time_t(this->lastModification); };
-		const std::string virtual PrintInfo() const { return this->Name() + std::string("\t") + std::to_string(this->Size()) + std::string("\t") + to_timestring(this->LastModification()) ; };
+		const std::string virtual PrintInfo() const { return this->Name() + std::string("\t") + std::to_string(this->Size()) + std::string("\t") + to_timestring(this->LastModification()) + std::string("\t") + this->Path() ; };
 	};
 	
-	std::ostream& operator<<(std::ostream& out, const Info* n)
+	std::ostream& operator<<(std::ostream& out, const Info& n)
 	{
-		return out<<n->PrintInfo();
+		return out<<n.PrintInfo();
 	}
 
 //---------------------------------------------------------------------------------------------------FileInfo----------------------------------------------------------------------------------------
@@ -84,7 +85,7 @@ namespace FS
 		DEFINE_VISITABLE();
 		~FileInfo(){};
 
-		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s): Info(p.parent_path(),lm, s)
+		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s): Info(p, p.parent_path(),lm, s)
 		{ 
 			size_t length = strlen( p.extension().c_str() );
 			extension = new char[ length + 1 ];
