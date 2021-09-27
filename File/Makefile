@@ -21,7 +21,11 @@ Regex: 	RegexTest.cpp
 	g++ -std=c++11 -o Regex RegexTest.cpp
 
 clean:
-	rm *.o test
+	rm *,o
+
+All:
+	$(MAKE) clean
+	$(MAKE) Debug
 
 
 

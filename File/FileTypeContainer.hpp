@@ -33,17 +33,31 @@ namespace FS
 			auto srcPath = std::filesystem::path(src);
 			auto rootP = std::filesystem::path(rootPath);
 			auto dstPath = std::filesystem::path(dst);
-			std::string result = dst;
+			std::string result = "";
 
 			auto it2 = rootP.begin();
 
-			for (auto it = srcPath.begin() ; it != srcPath.end(); ++it, ++it2)
+			for (auto it = --srcPath.end() ; it != srcPath.begin(); --it)
 			{
-				if((*(--rootP.end())) == *it || *it != *it2)
-					result = result + "/" + (*it).string();
-			}
+// 					result = result + "/" + (*it).string();
+					
+				if(*it == *(--rootP.end()))
+				{
+					result = (*it).string() + "/" + result ;
+					break;
+				}
 				
-			return std::filesystem::path(result);
+				result = (*it).string() + "/" + result ;
+				Logger::Log()<<"BuildDestPath: "<<*it<<"=>"<<result<<std::endl;
+// 				if((*(--rootP.end())) == *it || *it != *it2)
+			}
+			
+			Logger::Log()<<"BuildDestPath: "<<dst<<"-----------"<<result<<std::endl;
+			result = dst + result;
+			
+			Logger::Log()<<"BuildDestPath: "<<result<<std::endl;
+			
+			return std::filesystem::path(std::string(result.cbegin(),(--result.cend())));
 		}
 	public:
 		void SetRootPath(std::string p){ this->rootPath = p;}
@@ -60,7 +74,7 @@ namespace FS
 			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
 			{
 				std::string dst = this->BuildDestPath(it->Info().Path(),dest);
-				it->CopyTo(dest);
+				it->CopyTo(dst);
 			}
 		}
 		
@@ -98,7 +112,7 @@ namespace FS
 			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
 			{
 				std::string dst = this->BuildDestPath(it->Info().Path(),dest);
-// 				Logger::Log()<<"Destination in CopyTO: "<<dst<<std::endl;
+				Logger::Log()<<"Destination: "<<dst<<std::endl;
 				it->CopyTo(dst);
 			}
 			

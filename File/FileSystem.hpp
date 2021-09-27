@@ -17,14 +17,22 @@ class FileSystem
 {
 	using Delimiter = T::char_<'/'> ;
 	inline static std::vector<FS::Info*> nodes;
+	inline static int level = 0;
 		
 public:
 
 	static std::vector<FS::Info*> List(const fs::path& pathToScan) {
+		std::cout<<"|->"<<pathToScan<<std::endl;
 		
 		for (const auto& entry : fs::directory_iterator(pathToScan)) {
 			const auto filenameStr = entry.path().filename().string();
+			
+			for(int i = 0; i < level; ++i)
+				std::cout<<"|";
+				
+			
 			if (entry.is_directory()) {
+				++level;
 				auto dirnodes = FileSystem::List(entry.path());
 				FS::DirectoryInfo* dir = new FS::DirectoryInfo(entry.path(),entry.last_write_time(),dirnodes);
 				nodes.push_back(dir);
@@ -33,8 +41,12 @@ public:
 			{
 				FS::FileInfo* file = new FS::FileInfo(entry.path(), entry.last_write_time(), entry.file_size());
 				nodes.push_back(file);
+				std::cout<<"|--"<<*file<<std::endl;
 			}
+			
 		}
+		
+		--level;
 		
 		return nodes;
 	}

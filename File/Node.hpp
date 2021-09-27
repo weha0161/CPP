@@ -65,7 +65,7 @@ namespace FS
 		{ 
 			auto destinationName = dest;// + "/" + fs::path(this->fileInfo.Path()).string();
 			auto srcName = fs::path(this->fileInfo.Path()).parent_path().string() +"/"+ this->fileInfo.Name();
-			Logger::Log()<<"CopyTo: "<<this->fileInfo.Path()<<" "<<this->fileInfo.Name()<<std::endl;
+			Logger::Log()<<"CopyTo: "<<destinationName<<" "<<this->fileInfo.Name()<<std::endl;
 			fs::copy(srcName, fs::path(destinationName));
 		};
 	};
