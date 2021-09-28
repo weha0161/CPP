@@ -15,10 +15,8 @@ using namespace FS;
 int main()
 {
 
-// 	 
-//     const fs::path pathToShow{ "//home//markus//Dokumente//cpp" };
     const fs::path pathToShow{ "//home//markus//Dokumente//cpp//File" };
-//     FS::Directory dir = FS::Directory("");
+//     const fs::path pathToShow{ "//home//markus//Dokumente//cpp//Matrix" };
 
 	auto nodes = FileSystem::List(pathToShow);
 	auto root = fs::directory_entry(pathToShow);
@@ -26,18 +24,20 @@ int main()
 	
 	nodes.push_back(dir);
 	
-	for(auto it = nodes.cbegin(); it != nodes.cend(); ++it)
-			{
-				Logger::Log<Debug>()<<*it<<" "<<(*it)->Path()<<std::endl;
-			}
-// 	auto n = nodes[3];
-// 	Logger::Log<Debug>()<<((FileInfo*)n)->Extension()<<std::endl;
+// 	for(auto it = nodes.cbegin(); it != nodes.cend(); ++it)
+// 	{
+// 		Logger::Log<Debug>()<<*it<<" "<<(*it)->Path()<<std::endl;
+// 	}
 	
 	Backup::Repository::Map(nodes.cbegin(), nodes.cend());
 	
 	FileSystem::CreateDirectories("/home/markus/Dokumente/cpp/File","/home/markus/Downloads/");
 	Backup::Repository::List();
 	Backup::Repository::CopyTo("/home/markus/Downloads/");
+	
+// 	FileSystem::CreateDirectories("/home/markus/Dokumente/cpp/Matrix","/home/markus/Downloads/");
+// 	Backup::Repository::List();
+// 	Backup::Repository::CopyTo("/home/markus/Downloads/");
 	
     return 0;
 };

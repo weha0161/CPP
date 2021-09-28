@@ -39,8 +39,6 @@ namespace FS
 
 			for (auto it = --srcPath.end() ; it != srcPath.begin(); --it)
 			{
-// 					result = result + "/" + (*it).string();
-					
 				if(*it == *(--rootP.end()))
 				{
 					result = (*it).string() + "/" + result ;
@@ -48,14 +46,9 @@ namespace FS
 				}
 				
 				result = (*it).string() + "/" + result ;
-				Logger::Log()<<"BuildDestPath: "<<*it<<"=>"<<result<<std::endl;
-// 				if((*(--rootP.end())) == *it || *it != *it2)
 			}
 			
-			Logger::Log()<<"BuildDestPath: "<<dst<<"-----------"<<result<<std::endl;
 			result = dst + result;
-			
-			Logger::Log()<<"BuildDestPath: "<<result<<std::endl;
 			
 			return std::filesystem::path(std::string(result.cbegin(),(--result.cend())));
 		}

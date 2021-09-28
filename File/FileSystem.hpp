@@ -53,16 +53,28 @@ public:
 	
 	static void CreateDirectories(std::string src, std::string dest)
 	{
-		int length = src.size();
-		
-		auto all = find_if(nodes.cbegin(), nodes.cend(), [&src](auto d){ return String_::Contains(d->Path(),src);} );
+		auto srcPath = std::filesystem::path(src);
+		auto dstPath = std::filesystem::path(dest);
 		
 		for(auto n : FS::Directory::Nodes())
 		{	    
-			std::string srcPath = n.Info().Path();
-			std::string destPath = srcPath.replace(0,length,dest);
-			fs::create_directories(destPath);	
+			auto destPath = BuildDestPath(srcPath, n.Info().Path(),dstPath);
+			fs::create_directories(destPath);
+			
+			Logger::Log()<<"Directory created "<<destPath<<std::endl;
 		}			
+	}
+	
+	static std::filesystem::path BuildDestPath(const fs::path& root, const fs::path& src, const fs::path& dst)
+	{
+		auto folder = src.end();
+		auto rootFolder = *(--root.end());
+		fs::path result;
+		
+		while(*(--folder) != rootFolder)
+			result = *folder / result;
+		
+		return dst / rootFolder / result;
 	}
 };
 
