@@ -15,29 +15,37 @@ using namespace FS;
 int main()
 {
 
-    const fs::path pathToShow{ "//home//markus//Dokumente//cpp//File" };
+//     fs::path pathToShow{ "//home//markus//Dokumente//cpp//File" };
 //     const fs::path pathToShow{ "//home//markus//Dokumente//cpp//Matrix" };
 
-	auto nodes = FileSystem::List(pathToShow);
-	auto root = fs::directory_entry(pathToShow);
-	FS::DirectoryInfo* dir = new FS::DirectoryInfo(root.path(),root.last_write_time(),nodes);
+// 	auto nodes = FileSystem::List(pathToShow);
+// 	auto root = fs::directory_entry(pathToShow);
+// 	FS::DirectoryInfo* dir = new FS::DirectoryInfo(root.path(),root.last_write_time(),nodes);
 	
-	nodes.push_back(dir);
+// 	nodes.push_back(dir);
+// 	Backup::Repository::Map(nodes.cbegin(), nodes.cend());
 	
-// 	for(auto it = nodes.cbegin(); it != nodes.cend(); ++it)
-// 	{
-// 		Logger::Log<Debug>()<<*it<<" "<<(*it)->Path()<<std::endl;
-// 	}
-	
-	Backup::Repository::Map(nodes.cbegin(), nodes.cend());
-	
-	FileSystem::CreateDirectories("/home/markus/Dokumente/cpp/File","/home/markus/Downloads/");
-	Backup::Repository::List();
-	Backup::Repository::CopyTo("/home/markus/Downloads/");
-	
+// 	FileSystem::CreateDirectories("/home/markus/Dokumente/cpp/File","/home/markus/Downloads/");
+// 	Backup::Repository::List();
+// 	Backup::Repository::CopyTo("/home/markus/Downloads/");
+    
+// 	fs::path pathToShow = "//home//markus//Dokumente//cpp//Matrix";
+// 
+// 	auto nodes2 = FileSystem::List(pathToShow);
+// 	auto root = fs::directory_entry(pathToShow);
+// 	auto dir = new FS::DirectoryInfo(root.path(),root.last_write_time(),nodes2);
+// 	
+// 	nodes2.push_back(dir);
+// 	Backup::Repository::Map(nodes2.cbegin(), nodes2.cend());
+// 	
 // 	FileSystem::CreateDirectories("/home/markus/Dokumente/cpp/Matrix","/home/markus/Downloads/");
 // 	Backup::Repository::List();
 // 	Backup::Repository::CopyTo("/home/markus/Downloads/");
+	
+	std::string from = "/home/markus/Dokumente/cpp/Matrix";
+	std::string to ="/home/markus/Downloads/";
+	
+	Backup::Repository::Backup(from,to);
 	
     return 0;
 };

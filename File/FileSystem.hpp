@@ -9,6 +9,7 @@
 #include "../Logger/Logger.hpp"
 #include "../String/String_.hpp"
 #include "../Wrapper/Wrapper.hpp"
+#include "Node.hpp"
 
 #ifndef FILESYSTEM_HPP
 #define FILESYSTEM_HPP
@@ -67,6 +68,7 @@ public:
 	
 	static std::filesystem::path BuildDestPath(const fs::path& root, const fs::path& src, const fs::path& dst)
 	{
+			Logger::Log()<<"BuildDestPath "<<root<<" "<<src<<" "<<dst<<" "<<std::endl;
 		auto folder = src.end();
 		auto rootFolder = *(--root.end());
 		fs::path result;

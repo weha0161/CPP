@@ -11,6 +11,7 @@
 #include <filesystem>
 #include "../Logger/Logger.hpp"
 #include "FileTypeContainer.hpp"
+#include "FileSystem.hpp"
 #include "Info.hpp"
 #include "Node.hpp"
 #include "../Typelist/Typelist.h"
@@ -28,7 +29,7 @@ namespace Backup
 		using FileTypes = Typelist<FS::HPP,FS::H,FS::CSV,FS::CPP>::Type;
 		using TypeContainer = FS::FileTypeContainer<FileTypes>;
 	
-		inline static std::string Root = "//home//markus//Dokumente//cpp//File"; 
+		inline static std::string Root = "//home//markus//Dokumente//cpp//Matrix"; 
 		inline static std::string Dest = "//home//markus//Downloads"; 
 		
 		template<typename Iterator>
@@ -50,6 +51,23 @@ namespace Backup
 		static void List()
 		{
 			typeContainer.List();
+		}
+		
+		static void Backup(std::string from, std::string to)
+		{
+			auto nodes = FileSystem::List(from);
+
+			auto root = fs::directory_entry(from);
+			auto dir = new FS::DirectoryInfo(root.path(),root.last_write_time(),nodes);
+			
+			nodes.push_back(dir);
+			Backup::Repository::Map(nodes.cbegin(), nodes.cend());
+			
+			FileSystem::CreateDirectories(from,to);
+			Backup::Repository::List();
+			Backup::Repository::CopyTo(to);
+
+			FileSystem::List(to);
 		}
 		
 	private:
