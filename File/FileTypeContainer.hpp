@@ -27,19 +27,18 @@ namespace FS
 	class FileTypeContainer<Typelist<Head>>
 	{
 	protected:
-		std::string rootPath;
+		std::filesystem::path rootPath;
 		std::filesystem::path BuildDestPath(const std::string& src, const std::string &dst)
 		{
 			auto srcPath = std::filesystem::path(src);
-			auto rootP = std::filesystem::path(rootPath);
 			auto dstPath = std::filesystem::path(dst);
 			std::string result = "";
 
-			auto it2 = rootP.begin();
+			auto it2 = this->rootPath.begin();
 
 			for (auto it = --srcPath.end() ; it != srcPath.begin(); --it)
 			{
-				if(*it == *(--rootP.end()))
+				if(*it == *(--this->rootPath.end()))
 				{
 					result = (*it).string() + "/" + result ;
 					break;
@@ -53,7 +52,7 @@ namespace FS
 			return std::filesystem::path(std::string(result.cbegin(),(--result.cend())));
 		}
 	public:
-		void SetRootPath(std::string p){ this->rootPath = p;}
+		void SetRootPath(std::string p){ this->rootPath = std::filesystem::path(p);;}
 		using Type = Head;
 		
 		void Add(FileInfo* fi)
@@ -67,7 +66,8 @@ namespace FS
 			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
 			{
 				std::string dst = this->BuildDestPath(it->Info().Path(),dest);
-				it->CopyTo(dst);
+				if(it->BelongsTo(this->rootPath))
+					it->CopyTo(dst);
 			}
 		}
 		
@@ -105,8 +105,8 @@ namespace FS
 			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
 			{
 				std::string dst = this->BuildDestPath(it->Info().Path(),dest);
-				Logger::Log()<<"Destination: "<<dst<<std::endl;
-				it->CopyTo(dst);
+				if(it->BelongsTo(this->rootPath))
+					it->CopyTo(dst);
 			}
 			
 			FileTypeContainer<Typelist<Tail...>>::CopyTo(dest);
