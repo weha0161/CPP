@@ -57,12 +57,15 @@ public:
 		auto srcPath = std::filesystem::path(src);
 		auto dstPath = std::filesystem::path(dest);
 		
-		for(auto n : FS::Directory::Nodes())
-		{	    
-			auto destPath = BuildDestPath(srcPath, n.Info().Path(),dstPath);
-			fs::create_directories(destPath);
-			
-			Logger::Log()<<"Directory created "<<destPath<<std::endl;
+		for(auto it = FS::Directory::Nodes().cbegin(); it != FS::Directory::Nodes().cend(); ++it)
+		{
+			if(it->BelongsTo(srcPath))
+			{
+				auto destPath = BuildDestPath(srcPath, it->Info().Path(),dstPath);
+				fs::create_directories(destPath);
+				
+				Logger::Log()<<"Directory created "<<destPath<<std::endl;
+			}
 		}			
 	}
 	

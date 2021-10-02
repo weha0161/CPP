@@ -52,6 +52,24 @@ namespace FS
 		const DirectoryInfo directoryInfo;
 		Directory(DirectoryInfo* fi): directoryInfo(*fi){};
 		const DirectoryInfo& Info() const {return directoryInfo;}
+		
+		const Directory& operator= (const Directory& d) const
+		{
+// 			directoryInfo = d.Info();
+
+			return *this;
+		}
+
+		bool BelongsTo(const fs::path& p) const
+		{  
+			auto pIt = fs::path(this->directoryInfo.Path()).begin();
+			
+			for(auto sp = p.begin(); sp != p.end(); ++sp, ++pIt)
+				if(*sp != *pIt)
+					return false;
+				
+			return true;
+		};
 	};
 	
 	//---------------------------------------------------------------------------------------------------File----------------------------------------------------------------------------------------
@@ -65,6 +83,17 @@ namespace FS
 		{ 
 			auto srcName = fs::path(this->fileInfo.Path()).parent_path().string() +"/"+ this->fileInfo.Name();
 			fs::copy(srcName, fs::path(destinationName));
+		};
+	
+		bool BelongsTo(const fs::path& p) const
+		{  
+			auto pIt = fs::path(this->fileInfo.Path()).begin();
+			
+			for(auto sp = p.begin(); sp != p.end(); ++sp, ++pIt)
+				if(*sp != *pIt)
+					return false;
+				
+			return true;
 		};
 	};
 

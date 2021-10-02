@@ -21,7 +21,7 @@ Regex: 	RegexTest.cpp
 	g++ -std=c++11 -o Regex RegexTest.cpp
 
 clean:
-	rm -r  ../../../Downloads/File/ && rm *.o
+	rm -r  ../../../Downloads/* && rm *.o
 	
 All:
 	$(MAKE) clean

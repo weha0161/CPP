@@ -46,6 +46,9 @@ int main()
 	std::string to ="/home/markus/Downloads/";
 	
 	Backup::Repository::Backup(from,to);
+    
+	std::string from2 = "//home//markus//Dokumente//cpp//File";
+	Backup::Repository::Backup(from2,to);
 	
     return 0;
 };
