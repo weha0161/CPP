@@ -70,7 +70,7 @@ namespace Backup
 			Backup::Repository::List();
 			Backup::Repository::CopyTo(to);
 
-			FileSystem::List(to);
+// 			FileSystem::List(to);
 		}
 		
 	private:

@@ -42,13 +42,36 @@ int main()
 // 	Backup::Repository::List();
 // 	Backup::Repository::CopyTo("/home/markus/Downloads/");
 	
-	std::string from = "/home/markus/Dokumente/cpp/Matrix";
-	std::string to ="/home/markus/Downloads/";
+	std::vector<std::string> dirs= 
+	{
+		"/home/markus/Dokumente/cpp/Matrix",
+		"/home/markus/Dokumente/cpp/File",
+		"/home/markus/Dokumente/cpp/Visitor",
+		"/home/markus/Dokumente/cpp/Unit",
+		"/home/markus/Dokumente/cpp/Wrapper",
+		"/home/markus/Dokumente/cpp/Traits",
+		"/home/markus/Dokumente/cpp/SFINAE",
+		"/home/markus/Dokumente/cpp/Quantity",
+		"/home/markus/Dokumente/cpp/Logger",
+		"/home/markus/Dokumente/cpp/Fraction",
+		"/home/markus/Dokumente/cpp/CSV",
+		"/home/markus/Dokumente/cpp/COW",
+		"/home/markus/Dokumente/cpp/AbstractFactory",
+		"/home/markus/Dokumente/cpp/Typelist",
+		"/home/markus/Dokumente/cpp/String",
+	};
 	
-	Backup::Repository::Backup(from,to);
+	for(auto p : dirs)
+	{
+		std::string from = p;
+		std::string to ="/home/markus/Downloads/";
+		
+		Backup::Repository::Backup(from,to);
+	}
+	
     
-	std::string from2 = "//home//markus//Dokumente//cpp//File";
-	Backup::Repository::Backup(from2,to);
+// 	std::string from2 = "//home//markus//Dokumente//cpp//File";
+// 	Backup::Repository::Backup(from2,to);
 	
     return 0;
 };
