@@ -64,14 +64,13 @@ public:
 				auto destPath = BuildDestPath(srcPath, it->Info().Path(),dstPath);
 				fs::create_directories(destPath);
 				
-				Logger::Log()<<"Directory created "<<destPath<<std::endl;
+				Logger::Log()<<"Directory created :"<<destPath<<std::endl;
 			}
 		}			
 	}
 	
 	static std::filesystem::path BuildDestPath(const fs::path& root, const fs::path& src, const fs::path& dst)
 	{
-			Logger::Log()<<"BuildDestPath "<<root<<" "<<src<<" "<<dst<<" "<<std::endl;
 		auto folder = src.end();
 		auto rootFolder = *(--root.end());
 		fs::path result;

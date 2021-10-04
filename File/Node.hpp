@@ -53,13 +53,6 @@ namespace FS
 		Directory(DirectoryInfo* fi): directoryInfo(*fi){};
 		const DirectoryInfo& Info() const {return directoryInfo;}
 		
-		const Directory& operator= (const Directory& d) const
-		{
-// 			directoryInfo = d.Info();
-
-			return *this;
-		}
-
 		bool BelongsTo(const fs::path& p) const
 		{  
 			auto pIt = fs::path(this->directoryInfo.Path()).begin();
@@ -74,7 +67,7 @@ namespace FS
 	
 	//---------------------------------------------------------------------------------------------------File----------------------------------------------------------------------------------------
 
-	struct File //public Node<File, FileInfo>
+	struct File
 	{
 		const FileInfo fileInfo;
 		File(FileInfo* fi): fileInfo(*fi){};
