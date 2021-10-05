@@ -34,7 +34,8 @@ int main()
 		"/home/markus/Dokumente/cpp/String",
 	};
 	
-	std::string to ="/media/markus/8591-1355/CPP/";
+// 	std::string to ="/media/markus/8591-1355/CPP/";
+	std::string to ="/home/markus/Downloads/";
 	
 	for(auto p : dirs)
 	{
@@ -107,7 +108,6 @@ int main()
 	}
 	
 // 	std::string from = "/home/markus/Dokumente/cpp";
-// 		std::string to ="/home/markus/Downloads/";
 // 		
 // 		Backup::Repository::Backup(from,to);
     

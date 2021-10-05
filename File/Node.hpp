@@ -67,7 +67,7 @@ namespace FS
 	
 	//---------------------------------------------------------------------------------------------------File----------------------------------------------------------------------------------------
 
-	struct File
+	struct File: Node<File, FileInfo>
 	{
 		const FileInfo fileInfo;
 		File(FileInfo* fi): fileInfo(*fi){};
@@ -88,6 +88,8 @@ namespace FS
 				
 			return true;
 		};
+		
+		void Read(){};
 	};
 
 	//---------------------------------------------------------------------------------------------------FileTypes----------------------------------------------------------------------------------------
@@ -98,10 +100,10 @@ namespace FS
 		static const char* Extension;		
 	};
 	
-	struct CPP: public FileTypeBase<CPP>, public File{};
-	struct HPP: public FileTypeBase<HPP>, public File{};
-	struct H: public FileTypeBase<H>, public File{};
-	struct CSV: public FileTypeBase<CSV>, public File{};
+	struct CPP: public FileTypeBase<CPP>{};
+	struct HPP: public FileTypeBase<HPP>{};
+	struct H: public FileTypeBase<H>{};
+	struct CSV: public FileTypeBase<CSV>{};
 
 	template<> const char* FileTypeBase<CPP>::Extension = ".cpp";
 	template<> const char* FileTypeBase<HPP>::Extension = ".hpp";
