@@ -79,6 +79,18 @@ namespace FS
 			}			
 		}
 		
+		std::vector<std::string> Read(std::string name)
+		{
+			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
+			{				
+				if(it->Info().Name() == name)
+					return it->Read();
+			}
+			
+
+			return std::vector<std::string>();
+		}
+		
 		FileTypeContainer()	{ }
 	};
 	
@@ -120,6 +132,17 @@ namespace FS
 			}
 			
 			FileTypeContainer<Typelist<Tail...>>::List();
+		}
+		
+		std::vector<std::string> Read(std::string name)
+		{
+			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
+			{				
+				if(it->Info().Name() == name)
+					return it->Read();
+			}
+			
+			return FileTypeContainer<Typelist<Tail...>>::Read(name);
 		}
 		
 		FileTypeContainer() { };

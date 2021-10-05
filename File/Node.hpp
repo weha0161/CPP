@@ -78,7 +78,23 @@ namespace FS
 		};
 	
 		
-		void Read(){};
+		std::vector<std::string> Read() const
+		{
+			std::string line;
+			std::vector<std::string> result = std::vector<std::string>();
+			
+			std::ifstream ifs (this->info.Path());
+			if (ifs.is_open())
+			{
+				while ( getline (ifs,line) )
+				{
+					result.push_back(line);
+				}
+				ifs.close();
+			}
+			
+			return result;
+		};
 	};
 
 	//---------------------------------------------------------------------------------------------------FileTypes----------------------------------------------------------------------------------------

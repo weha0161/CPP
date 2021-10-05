@@ -73,6 +73,11 @@ namespace Backup
 // 			FileSystem::List(to);
 		}
 		
+		static std::vector<std::string> Read(std::string s)
+		{
+			return typeContainer.Read(s);			
+		}
+		
 	private:
 		static inline TypeContainer typeContainer = TypeContainer();
 		inline static std::string Root = ""; 
