@@ -34,28 +34,21 @@ namespace FS
 		using Cont = std::vector<ElementType>;
 	protected:
 		static inline Cont cont = Cont();
-	public:
+		const DerivedInfo info;
+	public:		
+		Node(DerivedInfo* fi): info(*fi){};
 		
 		static void Add(Info* fi)
 		{ 
 			cont.push_back(ElementType(static_cast<DerivedInfo*>(fi))); 
 		};
-		
 		static ElementType Get(Info* fi){return ElementType();};
 		static const Cont& Nodes() { return cont; };
-	};
-	
-	//---------------------------------------------------------------------------------------------------Directory----------------------------------------------------------------------------------------
-
-	struct Directory: Node<Directory, DirectoryInfo>
-	{
-		const DirectoryInfo directoryInfo;
-		Directory(DirectoryInfo* fi): directoryInfo(*fi){};
-		const DirectoryInfo& Info() const {return directoryInfo;}
 		
+		const DerivedInfo& Info() const {return info;}
 		bool BelongsTo(const fs::path& p) const
 		{  
-			auto pIt = fs::path(this->directoryInfo.Path()).begin();
+			auto pIt = fs::path(this->info.Path()).begin();
 			
 			for(auto sp = p.begin(); sp != p.end(); ++sp, ++pIt)
 				if(*sp != *pIt)
@@ -63,31 +56,27 @@ namespace FS
 				
 			return true;
 		};
+	};
+	
+	//---------------------------------------------------------------------------------------------------Directory----------------------------------------------------------------------------------------
+
+	struct Directory: Node<Directory, DirectoryInfo>
+	{	
+		Directory(DirectoryInfo * di): Node(di){};
 	};
 	
 	//---------------------------------------------------------------------------------------------------File----------------------------------------------------------------------------------------
 
 	struct File: Node<File, FileInfo>
 	{
-		const FileInfo fileInfo;
-		File(FileInfo* fi): fileInfo(*fi){};
-		const FileInfo& Info() const {return fileInfo;}
+		File(FileInfo* fi): Node(fi){};
+
 		void CopyTo(std::string destinationName) const 
 		{ 
-			auto srcName = fs::path(this->fileInfo.Path()).parent_path().string() +"/"+ this->fileInfo.Name();
+			auto srcName = fs::path(this->info.Path()).parent_path().string() +"/"+ this->info.Name();
 			fs::copy(srcName, fs::path(destinationName));
 		};
 	
-		bool BelongsTo(const fs::path& p) const
-		{  
-			auto pIt = fs::path(this->fileInfo.Path()).begin();
-			
-			for(auto sp = p.begin(); sp != p.end(); ++sp, ++pIt)
-				if(*sp != *pIt)
-					return false;
-				
-			return true;
-		};
 		
 		void Read(){};
 	};
