@@ -98,7 +98,7 @@ namespace FS
 			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
 			{				
 				if(it->Info().Name() == name)
-					return it->template Parse<FS::CPP>();
+					return it->template Parse<ParseType>();
 			}
 			
 			return typename ParseType::ParseCont();
@@ -164,11 +164,10 @@ namespace FS
 			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
 			{				
 				if(it->Info().Name() == name)
-// 					return it->Parse<ParseType>();
-					return it->template Parse<FS::CPP>();
+					return it->template Parse<ParseType>();
 			}
 			
-			return FileTypeContainer<Typelist<Tail...>>::template Parse<FS::CPP>(name);
+			return FileTypeContainer<Typelist<Tail...>>::template Parse<ParseType>(name);
 		}
 		
 		FileTypeContainer() { };

@@ -101,8 +101,9 @@ namespace FS
 		template<typename ParseType, typename ParseTypeContainer = ParseType::ParseCont>
 		ParseTypeContainer Parse() const
 		{
-			Logger::Log()<<"PARSE"<<std::endl;
-			return ParseTypeContainer();
+			auto content = this->Read();
+			
+			return ParseType::Parse(content);
 		}
 	};
 

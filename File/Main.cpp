@@ -6,7 +6,7 @@
 #include <vector>
 #include <cstdlib>
 #include <unordered_map>
-// #include "Directory.hpp"
+#include "ParseTypes.hpp"
 #include "Repository.hpp"
 #include "FileSystem.hpp"
 
@@ -118,11 +118,11 @@ int main()
 	
 	auto f = Backup::Repository::Read(fileName);
 	
-	for(auto l : f)
-		Logger::Log() << l<< std::endl;
 
-	auto p = Backup::Repository::Parse<CPP>(fileName);
+	auto p = Backup::Repository::Parse<FS::CODE>(fileName);
 	
+	for(auto l : p)
+		Logger::Log() << l<< std::endl;
 	
     return 0;
 };
