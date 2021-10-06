@@ -13,6 +13,7 @@
 #include "../Typelist/Typelist.h"
 #include "../Visitor/Visitor.hpp"
 #include "Info.hpp"
+#include "Node.hpp"
 
 #ifndef FILETYPECONTAINER_HPP
 #define FILETYPECONTAINER_HPP
@@ -91,6 +92,18 @@ namespace FS
 			return std::vector<std::string>();
 		}
 		
+		template<typename ParseType>
+		typename ParseType::ParseCont Parse(std::string name)
+		{
+			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
+			{				
+				if(it->Info().Name() == name)
+					return it->template Parse<FS::CPP>();
+			}
+			
+			return typename ParseType::ParseCont();
+		}
+		
 		FileTypeContainer()	{ }
 	};
 	
@@ -143,6 +156,19 @@ namespace FS
 			}
 			
 			return FileTypeContainer<Typelist<Tail...>>::Read(name);
+		}
+		
+		template<typename ParseType>
+		typename ParseType::ParseCont Parse(std::string name)
+		{
+			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
+			{				
+				if(it->Info().Name() == name)
+// 					return it->Parse<ParseType>();
+					return it->template Parse<FS::CPP>();
+			}
+			
+			return FileTypeContainer<Typelist<Tail...>>::template Parse<FS::CPP>(name);
 		}
 		
 		FileTypeContainer() { };

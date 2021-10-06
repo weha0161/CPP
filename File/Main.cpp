@@ -121,6 +121,8 @@ int main()
 	for(auto l : f)
 		Logger::Log() << l<< std::endl;
 
+	auto p = Backup::Repository::Parse<CPP>(fileName);
+	
 	
     return 0;
 };

@@ -78,6 +78,12 @@ namespace Backup
 			return typeContainer.Read(s);			
 		}
 		
+		template<typename ParseType>
+		static typename ParseType::ParseCont Parse(std::string s)
+		{
+			return typeContainer.Parse<ParseType>(s);			
+		}
+		
 	private:
 		static inline TypeContainer typeContainer = TypeContainer();
 		inline static std::string Root = ""; 

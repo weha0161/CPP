@@ -67,8 +67,10 @@ namespace FS
 	
 	//---------------------------------------------------------------------------------------------------File----------------------------------------------------------------------------------------
 
+// 	template<typename ParseT = std::string>
 	struct File: Node<File, FileInfo>
 	{
+		
 		File(FileInfo* fi): Node(fi){};
 
 		void CopyTo(std::string destinationName) const 
@@ -95,6 +97,13 @@ namespace FS
 			
 			return result;
 		};
+		
+		template<typename ParseType, typename ParseTypeContainer = ParseType::ParseCont>
+		ParseTypeContainer Parse() const
+		{
+			Logger::Log()<<"PARSE"<<std::endl;
+			return ParseTypeContainer();
+		}
 	};
 
 	//---------------------------------------------------------------------------------------------------FileTypes----------------------------------------------------------------------------------------
@@ -102,6 +111,8 @@ namespace FS
 	template<typename T>
 	struct FileTypeBase: Node<FileTypeBase<T>, FileInfo, File>
 	{
+		using ParseType = std::string;
+		using ParseCont = std::vector<ParseType>;
 		static const char* Extension;		
 	};
 	
