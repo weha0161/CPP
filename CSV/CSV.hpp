@@ -1,5 +1,5 @@
-#include "../String/String_.h"
-#include "../Logger/Logger.h"
+#include "../String/String_.hpp"
+#include "../Logger/Logger.hpp"
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/vector.hpp>
 #include <map>
@@ -18,8 +18,13 @@ public:
 	Element(std::string s):stringValue(s), Value(s) {};
 	const std::string Value;
 private:
-	const String_ stringValue;
+	const std::string stringValue;
 };
+
+std::ostream& operator<<(std::ostream& out, const Element& e)
+{
+	return out<<e.Value;
+}
 
 //--------------------------------CreateElementNewPolicy------------------------------------------------
 
@@ -101,7 +106,7 @@ private:
 		void operator()(Type) const
 		{
 			RegisterImpl(Type::Identifier, CreatePolicy<Type>::DoCreate);
-			Logger::Instance().Log<Debug>(std::string("Register: " + Type::Identifier));
+			Logger::Log<Debug>()<<"Register: "<< Type::Identifier<<std::endl;
 		};
 	};
 	
