@@ -98,14 +98,14 @@ int main()
 	
 	auto cv = Backup::Repository::Read(csv);
 	
-	auto se = Backup::Repository::Parse<FS::SalesEntry>(csv);
+	auto se = Backup::Repository::Parse<FS::AccountTransaction>(csv);
 	
 	int i = 0;
 // 	for(auto i = se.cbegin(); i != se.cend(); ++i)
 // 		std::cout<< ++i<<": " <<i->second<< std::endl;
 	
-	for (auto elem : se)
-        std::cout << elem.first << ": " << elem.second << std::endl;
+	for (auto elem : se.Keys())
+        std::cout << elem.Value << std::endl;
 	
     return 0;
 };

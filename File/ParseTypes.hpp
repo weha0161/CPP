@@ -57,7 +57,32 @@ namespace FS
 		return out<<c.LineNumber()<<"\t"<<c.Line();
 	}
 	
-	class SalesEntry
+	template<typename T, template<typename, typename> class TCont = std::map, template<typename> class Cont = std::vector>
+	class TransactionContainer
+	{
+	public:
+		using KeyType = typename T::KeyType;
+	private:
+		Cont<KeyType> keys;
+		TCont<KeyType, Cont<T>> transactions;
+	public:
+		void Insert(KeyType k, T t)
+		{
+			if(!this->Contains(k))
+			{
+				this->keys.push_back(k);
+				this->transactions.insert(std::pair<KeyType, Cont<T>>(k,Cont{ t }));
+				return;
+			}
+			
+			this->transactions[k].push_back(t);
+		}
+		
+		bool Contains(KeyType k){ return this->transactions.find(k) != this->transactions.end(); }
+		const Cont<KeyType>& Keys() { return keys; }
+	};
+	
+	class AccountTransaction
 	{
 		using Separator = T::char_<','> ;
 		
@@ -66,10 +91,11 @@ namespace FS
 		Date date;
 		Value value;
 	public:
-		using ParseType = SalesEntry;
-		using ParseCont = std::multimap<std::string,ParseType>;
+		using ParseType = AccountTransaction;
+		using KeyType = Key;
+		using ParseCont = TransactionContainer<ParseType>;
 		
-		SalesEntry(std::string k, std::string c, std::string d, std::string v): key(k), cause(c), date(d), value(v) {};
+		AccountTransaction(std::string k, std::string c, std::string d, std::string v): key(k), cause(c), date(d), value(v) {};
 		
 		const Key& GetKey() const { return key; }
 		const Entry& GetEntry() const { return cause; }
@@ -91,7 +117,7 @@ namespace FS
 				auto sum = values.at(3);
 				
 				if(key != "")
-					result.insert(std::pair<std::string, ParseType>(key, ParseType(key,cause,sum, date)));
+					result.Insert(key, ParseType(key,cause,sum, date));
 			}
 
 			return result;
@@ -117,7 +143,7 @@ namespace FS
 		
 	};
 	
-	std::ostream& operator<<(std::ostream& out, const SalesEntry& s)
+	std::ostream& operator<<(std::ostream& out, const AccountTransaction& s)
 	{
 		return out<<s.GetKey()<<"\t"<<s.GetEntry()<<"\t"<<s.GetDate()<<"\t"<<s.GetValue()<<"\t";
 	}
