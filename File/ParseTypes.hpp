@@ -80,6 +80,7 @@ namespace FS
 		
 		bool Contains(KeyType k){ return this->transactions.find(k) != this->transactions.end(); }
 		const Cont<KeyType>& Keys() { return keys; }
+		const Cont<T>& operator[](KeyType k){ return this->transactions[k]; }
 	};
 	
 	class AccountTransaction

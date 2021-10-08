@@ -104,8 +104,14 @@ int main()
 // 	for(auto i = se.cbegin(); i != se.cend(); ++i)
 // 		std::cout<< ++i<<": " <<i->second<< std::endl;
 	
-	for (auto elem : se.Keys())
+	auto keys = se.Keys();
+	for (auto elem : keys)
         std::cout << elem.Value << std::endl;
+	
+	std::cout<<"\n";
+	
+	for (auto elem : se[keys[1]])
+        std::cout << elem << std::endl;
 	
     return 0;
 };
