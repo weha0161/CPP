@@ -26,16 +26,16 @@ namespace fs = std::filesystem;
 namespace FS
 {
 
-	class CODE
+	class Code
 	{
 		
 		std::string line;
 		uint lineNumber;
 	public:
-		using ParseType = CODE;
+		using ParseType = Code;
 		using ParseCont = std::vector<ParseType>;
 		
-		CODE(uint lineNo, std::string l): lineNumber(lineNo), line(l){};
+		Code(uint lineNo, std::string l): lineNumber(lineNo), line(l){};
 		
 		const uint LineNumber() const { return lineNumber; }
 		const std::string& Line() const { return line; }
@@ -52,12 +52,12 @@ namespace FS
 		
 	};
 	
-	std::ostream& operator<<(std::ostream& out, const CODE& c)
+	std::ostream& operator<<(std::ostream& out, const Code& c)
 	{
 		return out<<c.LineNumber()<<"\t"<<c.Line();
 	}
 	
-	class SALES_ENTRY
+	class SalesEntry
 	{
 		using Separator = T::char_<','> ;
 		
@@ -66,10 +66,10 @@ namespace FS
 		Date date;
 		Value value;
 	public:
-		using ParseType = SALES_ENTRY;
+		using ParseType = SalesEntry;
 		using ParseCont = std::multimap<std::string,ParseType>;
 		
-		SALES_ENTRY(std::string k, std::string c, std::string d, std::string v): key(k), cause(c), date(d), value(v) {};
+		SalesEntry(std::string k, std::string c, std::string d, std::string v): key(k), cause(c), date(d), value(v) {};
 		
 		const Key& GetKey() const { return key; }
 		const Entry& GetEntry() const { return cause; }
@@ -84,7 +84,14 @@ namespace FS
 			for(auto line : content)
 			{
 				auto values = GetCsvRowValues(line);
-				result.insert(std::pair<std::string, ParseType>(values.at(1), ParseType(values.at(1),values.at(2),values.at(3), values.at(0))));
+				
+				auto date = values.at(0);
+				auto key = values.at(1);
+				auto cause = values.at(2);
+				auto sum = values.at(3);
+				
+				if(key != "")
+					result.insert(std::pair<std::string, ParseType>(key, ParseType(key,cause,sum, date)));
 			}
 
 			return result;
@@ -110,7 +117,7 @@ namespace FS
 		
 	};
 	
-	std::ostream& operator<<(std::ostream& out, const SALES_ENTRY& s)
+	std::ostream& operator<<(std::ostream& out, const SalesEntry& s)
 	{
 		return out<<s.GetKey()<<"\t"<<s.GetEntry()<<"\t"<<s.GetDate()<<"\t"<<s.GetValue()<<"\t";
 	}

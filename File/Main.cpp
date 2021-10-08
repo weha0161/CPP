@@ -91,21 +91,21 @@ int main()
 	
 	auto f = Backup::Repository::Read(fileName);
 	
-	auto p = Backup::Repository::Parse<FS::CODE>(fileName);
+	auto p = Backup::Repository::Parse<FS::Code>(fileName);
 	
 	for(auto l : p)
 		Logger::Log() << l<< std::endl;
 	
 	auto cv = Backup::Repository::Read(csv);
 	
-	auto se = Backup::Repository::Parse<FS::SALES_ENTRY>(csv);
+	auto se = Backup::Repository::Parse<FS::SalesEntry>(csv);
 	
 	int i = 0;
 // 	for(auto i = se.cbegin(); i != se.cend(); ++i)
 // 		std::cout<< ++i<<": " <<i->second<< std::endl;
 	
 	for (auto elem : se)
-        std::cout << elem.first << " :: " << elem.second << std::endl;
+        std::cout << elem.first << ": " << elem.second << std::endl;
 	
     return 0;
 };
