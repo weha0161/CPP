@@ -51,33 +51,7 @@ using namespace FS;
 
 int main()
 {
-/*
-    fs::path pathToShow{ "//home//markus//Dokumente//cpp//File" };
-    const fs::path pathToShow{ "//home//markus//Dokumente//cpp//Matrix" };
 
-	auto nodes = FileSystem::List(pathToShow);
-	auto root = fs::directory_entry(pathToShow);
-	FS::DirectoryInfo* dir = new FS::DirectoryInfo(root.path(),root.last_write_time(),nodes);
-	
-	nodes.push_back(dir);
-	Backup::Repository::Map(nodes.cbegin(), nodes.cend());
-	
-	FileSystem::CreateDirectories("/home/markus/Dokumente/cpp/File","/home/markus/Downloads/");
-	Backup::Repository::List();
-	Backup::Repository::CopyTo("/home/markus/Downloads/");
-    
-	fs::path pathToShow = "//home//markus//Dokumente//cpp//Matrix";
-
-	auto nodes2 = FileSystem::List(pathToShow);
-	auto root = fs::directory_entry(pathToShow);
-	auto dir = new FS::DirectoryInfo(root.path(),root.last_write_time(),nodes2);
-	
-	nodes2.push_back(dir);
-	Backup::Repository::Map(nodes2.cbegin(), nodes2.cend());*/
-	
-	FileSystem::CreateDirectories("/home/markus/Dokumente/cpp/Matrix","/home/markus/Downloads/");
-	Backup::Repository::List();
-	Backup::Repository::CopyTo("/home/markus/Downloads/");
 	
 	std::vector<std::string> dirs= 
 	{
@@ -102,27 +76,36 @@ int main()
 	for(auto p : dirs)
 	{
 		std::string from = p;
-// 		std::string to ="/media/markus/8591-1355/1/";
+		auto nodes = FileSystem::List(from);
+
+		auto root = fs::directory_entry(from);
+		auto dir = new FS::DirectoryInfo(root.path(),root.last_write_time(),nodes);
+				
+		nodes.push_back(dir);
+		Backup::Repository::Map(nodes.cbegin(), nodes.cend());
 		
-		Backup::Repository::Backup(from,to);
 	}
-// 	
-// 	std::string from = "/home/markus/Dokumente/cpp";
-// 		
-// 		Backup::Repository::Backup(from,to);
-//     
-// 	std::string from2 = "//home//markus//Dokumente//cpp//File";
-// 	Backup::Repository::Backup(from2,to);
 	
 	std::string fileName = "Unit.h";
+	std::string csv = "RaibaKonten2021.csv";
 	
 	auto f = Backup::Repository::Read(fileName);
 	
-
 	auto p = Backup::Repository::Parse<FS::CODE>(fileName);
 	
 	for(auto l : p)
 		Logger::Log() << l<< std::endl;
+	
+	auto cv = Backup::Repository::Read(csv);
+	
+	auto se = Backup::Repository::Parse<FS::SALES_ENTRY>(csv);
+	
+	int i = 0;
+// 	for(auto i = se.cbegin(); i != se.cend(); ++i)
+// 		std::cout<< ++i<<": " <<i->second<< std::endl;
+	
+	for (auto elem : se)
+        std::cout << elem.first << " :: " << elem.second << std::endl;
 	
     return 0;
 };
