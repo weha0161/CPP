@@ -85,7 +85,7 @@ namespace FS
 	
 	class AccountTransaction
 	{
-		using Separator = T::char_<','> ;
+		using Separator = T::char_<';'> ;
 		
 		Key key;
 		Entry cause;
@@ -112,15 +112,34 @@ namespace FS
 			{
 				auto values = GetCsvRowValues(line);
 				
-				auto date = values.at(0);
 				auto key = values.at(1);
-				auto cause = values.at(2);
-				auto sum = values.at(3);
-				
 				if(key != "")
+				{
+					auto date = values.at(0);
+					auto cause = values.at(2);
+					auto sum = GetValue(values.at(3));
+					
 					result.Insert(key, ParseType(key,cause,sum, date));
+				}
+				
+				
 			}
 
+			return result;
+		}
+		
+		static std::string GetValue(std::string s)
+		{
+			std::string result;
+			for (unsigned int i = 0; i < s.size(); ++i)
+			{
+				if(std::isdigit(s.at(i)))
+					result += s.at(i);
+			}
+			
+			if(result.size() > 2)
+				result.insert(result.size()-2, ".");
+			
 			return result;
 		}
 		
