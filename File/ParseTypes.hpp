@@ -15,6 +15,7 @@
 #include <filesystem>
 #include "../Logger/Logger.hpp"
 #include "../CSV/CSV.hpp"
+#include "../Quantity/Quantity.h"
 #include "../Typelist/Typelist.h"
 #include "../Visitor/Visitor.hpp"
 
@@ -90,24 +91,26 @@ namespace FS
 		Key key;
 		Entry cause;
 		Date date;
-		Value value;
+// 		Value value;
+		Quantity<Sum> value;
 	public:
 		using ParseType = AccountTransaction;
 		using KeyType = Key;
 		using ParseCont = TransactionContainer<ParseType>;
 		
-		AccountTransaction(std::string k, std::string c, std::string d, std::string v): key(k), cause(c), date(d), value(v) {};
+		AccountTransaction(std::string k, std::string c, double v, std::string d) : key(k), cause(c), date(d), value(v) {};
 		
 		const Key& GetKey() const { return key; }
 		const Entry& GetEntry() const { return cause; }
 		const Date& GetDate() const { return date; }
-		const Value& GetValue() const { return value; }
+		const Quantity<Sum>& GetValue() const { return value; }
 		
 		static ParseCont Parse(std::vector<std::string> content)
 		{
 			uint ctr = 0;
 			auto result = ParseCont();
 
+			std::string::size_type sz; 
 			for(auto line : content)
 			{
 				auto values = GetCsvRowValues(line);
@@ -117,7 +120,9 @@ namespace FS
 				{
 					auto date = values.at(0);
 					auto cause = values.at(2);
-					auto sum = GetValue(values.at(3));
+					
+					auto n = GetNumericValue(values.at(3));
+					auto sum = n != "" ? std::stod(n) : 0.0 ;
 					
 					result.Insert(key, ParseType(key,cause,sum, date));
 				}
@@ -128,7 +133,7 @@ namespace FS
 			return result;
 		}
 		
-		static std::string GetValue(std::string s)
+		static std::string GetNumericValue(std::string s)
 		{
 			std::string result;
 			for (unsigned int i = 0; i < s.size(); ++i)
