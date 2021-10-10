@@ -82,6 +82,20 @@ namespace FS
 		bool Contains(KeyType k){ return this->transactions.find(k) != this->transactions.end(); }
 		const Cont<KeyType>& Keys() { return keys; }
 		const Cont<T>& operator[](KeyType k){ return this->transactions[k]; }
+		
+		void Display(std::ostream& out)
+		{
+			for(auto p : this->transactions)
+			{
+				out<<p.first<<":"<<std::endl;
+				for(auto elem : p.second)
+				{
+					out<<"\t"<<elem<<std::endl;
+				}
+				
+				out<<std::endl;
+			}
+		}
 	};
 	
 	template<typename Derived>
