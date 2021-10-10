@@ -123,10 +123,12 @@ namespace FS
 			uint ctr = 0;
 			auto result = ParseCont();
 
-			std::string::size_type sz; 
 			for(auto line : content)
 			{
 				auto values = GetCsvRowValues(line);
+				
+				if (values.size() < 4)
+					continue;
 				
 				auto key = values.at(Derived::KeyIdx);
 				if(key != "")
@@ -223,7 +225,7 @@ namespace FS
 	template<typename T>
 	std::ostream& operator<<(std::ostream& out, const AccountTransaction<T>& s)
 	{
-		return out<<s.GetKey()<<"\t"<<s.GetEntry()<<"\t"<<s.GetDate()<<"\t"<<s.GetValue()<<"\t";
+		return out<<std::setw(30)<<std::left<<s.GetKey()<<std::setw(60)<<s.GetEntry()<<std::setw(20)<<std::right<<s.GetDate()<<std::setw(10)<<s.GetValue()<<"\t";
 	}
 }
 
