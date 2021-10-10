@@ -50,6 +50,8 @@ public:
 	Key* DoCreate(){return this;};
 };
 
+inline bool operator< (const Key& lhs, const Key& rhs){ return lhs.Value < rhs.Value; }
+
 class Value: public Element
 {
 public:

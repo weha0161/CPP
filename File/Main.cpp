@@ -87,7 +87,9 @@ int main()
 	}
 	
 	std::string fileName = "Unit.h";
-	std::string csv = "RaibaKonten2021_1.csv";
+	std::string custom = "RaibaKonten2021_1.csv";
+	std::string comdirect = "Umsaetze_1026947527.csv";
+	std::string raiba = "Umsaetze_DE19660623660009232702.csv";
 	
 	auto f = Backup::Repository::Read(fileName);
 	
@@ -96,22 +98,17 @@ int main()
 	for(auto l : p)
 		Logger::Log() << l<< std::endl;
 	
-	auto cv = Backup::Repository::Read(csv);
+	auto cv = Backup::Repository::Read(custom);	
+	auto se = Backup::Repository::Parse<FS::Custom<0>>(custom);
+	se.Display(std::cout);
 	
-	auto se = Backup::Repository::Parse<FS::Custom<0>>(csv);
+// 	auto c = Backup::Repository::Read(comdirect);	
+// 	auto com = Backup::Repository::Parse<FS::Comdirect<0>>(comdirect);
+// 	com.Display(std::cout);
 	
-	int i = 0;
-// 	for(auto i = se.cbegin(); i != se.cend(); ++i)
-// 		std::cout<< ++i<<": " <<i->second<< std::endl;
-	
-	auto keys = se.Keys();
-	for (auto elem : keys)
-        std::cout << elem.Value << std::endl;
-	
-	std::cout<<"\n";
-	
-	for (auto elem : se[keys[1]])
-        std::cout << elem << std::endl;
+	auto c = Backup::Repository::Read(raiba);	
+	auto r = Backup::Repository::Parse<FS::Raiba<0>>(raiba);
+	r.Display(std::cout);
 	
     return 0;
 };

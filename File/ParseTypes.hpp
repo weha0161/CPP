@@ -191,6 +191,8 @@ namespace FS
 		inline static constexpr int CauseIdx = 2;
 		inline static constexpr int DateIdx = 0;
 		inline static constexpr int QuantityIdx = 4;
+		
+		Comdirect(std::string k, std::string c, double v, std::string d) : AccountTransaction<Comdirect<N>>(k,c,v, d) {};
 	};
 	
 	template<int N>
@@ -202,6 +204,8 @@ namespace FS
 		inline static constexpr int CauseIdx = 9;
 		inline static constexpr int DateIdx = 0;
 		inline static constexpr int QuantityIdx = 12;
+		
+		Raiba(std::string k, std::string c, double v, std::string d) : AccountTransaction<Raiba<N>>(k,c,v, d) {};
 	};
 	
 	template<int N = 0>
@@ -216,8 +220,8 @@ namespace FS
 		
 		Custom(std::string k, std::string c, double v, std::string d) : AccountTransaction<Custom<N>>(k,c,v, d) {};
 	};
-// 	template<typename>
-	std::ostream& operator<<(std::ostream& out, const Custom<0>& s)
+	template<typename T>
+	std::ostream& operator<<(std::ostream& out, const AccountTransaction<T>& s)
 	{
 		return out<<s.GetKey()<<"\t"<<s.GetEntry()<<"\t"<<s.GetDate()<<"\t"<<s.GetValue()<<"\t";
 	}
