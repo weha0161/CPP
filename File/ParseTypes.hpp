@@ -84,6 +84,7 @@ namespace FS
 		const Cont<T>& operator[](KeyType k){ return this->transactions[k]; }
 	};
 	
+	template<typename Derived>
 	class AccountTransaction
 	{
 		using Separator = T::char_<';'> ;
@@ -91,14 +92,12 @@ namespace FS
 		Key key;
 		Entry cause;
 		Date date;
-// 		Value value;
 		Quantity<Sum> value;
 	public:
-		using ParseType = AccountTransaction;
 		using KeyType = Key;
-		using ParseCont = TransactionContainer<ParseType>;
+		using ParseCont = TransactionContainer<Derived>;
 		
-		AccountTransaction(std::string k, std::string c, double v, std::string d) : key(k), cause(c), date(d), value(v) {};
+		AccountTransaction(std::string k, std::string c, double v, std::string d) : key(k), cause(c), date(d), value(v) { };
 		
 		const Key& GetKey() const { return key; }
 		const Entry& GetEntry() const { return cause; }
@@ -115,16 +114,16 @@ namespace FS
 			{
 				auto values = GetCsvRowValues(line);
 				
-				auto key = values.at(1);
+				auto key = values.at(Derived::KeyIdx);
 				if(key != "")
 				{
-					auto date = values.at(0);
-					auto cause = values.at(2);
+					auto date = values.at(Derived::DateIdx);
+					auto cause = values.at(Derived::CauseIdx);
 					
-					auto n = GetNumericValue(values.at(3));
+					auto n = GetNumericValue(values.at(Derived::QuantityIdx));
 					auto sum = n != "" ? std::stod(n) : 0.0 ;
-					
-					result.Insert(key, ParseType(key,cause,sum, date));
+				
+					result.Insert(key, Derived(key,cause,sum, date));
 				}
 				
 				
@@ -168,7 +167,43 @@ namespace FS
 		
 	};
 	
-	std::ostream& operator<<(std::ostream& out, const AccountTransaction& s)
+	
+	template<int N>
+	struct Comdirect: public AccountTransaction<Comdirect<N>>
+	{
+		enum{ Num = N };
+		using Type = Comdirect<N>;
+		inline static constexpr int KeyIdx = 3;
+		inline static constexpr int CauseIdx = 2;
+		inline static constexpr int DateIdx = 0;
+		inline static constexpr int QuantityIdx = 4;
+	};
+	
+	template<int N>
+	struct Raiba: public AccountTransaction<Raiba<N>>
+	{
+		enum{ Num = N };
+		using Type = Raiba<N>;
+		inline static constexpr int KeyIdx = 4;
+		inline static constexpr int CauseIdx = 9;
+		inline static constexpr int DateIdx = 0;
+		inline static constexpr int QuantityIdx = 12;
+	};
+	
+	template<int N = 0>
+	struct Custom: public AccountTransaction<Custom<N>>
+	{
+		enum{ Num = N };
+		using Type = Custom<N>;
+		inline static constexpr int KeyIdx = 1;
+		inline static constexpr int CauseIdx = 2;
+		inline static constexpr int DateIdx = 0;
+		inline static constexpr int QuantityIdx = 3;
+		
+		Custom(std::string k, std::string c, double v, std::string d) : AccountTransaction<Custom<N>>(k,c,v, d) {};
+	};
+// 	template<typename>
+	std::ostream& operator<<(std::ostream& out, const Custom<0>& s)
 	{
 		return out<<s.GetKey()<<"\t"<<s.GetEntry()<<"\t"<<s.GetDate()<<"\t"<<s.GetValue()<<"\t";
 	}

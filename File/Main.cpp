@@ -98,7 +98,7 @@ int main()
 	
 	auto cv = Backup::Repository::Read(csv);
 	
-	auto se = Backup::Repository::Parse<FS::AccountTransaction>(csv);
+	auto se = Backup::Repository::Parse<FS::Custom<0>>(csv);
 	
 	int i = 0;
 // 	for(auto i = se.cbegin(); i != se.cend(); ++i)
