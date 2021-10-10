@@ -88,10 +88,15 @@ namespace FS
 			for(auto p : this->transactions)
 			{
 				out<<p.first<<":"<<std::endl;
+				
+				typename T::QunatityType total(0.0);
 				for(auto elem : p.second)
 				{
+					total = total + elem.GetQuantity();
 					out<<"\t"<<elem<<std::endl;
 				}
+				
+				out<<"Total: "<<total<<std::endl;
 				
 				out<<std::endl;
 			}
@@ -110,13 +115,14 @@ namespace FS
 	public:
 		using KeyType = Key;
 		using ParseCont = TransactionContainer<Derived>;
+		using QunatityType = Quantity<Sum>;
 		
 		AccountTransaction(std::string k, std::string c, double v, std::string d) : key(k), cause(c), date(d), value(v) { };
 		
 		const Key& GetKey() const { return key; }
 		const Entry& GetEntry() const { return cause; }
 		const Date& GetDate() const { return date; }
-		const Quantity<Sum>& GetValue() const { return value; }
+		const Quantity<Sum>& GetQuantity() const { return value; }
 		static constexpr unsigned int Indices[4] = {Derived::KeyIdx, Derived::DateIdx, Derived::CauseIdx, Derived::QuantityIdx};
 		static const unsigned int MaxIdx = *std::max_element(Indices,Indices+4);
 		
@@ -227,7 +233,7 @@ namespace FS
 	template<typename T>
 	std::ostream& operator<<(std::ostream& out, const AccountTransaction<T>& s)
 	{
-		return out<<std::setw(30)<<std::left<<s.GetKey()<<std::setw(60)<<s.GetEntry()<<std::setw(20)<<std::right<<s.GetDate()<<std::setw(10)<<s.GetValue()<<"\t";
+		return out<<std::setw(30)<<std::left<<s.GetKey()<<std::setw(60)<<s.GetEntry()<<std::setw(20)<<std::right<<s.GetDate()<<std::setw(10)<<std::setprecision(2)<<std::fixed<<s.GetQuantity()<<"\t";
 	}
 }
 
