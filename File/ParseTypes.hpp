@@ -117,6 +117,8 @@ namespace FS
 		const Entry& GetEntry() const { return cause; }
 		const Date& GetDate() const { return date; }
 		const Quantity<Sum>& GetValue() const { return value; }
+		static constexpr unsigned int Indices[4] = {Derived::KeyIdx, Derived::DateIdx, Derived::CauseIdx, Derived::QuantityIdx};
+		static const unsigned int MaxIdx = *std::max_element(Indices,Indices+4);
 		
 		static ParseCont Parse(std::vector<std::string> content)
 		{
@@ -127,7 +129,7 @@ namespace FS
 			{
 				auto values = GetCsvRowValues(line);
 				
-				if (values.size() < 4)
+				if (values.size() < MaxIdx)
 					continue;
 				
 				auto key = values.at(Derived::KeyIdx);
@@ -184,41 +186,41 @@ namespace FS
 	};
 	
 	
-	template<int N>
+	template<unsigned int N>
 	struct Comdirect: public AccountTransaction<Comdirect<N>>
 	{
 		enum{ Num = N };
 		using Type = Comdirect<N>;
-		inline static constexpr int KeyIdx = 3;
-		inline static constexpr int CauseIdx = 2;
-		inline static constexpr int DateIdx = 0;
-		inline static constexpr int QuantityIdx = 4;
+		inline static constexpr unsigned int KeyIdx = 3;
+		inline static constexpr unsigned int CauseIdx = 2;
+		inline static constexpr unsigned int DateIdx = 0;
+		inline static constexpr unsigned int QuantityIdx = 4;
 		
 		Comdirect(std::string k, std::string c, double v, std::string d) : AccountTransaction<Comdirect<N>>(k,c,v, d) {};
 	};
 	
-	template<int N>
+	template<unsigned int N>
 	struct Raiba: public AccountTransaction<Raiba<N>>
 	{
 		enum{ Num = N };
 		using Type = Raiba<N>;
-		inline static constexpr int KeyIdx = 4;
-		inline static constexpr int CauseIdx = 9;
-		inline static constexpr int DateIdx = 0;
-		inline static constexpr int QuantityIdx = 12;
+		inline static constexpr unsigned int KeyIdx = 4;
+		inline static constexpr unsigned int CauseIdx = 9;
+		inline static constexpr unsigned int DateIdx = 0;
+		inline static constexpr unsigned int QuantityIdx = 12;
 		
 		Raiba(std::string k, std::string c, double v, std::string d) : AccountTransaction<Raiba<N>>(k,c,v, d) {};
 	};
 	
-	template<int N = 0>
+	template<unsigned int N = 0>
 	struct Custom: public AccountTransaction<Custom<N>>
 	{
 		enum{ Num = N };
 		using Type = Custom<N>;
-		inline static constexpr int KeyIdx = 1;
-		inline static constexpr int CauseIdx = 2;
-		inline static constexpr int DateIdx = 0;
-		inline static constexpr int QuantityIdx = 3;
+		inline static constexpr unsigned int KeyIdx = 1;
+		inline static constexpr unsigned int CauseIdx = 2;
+		inline static constexpr unsigned int DateIdx = 0;
+		inline static constexpr unsigned int QuantityIdx = 3;
 		
 		Custom(std::string k, std::string c, double v, std::string d) : AccountTransaction<Custom<N>>(k,c,v, d) {};
 	};
