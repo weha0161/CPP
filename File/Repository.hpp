@@ -21,9 +21,95 @@
 #ifndef REPOSITORY_HPP
 #define REPOSITORY_HPP
 
-namespace Backup
+namespace CSV
 {
 	
+	struct Repository
+	{
+		using FileTypes = Typelist<FS::CSV>::Type;
+		using TypeContainer = FS::FileTypeContainer<FileTypes>;
+	
+		template<typename Iterator>
+		static void Map(const Iterator& begin, const Iterator& end)
+		{
+			for(Iterator it = begin; it != end; ++it)
+			{
+				(*it)->Accept(treeParser);
+			}
+			
+		}
+		
+		static void CopyTo(std::string dest)
+		{
+			typeContainer.SetRootPath(Repository::Root);
+			typeContainer.CopyTo(dest);
+		}
+		
+		static void List()
+		{
+			typeContainer.List();
+		}
+		
+		static void SetRootPath(std::string s) { Root = s; }
+		static void SetDestPath(std::string s) { Dest = s; }
+		
+		static void Map(std::string path)
+		{
+			auto nodes = FileSystem::List(path);
+
+			auto root = fs::directory_entry(path);
+			auto dir = new FS::DirectoryInfo(root.path(),root.last_write_time(),nodes);
+			
+			nodes.push_back(dir);
+			CSV::Repository::Map(nodes.cbegin(), nodes.cend());
+		}
+		
+		static void Backup(std::string from, std::string to)
+		{
+			Repository::Root = from;
+			Repository::Dest = to;
+			
+			Repository::Map(from);
+			
+			FileSystem::CreateDirectories(from,to);
+			CSV::Repository::List();
+			CSV::Repository::CopyTo(to);
+
+// 			FileSystem::List(to);
+		}
+		
+		static std::vector<std::string> Read(std::string s)
+		{
+			return typeContainer.Read(s);			
+		}
+		
+		template<typename ParseType>
+		static typename ParseType::ParseCont Parse(std::string s)
+		{
+			return typeContainer.Parse<ParseType>(s);			
+		}
+		
+	private:
+		static inline TypeContainer typeContainer = TypeContainer();
+		inline static std::string Root = ""; 
+		inline static std::string Dest = ""; 
+				
+		class TreeParserVisitor: 
+			public BaseVisitor,
+			public Visitor<FS::DirectoryInfo>,
+			public Visitor<FS::FileInfo>
+		{
+		public:
+			virtual void Visit(FS::DirectoryInfo& di) {	FS::Directory::Add(&di); };
+			virtual void Visit(FS::FileInfo& fi) { typeContainer.Add(&fi); };
+		};	
+		
+		static inline TreeParserVisitor treeParser = TreeParserVisitor();
+	};
+}
+
+namespace Backup
+{
 	struct Repository
 	{
 		using FileTypes = Typelist<FS::HPP,FS::H,FS::CSV,FS::CPP>::Type;
