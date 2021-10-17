@@ -107,11 +107,13 @@ namespace FS
 	class AccountTransaction
 	{
 		using Separator = T::char_<';'> ;
+		using Type = AccountTransaction<Derived> ;
 		
 		Key key;
 		Entry cause;
 		Date date;
 		Quantity<Sum> value;
+
 	public:
 		using KeyType = Key;
 		using ParseCont = TransactionContainer<Derived>;
@@ -147,7 +149,7 @@ namespace FS
 					auto n = GetNumericValue(values.at(Derived::QuantityIdx));
 					auto sum = n != "" ? std::stod(n) : 0.0 ;
 				
-					result.Insert(key, Derived(key,cause,sum, date));
+					Derived::Transactions.Insert(key, Derived(key,cause,sum, date));
 				}
 				
 				
@@ -203,6 +205,7 @@ namespace FS
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 4;
 		
+		inline static AccountTransaction<Type>::ParseCont Transactions = typename AccountTransaction<Type>::ParseCont();
 		Comdirect(std::string k, std::string c, double v, std::string d) : AccountTransaction<Comdirect<N>>(k,c,v, d) {};
 	};
 	
@@ -217,6 +220,7 @@ namespace FS
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 12;
 		
+		inline static AccountTransaction<Type>::ParseCont Transactions = typename AccountTransaction<Type>::ParseCont();
 		Raiba(std::string k, std::string c, double v, std::string d) : AccountTransaction<Raiba<N>>(k,c,v, d) {};
 	};
 	
@@ -231,6 +235,7 @@ namespace FS
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 3;
 		
+		inline static AccountTransaction<Type>::ParseCont Transactions = typename AccountTransaction<Type>::ParseCont();
 		Custom(std::string k, std::string c, double v, std::string d) : AccountTransaction<Custom<N>>(k,c,v, d) {};
 	};
 	template<typename T>
