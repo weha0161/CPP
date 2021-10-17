@@ -28,6 +28,11 @@ namespace CSV
 	{
 		using FileTypes = Typelist<FS::CSV>::Type;
 		using TypeContainer = FS::FileTypeContainer<FileTypes>;
+		using ParseTypes = Typelist<FS::Custom<0>, FS::Raiba<0>, FS::Comdirect<0>>::Type;
+        using ParseTypeContainer = FS::FileTypeContainer<ParseTypes>;
+		using ParseMethod = void(*)(std::vector<std::string>);
+		using ParserContainer = std::map<std::string, ParseMethod>;
+
 	
 		template<typename Iterator>
 		static void Map(const Iterator& begin, const Iterator& end)

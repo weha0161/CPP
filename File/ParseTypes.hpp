@@ -197,6 +197,7 @@ namespace FS
 	{
 		enum{ Num = N };
 		using Type = Comdirect<N>;
+		 inline static const std::string Name = "Comdirect";
 		inline static constexpr unsigned int KeyIdx = 3;
 		inline static constexpr unsigned int CauseIdx = 2;
 		inline static constexpr unsigned int DateIdx = 0;
@@ -210,6 +211,7 @@ namespace FS
 	{
 		enum{ Num = N };
 		using Type = Raiba<N>;
+		 inline static const std::string Name = "Raiba";
 		inline static constexpr unsigned int KeyIdx = 4;
 		inline static constexpr unsigned int CauseIdx = 9;
 		inline static constexpr unsigned int DateIdx = 0;
@@ -223,6 +225,7 @@ namespace FS
 	{
 		enum{ Num = N };
 		using Type = Custom<N>;
+		 inline static const std::string Name = "Custom";
 		inline static constexpr unsigned int KeyIdx = 1;
 		inline static constexpr unsigned int CauseIdx = 2;
 		inline static constexpr unsigned int DateIdx = 0;
