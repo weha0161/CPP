@@ -103,7 +103,9 @@ namespace FS
 		{
 			auto content = this->Read();
 			
-			return ParseType::Parse(content);
+			ParseType::Parse(content);
+			
+			return ParseType::Transactions;
 		}
 	};
 

@@ -29,10 +29,9 @@ namespace CSV
 		using FileTypes = Typelist<FS::CSV>::Type;
 		using TypeContainer = FS::FileTypeContainer<FileTypes>;
 		using ParseTypes = Typelist<FS::Custom<0>, FS::Raiba<0>, FS::Comdirect<0>>::Type;
-        using ParseTypeContainer = FS::FileTypeContainer<ParseTypes>;
+		using ParseTypeContainer = FS::FileTypeContainer<ParseTypes>;
 		using ParseMethod = void(*)(std::vector<std::string>);
 		using ParserContainer = std::map<std::string, ParseMethod>;
-
 	
 		template<typename Iterator>
 		static void Map(const Iterator& begin, const Iterator& end)
@@ -79,13 +78,16 @@ namespace CSV
 			FileSystem::CreateDirectories(from,to);
 			CSV::Repository::List();
 			CSV::Repository::CopyTo(to);
-
-// 			FileSystem::List(to);
 		}
 		
 		static std::vector<std::string> Read(std::string s)
 		{
 			return typeContainer.Read(s);			
+		}
+		
+		static void Attach()
+		{
+			parseTypeContainer.AttachTo(Repository::parseContainer);	
 		}
 		
 		template<typename ParseType>
@@ -94,8 +96,24 @@ namespace CSV
 			return typeContainer.Parse<ParseType>(s);			
 		}
 		
+		static void ParseAll()
+		{
+			for (auto it = parseContainer.begin(); it != parseContainer.end(); it++)
+			{
+				auto lines = CSV::Repository::Read(it->first);				
+				it->second(lines);
+			}			
+		}
+		
+		static void Display(std::ostream& os)
+		{
+			parseTypeContainer.Display(os);
+		}
+		
 	private:
+		static inline ParserContainer parseContainer = ParserContainer();
 		static inline TypeContainer typeContainer = TypeContainer();
+		static inline ParseTypeContainer parseTypeContainer = ParseTypeContainer();
 		inline static std::string Root = ""; 
 		inline static std::string Dest = ""; 
 				

@@ -128,10 +128,9 @@ namespace FS
 		static constexpr unsigned int Indices[4] = {Derived::KeyIdx, Derived::DateIdx, Derived::CauseIdx, Derived::QuantityIdx};
 		static const unsigned int MaxIdx = *std::max_element(Indices,Indices+4);
 		
-		static ParseCont Parse(std::vector<std::string> content)
+		static void Parse(std::vector<std::string> content)
 		{
 			uint ctr = 0;
-			auto result = ParseCont();
 
 			for(auto line : content)
 			{
@@ -155,7 +154,7 @@ namespace FS
 				
 			}
 
-			return result;
+			return;
 		}
 		
 		static std::string GetNumericValue(std::string s)
@@ -191,6 +190,11 @@ namespace FS
             return lineValues;
         };
 		
+		template<typename Cont>
+		static void AttachTo(Cont& cont)
+		{
+			cont.insert(std::make_pair(Derived::Filename,  &Type::Parse));
+		}	
 	};
 	
 	
@@ -199,7 +203,8 @@ namespace FS
 	{
 		enum{ Num = N };
 		using Type = Comdirect<N>;
-		 inline static const std::string Name = "Comdirect";
+		inline static const std::string Name = "Comdirect";
+		inline static const std::string Filename = "Umsaetze_1026947527.csv";
 		inline static constexpr unsigned int KeyIdx = 3;
 		inline static constexpr unsigned int CauseIdx = 2;
 		inline static constexpr unsigned int DateIdx = 0;
@@ -207,6 +212,11 @@ namespace FS
 		
 		inline static AccountTransaction<Type>::ParseCont Transactions = typename AccountTransaction<Type>::ParseCont();
 		Comdirect(std::string k, std::string c, double v, std::string d) : AccountTransaction<Comdirect<N>>(k,c,v, d) {};
+		
+		static void Display(std::ostream& os)
+		{
+			Transactions.Display(os);
+		}
 	};
 	
 	template<unsigned int N>
@@ -214,7 +224,8 @@ namespace FS
 	{
 		enum{ Num = N };
 		using Type = Raiba<N>;
-		 inline static const std::string Name = "Raiba";
+		inline static const std::string Name = "Raiba";
+		inline static const std::string Filename = "Umsaetze_DE19660623660009232702.csv";
 		inline static constexpr unsigned int KeyIdx = 4;
 		inline static constexpr unsigned int CauseIdx = 9;
 		inline static constexpr unsigned int DateIdx = 0;
@@ -222,6 +233,11 @@ namespace FS
 		
 		inline static AccountTransaction<Type>::ParseCont Transactions = typename AccountTransaction<Type>::ParseCont();
 		Raiba(std::string k, std::string c, double v, std::string d) : AccountTransaction<Raiba<N>>(k,c,v, d) {};
+		
+		static void Display(std::ostream& os)
+		{
+			Transactions.Display(os);
+		}
 	};
 	
 	template<unsigned int N = 0>
@@ -229,14 +245,21 @@ namespace FS
 	{
 		enum{ Num = N };
 		using Type = Custom<N>;
-		 inline static const std::string Name = "Custom";
+		using Base = AccountTransaction<Type>;
+		inline static const std::string Name = "Custom";
+		inline static const std::string Filename = "RaibaKonten2021_1.csv";
 		inline static constexpr unsigned int KeyIdx = 1;
 		inline static constexpr unsigned int CauseIdx = 2;
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 3;
 		
 		inline static AccountTransaction<Type>::ParseCont Transactions = typename AccountTransaction<Type>::ParseCont();
-		Custom(std::string k, std::string c, double v, std::string d) : AccountTransaction<Custom<N>>(k,c,v, d) {};
+		Custom(std::string k, std::string c, double v, std::string d) : AccountTransaction<Custom<N>>(k,c,v, d) {};		
+		
+		static void Display(std::ostream& os)
+		{
+			Transactions.Display(os);
+		}
 	};
 	template<typename T>
 	std::ostream& operator<<(std::ostream& out, const AccountTransaction<T>& s)

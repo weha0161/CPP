@@ -104,6 +104,17 @@ namespace FS
 			return typename ParseType::ParseCont();
 		}
 		
+		template<typename Cont>
+		void AttachTo(Cont& cont)
+		{
+			Head::AttachTo(cont);
+		}
+		
+		void Display(std::ostream& os)
+		{
+			Head::Display(os);
+		}
+		
 		FileTypeContainer()	{ }
 	};
 	
@@ -168,6 +179,21 @@ namespace FS
 			}
 			
 			return FileTypeContainer<Typelist<Tail...>>::template Parse<ParseType>(name);
+		}
+		
+		template<typename Cont>
+		void AttachTo(Cont& cont)
+		{
+			Head::AttachTo(cont);
+			
+			FileTypeContainer<Typelist<Tail...>>::AttachTo(cont);
+		}
+		
+		void Display(std::ostream& os)
+		{
+			Head::Display(os);
+			
+			FileTypeContainer<Typelist<Tail...>>::Display(os);
 		}
 		
 		FileTypeContainer() { };
