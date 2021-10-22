@@ -76,6 +76,22 @@ public:
 	Date* DoCreate(){return this;};
 };
 
+class IBAN: public Element
+{
+public:
+	inline static const std::string Identifier = "IBAN";
+	IBAN(std::string s): Element(s){};
+	IBAN* DoCreate(){return this;};
+};
+
+class BIC: public Element
+{
+public:
+	inline static const std::string Identifier = "BIC";
+	BIC(std::string s): Element(s){};
+	BIC* DoCreate(){return this;};
+};
+
 
 class Item: public Element
 {

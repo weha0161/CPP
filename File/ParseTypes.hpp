@@ -112,6 +112,8 @@ namespace FS
 		Key key;
 		Entry cause;
 		Date date;
+		IBAN iban;
+		BIC bic;
 		Quantity<Sum> value;
 
 	public:
@@ -119,11 +121,13 @@ namespace FS
 		using ParseCont = TransactionContainer<Derived>;
 		using QunatityType = Quantity<Sum>;
 		
-		AccountTransaction(std::string k, std::string c, double v, std::string d) : key(k), cause(c), date(d), value(v) { };
+		AccountTransaction(std::string k, std::string c, double v, std::string d, std::string i = "", std::string b = "") : key(k), cause(c), date(d), value(v), iban(i), bic(b) { };
 		
 		const Key& GetKey() const { return key; }
 		const Entry& GetEntry() const { return cause; }
 		const Date& GetDate() const { return date; }
+		const IBAN& GetIBAN() const { return iban; }
+		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetQuantity() const { return value; }
 		static constexpr unsigned int Indices[4] = {Derived::KeyIdx, Derived::DateIdx, Derived::CauseIdx, Derived::QuantityIdx};
 		static const unsigned int MaxIdx = *std::max_element(Indices,Indices+4);
