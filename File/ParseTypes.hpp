@@ -121,7 +121,7 @@ namespace FS
 		using ParseCont = TransactionContainer<Derived>;
 		using QunatityType = Quantity<Sum>;
 		
-		AccountTransaction(std::string k, std::string c, double v, std::string d, std::string i = "", std::string b = "") : key(k), cause(c), date(d), value(v), iban(i), bic(b) { };
+		AccountTransaction(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : key(k), cause(c), date(d), value(v), iban(i), bic(b) { };
 		
 		const Key& GetKey() const { return key; }
 		const Entry& GetEntry() const { return cause; }
@@ -268,7 +268,8 @@ namespace FS
 	template<typename T>
 	std::ostream& operator<<(std::ostream& out, const AccountTransaction<T>& s)
 	{
-		return out<<std::setw(30)<<std::left<<s.GetKey()<<std::setw(60)<<s.GetEntry()<<std::setw(20)<<std::right<<s.GetDate()<<std::setw(10)<<std::setprecision(2)<<std::fixed<<s.GetQuantity()<<"\t";
+		out<<std::setw(30)<<std::left<<s.GetKey()<<std::setw(60)<<s.GetEntry()<<std::setw(20)<<std::right<<s.GetDate()<<std::setw(10)<<std::setprecision(2)<<std::fixed<<s.GetQuantity()<<"\n";
+		return out<<std::setw(30)<<std::left<<s.GetIBAN()<<std::setw(60)<<s.GetBIC()<<std::setw(20);
 	}
 }
 
