@@ -106,7 +106,6 @@ namespace FS
 	template<typename Derived>
 	class AccountTransaction
 	{
-		using Separator = T::char_<';'> ;
 		using Type = AccountTransaction<Derived> ;
 		
 		Key key;
@@ -116,6 +115,9 @@ namespace FS
 		BIC bic;
 		Quantity<Sum> value;
 
+	protected:
+		using CSVSeparator = T::char_<';'> ;
+// 		using TextSeparator = T::char_<' '> ;
 	public:
 		using KeyType = Key;
 		using ParseCont = TransactionContainer<Derived>;
@@ -138,7 +140,7 @@ namespace FS
 
 			for(auto line : content)
 			{
-				auto values = GetCsvRowValues(line);
+				auto values = Split<CSVSeparator>(line);
 				
 				if (values.size() < MaxIdx)
 					continue;
@@ -152,6 +154,9 @@ namespace FS
 					auto n = GetNumericValue(values.at(Derived::QuantityIdx));
 					auto sum = n != "" ? std::stod(n) : 0.0 ;
 				
+					Derived::template Extract<IBAN>(key);
+					Derived::template Extract<BIC>(key);
+					
 					Derived::Transactions.Insert(key, Derived(key,cause,sum, date));
 				}
 				
@@ -176,11 +181,12 @@ namespace FS
 			return result;
 		}
 		
-		static std::vector<std::string> GetCsvRowValues(const std::string& lineArg)
+		template<typename T>
+		static std::vector<std::string> Split(const std::string& lineArg)
         {
             std::vector<std::string> lineValues;
             std::string line = lineArg;
-            std::string delimiter = {Separator::Value};
+            std::string delimiter = {T::Value};
             size_t pos = 0;
             std::string token;
             
@@ -221,6 +227,20 @@ namespace FS
 		{
 			Transactions.Display(os);
 		}
+		
+		using TextSeparator = T::char_<' '> ;
+		
+		template<typename T>
+		static std::string Extract(std::string s)
+		{
+			auto r = AccountTransaction<Type>::template Split<TextSeparator>(s);
+// 			
+			std::cout<<"SPLI: "<<r.size()<<std::endl;
+			for(auto r1: r )
+				std::cout<<"SPLI: "<<r1<<std::endl;
+			
+			return s;
+		}
 	};
 	
 	template<unsigned int N>
@@ -241,6 +261,12 @@ namespace FS
 		static void Display(std::ostream& os)
 		{
 			Transactions.Display(os);
+		}
+		
+		template<typename T>
+		static std::string Extract(std::string s)
+		{
+			return s;
 		}
 	};
 	
@@ -263,6 +289,12 @@ namespace FS
 		static void Display(std::ostream& os)
 		{
 			Transactions.Display(os);
+		}
+		
+		template<typename T>
+		static std::string Extract(std::string s)
+		{
+			return s;
 		}
 	};
 	template<typename T>
