@@ -29,29 +29,24 @@ namespace String_
 	
 	T::Is_<Delimiter> isDelimiter;
 	T::IsNot_<Delimiter> isNotDelimiter;
-	
-
-	template<typename Type = Delimiter, typename is = T::Is_<Type>, typename isNot = T::IsNot_<Type>>
-	std::vector<std::string> Split(const std::string s)
+		
+	template<typename Type = Delimiter>
+	std::vector<std::string> Split(const std::string lineArg)
 	{
-		using iter = std::string::const_iterator;
-		std::vector<std::string> v;
+		std::vector<std::string> lineValues;
+		std::string line = lineArg;
+		std::string delimiter = {Type::Value};
+		size_t pos = 0;
+		std::string token;
 		
-		iter i = s.cbegin();
-		while (i != s.cend())
-		{
-			i = find_if(i,s.cend(), isNot());
-			iter j = find_if(i,s.cend(), is());
+		while ((pos = line.find(delimiter)) != std::string::npos) {
 		
-			if (i != s.cend())
-			{
-				v.push_back(std::string(i,j));
-			}
-			
-			i = j;
+			token = line.substr(0, pos);        
+			line.erase(0, pos + delimiter.length());
+			lineValues.push_back(token);
 		}
-		
-		return v;
+				
+		return lineValues;
 	};
 	
 	bool Contains(std::string s, std::string sub)

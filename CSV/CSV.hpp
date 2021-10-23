@@ -80,7 +80,7 @@ class IBAN: public Element
 {
 public:
 	inline static const std::string Identifier = "IBAN";
-	IBAN(std::string s): Element(s){};
+	IBAN(std::string s): Element(s){ };
 	IBAN* DoCreate(){return this;};
 };
 

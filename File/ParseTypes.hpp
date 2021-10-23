@@ -141,7 +141,7 @@ namespace FS
 
 			for(auto line : content)
 			{
-				auto values = Split<CSVSeparator>(line);
+				auto values = String_::Split<CSVSeparator>(line);
 				
 				if (values.size() < MaxIdx)
 					continue;
@@ -181,26 +181,7 @@ namespace FS
 			
 			return result;
 		}
-		
-		template<typename T>
-		static std::vector<std::string> Split(const std::string& lineArg)
-        {
-            std::vector<std::string> lineValues;
-            std::string line = lineArg;
-            std::string delimiter = {T::Value};
-            size_t pos = 0;
-            std::string token;
-            
-            while ((pos = line.find(delimiter)) != std::string::npos) {
-            
-                token = line.substr(0, pos);        
-                line.erase(0, pos + delimiter.length());
-                lineValues.push_back(token);
-            }
-                    
-            return lineValues;
-        };
-		
+				
 		template<typename Cont>
 		static void AttachTo(Cont& cont)
 		{
@@ -237,7 +218,7 @@ namespace FS
 			if(s == "\"Buchungstext\"")
 				return "";
 			
-			auto vals = AccountTransaction<Type>::template Split<TextSeparator>(s);
+			auto vals = String_::Split<TextSeparator>(s);
 						
 			auto it = std::find_if (vals.begin(), vals.end(), [](auto s){return String_::Contains(s,T::Identifier); } );
 			
