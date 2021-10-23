@@ -18,6 +18,7 @@
 #include "../Quantity/Quantity.h"
 #include "../Typelist/Typelist.h"
 #include "../Visitor/Visitor.hpp"
+#include "../String/String_.hpp"
 
 #ifndef PARSETYPES_HPP
 #define PARSETYPES_HPP
@@ -154,10 +155,10 @@ namespace FS
 					auto n = GetNumericValue(values.at(Derived::QuantityIdx));
 					auto sum = n != "" ? std::stod(n) : 0.0 ;
 				
-					Derived::template Extract<IBAN>(key);
-					Derived::template Extract<BIC>(key);
-					
-					Derived::Transactions.Insert(key, Derived(key,cause,sum, date));
+					auto iban = Derived::template Extract<IBAN>(key);
+					auto bic =Derived::template Extract<BIC>(key);
+
+					Derived::Transactions.Insert(key, Derived(key,cause,sum, date, iban, bic));
 				}
 				
 				
@@ -221,7 +222,7 @@ namespace FS
 		inline static constexpr unsigned int QuantityIdx = 4;
 		
 		inline static AccountTransaction<Type>::ParseCont Transactions = typename AccountTransaction<Type>::ParseCont();
-		Comdirect(std::string k, std::string c, double v, std::string d) : AccountTransaction<Comdirect<N>>(k,c,v, d) {};
+		Comdirect(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : AccountTransaction<Comdirect<N>>(k,c,v, d, i, b) {};
 		
 		static void Display(std::ostream& os)
 		{
@@ -233,13 +234,17 @@ namespace FS
 		template<typename T>
 		static std::string Extract(std::string s)
 		{
-			auto r = AccountTransaction<Type>::template Split<TextSeparator>(s);
-// 			
-			std::cout<<"SPLI: "<<r.size()<<std::endl;
-			for(auto r1: r )
-				std::cout<<"SPLI: "<<r1<<std::endl;
+			if(s == "\"Buchungstext\"")
+				return "";
 			
-			return s;
+			auto vals = AccountTransaction<Type>::template Split<TextSeparator>(s);
+						
+			auto it = std::find_if (vals.begin(), vals.end(), [](auto s){return String_::Contains(s,T::Identifier); } );
+			
+			if(it == vals.end())
+				return "";
+						
+			return *(++it);
 		}
 	};
 	
@@ -256,7 +261,7 @@ namespace FS
 		inline static constexpr unsigned int QuantityIdx = 12;
 		
 		inline static AccountTransaction<Type>::ParseCont Transactions = typename AccountTransaction<Type>::ParseCont();
-		Raiba(std::string k, std::string c, double v, std::string d) : AccountTransaction<Raiba<N>>(k,c,v, d) {};
+		Raiba(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : AccountTransaction<Raiba<N>>(k,c,v, d, i, b) {};
 		
 		static void Display(std::ostream& os)
 		{
@@ -284,7 +289,7 @@ namespace FS
 		inline static constexpr unsigned int QuantityIdx = 3;
 		
 		inline static AccountTransaction<Type>::ParseCont Transactions = typename AccountTransaction<Type>::ParseCont();
-		Custom(std::string k, std::string c, double v, std::string d) : AccountTransaction<Custom<N>>(k,c,v, d) {};		
+		Custom(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : AccountTransaction<Custom<N>>(k,c,v, d, i, b) {};		
 		
 		static void Display(std::ostream& os)
 		{
