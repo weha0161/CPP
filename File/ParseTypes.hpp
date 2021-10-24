@@ -109,8 +109,8 @@ namespace FS
 	{
 		using Type = AccountTransaction<Derived> ;
 		
-		Key key;
-		Entry cause;
+		Key owner;
+		Entry transaction;
 		Date date;
 		IBAN iban;
 		BIC bic;
@@ -124,15 +124,15 @@ namespace FS
 		using ParseCont = TransactionContainer<Derived>;
 		using QunatityType = Quantity<Sum>;
 		
-		AccountTransaction(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : key(k), cause(c), date(d), value(v), iban(i), bic(b) { };
+		AccountTransaction(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : owner(k), transaction(c), date(d), value(v), iban(i), bic(b) { };
 		
-		const Key& GetKey() const { return key; }
-		const Entry& GetEntry() const { return cause; }
+		const Key& GetOwner() const { return owner; }
+		const Entry& GetTransaction() const { return transaction; }
 		const Date& GetDate() const { return date; }
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetQuantity() const { return value; }
-		static constexpr unsigned int Indices[4] = {Derived::KeyIdx, Derived::DateIdx, Derived::CauseIdx, Derived::QuantityIdx};
+		static constexpr unsigned int Indices[4] = {Derived::OwnerIdx, Derived::DateIdx, Derived::TranactionIdx, Derived::QuantityIdx};
 		static const unsigned int MaxIdx = *std::max_element(Indices,Indices+4);
 		
 		static void Parse(std::vector<std::string> content)
@@ -146,12 +146,12 @@ namespace FS
 				if (values.size() < MaxIdx)
 					continue;
 				
-				auto keyLine = values.at(Derived::KeyIdx);
+				auto keyLine = values.at(Derived::OwnerIdx);
 				if(keyLine != "")
 				{
 					auto key = Derived::ExtractKey(keyLine);
 					auto date = values.at(Derived::DateIdx);
-					auto cause = values.at(Derived::CauseIdx);
+					auto transaction = values.at(Derived::TranactionIdx);
 					
 					auto n = GetNumericValue(values.at(Derived::QuantityIdx));
 					auto sum = n != "" ? std::stod(n) : 0.0 ;
@@ -160,7 +160,7 @@ namespace FS
 					auto bic =Derived::template Extract<BIC>(key);
 
 					Logger::Log()<<"KEY: "<<key<<" LINE"<<keyLine<<std::endl;
-					Derived::Transactions.Insert(key, Derived(key,cause,sum, date, iban, bic));
+					Derived::Transactions.Insert(key, Derived(key,transaction,sum, date, iban, bic));
 				}
 				
 				
@@ -199,8 +199,8 @@ namespace FS
 		using Type = Comdirect<N>;
 		inline static const std::string Name = "Comdirect";
 		inline static const std::string Filename = "Umsaetze_1026947527.csv";
-		inline static constexpr unsigned int KeyIdx = 3;
-		inline static constexpr unsigned int CauseIdx = 2;
+		inline static constexpr unsigned int OwnerIdx = 3;
+		inline static constexpr unsigned int TranactionIdx = 2;
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 4;
 		
@@ -258,8 +258,8 @@ namespace FS
 		using Type = Raiba<N>;
 		inline static const std::string Name = "Raiba";
 		inline static const std::string Filename = "Umsaetze_DE19660623660009232702.csv";
-		inline static constexpr unsigned int KeyIdx = 4;
-		inline static constexpr unsigned int CauseIdx = 9;
+		inline static constexpr unsigned int OwnerIdx = 4;
+		inline static constexpr unsigned int TranactionIdx = 9;
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 12;
 		
@@ -290,8 +290,8 @@ namespace FS
 		using Base = AccountTransaction<Type>;
 		inline static const std::string Name = "Custom";
 		inline static const std::string Filename = "RaibaKonten2021_1.csv";
-		inline static constexpr unsigned int KeyIdx = 1;
-		inline static constexpr unsigned int CauseIdx = 2;
+		inline static constexpr unsigned int OwnerIdx = 1;
+		inline static constexpr unsigned int TranactionIdx = 2;
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 3;
 		
@@ -317,7 +317,7 @@ namespace FS
 	template<typename T>
 	std::ostream& operator<<(std::ostream& out, const AccountTransaction<T>& s)
 	{
-		out<<std::setw(30)<<std::left<<s.GetKey()<<std::setw(60)<<s.GetEntry()<<std::setw(20)<<std::right<<s.GetDate()<<std::setw(10)<<std::setprecision(2)<<std::fixed<<s.GetQuantity()<<"\n";
+		out<<std::setw(30)<<std::left<<s.GetOwner()<<std::setw(60)<<s.GetTransaction()<<std::setw(20)<<std::right<<s.GetDate()<<std::setw(10)<<std::setprecision(2)<<std::fixed<<s.GetQuantity()<<"\n";
 		return out<<std::setw(30)<<std::left<<s.GetIBAN()<<std::setw(60)<<s.GetBIC()<<std::setw(20);
 	}
 }
