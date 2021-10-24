@@ -146,9 +146,10 @@ namespace FS
 				if (values.size() < MaxIdx)
 					continue;
 				
-				auto key = values.at(Derived::KeyIdx);
-				if(key != "")
+				auto keyLine = values.at(Derived::KeyIdx);
+				if(keyLine != "")
 				{
+					auto key = Derived::ExtractKey(keyLine);
 					auto date = values.at(Derived::DateIdx);
 					auto cause = values.at(Derived::CauseIdx);
 					
@@ -158,6 +159,7 @@ namespace FS
 					auto iban = Derived::template Extract<IBAN>(key);
 					auto bic =Derived::template Extract<BIC>(key);
 
+					Logger::Log()<<"KEY: "<<key<<" LINE"<<keyLine<<std::endl;
 					Derived::Transactions.Insert(key, Derived(key,cause,sum, date, iban, bic));
 				}
 				
@@ -227,6 +229,26 @@ namespace FS
 						
 			return *(++it);
 		}
+		
+		static std::string ExtractKey(std::string s)
+		{
+			if(s == "\"Buchungstext\"")
+				return "";
+			
+			auto vals = String_::Split<TextSeparator>(s);
+			
+			auto key = vals.at(1);
+			std::string toErase = "Kto/IBAN";
+			
+			size_t pos = key.find(toErase);
+			if (pos != std::string::npos)
+			{
+				// If found then erase it from string
+				key.erase(pos, toErase.length());
+			}
+			
+			return key;
+		}
 	};
 	
 	template<unsigned int N>
@@ -251,6 +273,10 @@ namespace FS
 		
 		template<typename T>
 		static std::string Extract(std::string s)
+		{
+			return s;
+		}
+		static std::string ExtractKey(std::string s)
 		{
 			return s;
 		}
@@ -279,6 +305,11 @@ namespace FS
 		
 		template<typename T>
 		static std::string Extract(std::string s)
+		{
+			return s;
+		}
+		
+		static std::string ExtractKey(std::string s)
 		{
 			return s;
 		}
