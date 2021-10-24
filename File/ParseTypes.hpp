@@ -186,7 +186,7 @@ namespace FS
 					auto bic =Derived::template Extract<BIC>(key);
 
 					Logger::Log()<<"KEY: "<<key<<" LINE"<<keyLine<<std::endl;
-					Derived::Transactions.Insert(key, Derived(key,transaction,sum, date, iban, bic));
+					Derived::In.Insert(key, Derived(key,transaction,sum, date, iban, bic));
 				}
 				
 				
@@ -219,11 +219,11 @@ namespace FS
 	
 	
 	//-----------------------------------------------------------------------------------------------Tranfers-----------------------------------------------------------------------
-	template<unsigned int N>
-	struct Comdirect: public AccountTransfer<Comdirect<N>>
+	template<typename Direction = Transfer<In>, unsigned int N = 0>
+	struct Comdirect: public AccountTransfer<Comdirect<Direction,N>>
 	{
 		enum{ Num = N };
-		using Type = Comdirect<N>;
+		using Type = Comdirect<Direction,N>;
 		inline static const std::string Name = "Comdirect";
 		inline static const std::string Filename = "Umsaetze_1026947527.csv";
 		inline static constexpr unsigned int OwnerIdx = 3;
@@ -231,12 +231,12 @@ namespace FS
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 4;
 		
-		inline static AccountTransfer<Type>::ParseCont Transactions = typename AccountTransfer<Type>::ParseCont();
-		Comdirect(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : AccountTransfer<Comdirect<N>>(k,c,v, d, i, b) {};
+		inline static AccountTransfer<Type>::ParseCont In = typename AccountTransfer<Type>::ParseCont();
+		Comdirect(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : AccountTransfer<Comdirect<Direction,N>>(k,c,v, d, i, b) {};
 		
 		static void Display(std::ostream& os)
 		{
-			Transactions.Display(os);
+			In.Display(os);
 		}
 		
 		using TextSeparator = T::char_<' '> ;
@@ -278,11 +278,11 @@ namespace FS
 		}
 	};
 	
-	template<unsigned int N>
-	struct Raiba: public AccountTransfer<Raiba<N>>
+	template<typename Direction = Transfer<In>, unsigned int N = 0>
+	struct Raiba: public AccountTransfer<Raiba<Direction,N>>
 	{
 		enum{ Num = N };
-		using Type = Raiba<N>;
+		using Type = Raiba<Direction,N>;
 		inline static const std::string Name = "Raiba";
 		inline static const std::string Filename = "Umsaetze_DE19660623660009232702.csv";
 		inline static constexpr unsigned int OwnerIdx = 4;
@@ -290,12 +290,12 @@ namespace FS
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 12;
 		
-		inline static AccountTransfer<Type>::ParseCont Transactions = typename AccountTransfer<Type>::ParseCont();
-		Raiba(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : AccountTransfer<Raiba<N>>(k,c,v, d, i, b) {};
+		inline static AccountTransfer<Type>::ParseCont In = typename AccountTransfer<Type>::ParseCont();
+		Raiba(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : AccountTransfer<Raiba<Direction,N>>(k,c,v, d, i, b) {};
 		
 		static void Display(std::ostream& os)
 		{
-			Transactions.Display(os);
+			In.Display(os);
 		}
 		
 		template<typename T>
@@ -309,11 +309,11 @@ namespace FS
 		}
 	};
 	
-	template<unsigned int N = 0>
-	struct Custom: public AccountTransfer<Custom<N>>
+	template<typename Direction = Transfer<In>, unsigned int N = 0>
+	struct Custom: public AccountTransfer<Custom<Direction,N>>
 	{
 		enum{ Num = N };
-		using Type = Custom<N>;
+		using Type = Custom<Direction,N>;
 		using Base = AccountTransfer<Type>;
 		inline static const std::string Name = "Custom";
 		inline static const std::string Filename = "RaibaKonten2021_1.csv";
@@ -322,12 +322,12 @@ namespace FS
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 3;
 		
-		inline static AccountTransfer<Type>::ParseCont Transactions = typename AccountTransfer<Type>::ParseCont();
-		Custom(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : AccountTransfer<Custom<N>>(k,c,v, d, i, b) {};		
+		inline static AccountTransfer<Type>::ParseCont In = typename AccountTransfer<Type>::ParseCont();
+		Custom(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : AccountTransfer<Custom<Direction,N>>(k,c,v, d, i, b) {};		
 		
 		static void Display(std::ostream& os)
 		{
-			Transactions.Display(os);
+			In.Display(os);
 		}
 		
 		template<typename T>
