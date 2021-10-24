@@ -59,6 +59,8 @@ namespace FS
 		return out<<c.LineNumber()<<"\t"<<c.Line();
 	}
 	
+	//-----------------------------------------------------------------------------------------------TranferContainer-----------------------------------------------------------------------
+		
 	template<typename T, template<typename, typename> class TCont = std::map, template<typename> class Cont = std::vector>
 	class TransferContainer
 	{
@@ -103,6 +105,30 @@ namespace FS
 			}
 		}
 	};
+	
+	//-----------------------------------------------------------------------------------------------TranferTypes-----------------------------------------------------------------------
+	
+	template<typename Direction>
+	struct Transfer
+	{
+		using Type = Transfer<Direction>;
+		using ValueType = Direction;
+		inline static const std::string Id = Direction::Id;
+	};
+	
+	struct In
+	{
+		using Type = In;
+		inline static const std::string Id = "In"; 
+	};
+	
+	struct Out
+	{
+		using Type = Out;
+		inline static const std::string Id = "In"; 
+	};
+	
+	//-----------------------------------------------------------------------------------------------AccountTranfer-----------------------------------------------------------------------
 	
 	template<typename Derived>
 	class AccountTransfer
@@ -192,6 +218,7 @@ namespace FS
 	};
 	
 	
+	//-----------------------------------------------------------------------------------------------Tranfers-----------------------------------------------------------------------
 	template<unsigned int N>
 	struct Comdirect: public AccountTransfer<Comdirect<N>>
 	{
