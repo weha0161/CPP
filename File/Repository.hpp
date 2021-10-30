@@ -29,7 +29,7 @@ namespace CSV
 		using FileTypes = Typelist<FS::CSV>::Type;
 		using TypeContainer = FS::FileTypeContainer<FileTypes>;
 		using Direction = FS::Transfer<FS::In>;
-		using ParseTypes = Typelist<FS::Custom<Direction,0>, FS::Raiba<Direction,0>, FS::Comdirect<Direction,0>>::Type;
+		using ParseTypes = Typelist<FS::Custom<0>, FS::Raiba<0>, FS::Comdirect<0>>::Type;
 		using ParseTypeContainer = FS::FileTypeContainer<ParseTypes>;
 		using ParseMethod = void(*)(std::vector<std::string>);
 		using ParserContainer = std::map<std::string, ParseMethod>;

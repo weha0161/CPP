@@ -125,15 +125,15 @@ namespace FS
 	struct Out
 	{
 		using Type = Out;
-		inline static const std::string Id = "In"; 
+		inline static const std::string Id = "Out"; 
 	};
 	
-	//-----------------------------------------------------------------------------------------------AccountTranfer-----------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------AccountTransfer-----------------------------------------------------------------------
 	
-	template<typename Derived>
+	template<typename Account, typename Direction>
 	class AccountTransfer
 	{
-		using Type = AccountTransfer<Derived> ;
+		using Type = AccountTransfer<Account,Direction> ;
 		
 		Key owner;
 		Entry transaction;
@@ -144,12 +144,8 @@ namespace FS
 
 	protected:
 		using CSVSeparator = T::char_<';'> ;
-// 		using TextSeparator = T::char_<' '> ;
 	public:
 		using KeyType = Key;
-// 		using InTransfer = Derived<Transfer<In>,N>;
-// 		using OuTransfer = Derived<Transfer<Out>,N>;
-		using ParseCont = TransferContainer<Derived>;
 		using QunatityType = Quantity<Sum>;
 		
 		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : owner(k), transaction(c), date(d), value(v), iban(i), bic(b) { };
@@ -160,6 +156,28 @@ namespace FS
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetQuantity() const { return value; }
+		const Direction& GetDirection() const { return Direction::Id; }		
+	};
+	
+	template<typename Derived>
+	class Account
+	{
+		using Type = Account<Derived> ;
+	protected:
+		using CSVSeparator = T::char_<';'> ;
+	public:
+		Key owner;
+		IBAN iban;
+		BIC bic;
+		using InTransfer = AccountTransfer<Derived,Transfer<In>>;
+		using OutTransfer = AccountTransfer<Derived, Transfer<Out>>;
+		using KeyType = Key ;
+		using ParseContIn = TransferContainer<AccountTransfer<Derived,Transfer<In>>>;
+		using ParseContOut = TransferContainer<AccountTransfer<Derived,Transfer<Out>>>;
+		using QunatityType = Quantity<Sum>;
+		
+		Account(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : owner(k), iban(i), bic(b) { };
+		
 		static constexpr unsigned int Indices[4] = {Derived::OwnerIdx, Derived::DateIdx, Derived::TranactionIdx, Derived::QuantityIdx};
 		static const unsigned int MaxIdx = *std::max_element(Indices,Indices+4);
 		
@@ -188,8 +206,8 @@ namespace FS
 					auto bic =Derived::template Extract<BIC>(key);
 
 					Logger::Log()<<"KEY: "<<key<<" LINE"<<keyLine<<std::endl;
-					Derived::InCont.Insert(key, Derived(key,transaction,sum, date, iban, bic));
-// 					Derived::OutCont.Insert(key, Derived(key,transaction,sum, date, iban, bic));
+					Derived::InCont.Insert(key, InTransfer(key,transaction,sum, date, iban, bic));
+					Derived::OutCont.Insert(key, OutTransfer(key,transaction,sum, date, iban, bic));
 				}
 				
 				
@@ -222,12 +240,14 @@ namespace FS
 	
 	
 	//-----------------------------------------------------------------------------------------------Tranfers-----------------------------------------------------------------------
-	template<typename Direction = Transfer<In>, unsigned int N = 0>
-	struct Comdirect: public AccountTransfer<Comdirect<Direction,N>>
+	template<unsigned int N = 0>
+	struct Comdirect: public Account<Comdirect<N>>
 	{
 		enum{ Num = N };
-		using OutType = Comdirect<Transfer<Out>,N>;
-		using InType = Comdirect<Direction,N>;
+		using InType = AccountTransfer<Comdirect,Transfer<In>>;
+		using OutType = AccountTransfer<Comdirect,Transfer<Out>>;
+		using Base = Account<Comdirect>;
+		
 		inline static const std::string Name = "Comdirect";
 		inline static const std::string Filename = "Umsaetze_1026947527.csv";
 		inline static constexpr unsigned int OwnerIdx = 3;
@@ -235,9 +255,9 @@ namespace FS
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 4;
 		
-		inline static AccountTransfer<InType>::ParseCont InCont = typename AccountTransfer<InType>::ParseCont();
-		inline static AccountTransfer<OutType>::ParseCont OutCont = typename AccountTransfer<OutType>::ParseCont();
-		Comdirect(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : AccountTransfer<Comdirect<Direction,N>>(k,c,v, d, i, b) {};
+		inline static Base::ParseContIn InCont = typename Base::ParseContIn();
+		inline static Base::ParseContOut OutCont = typename Base::ParseContOut();
+		Comdirect(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : Base(k,c,v, d, i, b) {};
 		
 		static void Display(std::ostream& os)
 		{
@@ -275,7 +295,6 @@ namespace FS
 			size_t pos = key.find(toErase);
 			if (pos != std::string::npos)
 			{
-				// If found then erase it from string
 				key.erase(pos, toErase.length());
 			}
 			
@@ -283,12 +302,14 @@ namespace FS
 		}
 	};
 	
-	template<typename Direction = Transfer<In>, unsigned int N = 0>
-	struct Raiba: public AccountTransfer<Raiba<Direction,N>>
+	template<unsigned int N = 0>
+	struct Raiba: public Account<Raiba<N>>
 	{
 		enum{ Num = N };
-		using OutType = Raiba<Transfer<Out>,N>;
-		using InType = Raiba<Direction,N>;
+		using InType = AccountTransfer<Raiba,Transfer<In>>;
+		using OutType = AccountTransfer<Raiba,Transfer<Out>>;
+		using Base = Account<Raiba>;
+		
 		inline static const std::string Name = "Raiba";
 		inline static const std::string Filename = "Umsaetze_DE19660623660009232702.csv";
 		inline static constexpr unsigned int OwnerIdx = 4;
@@ -296,9 +317,9 @@ namespace FS
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 12;
 		
-		inline static AccountTransfer<InType>::ParseCont InCont = typename AccountTransfer<InType>::ParseCont();
-		inline static AccountTransfer<OutType>::ParseCont OutCont = typename AccountTransfer<OutType>::ParseCont();
-		Raiba(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : AccountTransfer<Raiba<Direction,N>>(k,c,v, d, i, b) {};
+		inline static Base::ParseContIn InCont = typename Base::ParseContIn();
+		inline static Base::ParseContOut OutCont = typename Base::ParseContOut();
+		Raiba(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : Base(k,c,v, d, i, b) {};
 		
 		static void Display(std::ostream& os)
 		{
@@ -316,13 +337,14 @@ namespace FS
 		}
 	};
 	
-	template<typename Direction = Transfer<In>, unsigned int N = 0>
-	struct Custom: public AccountTransfer<Custom<Direction,N>>
+	template<unsigned int N = 0>
+	struct Custom: public Account<Custom<N>>
 	{
 		enum{ Num = N };
-		using OutType = Custom<Transfer<Out>,N>;
-		using InType = Custom<Direction,N>;
-		using Base = AccountTransfer<InType>;
+		using InType = AccountTransfer<Custom,Transfer<In>>;
+		using OutType = AccountTransfer<Custom,Transfer<Out>>;
+		using Base = Account<Custom>;
+		
 		inline static const std::string Name = "Custom";
 		inline static const std::string Filename = "RaibaKonten2021_1.csv";
 		inline static constexpr unsigned int OwnerIdx = 1;
@@ -330,9 +352,9 @@ namespace FS
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 3;
 		
-		inline static AccountTransfer<InType>::ParseCont InCont = typename AccountTransfer<InType>::ParseCont();
-		inline static AccountTransfer<OutType>::ParseCont OutCont = typename AccountTransfer<OutType>::ParseCont();
-		Custom(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : AccountTransfer<Custom<Direction,N>>(k,c,v, d, i, b) {};		
+		inline static Base::ParseContIn InCont = typename Base::ParseContIn();
+		inline static Base::ParseContOut OutCont = typename Base::ParseContOut();
+		Custom(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : Base(k,c,v, d, i, b) {};		
 		
 		static void Display(std::ostream& os)
 		{
@@ -350,11 +372,11 @@ namespace FS
 			return s;
 		}
 	};
-	template<typename T>
-	std::ostream& operator<<(std::ostream& out, const AccountTransfer<T>& s)
+	template<typename T, typename D>
+	std::ostream& operator<<(std::ostream& out, const AccountTransfer<T,D>& s)
 	{
 		out<<std::setw(30)<<std::left<<s.GetOwner()<<std::setw(60)<<s.GetTransaction()<<std::setw(20)<<std::right<<s.GetDate()<<std::setw(10)<<std::setprecision(2)<<std::fixed<<s.GetQuantity()<<"\n";
-		return out<<std::setw(30)<<std::left<<s.GetIBAN()<<std::setw(60)<<s.GetBIC()<<std::setw(20);
+		return out<<std::setw(30)<<std::left<<s.GetIBAN()<<std::setw(60)<<s.GetBIC()<<std::setw(20);		
 	}
 }
 
