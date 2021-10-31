@@ -81,17 +81,51 @@ namespace FS
 		inline static const std::string Id = "Out"; 
 	};
 	
+	//-----------------------------------------------------------------------------------------------AccountTransfer-----------------------------------------------------------------------
+	
+	template<typename Account, typename Direction>
+	class AccountTransfer
+	{
+		using Type = AccountTransfer<Account,Direction> ;
+		
+		Key owner;
+		Entry transaction;
+		Date date;
+		IBAN iban;
+		BIC bic;
+		Quantity<Sum> value;
+
+	protected:
+		using CSVSeparator = T::char_<';'> ;
+	public:
+		using KeyType = Key;
+		using QunatityType = Quantity<Sum>;
+		
+		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : owner(k), transaction(c), date(d), value(v), iban(i), bic(b) { };
+		
+		const Key& GetOwner() const { return owner; }
+		const Entry& GetTransaction() const { return transaction; }
+		const Date& GetDate() const { return date; }
+		const IBAN& GetIBAN() const { return iban; }
+		const BIC& GetBIC() const { return bic; }
+		const Quantity<Sum>& GetQuantity() const { return value; }
+		const Direction& GetDirection() const { return Direction::Id; }		
+	};
+	
 	//-----------------------------------------------------------------------------------------------TranferEndpoint-----------------------------------------------------------------------
 	
 	template<typename Account, typename Direction, template<typename> class Cont = std::vector>
 	class AccountEndpoint
 	{
 		using Type = AccountEndpoint<Account,Direction> ;
+		using TransferType = AccountTransfer<Account,Direction> ;
+		using ContType = Cont<TransferType> ;
 		
 		Key owner;
 		IBAN iban;
 		BIC bic;
 		Quantity<Sum> total;
+		ContType transfers;
 
 	protected:
 		using CSVSeparator = T::char_<';'> ;
@@ -100,13 +134,19 @@ namespace FS
 		using QunatityType = Quantity<Sum>;
 		
 		AccountEndpoint(std::string ownerKey, std::string i = "IBAN", std::string b = "BIC") : owner(ownerKey), iban(i), bic(b) { };
+		AccountEndpoint(const TransferType& t) : owner(t.GetOwner()), iban(t.GetIBAN()), bic(t.GetBIC()) { };
 		
 		const Key& GetOwner() const { return owner; }
-// 		const Entry& GetTransaction() const { return transaction; }
+		const ContType& GetTransfers() const { return transfers; }
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetTotal() const { return total; }
 		const Direction& GetDirection() const { return Direction::Id; }		
+		
+		void Insert(TransferType t)
+		{
+			this->transfers.push_back(t);
+		}
 	};
 	
 	//-----------------------------------------------------------------------------------------------TranferContainer-----------------------------------------------------------------------
@@ -156,37 +196,6 @@ namespace FS
 		}
 	};
 	
-	
-	//-----------------------------------------------------------------------------------------------AccountTransfer-----------------------------------------------------------------------
-	
-	template<typename Account, typename Direction>
-	class AccountTransfer
-	{
-		using Type = AccountTransfer<Account,Direction> ;
-		
-		Key owner;
-		Entry transaction;
-		Date date;
-		IBAN iban;
-		BIC bic;
-		Quantity<Sum> value;
-
-	protected:
-		using CSVSeparator = T::char_<';'> ;
-	public:
-		using KeyType = Key;
-		using QunatityType = Quantity<Sum>;
-		
-		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : owner(k), transaction(c), date(d), value(v), iban(i), bic(b) { };
-		
-		const Key& GetOwner() const { return owner; }
-		const Entry& GetTransaction() const { return transaction; }
-		const Date& GetDate() const { return date; }
-		const IBAN& GetIBAN() const { return iban; }
-		const BIC& GetBIC() const { return bic; }
-		const Quantity<Sum>& GetQuantity() const { return value; }
-		const Direction& GetDirection() const { return Direction::Id; }		
-	};
 	
 	template<typename Derived>
 	class Account
