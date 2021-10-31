@@ -136,7 +136,7 @@ namespace FS
 		using QunatityType = Quantity<Sum>;
 		
 		AccountEndpoint(std::string ownerKey, std::string i = "IBAN", std::string b = "BIC") : owner(ownerKey), iban(i), bic(b) { };
-		AccountEndpoint(const TransferType& t) : owner(t.GetOwner()), iban(t.GetIBAN()), bic(t.GetBIC()), total(0) { };
+		AccountEndpoint(const TransferType& t) : owner(t.GetOwner()), iban(t.GetIBAN()), bic(t.GetBIC()), total(t.GetQuantity()) { };
 		AccountEndpoint():owner("ownerKey"), iban("i"), bic("b"), total(0) { };
 		
 		const Key& GetOwner() const { return owner; }
@@ -146,9 +146,10 @@ namespace FS
 		const Quantity<Sum>& GetTotal() const { return total; }
 		const Direction& GetDirection() const { return Direction::Id; }		
 		
-		void Insert(TransferType t)
+		void Add(TransferType t)
 		{
 			this->transfers.push_back(t);
+			this->total = this->total + t.GetQuantity();
 		}
 	};
 	
@@ -169,11 +170,11 @@ namespace FS
 			if(!this->Contains(k))
 			{
 				this->keys.push_back(k);
-				this->transfers.insert(std::pair<KeyType, AccountEndpointType>(k,AccountEndpointType()));
+				this->transfers.insert(std::pair<KeyType, AccountEndpointType>(k,AccountEndpointType(t)));
 				return;
 			}
 			
-			this->transfers[k].Insert(t);
+			this->transfers[k].Add(t);
 		}
 		
 		bool Contains(KeyType k){ return this->transfers.find(k) != this->transfers.end(); }
@@ -193,7 +194,7 @@ namespace FS
 					out<<"\t"<<elem<<std::endl;
 				}
 				*/
-// 				out<<"Total: "<<p.second.GetT<<std::endl;
+				out<<"Total: "<<p.second.GetTotal()<<std::endl;
 				
 				out<<std::endl;
 			}
