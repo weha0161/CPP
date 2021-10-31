@@ -59,6 +59,56 @@ namespace FS
 		return out<<c.LineNumber()<<"\t"<<c.Line();
 	}
 	
+	//-----------------------------------------------------------------------------------------------TranferTypes-----------------------------------------------------------------------
+	
+	template<typename Direction>
+	struct Transfer
+	{
+		using Type = Transfer<Direction>;
+		using ValueType = Direction;
+		inline static const std::string Id = Direction::Id;
+	};
+	
+	struct In
+	{
+		using Type = In;
+		inline static const std::string Id = "In"; 
+	};
+	
+	struct Out
+	{
+		using Type = Out;
+		inline static const std::string Id = "Out"; 
+	};
+	
+	//-----------------------------------------------------------------------------------------------TranferEndpoint-----------------------------------------------------------------------
+	
+	template<typename Account, typename Direction, template<typename> class Cont = std::vector>
+	class AccountEndpoint
+	{
+		using Type = AccountEndpoint<Account,Direction> ;
+		
+		Key owner;
+		IBAN iban;
+		BIC bic;
+		Quantity<Sum> total;
+
+	protected:
+		using CSVSeparator = T::char_<';'> ;
+	public:
+		using KeyType = Key;
+		using QunatityType = Quantity<Sum>;
+		
+		AccountEndpoint(std::string ownerKey, std::string i = "IBAN", std::string b = "BIC") : owner(ownerKey), iban(i), bic(b) { };
+		
+		const Key& GetOwner() const { return owner; }
+// 		const Entry& GetTransaction() const { return transaction; }
+		const IBAN& GetIBAN() const { return iban; }
+		const BIC& GetBIC() const { return bic; }
+		const Quantity<Sum>& GetTotal() const { return total; }
+		const Direction& GetDirection() const { return Direction::Id; }		
+	};
+	
 	//-----------------------------------------------------------------------------------------------TranferContainer-----------------------------------------------------------------------
 		
 	template<typename T, template<typename, typename> class TCont = std::map, template<typename> class Cont = std::vector>
@@ -106,27 +156,6 @@ namespace FS
 		}
 	};
 	
-	//-----------------------------------------------------------------------------------------------TranferTypes-----------------------------------------------------------------------
-	
-	template<typename Direction>
-	struct Transfer
-	{
-		using Type = Transfer<Direction>;
-		using ValueType = Direction;
-		inline static const std::string Id = Direction::Id;
-	};
-	
-	struct In
-	{
-		using Type = In;
-		inline static const std::string Id = "In"; 
-	};
-	
-	struct Out
-	{
-		using Type = Out;
-		inline static const std::string Id = "Out"; 
-	};
 	
 	//-----------------------------------------------------------------------------------------------AccountTransfer-----------------------------------------------------------------------
 	
