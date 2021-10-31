@@ -151,6 +151,17 @@ namespace FS
 			this->transfers.push_back(t);
 			this->total = this->total + t.GetQuantity();
 		}
+		
+		void Display(std::ostream& out)
+		{
+			out<<"Owner: "<<owner<<"\tIBAN: "<<iban<<"\tBIC: "<<bic<<std::endl;
+			for(auto p : this->transfers)
+			{
+				out<<"\tDate: "<<p.GetDate()<<"\tSum: "<<p.GetQuantity()<<std::endl;
+			}
+
+			out<<std::endl;
+		}
 	};
 	
 	//-----------------------------------------------------------------------------------------------TranferContainer-----------------------------------------------------------------------
@@ -186,15 +197,10 @@ namespace FS
 			for(auto p : this->transfers)
 			{
 				out<<p.first<<":"<<std::endl;
-				/*
-				typename T::QunatityType total(0.0);
-				for(auto elem : p.second)
-				{
-					total = total + elem.GetQuantity();
-					out<<"\t"<<elem<<std::endl;
-				}
-				*/
-				out<<"Total: "<<p.second.GetTotal()<<std::endl;
+				
+				p.second.Display(out);
+				
+				out<<"\nTotal: "<<p.second.GetTotal()<<std::endl;
 				
 				out<<std::endl;
 			}
@@ -245,10 +251,10 @@ namespace FS
 					auto n = GetNumericValue(values.at(Derived::QuantityIdx));
 					auto sum = n != "" ? std::stod(n) : 0.0 ;
 				
-					auto iban = Derived::template Extract<IBAN>(key);
-					auto bic =Derived::template Extract<BIC>(key);
+					auto iban = Derived::template Extract<IBAN>(transaction);
+					auto bic =Derived::template Extract<BIC>(transaction);
 
-					Logger::Log()<<"KEY: "<<key<<" LINE"<<keyLine<<std::endl;
+					Logger::Log()<<"KEY: "<<key<<" LINE"<<iban<<std::endl;
 					Derived::InCont.Insert(key, InTransfer(key,transaction,sum, date, iban, bic));
 					Derived::OutCont.Insert(key, OutTransfer(key,transaction,sum, date, iban, bic));
 				}
