@@ -98,6 +98,8 @@ namespace FS
 	protected:
 		using CSVSeparator = T::char_<';'> ;
 	public:
+		using AccountType = Account ;
+		using DirectionType = Direction ;
 		using KeyType = Key;
 		using QunatityType = Quantity<Sum>;
 		
@@ -134,7 +136,8 @@ namespace FS
 		using QunatityType = Quantity<Sum>;
 		
 		AccountEndpoint(std::string ownerKey, std::string i = "IBAN", std::string b = "BIC") : owner(ownerKey), iban(i), bic(b) { };
-		AccountEndpoint(const TransferType& t) : owner(t.GetOwner()), iban(t.GetIBAN()), bic(t.GetBIC()) { };
+		AccountEndpoint(const TransferType& t) : owner(t.GetOwner()), iban(t.GetIBAN()), bic(t.GetBIC()), total(0) { };
+		AccountEndpoint():owner("ownerKey"), iban("i"), bic("b"), total(0) { };
 		
 		const Key& GetOwner() const { return owner; }
 		const ContType& GetTransfers() const { return transfers; }
@@ -156,40 +159,41 @@ namespace FS
 	{
 	public:
 		using KeyType = typename T::KeyType;
+		using AccountEndpointType = AccountEndpoint<typename T::AccountType, typename T::DirectionType>;
 	private:
 		Cont<KeyType> keys;
-		TCont<KeyType, Cont<T>> transfers;
+		TCont<KeyType, AccountEndpointType> transfers;
 	public:
 		void Insert(KeyType k, T t)
 		{
 			if(!this->Contains(k))
 			{
 				this->keys.push_back(k);
-				this->transfers.insert(std::pair<KeyType, Cont<T>>(k,Cont{ t }));
+				this->transfers.insert(std::pair<KeyType, AccountEndpointType>(k,AccountEndpointType()));
 				return;
 			}
 			
-			this->transfers[k].push_back(t);
+			this->transfers[k].Insert(t);
 		}
 		
 		bool Contains(KeyType k){ return this->transfers.find(k) != this->transfers.end(); }
 		const Cont<KeyType>& Keys() { return keys; }
-		const Cont<T>& operator[](KeyType k){ return this->transfers[k]; }
+		const AccountEndpointType& operator[](KeyType k){ return this->transfers[k]; }
 		
 		void Display(std::ostream& out)
 		{
 			for(auto p : this->transfers)
 			{
 				out<<p.first<<":"<<std::endl;
-				
+				/*
 				typename T::QunatityType total(0.0);
 				for(auto elem : p.second)
 				{
 					total = total + elem.GetQuantity();
 					out<<"\t"<<elem<<std::endl;
 				}
-				
-				out<<"Total: "<<total<<std::endl;
+				*/
+// 				out<<"Total: "<<p.second.GetT<<std::endl;
 				
 				out<<std::endl;
 			}
