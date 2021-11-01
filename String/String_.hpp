@@ -9,18 +9,6 @@
 #ifndef STRING_H
 #define STRING_H
 
-// //--------------------------------STRING_------------------------------------------------
-// class String_
-// {
-// private:
-// 	
-// public:
-// 	const std::string Value;
-// 	const int Size;
-// 	String_(std::string s): Value(s),Size(s.length()) {};
-// 	operator std::string() const { return Value; }	
-// };
-
 namespace String_
 {
 	//---------------------------------------------------------------------------------------------------Split----------------------------------------------------------------------------------------
@@ -31,22 +19,26 @@ namespace String_
 	T::IsNot_<Delimiter> isNotDelimiter;
 		
 	template<typename Type = Delimiter>
-	std::vector<std::string> Split(const std::string lineArg)
+	std::vector<std::string> Split(const std::string str)
 	{
-		std::vector<std::string> lineValues;
-		std::string line = lineArg;
-		std::string delimiter = {Type::Value};
-		size_t pos = 0;
-		std::string token;
+		std::vector<std::string> result;		
+		using iter = std::string::const_iterator;
 		
-		while ((pos = line.find(delimiter)) != std::string::npos) {
+		iter i = str.begin();
 		
-			token = line.substr(0, pos);        
-			line.erase(0, pos + delimiter.length());
-			lineValues.push_back(token);
+		while(i != str.end())
+		{
+			i = std::find_if(i, str.end(), [](auto c){ return Type::Value != c; });
+			
+			iter j = std::find_if(i, str.end(), [](auto c){ return Type::Value == c; });
+			
+			if(i != str.end())
+				result.push_back(std::string(i,j));
+			
+			i = j;
 		}
 				
-		return lineValues;
+		return result;
 	};
 	
 	bool Contains(std::string s, std::string sub)

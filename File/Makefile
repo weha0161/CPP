@@ -18,7 +18,7 @@ Debug:	$(OBJECTS)
 	$(CXX) $(DEBUGFLAGS) $*.cpp
 	
 Regex: 	RegexTest.cpp
-	g++ -std=c++11 -o Regex RegexTest.cpp
+	g++ -std=c++2a -o Regex RegexTest.cpp
 
 clean:
 	rm -r  ../../../Downloads/* && rm *.o
