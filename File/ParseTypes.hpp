@@ -287,6 +287,41 @@ namespace FS
 		}	
 	};
 	
+	class JSONParser
+	{
+		using Type = std::string;
+		using ResultType = std::map<Type, Type>;
+		using JSON_Separator = T::char_<':'> ;
+		using BlankSeparator = T::char_<' '> ;
+		ResultType resultMap;
+
+	public:	
+		template<typename Iterator>
+		ResultType Parse(Type key, Iterator first, Iterator end)
+		{
+			if(first == end)
+				return this->resultMap;
+			
+			auto vals = String_::Split<BlankSeparator>(*first);
+			auto value = Type();
+					
+			for(int i = 0; i < vals.size()-1; ++i)
+				value += vals.at(i);
+			
+			this->resultMap[key] = value;
+			this->resultMap.insert({key, value});			
+			key = vals.at(vals.size()-1);
+
+			return Parse(key, ++first,end);
+		}
+		
+		ResultType Parse(Type input)
+		{
+			auto vals = String_::Split<JSON_Separator>(input);
+				
+			return Parse(*vals.begin(), ++vals.begin(),vals.end());
+		}
+	};
 	
 	//-----------------------------------------------------------------------------------------------Tranfers-----------------------------------------------------------------------
 	template<unsigned int N = 0>
@@ -333,21 +368,14 @@ namespace FS
 		
 		static std::string ExtractKey(std::string s)
 		{
+			JSONParser json;
+			Logger::Log()<<"KEY: "<<s<<std::endl;
 			if(s == "\"Buchungstext\"")
 				return "";
 			
-			auto vals = String_::Split<TextSeparator>(s);
+			auto vals = json.Parse(s);
 			
-			auto key = vals.at(1);
-			std::string toErase = "Kto/IBAN";
-			
-			size_t pos = key.find(toErase);
-			if (pos != std::string::npos)
-			{
-				key.erase(pos, toErase.length());
-			}
-			
-			return key;
+			return vals.begin()->second;
 		}
 	};
 	
