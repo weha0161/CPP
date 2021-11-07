@@ -5,10 +5,13 @@
 #include <iterator>
 #include <vector>
 #include <cstdlib>
+#include <cstdint>
+#include <filesystem>
 #include <unordered_map>
 #include "ParseTypes.hpp"
 #include "Repository.hpp"
 #include "FileSystem.hpp"
+namespace fs = std::filesystem;
 
 std::vector<std::string> GetFiles(std::string filename = "Backup.txt")
 {
@@ -25,18 +28,49 @@ std::vector<std::string> GetFiles(std::string filename = "Backup.txt")
 
 	return result;
 }
+
+bool Directory_exists(const fs::path& p, fs::file_status s = fs::file_status{})
+{
+    if(fs::status_known(s) ? fs::exists(s) : fs::exists(p))
+        return true;
+   
+	return false;
+}
+
+std::string GetTarget()
+{
+    const std::string usb ="/media/markus/8591-1355/";
+ 	const std::string seagate ="/media/markus/Seagate/";
+	
+	if(Directory_exists(usb)) 
+		return usb;
+	if(Directory_exists(seagate)) 
+		return seagate;	
+	
+	return "";
+}
+
 using namespace FS;
 //----------------------------------------------------------------------------PRODUCT----------------------------------------------------------
 int main()
 {
 	auto dirs = GetFiles();
 	
-// 	std::string to ="/media/markus/8591-1355/CPP/";
- 	std::string to ="/media/markus/Seagate/CPP/";
-// 	
-	for(auto dir : dirs)
+	auto source = GetTarget();
+	
+	if(source != "")
 	{
-		Backup::Repository::Backup(dir,to);
+		auto to = source + "CPP/";
+		
+		if(Directory_exists(to))
+			std::filesystem::remove_all(to);
+		
+		fs::create_directories(to);
+		
+		for(auto dir : dirs)
+		{
+			Backup::Repository::Backup(dir,to);
+		}		
 	}
 		
     return 0;
