@@ -335,7 +335,7 @@ namespace FS
 		inline static const std::string Name = "Comdirect";
 		inline static const std::string Filename = "Umsaetze_1026947527.csv";
 		inline static constexpr unsigned int OwnerIdx = 3;
-		inline static constexpr unsigned int TranactionIdx = 2;
+		inline static constexpr unsigned int TranactionIdx = 3;
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 4;
 		
@@ -353,17 +353,15 @@ namespace FS
 		template<typename T>
 		static std::string Extract(std::string s)
 		{
-			if(s == "\"Buchungstext\"")
-				return "";
-			
-			auto vals = String_::Split<TextSeparator>(s);
-						
-			auto it = std::find_if (vals.begin(), vals.end(), [](auto s){return String_::Contains(s,T::Identifier); } );
+			JSONParser json;
+			auto vals = json.Parse(s);
+
+			auto it = std::find_if (vals.begin(),vals.end(), [](std::pair<std::string, std::string> const& item) { return String_::Contains(item.first,T::Identifier); } );
 			
 			if(it == vals.end())
 				return "";
 						
-			return *(++it);
+			return (it)->second;
 		}
 		
 		static std::string ExtractKey(std::string s)
