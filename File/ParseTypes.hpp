@@ -404,7 +404,15 @@ namespace FS
 		template<typename T>
 		static std::string Extract(std::string s)
 		{
-			return s;
+			JSONParser json;
+			auto vals = json.Parse(s);
+
+			auto it = std::find_if (vals.begin(),vals.end(), [](std::pair<std::string, std::string> const& item) { return String_::Contains(item.first,T::Identifier); } );
+			
+			if(it == vals.end())
+				return "";
+						
+			return (it)->second;
 		}
 		static std::string ExtractKey(std::string s)
 		{
