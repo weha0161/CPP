@@ -56,6 +56,15 @@ class Logger
 			
 //             this->file<<message<<std::endl;
         };
+		
+        template<typename Iterator,class LogPolicy = Debug>
+        static void Log(Iterator begin, Iterator end)
+        {
+			int j = 0;
+		
+			for(auto i = begin; begin != end; ++i, ++j)
+				Logger::Log<LogPolicy>()<<j<<" :"<<*i<<std::endl;
+		};
 };
 
 // template<class A>
