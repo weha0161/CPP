@@ -20,6 +20,9 @@ Debug:	$(OBJECTS)
 Regex: 	RegexTest.cpp
 	g++ -std=c++2a -o Regex RegexTest.cpp
 
+Backup:	Backup.cpp
+	g++ -std=c++2a -o Backup Backup.cpp
+
 clean:
 	rm -r  ../../../Downloads/* && rm *.o
 	
