@@ -232,34 +232,47 @@ namespace FS
 		
 		static void Parse(std::vector<std::string> content)
 		{
-			uint ctr = 0;
-
-			for(auto line : content)
+			if(content.size() > 0)
 			{
-				auto values = String_::Split<CSVSeparator>(line);
+				uint ctr = 0;
+							
+				Logger::Log(content.cbegin(), content.cend());
 				
-				if (values.size() < MaxIdx)
-					continue;
+				auto header = RemoveHeader(content);
+				auto trailer = RemoveTrailer(content);
+	
+				Logger::Log(header.cbegin(), header.cend(),"HEADER");
+				Logger::Log(trailer.cbegin(), trailer.cend(),"TRAILER");
+				Logger::Log(content.cbegin(), content.cend(),"CONTENT END");
 				
-				auto keyLine = values.at(Derived::OwnerIdx);
-				if(keyLine != "")
+				for(auto line : content)
 				{
-					auto key = Derived::ExtractKey(keyLine);
-					auto date = values.at(Derived::DateIdx);
-					auto transaction = values.at(Derived::TranactionIdx);
+					auto values = String_::Split<CSVSeparator>(line);
 					
-					auto n = GetNumericValue(values.at(Derived::QuantityIdx));
-					auto sum = n != "" ? std::stod(n) : 0.0 ;
-				
-					auto iban = Derived::template Extract<IBAN>(transaction);
-					auto bic =Derived::template Extract<BIC>(transaction);
+					if (values.size() < MaxIdx)
+						continue;
+					
+					auto keyLine = values.at(Derived::OwnerIdx);
+					if(keyLine != "")
+					{
+						auto key = Derived::ExtractKey(keyLine);
+						auto date = values.at(Derived::DateIdx);
+						auto transaction = values.at(Derived::TranactionIdx);
+						
+						auto n = GetNumericValue(values.at(Derived::QuantityIdx));
+						auto sum = n != "" ? std::stod(n) : 0.0 ;
+					
+						auto iban = Derived::template Extract<IBAN>(transaction);
+						auto bic =Derived::template Extract<BIC>(transaction);
 
-					Logger::Log()<<"KEY: "<<key<<" LINE"<<iban<<std::endl;
-					Derived::InCont.Insert(key, InTransfer(key,transaction,sum, date, iban, bic));
-					Derived::OutCont.Insert(key, OutTransfer(key,transaction,sum, date, iban, bic));
+	// 					Logger::Log()<<"KEY: "<<key<<" LINE"<<iban<<std::endl;
+						Derived::InCont.Insert(key, InTransfer(key,transaction,sum, date, iban, bic));
+						Derived::OutCont.Insert(key, OutTransfer(key,transaction,sum, date, iban, bic));
+					}
+					
+					Derived::ProcessValues(values);
+					
 				}
-				
-				
 			}
 
 			return;
@@ -284,6 +297,22 @@ namespace FS
 		static void AttachTo(Cont& cont)
 		{
 			cont.insert(std::make_pair(Derived::Filename,  &Type::Parse));
+		}	
+		
+		static std::vector<std::string> RemoveHeader(std::vector<std::string>&  cont)
+		{
+			std::vector<std::string> header;
+			std::copy(cont.begin(), cont.begin() + Derived::HeaderLength, std::back_inserter(header));
+			cont.erase(cont.begin(), cont.begin() + Derived::HeaderLength);
+			return header;
+		}	
+		
+		static std::vector<std::string> RemoveTrailer(std::vector<std::string>&  cont)
+		{
+			std::vector<std::string> header;
+			std::copy(cont.end() - Derived::TrailerLength, cont.end(), std::back_inserter(header));
+			cont.erase(cont.end() - Derived::TrailerLength, cont.end());
+			return header;
 		}	
 	};
 	
@@ -338,6 +367,8 @@ namespace FS
 		inline static constexpr unsigned int TranactionIdx = 3;
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 4;
+		inline static constexpr unsigned int HeaderLength = 5;
+		inline static constexpr unsigned int TrailerLength = 23;
 		
 		inline static Base::ParseContIn InCont = typename Base::ParseContIn();
 		inline static Base::ParseContOut OutCont = typename Base::ParseContOut();
@@ -375,6 +406,28 @@ namespace FS
 			
 			return vals.begin()->second;
 		}
+		
+		static void ProcessValues(std::vector<std::string> values)
+		{
+			auto keyLine = values.at(OwnerIdx);
+			if(keyLine != "")
+			{
+				auto key = ExtractKey(keyLine);
+				auto date = values.at(DateIdx);
+				auto transaction = values.at(TranactionIdx);
+				
+				auto n = Base::GetNumericValue(values.at(QuantityIdx));
+				auto sum = n != "" ? std::stod(n) : 0.0 ;
+			
+				auto iban =  Extract<IBAN>(transaction);
+				auto bic = Extract<BIC>(transaction);
+
+// 				Logger::Log()<<"KEY: "<<key<<" LINE"<<iban<<std::endl;
+				InCont.Insert(key, typename Base::InTransfer(key,transaction,sum, date, iban, bic));
+				OutCont.Insert(key, typename Base::OutTransfer(key,transaction,sum, date, iban, bic));
+			}
+				
+		}
 	};
 	
 	template<unsigned int N = 0>
@@ -391,6 +444,8 @@ namespace FS
 		inline static constexpr unsigned int TranactionIdx = 9;
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 12;
+		inline static constexpr unsigned int HeaderLength = 16;
+		inline static constexpr unsigned int TrailerLength = 3;
 		
 		inline static Base::ParseContIn InCont = typename Base::ParseContIn();
 		inline static Base::ParseContOut OutCont = typename Base::ParseContOut();
@@ -418,6 +473,27 @@ namespace FS
 		{
 			return s;
 		}
+		
+		static void ProcessValues(std::vector<std::string> values)
+		{
+			auto keyLine = values.at(OwnerIdx);
+			if(keyLine != "")
+			{
+				auto key = ExtractKey(keyLine);
+				auto date = values.at(DateIdx);
+				auto transaction = values.at(TranactionIdx);
+				
+				auto n = Base::GetNumericValue(values.at(QuantityIdx));
+				auto sum = n != "" ? std::stod(n) : 0.0 ;
+			
+				auto iban =  Extract<IBAN>(transaction);
+				auto bic = Extract<BIC>(transaction);
+
+				Logger::Log()<<"KEY: "<<key<<" LINE"<<iban<<std::endl;
+				InCont.Insert(key, typename Base::InTransfer(key,transaction,sum, date, iban, bic));
+				OutCont.Insert(key, typename Base::OutTransfer(key,transaction,sum, date, iban, bic));
+			}
+		}				
 	};
 	
 	template<unsigned int N = 0>
@@ -434,6 +510,8 @@ namespace FS
 		inline static constexpr unsigned int TranactionIdx = 2;
 		inline static constexpr unsigned int DateIdx = 0;
 		inline static constexpr unsigned int QuantityIdx = 3;
+		inline static constexpr unsigned int HeaderLength = 15;
+		inline static constexpr unsigned int TrailerLength = 4;
 		
 		inline static Base::ParseContIn InCont = typename Base::ParseContIn();
 		inline static Base::ParseContOut OutCont = typename Base::ParseContOut();
@@ -454,6 +532,29 @@ namespace FS
 		{
 			return s;
 		}
+		
+		static void ProcessValues(std::vector<std::string> values)
+		{
+			auto keyLine = values.at(OwnerIdx);
+			if(keyLine != "")
+			{
+				auto key = ExtractKey(keyLine);
+				auto date = values.at(DateIdx);
+				auto transaction = values.at(TranactionIdx);
+				
+				auto n = Base::GetNumericValue(values.at(QuantityIdx));
+				auto sum = n != "" ? std::stod(n) : 0.0 ;
+			
+				auto iban =  Extract<IBAN>(transaction);
+				auto bic = Extract<BIC>(transaction);
+
+				Logger::Log()<<"KEY: "<<key<<" LINE"<<iban<<std::endl;
+				InCont.Insert(key, typename Base::InTransfer(key,transaction,sum, date, iban, bic));
+				OutCont.Insert(key, typename Base::OutTransfer(key,transaction,sum, date, iban, bic));
+			}
+		}				
+				
+
 	};
 	template<typename T, typename D>
 	std::ostream& operator<<(std::ostream& out, const AccountTransfer<T,D>& s)
