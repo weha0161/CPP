@@ -58,11 +58,15 @@ class Logger
         };
 		
         template<typename Iterator,class LogPolicy = Debug>
-        static void Log(Iterator begin, Iterator end)
+        static void Log(Iterator begin, Iterator end, std::string name = "")
         {
 			int j = 0;
 
-			std::for_each(begin,end,[=](auto i){ Logger::Log<LogPolicy>()<<j<<" :"<<i<<std::endl; });
+			if(name != "")
+				Logger::Log()<<name<<" :"<<std::endl;
+			
+			for(auto i = begin; i != end; ++i, ++j)
+				Logger::Log<LogPolicy>()<<"\t"<<j<<" :"<<*i<<std::endl;
 		};
 };
 
