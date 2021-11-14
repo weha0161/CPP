@@ -61,9 +61,8 @@ class Logger
         static void Log(Iterator begin, Iterator end)
         {
 			int j = 0;
-		
-			for(auto i = begin; begin != end; ++i, ++j)
-				Logger::Log<LogPolicy>()<<j<<" :"<<*i<<std::endl;
+
+			std::for_each(begin,end,[=](auto i){ Logger::Log<LogPolicy>()<<j<<" :"<<i<<std::endl; });
 		};
 };
 
