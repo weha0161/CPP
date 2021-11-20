@@ -337,8 +337,10 @@ namespace FS
 		enum{ Num = N };
 		using InType = AccountTransfer<Comdirect,Transfer<In>>;
 		using OutType = AccountTransfer<Comdirect,Transfer<Out>>;
+		using IsOutTransferSign = T::char_<'-'>;
 		using Base = Account<Comdirect>;
 		
+		inline static T::Is_<IsOutTransferSign> IsOutTransfer;
 		inline static const std::string Name = "Comdirect";
 		inline static const std::string Filename = "Umsaetze_1026947527.csv";
 		inline static constexpr unsigned int OwnerIdx = 3;
@@ -384,6 +386,8 @@ namespace FS
 			return vals.begin()->second;
 		}
 		
+		
+		
 		static void ProcessValues(std::vector<std::string> values)
 		{
 			auto keyLine = values.at(OwnerIdx);
@@ -398,9 +402,13 @@ namespace FS
 			
 				auto iban =  Extract<IBAN>(transaction);
 				auto bic = Extract<BIC>(transaction);
-
-				InCont.Insert(key, typename Base::InTransfer(key,transaction,sum, date, iban, bic));
-				OutCont.Insert(key, typename Base::OutTransfer(key,transaction,sum, date, iban, bic));
+				
+				Logger::Log()<<values.at(QuantityIdx)<<" is "<<IsOutTransfer(*(values.at(QuantityIdx).begin()+1))<<std::endl;
+				
+				if(*(values.at(QuantityIdx).begin()+1))
+					OutCont.Insert(key, typename Base::OutTransfer(key,transaction,sum, date, iban, bic));
+				else
+					InCont.Insert(key, typename Base::InTransfer(key,transaction,sum, date, iban, bic));
 			}
 				
 		}
