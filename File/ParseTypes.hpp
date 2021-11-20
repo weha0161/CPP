@@ -236,40 +236,18 @@ namespace FS
 			{
 				uint ctr = 0;
 							
-				Logger::Log(content.cbegin(), content.cend());
+// 				Logger::Log(content.cbegin(), content.cend());
 				
 				auto header = RemoveHeader(content);
 				auto trailer = RemoveTrailer(content);
 	
-				Logger::Log(header.cbegin(), header.cend(),"HEADER");
-				Logger::Log(trailer.cbegin(), trailer.cend(),"TRAILER");
-				Logger::Log(content.cbegin(), content.cend(),"CONTENT END");
-								
 				for(auto line : content)
 				{
 					auto values = String_::Split<CSVSeparator>(line);
 					
 					if (values.size() < MaxIdx)
 						continue;
-					
-// 					auto keyLine = values.at(Derived::OwnerIdx);
-// 					if(keyLine != "")
-// 					{
-// 						auto key = Derived::ExtractKey(keyLine);
-// 						auto date = values.at(Derived::DateIdx);
-// 						auto transaction = values.at(Derived::TranactionIdx);
-// 						
-// 						auto n = GetNumericValue(values.at(Derived::QuantityIdx));
-// 						auto sum = n != "" ? std::stod(n) : 0.0 ;
-// 					
-// 						auto iban = Derived::template Extract<IBAN>(transaction);
-// 						auto bic =Derived::template Extract<BIC>(transaction);
-// 
-// 	// 					Logger::Log()<<"KEY: "<<key<<" LINE"<<iban<<std::endl;
-// 						Derived::InCont.Insert(key, InTransfer(key,transaction,sum, date, iban, bic));
-// 						Derived::OutCont.Insert(key, OutTransfer(key,transaction,sum, date, iban, bic));
-// 					}
-					
+										
 					Derived::ProcessValues(values);
 					
 				}
@@ -398,7 +376,6 @@ namespace FS
 		static std::string ExtractKey(std::string s)
 		{
 			JSONParser json;
-			Logger::Log()<<"KEY: "<<s<<std::endl;
 			if(s == "\"Buchungstext\"")
 				return "";
 			
@@ -422,7 +399,6 @@ namespace FS
 				auto iban =  Extract<IBAN>(transaction);
 				auto bic = Extract<BIC>(transaction);
 
-// 				Logger::Log()<<"KEY: "<<key<<" LINE"<<iban<<std::endl;
 				InCont.Insert(key, typename Base::InTransfer(key,transaction,sum, date, iban, bic));
 				OutCont.Insert(key, typename Base::OutTransfer(key,transaction,sum, date, iban, bic));
 			}
@@ -485,13 +461,15 @@ namespace FS
 				auto date = values.at(DateIdx);
 				auto transaction = values.at(TranactionIdx);
 				
-				auto n = Base::GetNumericValue(values.at(QuantityIdx));
-				auto sum = n != "" ? std::stod(n) : 0.0 ;
+				auto val = values.at(QuantityIdx);
+				std::string::iterator end_pos = std::remove(val.begin(), val.end(), ' ');
+				val.erase(end_pos, val.end());
+
+				auto sum = std::stod(*(values.end()-2));
 			
 				auto iban =  values.at(IBANIdx);
 				auto bic =  values.at(BICIdx);
 
-// 				Logger::Log()<<"KEY: "<<key<<" LINE"<<iban<<std::endl;
 				InCont.Insert(key, typename Base::InTransfer(key,transaction,sum, date, iban, bic));
 				OutCont.Insert(key, typename Base::OutTransfer(key,transaction,sum, date, iban, bic));
 			}
@@ -550,7 +528,6 @@ namespace FS
 				auto iban =  Extract<IBAN>(transaction);
 				auto bic = Extract<BIC>(transaction);
 
-// 				Logger::Log()<<"KEY: "<<key<<" LINE"<<iban<<std::endl;
 				InCont.Insert(key, typename Base::InTransfer(key,transaction,sum, date, iban, bic));
 				OutCont.Insert(key, typename Base::OutTransfer(key,transaction,sum, date, iban, bic));
 			}
