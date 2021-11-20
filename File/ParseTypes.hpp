@@ -212,7 +212,8 @@ namespace FS
 	class Account
 	{
 		using Type = Account<Derived> ;
-	protected:
+	protected:		
+// 		inline static T::Is_<typename Derived::IsOutTransferSign> IsOutTransfer;
 		using CSVSeparator = T::char_<';'> ;
 	public:
 		Key owner;
@@ -292,6 +293,16 @@ namespace FS
 			cont.erase(cont.end() - Derived::TrailerLength, cont.end());
 			return header;
 		}	
+		
+	protected:
+		static void InsertInContainer(std::string key, std::string transaction, double sum, std::string date, std::string iban, std::string bic, char transferSign)
+		{
+			if(Derived::IsOutTransfer(transferSign))
+				Derived::OutCont.Insert(key, OutTransfer(key,transaction,sum, date, iban, bic));
+			else
+				Derived::InCont.Insert(key, InTransfer(key,transaction,sum, date, iban, bic));
+			
+		}
 	};
 	
 	class JSONParser
@@ -402,13 +413,8 @@ namespace FS
 			
 				auto iban =  Extract<IBAN>(transaction);
 				auto bic = Extract<BIC>(transaction);
-				
-				Logger::Log()<<values.at(QuantityIdx)<<" is "<<IsOutTransfer(*(values.at(QuantityIdx).begin()+1))<<std::endl;
-				
-				if(*(values.at(QuantityIdx).begin()+1))
-					OutCont.Insert(key, typename Base::OutTransfer(key,transaction,sum, date, iban, bic));
-				else
-					InCont.Insert(key, typename Base::InTransfer(key,transaction,sum, date, iban, bic));
+								
+				Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(values.at(QuantityIdx).begin()+1));
 			}
 				
 		}
@@ -420,8 +426,11 @@ namespace FS
 		enum{ Num = N };
 		using InType = AccountTransfer<Raiba,Transfer<In>>;
 		using OutType = AccountTransfer<Raiba,Transfer<Out>>;
+		using IsOutTransferSign = T::char_<'S'>;
 		using Base = Account<Raiba>;
 		
+		
+		inline static T::Is_<IsOutTransferSign> IsOutTransfer;
 		inline static const std::string Name = "Raiba";
 		inline static const std::string Filename = "Umsaetze_DE19660623660009232702.csv";
 		inline static constexpr unsigned int OwnerIdx = 4;
@@ -477,9 +486,9 @@ namespace FS
 			
 				auto iban =  values.at(IBANIdx);
 				auto bic =  values.at(BICIdx);
-
-				InCont.Insert(key, typename Base::InTransfer(key,transaction,sum, date, iban, bic));
-				OutCont.Insert(key, typename Base::OutTransfer(key,transaction,sum, date, iban, bic));
+				
+				std::string sign = *(values.end()-1);
+				Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0]);
 			}
 		}				
 	};
@@ -490,8 +499,10 @@ namespace FS
 		enum{ Num = N };
 		using InType = AccountTransfer<Custom,Transfer<In>>;
 		using OutType = AccountTransfer<Custom,Transfer<Out>>;
+		using IsOutTransferSign = T::char_<'-'>;
 		using Base = Account<Custom>;
 		
+		inline static T::Is_<IsOutTransferSign> IsOutTransfer;
 		inline static const std::string Name = "Custom";
 		inline static const std::string Filename = "RaibaKonten2021_1.csv";
 		inline static constexpr unsigned int OwnerIdx = 1;
@@ -538,6 +549,8 @@ namespace FS
 
 				InCont.Insert(key, typename Base::InTransfer(key,transaction,sum, date, iban, bic));
 				OutCont.Insert(key, typename Base::OutTransfer(key,transaction,sum, date, iban, bic));
+				
+				Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(values.at(QuantityIdx).begin()+1));
 			}
 		}				
 				
