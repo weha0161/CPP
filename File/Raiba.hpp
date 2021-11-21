@@ -21,36 +21,38 @@
 #include "../Visitor/Visitor.hpp"
 #include "../String/String_.hpp"
 
-#ifndef COMDIRECT_HPP
-#define COMDIRECT_HPP
+#ifndef RAIBA_HPP
+#define RAIBA_HPP
 
 namespace fs = std::filesystem;
 
 namespace Bank
-{
-	//-----------------------------------------------------------------------------------------------Tranfers-----------------------------------------------------------------------
+{	
 	template<unsigned int N = 0>
-	struct Comdirect: public Account<Comdirect<N>>
+	struct Raiba: public Account<Raiba<N>>
 	{
 		enum{ Num = N };
-		using InType = AccountTransfer<Comdirect,Transfer<In>>;
-		using OutType = AccountTransfer<Comdirect,Transfer<Out>>;
-		using IsOutTransferSign = T::char_<'-'>;
-		using Base = Account<Comdirect>;
+		using InType = AccountTransfer<Raiba,Transfer<In>>;
+		using OutType = AccountTransfer<Raiba,Transfer<Out>>;
+		using IsOutTransferSign = T::char_<'S'>;
+		using Base = Account<Raiba>;
+		
 		
 		inline static T::Is_<IsOutTransferSign> IsOutTransfer;
-		inline static const std::string Name = "Comdirect";
-		inline static const std::string Filename = "Umsaetze_1026947527.csv";
-		inline static constexpr unsigned int OwnerIdx = 3;
-		inline static constexpr unsigned int TranactionIdx = 3;
+		inline static const std::string Name = "Raiba";
+		inline static const std::string Filename = "Umsaetze_DE19660623660009232702.csv";
+		inline static constexpr unsigned int OwnerIdx = 4;
+		inline static constexpr unsigned int TranactionIdx = 9;
+		inline static constexpr unsigned int IBANIdx = 6;
+		inline static constexpr unsigned int BICIdx = 7;
 		inline static constexpr unsigned int DateIdx = 0;
-		inline static constexpr unsigned int QuantityIdx = 4;
-		inline static constexpr unsigned int HeaderLength = 5;
-		inline static constexpr unsigned int TrailerLength = 23;
+		inline static constexpr unsigned int QuantityIdx = 12;
+		inline static constexpr unsigned int HeaderLength = 16;
+		inline static constexpr unsigned int TrailerLength = 3;
 		
 		inline static Base::ParseContIn InCont = typename Base::ParseContIn();
 		inline static Base::ParseContOut OutCont = typename Base::ParseContOut();
-		Comdirect(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : Base(k,c,v, d, i, b) {};
+		Raiba(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : Base(k,c,v, d, i, b) {};
 		
 		static void Display(std::ostream& os)
 		{
@@ -60,8 +62,6 @@ namespace Bank
 			os<<"OUT"<<std::endl;
 			OutCont.Display(os);
 		}
-		
-		using TextSeparator = T::char_<' '> ;
 		
 		template<typename T>
 		static std::string Extract(std::string s)
@@ -76,19 +76,10 @@ namespace Bank
 						
 			return (it)->second;
 		}
-		
 		static std::string ExtractKey(std::string s)
 		{
-			JSONParser json;
-			if(s == "\"Buchungstext\"")
-				return "";
-			
-			auto vals = json.Parse(s);
-			
-			return vals.begin()->second;
+			return s;
 		}
-		
-		
 		
 		static void ProcessValues(std::vector<std::string> values)
 		{
@@ -99,16 +90,19 @@ namespace Bank
 				auto date = values.at(DateIdx);
 				auto transaction = values.at(TranactionIdx);
 				
-				auto n = Base::GetNumericValue(values.at(QuantityIdx));
-				auto sum = n != "" ? std::stod(n) : 0.0 ;
+				auto val = values.at(QuantityIdx);
+				std::string::iterator end_pos = std::remove(val.begin(), val.end(), ' ');
+				val.erase(end_pos, val.end());
+
+				auto sum = std::stod(*(values.end()-2));
 			
-				auto iban =  Extract<IBAN>(transaction);
-				auto bic = Extract<BIC>(transaction);
-								
-				Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(values.at(QuantityIdx).begin()+1));
-			}
+				auto iban =  values.at(IBANIdx);
+				auto bic =  values.at(BICIdx);
 				
-		}
+				std::string sign = *(values.end()-1);
+				Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0]);
+			}
+		}				
 	};
 }
 

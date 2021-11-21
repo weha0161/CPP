@@ -16,6 +16,8 @@
 #include "Node.hpp"
 #include "Account.hpp"
 #include "Comdirect.hpp"
+#include "Raiba.hpp"
+#include "Custom.hpp"
 #include "../Typelist/Typelist.h"
 #include "../Visitor/Visitor.hpp"
 
@@ -30,8 +32,8 @@ namespace CSV
 	{
 		using FileTypes = Typelist<FS::CSV>::Type;
 		using TypeContainer = FS::FileTypeContainer<FileTypes>;
-		using Direction = FS::Transfer<FS::In>;
-		using ParseTypes = Typelist<FS::Custom<0>, FS::Raiba<0>, FS::Comdirect<0>>::Type;
+		using Direction = Bank::Transfer<Bank::In>;
+		using ParseTypes = Typelist<Bank::Custom<0>, Bank::Raiba<0>, Bank::Comdirect<0>>::Type;
 		using ParseTypeContainer = FS::FileTypeContainer<ParseTypes>;
 		using ParseMethod = void(*)(std::vector<std::string>);
 		using ParserContainer = std::map<std::string, ParseMethod>;

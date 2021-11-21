@@ -58,7 +58,11 @@ namespace FS
 	{
 		return out<<c.LineNumber()<<"\t"<<c.Line();
 	}
-	
+
+}
+
+namespace Bank
+{
 	//-----------------------------------------------------------------------------------------------TranferTypes-----------------------------------------------------------------------
 	
 	template<typename Direction>
@@ -340,6 +344,13 @@ namespace FS
 			return Parse(*vals.begin(), ++vals.begin(),vals.end());
 		}
 	};
+	
+	template<typename T, typename D>
+	std::ostream& operator<<(std::ostream& out, const AccountTransfer<T,D>& s)
+	{
+		out<<std::setw(30)<<std::left<<s.GetOwner()<<std::setw(60)<<s.GetTransaction()<<std::setw(20)<<std::right<<s.GetDate()<<std::setw(10)<<std::setprecision(2)<<std::fixed<<s.GetQuantity()<<"\n";
+		return out<<std::setw(30)<<std::left<<s.GetIBAN()<<std::setw(60)<<s.GetBIC()<<std::setw(20);		
+	}
 }
 
 
