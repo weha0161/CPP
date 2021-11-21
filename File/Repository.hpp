@@ -14,6 +14,8 @@
 #include "FileSystem.hpp"
 #include "Info.hpp"
 #include "Node.hpp"
+#include "Account.hpp"
+#include "Comdirect.hpp"
 #include "../Typelist/Typelist.h"
 #include "../Visitor/Visitor.hpp"
 
