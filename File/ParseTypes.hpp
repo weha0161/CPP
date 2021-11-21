@@ -367,7 +367,11 @@ namespace FS
 		
 		static void Display(std::ostream& os)
 		{
+			os<<"IN"<<std::endl;
 			InCont.Display(os);
+			
+			os<<"OUT"<<std::endl;
+			OutCont.Display(os);
 		}
 		
 		using TextSeparator = T::char_<' '> ;
@@ -448,7 +452,11 @@ namespace FS
 		
 		static void Display(std::ostream& os)
 		{
+			os<<"IN"<<std::endl;
 			InCont.Display(os);
+			
+			os<<"OUT"<<std::endl;
+			OutCont.Display(os);
 		}
 		
 		template<typename T>
