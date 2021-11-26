@@ -16,6 +16,7 @@
 #include "Node.hpp"
 #include "Account.hpp"
 #include "Comdirect.hpp"
+#include "Transfer.hpp"
 #include "Raiba.hpp"
 #include "Custom.hpp"
 #include "../Typelist/Typelist.h"
