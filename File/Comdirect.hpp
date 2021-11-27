@@ -14,6 +14,7 @@
 #include <boost/mpl/placeholders.hpp>
 #include <filesystem>
 #include "Account.hpp"
+#include "JSONParser.hpp"
 #include "../Logger/Logger.hpp"
 #include "../CSV/CSV.hpp"
 #include "../Quantity/Quantity.h"
@@ -66,7 +67,7 @@ namespace Bank
 		template<typename T>
 		static std::string Extract(std::string s)
 		{
-			JSONParser json;
+			Parser::JSON json;
 			auto vals = json.Parse(s);
 
 			auto it = std::find_if (vals.begin(),vals.end(), [](std::pair<std::string, std::string> const& item) { return String_::Contains(item.first,T::Identifier); } );
@@ -79,7 +80,7 @@ namespace Bank
 		
 		static std::string ExtractKey(std::string s)
 		{
-			JSONParser json;
+			Parser::JSON json;
 			if(s == "\"Buchungstext\"")
 				return "";
 			
