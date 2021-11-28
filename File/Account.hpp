@@ -99,6 +99,28 @@ namespace Bank
 			cont.insert(std::make_pair(Derived::Filename,  &Type::Parse));
 		}	
 		
+		
+		static const ParseContOut& OutTransfers()
+		{
+			return Derived::OutCont;
+		}	
+		
+		static const ParseContIn& InTransfers()
+		{
+			return Derived::InCont;
+		}	
+		
+	protected:
+		static void InsertInContainer(std::string key, std::string transaction, double sum, std::string date, std::string iban, std::string bic, char transferSign)
+		{
+			if(Derived::IsOutTransfer(transferSign))
+				Derived::OutCont.Insert(key, OutTransfer(key,transaction,sum, date, iban, bic));
+			else
+				Derived::InCont.Insert(key, InTransfer(key,transaction,sum, date, iban, bic));
+			
+		}
+		
+	private:
 		static std::vector<std::string> RemoveHeader(std::vector<std::string>&  cont)
 		{
 			std::vector<std::string> header;
@@ -114,16 +136,6 @@ namespace Bank
 			cont.erase(cont.end() - Derived::TrailerLength, cont.end());
 			return header;
 		}	
-		
-	protected:
-		static void InsertInContainer(std::string key, std::string transaction, double sum, std::string date, std::string iban, std::string bic, char transferSign)
-		{
-			if(Derived::IsOutTransfer(transferSign))
-				Derived::OutCont.Insert(key, OutTransfer(key,transaction,sum, date, iban, bic));
-			else
-				Derived::InCont.Insert(key, InTransfer(key,transaction,sum, date, iban, bic));
-			
-		}
 	};
 }
 
