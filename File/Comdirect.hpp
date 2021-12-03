@@ -64,6 +64,27 @@ namespace Bank
 		
 		using TextSeparator = T::char_<' '> ;
 		
+		static void ProcessValues(std::vector<std::string> values)
+		{
+			auto keyLine = values.at(OwnerIdx);
+			if(keyLine != "")
+			{
+				auto key = ExtractKey(keyLine);
+				auto date = values.at(DateIdx);
+				auto transaction = values.at(TranactionIdx);
+				
+				auto n = Base::GetNumericValue(values.at(QuantityIdx));
+				auto sum = n != "" ? std::stod(n) : 0.0 ;
+			
+				auto iban =  Extract<IBAN>(transaction);
+				auto bic = Extract<BIC>(transaction);
+								
+				Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(values.at(QuantityIdx).begin()+1));
+			}
+				
+		}		
+		
+	protected:
 		template<typename T>
 		static std::string Extract(std::string s)
 		{
@@ -90,26 +111,6 @@ namespace Bank
 		}
 		
 		
-		
-		static void ProcessValues(std::vector<std::string> values)
-		{
-			auto keyLine = values.at(OwnerIdx);
-			if(keyLine != "")
-			{
-				auto key = ExtractKey(keyLine);
-				auto date = values.at(DateIdx);
-				auto transaction = values.at(TranactionIdx);
-				
-				auto n = Base::GetNumericValue(values.at(QuantityIdx));
-				auto sum = n != "" ? std::stod(n) : 0.0 ;
-			
-				auto iban =  Extract<IBAN>(transaction);
-				auto bic = Extract<BIC>(transaction);
-								
-				Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(values.at(QuantityIdx).begin()+1));
-			}
-				
-		}
 	};
 }
 

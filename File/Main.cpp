@@ -69,6 +69,24 @@ int main()
     CSV::Repository::ParseAll();
     CSV::Repository::Display(std::cout);
 	
+	std::cout<<"\n TEST INs"<<std::endl;
+// 	auto com = CSV::Repository::Get();
+					
+	auto com = Bank::Comdirect<0>::OutTransfers();
+	com.Display(std::cout);
+	
+	std::cout<<"\n TEST INs 2"<<std::endl;
+// 	auto com = CSV::Repository::Get();
+					
+	auto com2 = Bank::Comdirect<2>::OutTransfers();
+	com2.Display(std::cout);
+	
+// 	for(auto i : com)
+// 		std::cout<<*i<<Std::endl;
+	
+// 	auto ins = com::InTransfers()
+// 	std::cout<<ins
+	
 // 	FS::Comdirect<0>::Transactions.Display(std::cout);
 	
     return 0;

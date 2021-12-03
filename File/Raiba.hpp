@@ -64,24 +64,6 @@ namespace Bank
 			OutCont.Display(os);
 		}
 		
-		template<typename T>
-		static std::string Extract(std::string s)
-		{
-			Parser::JSON json;
-			auto vals = json.Parse(s);
-
-			auto it = std::find_if (vals.begin(),vals.end(), [](std::pair<std::string, std::string> const& item) { return String_::Contains(item.first,T::Identifier); } );
-			
-			if(it == vals.end())
-				return "";
-						
-			return (it)->second;
-		}
-		static std::string ExtractKey(std::string s)
-		{
-			return s;
-		}
-		
 		static void ProcessValues(std::vector<std::string> values)
 		{
 			auto keyLine = values.at(OwnerIdx);
@@ -103,7 +85,26 @@ namespace Bank
 				std::string sign = *(values.end()-1);
 				Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0]);
 			}
-		}				
+		}						
+		
+	protected:
+		template<typename T>
+		static std::string Extract(std::string s)
+		{
+			Parser::JSON json;
+			auto vals = json.Parse(s);
+
+			auto it = std::find_if (vals.begin(),vals.end(), [](std::pair<std::string, std::string> const& item) { return String_::Contains(item.first,T::Identifier); } );
+			
+			if(it == vals.end())
+				return "";
+						
+			return (it)->second;
+		}
+		static std::string ExtractKey(std::string s)
+		{
+			return s;
+		}
 	};
 }
 

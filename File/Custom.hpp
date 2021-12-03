@@ -56,17 +56,6 @@ namespace Bank
 			InCont.Display(os);
 		}
 		
-		template<typename T>
-		static std::string Extract(std::string s)
-		{
-			return s;
-		}
-		
-		static std::string ExtractKey(std::string s)
-		{
-			return s;
-		}
-		
 		static void ProcessValues(std::vector<std::string> values)
 		{
 			auto keyLine = values.at(OwnerIdx);
@@ -89,7 +78,17 @@ namespace Bank
 			}
 		}				
 				
-
+	protected:
+		template<typename T>
+		static std::string Extract(std::string s)
+		{
+			return s;
+		}
+		
+		static std::string ExtractKey(std::string s)
+		{
+			return s;
+		}
 	};
 }
 

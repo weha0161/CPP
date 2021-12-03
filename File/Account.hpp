@@ -36,21 +36,16 @@ namespace Bank
 	protected:		
 // 		inline static T::Is_<typename Derived::IsOutTransferSign> IsOutTransfer;
 		using CSVSeparator = T::char_<';'> ;
-	public:
 		Key owner;
 		IBAN iban;
 		BIC bic;
+	public:
 		using InTransfer = AccountTransfer<Derived,Transfer<In>>;
 		using OutTransfer = AccountTransfer<Derived, Transfer<Out>>;
 		using KeyType = Key ;
 		using ParseContIn = TransferContainer<AccountTransfer<Derived,Transfer<In>>>;
 		using ParseContOut = TransferContainer<AccountTransfer<Derived,Transfer<Out>>>;
 		using QunatityType = Quantity<Sum>;
-		
-		Account(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : owner(k), iban(i), bic(b) { };
-		
-		static constexpr unsigned int Indices[4] = {Derived::OwnerIdx, Derived::DateIdx, Derived::TranactionIdx, Derived::QuantityIdx};
-		static const unsigned int MaxIdx = *std::max_element(Indices,Indices+4);
 		
 		static void Parse(std::vector<std::string> content)
 		{
@@ -78,20 +73,6 @@ namespace Bank
 			return;
 		}
 		
-		static std::string GetNumericValue(std::string s)
-		{
-			std::string result;
-			for (unsigned int i = 0; i < s.size(); ++i)
-			{
-				if(std::isdigit(s.at(i)))
-					result += s.at(i);
-			}
-			
-			if(result.size() > 2)
-				result.insert(result.size()-2, ".");
-			
-			return result;
-		}
 				
 		template<typename Cont>
 		static void AttachTo(Cont& cont)
@@ -111,6 +92,25 @@ namespace Bank
 		}	
 		
 	protected:
+		Account(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : owner(k), iban(i), bic(b) { };
+		
+		static constexpr unsigned int Indices[4] = {Derived::OwnerIdx, Derived::DateIdx, Derived::TranactionIdx, Derived::QuantityIdx};
+		static const unsigned int MaxIdx = *std::max_element(Indices,Indices+4);
+		
+		static std::string GetNumericValue(std::string s)
+		{
+			std::string result;
+			for (unsigned int i = 0; i < s.size(); ++i)
+			{
+				if(std::isdigit(s.at(i)))
+					result += s.at(i);
+			}
+			
+			if(result.size() > 2)
+				result.insert(result.size()-2, ".");
+			
+			return result;
+		}
 		static void InsertInContainer(std::string key, std::string transaction, double sum, std::string date, std::string iban, std::string bic, char transferSign)
 		{
 			if(Derived::IsOutTransfer(transferSign))
