@@ -9,8 +9,8 @@ namespace CommandLine
 {
 	class ParserState
 	{
-		const std::string ID;
 	protected:
+		const std::string ID;
 		ParserState(std::string id): ID(id){}
 	public:
 		virtual ParserState* Event( char c) 
@@ -20,7 +20,7 @@ namespace CommandLine
 		}
 		static ParserState* Reset() { return Incomplete; }
 		virtual ~ParserState() {}
-		static ParserState *Invalid, *Valid, *Incomplete;		
+		static ParserState *Invalid, *Valid, *Incomplete, *Exit;		
 	};
 	
 	class InvalidState: public ParserState
@@ -49,6 +49,17 @@ namespace CommandLine
 	{
 	public:
 		IncompleteState(): ParserState("Incomplete"){};
+		virtual ParserState* Event(char c) 
+		{ 
+			ParserState::Event(c);
+			return this; 			
+		}
+	};
+	
+	class Exit: public ParserState
+	{
+	public:
+		Exit(): ParserState("Exit"){};
 		virtual ParserState* Event(char c) 
 		{ 
 			ParserState::Event(c);
