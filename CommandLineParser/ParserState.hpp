@@ -18,16 +18,15 @@ namespace CommandLine
 			Logger::Log()<<ID<<"\t"<<c<<" = \t"<<(int)c<<std::endl;
 			return this; 
 		}
-		static ParserState* Reset() { return incomplete; }
+		static ParserState* Reset() { return Incomplete; }
 		virtual ~ParserState() {}
-// 	protected:
-		static ParserState *invalid, *valid, *incomplete;		
+		static ParserState *Invalid, *Valid, *Incomplete;		
 	};
 	
-	class Invalid: public ParserState
+	class InvalidState: public ParserState
 	{
 	public:
-		Invalid(): ParserState("Invalid"){};
+		InvalidState(): ParserState("Invalid"){};
 		virtual ParserState* Event(char c) 
 		{ 
 			ParserState::Event(c);
@@ -35,10 +34,10 @@ namespace CommandLine
 		}
 	};
 	
-	class Valid: public ParserState
+	class ValidState: public ParserState
 	{
 	public:
-		Valid(): ParserState("Valid"){};
+		ValidState(): ParserState("Valid"){};
 		virtual ParserState* Event(char c)
 		{ 
 			ParserState::Event(c);
@@ -46,10 +45,10 @@ namespace CommandLine
 		}
 	};
 	
-	class Incomplete: public ParserState
+	class IncompleteState: public ParserState
 	{
 	public:
-		Incomplete(): ParserState("Incomplete"){};
+		IncompleteState(): ParserState("Incomplete"){};
 		virtual ParserState* Event(char c) 
 		{ 
 			ParserState::Event(c);
@@ -58,9 +57,9 @@ namespace CommandLine
 	};
 	
 	
-	ParserState* ParserState::invalid = new Invalid; 
-	ParserState* ParserState::valid = new Valid; 
-	ParserState* ParserState::incomplete = new Incomplete; 
+	ParserState* ParserState::Invalid = new InvalidState; 
+	ParserState* ParserState::Valid = new ValidState; 
+	ParserState* ParserState::Incomplete = new IncompleteState; 
 }
 
 #endif
