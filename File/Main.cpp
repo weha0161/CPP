@@ -63,23 +63,34 @@ int main()
     CSV::Repository::Map(csv);
 
 	auto c = CSV::Repository::Read(comdirect);	
-// 	auto r = CSV::Repository::Parse<FS::Comdirect<0>>(comdirect);
-// 	r.Display(std::cout);
+	
     CSV::Repository::Attach();
     CSV::Repository::ParseAll();
     CSV::Repository::Display(std::cout);
 	
-	std::cout<<"\n TEST INs"<<std::endl;
-// 	auto com = CSV::Repository::Get();
-					
-	auto com = Bank::Comdirect<0>::OutTransfers();
-	com.Display(std::cout);
+	std::cout<<"\n TEST Transfers"<<std::endl;
 	
-	std::cout<<"\n TEST INs 2"<<std::endl;
-// 	auto com = CSV::Repository::Get();
-					
-	auto com2 = Bank::Comdirect<2>::OutTransfers();
+	std::cout<<"\n-------------------------------------------------------- Transfers OUT --------------------------------------------------------------"<<std::endl;
+
+	auto out = Transfers<Bank::Comdirect<0>>();
+	auto com1 = out();
+	com1.Display(std::cout);
+	
+	std::cout<<"\n-------------------------------------------------------- Transfers IN --------------------------------------------------------------"<<std::endl;
+	auto in = Transfers<Bank::Comdirect<0>, Bank::In>();
+	auto com2 = in();
 	com2.Display(std::cout);
+
+	std::cout<<"\n TEST GET Werner"<<std::endl;
+	std::cout<<"\n-------------------------------------------------------- Transfers OUT --------------------------------------------------------------"<<std::endl;
+	auto g = Get<Bank::Comdirect<0>>();
+	auto gr = g(Key("Werner"));
+	gr.Display(std::cout);
+	
+	std::cout<<"\n-------------------------------------------------------- Transfers IN --------------------------------------------------------------"<<std::endl;
+	auto g2 = Get<Bank::Comdirect<0>, Bank::In>();
+	auto gr2 = g2(Key("Werner"));
+	gr2.Display(std::cout);
 	
 // 	for(auto i : com)
 // 		std::cout<<*i<<Std::endl;

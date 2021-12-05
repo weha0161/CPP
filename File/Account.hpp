@@ -158,4 +158,22 @@ struct Get<A, Bank::In>
 	}
 };
 
+template<typename A, typename Direction = Bank::Out>
+struct Transfers
+{
+	const typename A::ParseContOut& operator()()
+	{
+		return A::OutCont;
+	}
+};
+
+template<typename A>
+struct Transfers<A, Bank::In>
+{
+	const typename A::ParseContIn& operator()()
+	{
+		return A::InCont;
+	}
+};
+
 #endif

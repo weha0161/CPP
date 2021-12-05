@@ -118,7 +118,7 @@ namespace Bank
 			this->total = this->total + t.GetQuantity();
 		}
 		
-		void Display(std::ostream& out)
+		void Display(std::ostream& out) const
 		{
 			out<<"Owner: "<<owner<<"\tIBAN: "<<iban<<"\tBIC: "<<bic<<std::endl;
 			for(auto p : this->transfers)
@@ -158,7 +158,7 @@ namespace Bank
 		const Cont<KeyType>& Keys() { return keys; }
 		const AccountEndpointType& operator[](KeyType k){ return this->transfers[k]; }
 		
-		void Display(std::ostream& out)
+		void Display(std::ostream& out) const
 		{
 			for(auto p : this->transfers)
 			{
@@ -170,7 +170,7 @@ namespace Bank
 				
 				out<<std::endl;
 			}
-		}
+		}		
 	};
 		
 	template<typename T, typename D>
