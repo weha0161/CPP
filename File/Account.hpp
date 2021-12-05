@@ -33,14 +33,13 @@ namespace Bank
 	template<typename Derived>
 	class Account
 	{
-		using Type = Account<Derived> ;
 	protected:		
-// 		inline static T::Is_<typename Derived::IsOutTransferSign> IsOutTransfer;
 		using CSVSeparator = T::char_<';'> ;
 		Key owner;
 		IBAN iban;
 		BIC bic;
 	public:
+		using Type = Account<Derived> ;
 		using InTransfer = AccountTransfer<Derived,Transfer<In>>;
 		using OutTransfer = AccountTransfer<Derived, Transfer<Out>>;
 		using KeyType = Key ;
@@ -79,17 +78,6 @@ namespace Bank
 		static void AttachTo(Cont& cont)
 		{
 			cont.insert(std::make_pair(Derived::Filename,  &Type::Parse));
-		}	
-		
-		
-		static const ParseContOut& OutTransfers()
-		{
-			return Derived::OutCont;
-		}	
-		
-		static const ParseContIn& InTransfers()
-		{
-			return Derived::InCont;
 		}	
 		
 	protected:

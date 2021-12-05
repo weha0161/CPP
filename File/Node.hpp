@@ -51,8 +51,10 @@ namespace FS
 			auto pIt = fs::path(this->info.Path()).begin();
 			
 			for(auto sp = p.begin(); sp != p.end(); ++sp, ++pIt)
+			{
 				if(*sp != *pIt)
 					return false;
+			}
 				
 			return true;
 		};

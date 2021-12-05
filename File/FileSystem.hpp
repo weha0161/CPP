@@ -59,8 +59,6 @@ public:
 		
 		for(auto it = FS::Directory::Nodes().cbegin(); it != FS::Directory::Nodes().cend(); ++it)
 		{
-// 			Logger::Log()<<"Dir: "<<src<<" Dest: "<<dest<<std::endl;
-			Logger::Log()<<"DirPath: "<<srcPath<<" Dest: "<<it->BelongsTo(srcPath)<<std::endl;
 			
 			if(it->BelongsTo(srcPath))
 			{
