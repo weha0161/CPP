@@ -16,6 +16,7 @@
 #include "Transfer.hpp"
 #include "JSONParser.hpp"
 #include "../Logger/Logger.hpp"
+#include "../Wrapper/Wrapper.hpp"
 #include "../CSV/CSV.hpp"
 #include "../Quantity/Quantity.h"
 #include "../Typelist/Typelist.h"
@@ -139,5 +140,22 @@ namespace Bank
 	};
 }
 
+template<typename A, typename Direction = Bank::Out>
+struct Get
+{
+	Bank::AccountEndpoint<A, Bank::Transfer<Direction>> operator()(typename A::KeyType k)
+	{
+		return A::OutCont[k];
+	}
+};
+
+template<typename A>
+struct Get<A, Bank::In>
+{
+	Bank::AccountEndpoint<A, Bank::Transfer<Bank::In>> operator()(typename A::KeyType k)
+	{
+		return A::InCont[k];
+	}
+};
 
 #endif
