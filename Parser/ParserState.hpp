@@ -12,12 +12,21 @@ namespace CommandLine
 	protected:
 		const std::string ID;
 		ParserState(std::string id): ID(id){}
+		using Iterator = std::vector<std::string>::const_iterator;
 	public:
-		virtual ParserState* Event( char c) 
+		
+		virtual ParserState* Event(char c) 
 		{ 
 			Logger::Log()<<ID<<"\t"<<c<<" = \t"<<(int)c<<std::endl;
 			return this; 
 		}
+		
+		virtual ParserState* Event(char c, Iterator begin, Iterator end) 
+		{ 
+			Logger::Log()<<ID<<"\t"<<c<<" = \t"<<(int)c<<std::endl;
+			return this; 
+		}
+		
 		static ParserState* Reset() { return Incomplete; }
 		virtual ~ParserState() {}
 		static ParserState *Invalid, *Valid, *Incomplete, *Exit;		
@@ -53,6 +62,22 @@ namespace CommandLine
 		{ 
 			ParserState::Event(c);
 			return this; 			
+		}
+		
+		virtual ParserState* Event(char c, Iterator begin, Iterator end) 
+		{ 
+			ParserState::Event(c);
+			
+			std::cout<<"No match, did you mean:\t";
+			
+			for(Iterator it = begin; it != end; ++it)
+			{
+				std::cout<<*it<<"\t";
+			}
+			
+			std::cout<<std::endl;
+			
+			return this; 
 		}
 	};
 	

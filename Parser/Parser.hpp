@@ -13,6 +13,7 @@ namespace CommandLine
 	class Parser
 	{
 		using Exit =  T::char_<27>;
+		using Enter =  T::char_<10>;
 		std::string extractedValue;
 		char currentValue;
 		ParserState* state = ParserState::Incomplete; 
@@ -24,14 +25,22 @@ namespace CommandLine
 		virtual void Event()
 		{ 
 			Logger::Log()<<"PARSER EVENT: "<<this->currentValue<<" / "<<(int)this->currentValue<<std::endl;
+			Logger::Log()<<"extractedValue: "<<this->extractedValue<<std::endl;
+			
+			if(this->currentValue < 0 || this->currentValue == Enter::Value)
+				return;
+			
 			if(this->currentValue == Exit::Value)
 				state = ParserState::Exit->Event(this->currentValue);
+			
+			
 			if(this->extractedValue == "TEST")
-				state = state->Event(this->currentValue);
+				state = ParserState::Valid->Event(this->currentValue);
 			else
 			{
 				this->extractedValue += (this->currentValue);
-				state = state->Event(this->currentValue);
+				std::vector<std::string> vals { "tes", "tess" };
+				state = state->Event(this->currentValue, vals.cbegin(), vals.cend());
 			}
 		};
 		
