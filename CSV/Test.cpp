@@ -20,7 +20,11 @@ int main()
 	std::cout<<"Pointer Test Value "<<pv->Value<<std::endl;
 	
 	std::cout<<"Test Unregister Value "<<std::endl;
+	std::cout<<"Test Date "<<std::endl;
 	
+	auto d1 = Date("30.09.2021");
+	
+    std::cout<<d1.TimeString()<<std::endl;
 	
     std::cout<<"END"<<std::endl;
 

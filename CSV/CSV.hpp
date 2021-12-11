@@ -3,6 +3,8 @@
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/vector.hpp>
 #include <map>
+#include <chrono>
+#include <ctime>
 
 #ifndef CSV_H
 #define CSV_H
@@ -70,10 +72,53 @@ public:
 
 class Date: public Element
 {
+	std::chrono::system_clock::time_point CreateTimePoint(int y, int m, int d)
+	{
+		struct std::tm t;
+		t.tm_sec = 0;
+		t.tm_min = 0;
+		t.tm_hour = 0;
+		t.tm_mday = d;
+		t.tm_mon = m-1;
+		t.tm_year = y - 1900;
+		
+		std::time_t tt = std::mktime(&t);
+		
+		return std::chrono::system_clock::from_time_t(tt);
+	}
+	
+	void Parse(std::string s)
+	{
+		std::string res;
+		for(auto c : s)
+			if(isdigit(c))
+				res += c;
+		
+		Logger::Log<Debug>()<<res<<std::endl;
+		
+		int d = std::stoi(std::string(res.begin(),res.begin()+2));
+		int m = std::stoi(std::string(res.begin()+3,res.begin()+4));
+		int y = std::stoi(std::string(res.begin()+4,res.begin()+8));
+		
+		Logger::Log<Debug>()<<d<<"-"<<m<<"-"<<y<<std::endl;
+		this->tp = this->CreateTimePoint(y,m,d);
+	}
+	
+	std::chrono::system_clock::time_point tp;
+	
+// 	std::string TimeString(const std::chrono::system_clock::time_point& t)
 public:
 	inline static const std::string Identifier = "Date";
-	Date(std::string s): Element(s){};
+	Date(std::string s): Element(s){ this->Parse(s); };
 	Date* DoCreate(){return this;};
+
+	std::string TimeString()
+	{
+		std::time_t t = std::chrono::system_clock::to_time_t(this->tp);
+		std::string ts = ctime(&t);
+		ts.resize(ts.size()-1);
+		return ts;
+	}
 };
 
 class IBAN: public Element
