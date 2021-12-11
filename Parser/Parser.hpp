@@ -35,13 +35,14 @@ namespace CommandLine
 			else
 			{
 				this->extractedValue += (this->currentValue);
-				std::vector<std::string> vals { "tes", "tess" };
-				state = state->Event(this->currentValue, vals.cbegin(), vals.cend());
+				state = state->Event(this->currentValue);
 			}
 		};
 		
 		void Parse()
 		{
+			std::vector<std::string> vals { "tes", "tess" };
+			ParserState::SetValues(vals.begin(), vals.end());
 			do
 			{
 				this->Event();

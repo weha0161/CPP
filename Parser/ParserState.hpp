@@ -12,7 +12,9 @@ namespace CommandLine
 	protected:
 		const std::string ID;
 		ParserState(std::string id): ID(id){}
-		using Iterator = std::vector<std::string>::const_iterator;
+		using CIterator = std::vector<std::string>::const_iterator;
+		using Iterator = std::vector<std::string>::iterator;
+		static std::vector<std::string> Values;
 	public:
 		
 		virtual ParserState* Event(std::string c) 
@@ -21,13 +23,10 @@ namespace CommandLine
 			return this; 
 		}
 		
-		virtual ParserState* Event(std::string c, Iterator begin, Iterator end) 
-		{ 
-			return this; 
-		}
+		virtual ~ParserState() {}
 		
 		static ParserState* Reset() { return Incomplete; }
-		virtual ~ParserState() {}
+		static void SetValues(Iterator begin, Iterator end) { ParserState::Values = std::vector<std::string>(begin,end); }
 		static ParserState *Invalid, *Valid, *Incomplete, *Exit;		
 	};
 	
@@ -57,19 +56,14 @@ namespace CommandLine
 	{
 	public:
 		IncompleteState(): ParserState("Incomplete"){};
-		virtual ParserState* Event(std::string c) 
-		{ 
-			ParserState::Event(c);
-			return this; 			
-		}
 		
-		virtual ParserState* Event(std::string c, Iterator begin, Iterator end) 
+		virtual ParserState* Event(std::string c) 
 		{ 
 			ParserState::Event(c);
 			
 			std::cout<<"No match, did you mean:\t";
 			
-			for(Iterator it = begin; it != end; ++it)
+			for(CIterator it = ParserState::Values.begin(); it != ParserState::Values.end(); ++it)
 			{
 				std::cout<<*it<<"\t";
 			}
@@ -96,6 +90,7 @@ namespace CommandLine
 	ParserState* ParserState::Valid = new ValidState; 
 	ParserState* ParserState::Incomplete = new IncompleteState; 
 	ParserState* ParserState::Exit = new ExitState; 
+	std::vector<std::string> ParserState::Values = std::vector<std::string>();
 }
 
 #endif
