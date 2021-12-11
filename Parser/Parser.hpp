@@ -15,7 +15,7 @@ namespace CommandLine
 		using Exit =  T::char_<27>;
 		using Enter =  T::char_<10>;
 		std::string extractedValue;
-		char currentValue;
+		std::string currentValue = "";
 		ParserState* state = ParserState::Incomplete; 
 	public:
 		Parser()
@@ -24,13 +24,9 @@ namespace CommandLine
 		};
 		virtual void Event()
 		{ 
-			Logger::Log()<<"PARSER EVENT: "<<this->currentValue<<" / "<<(int)this->currentValue<<std::endl;
 			Logger::Log()<<"extractedValue: "<<this->extractedValue<<std::endl;
-			
-			if(this->currentValue < 0 || this->currentValue == Enter::Value)
-				return;
-			
-			if(this->currentValue == Exit::Value)
+						
+			if(this->currentValue[0] == Exit::Value)
 				state = ParserState::Exit->Event(this->currentValue);
 			
 			
@@ -50,7 +46,7 @@ namespace CommandLine
 			{
 				this->Event();
 			}
-			while((this->currentValue = std::cin.get()) != Exit::Value);
+			while(std::getline(std::cin,this->currentValue) && this->currentValue[0] != Exit::Value);
 		}
 		
 		virtual ~Parser(){};

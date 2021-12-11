@@ -15,15 +15,14 @@ namespace CommandLine
 		using Iterator = std::vector<std::string>::const_iterator;
 	public:
 		
-		virtual ParserState* Event(char c) 
+		virtual ParserState* Event(std::string c) 
 		{ 
-			Logger::Log()<<ID<<"\t"<<c<<" = \t"<<(int)c<<std::endl;
+			Logger::Log()<<ID<<"\t"<<c<<std::endl;
 			return this; 
 		}
 		
-		virtual ParserState* Event(char c, Iterator begin, Iterator end) 
+		virtual ParserState* Event(std::string c, Iterator begin, Iterator end) 
 		{ 
-			Logger::Log()<<ID<<"\t"<<c<<" = \t"<<(int)c<<std::endl;
 			return this; 
 		}
 		
@@ -36,7 +35,7 @@ namespace CommandLine
 	{
 	public:
 		InvalidState(): ParserState("Invalid"){};
-		virtual ParserState* Event(char c) 
+		virtual ParserState* Event(std::string c) 
 		{ 
 			ParserState::Event(c);
 			return this; 			
@@ -47,7 +46,7 @@ namespace CommandLine
 	{
 	public:
 		ValidState(): ParserState("Valid"){};
-		virtual ParserState* Event(char c)
+		virtual ParserState* Event(std::string c)
 		{ 
 			ParserState::Event(c);
 			return this; 			
@@ -58,13 +57,13 @@ namespace CommandLine
 	{
 	public:
 		IncompleteState(): ParserState("Incomplete"){};
-		virtual ParserState* Event(char c) 
+		virtual ParserState* Event(std::string c) 
 		{ 
 			ParserState::Event(c);
 			return this; 			
 		}
 		
-		virtual ParserState* Event(char c, Iterator begin, Iterator end) 
+		virtual ParserState* Event(std::string c, Iterator begin, Iterator end) 
 		{ 
 			ParserState::Event(c);
 			
@@ -85,7 +84,7 @@ namespace CommandLine
 	{
 	public:
 		ExitState(): ParserState("Exit"){};
-		virtual ParserState* Event(char c) 
+		virtual ParserState* Event(std::string c) 
 		{ 
 			ParserState::Event(c);
 			return this; 			
