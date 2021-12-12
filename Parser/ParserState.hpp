@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include "../Logger/Logger.hpp"
+#include "../String/String_.hpp"
 
 #ifndef PARSERSTATE_HPP
 #define PARSERSTATE_HPP
@@ -15,11 +16,12 @@ namespace CommandLine
 		using CIterator = std::vector<std::string>::const_iterator;
 		using Iterator = std::vector<std::string>::iterator;
 		static std::vector<std::string> Values;
+		inline static std::string extractedValue = "";
 	public:
 		
 		virtual ParserState* Event(std::string c) 
 		{ 
-			Logger::Log()<<ID<<"\t"<<c<<std::endl;
+			Logger::Log()<<ID<<"\tC: "<<c<<" Extracted:"<<this->extractedValue<<std::endl;
 			return this; 
 		}
 		
@@ -37,6 +39,9 @@ namespace CommandLine
 		virtual ParserState* Event(std::string c) 
 		{ 
 			ParserState::Event(c);
+			this->extractedValue = "";
+			std::cout<<"No match found!"<<std::endl;
+			
 			return this; 			
 		}
 	};
@@ -48,6 +53,8 @@ namespace CommandLine
 		virtual ParserState* Event(std::string c)
 		{ 
 			ParserState::Event(c);
+			std::cout<<"Match found!"<<std::endl;
+			
 			return this; 			
 		}
 	};
@@ -59,16 +66,30 @@ namespace CommandLine
 		
 		virtual ParserState* Event(std::string c) 
 		{ 
-			ParserState::Event(c);
+			this->extractedValue += c;
+			ParserState::Event(c);			
+			
+			auto possibilities = std::vector<std::string>();
+			for(CIterator it = ParserState::Values.begin(); it != ParserState::Values.end(); ++it)
+			{
+				if(*it == this->extractedValue)
+					return ParserState::Valid->Event(c);
+				
+				if(String_::Contains(*it,this->extractedValue))
+					possibilities.push_back(*it);
+			}
+			
+			if(possibilities.size() < 1)
+				return ParserState::Invalid->Event(c);			
 			
 			std::cout<<"No match, did you mean:\t";
-			
-			for(CIterator it = ParserState::Values.begin(); it != ParserState::Values.end(); ++it)
+			for(CIterator it = possibilities.cbegin(); it != possibilities.cend(); ++it)
 			{
 				std::cout<<*it<<"\t";
 			}
 			
 			std::cout<<std::endl;
+			std::cout<<this->extractedValue;
 			
 			return this; 
 		}
@@ -83,8 +104,7 @@ namespace CommandLine
 			ParserState::Event(c);
 			return this; 			
 		}
-	};
-	
+	};	
 	
 	ParserState* ParserState::Invalid = new InvalidState; 
 	ParserState* ParserState::Valid = new ValidState; 
