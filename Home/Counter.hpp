@@ -1,11 +1,14 @@
 #include "../String/String_.hpp"
 #include "../Logger/Logger.hpp"
 #include "../Unit/Unit.h"
+#include "../CSV/CSV.hpp"
+#include "Parser.hpp"
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/vector.hpp>
 #include <map>
 #include <chrono>
 #include <ctime>
+#include <memory>
 
 #ifndef COUNTER_H
 #define COUNTER_H
@@ -23,14 +26,14 @@ struct Energy: public CounterType<Energy,Current>
 	inline static std::string CounterType<Energy, Current>::Name = "Energy"; 
 };
 
-struct Water: public CounterType<Water,Mass>
+struct Water: public CounterType<Water,Volume>
 { 
-	inline static std::string CounterType<Water, Mass>::Name = "Water"; 
+	inline static std::string CounterType<Water, Volume>::Name = "Water"; 
 };
 
-struct Gas: public CounterType<Gas,Length>
+struct Gas: public CounterType<Gas,Volume>
 { 
-	inline static std::string CounterType<Gas, Length>::Name = "Gas"; 
+	inline static std::string CounterType<Gas, Volume>::Name = "Gas"; 
 };
 
 
@@ -42,12 +45,26 @@ struct CounterConfiguration
 	using Unit = U;
 };
 
-template<typename Config>
+template<typename U, typename T = double, typename DateT = Date>
+struct Reading
+{
+	using Unit = U;
+	const DateT Date;
+	const T Value;
+	
+	Reading(T val, DateT d): Date(d), Value(val){}
+};
+
+template<typename ConfigT>
 class Counter
 {
+	using Config = ConfigT;
+	using ReadingT = Reading<typename Config::Unit>;
 	const std::string name;
-public:
-		
+	std::unique_ptr<std::vector<ReadingT>> readings = std::unique_ptr<std::vector<ReadingT>>(new std::vector<ReadingT>());
+	
+public:	
+	using ReadingType = ReadingT;
 	const uint Number = Config::Number;
 	using Type = Config::Type;
 	using Unit = Config::Unit;
@@ -55,6 +72,8 @@ public:
 	Counter(const std::string s):name(s){} 
 	
 	const std::string Name() { return this->name; }
+// 	Read
+// 	Write
 };
 
 #endif
