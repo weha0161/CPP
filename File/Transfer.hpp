@@ -123,7 +123,7 @@ namespace Bank
 			out<<"Owner: "<<owner<<"\tIBAN: "<<iban<<"\tBIC: "<<bic<<std::endl;
 			for(auto p : this->transfers)
 			{
-				out<<"\tDate: "<<p.GetDate()<<"\tSum: "<<p.GetQuantity()<<std::endl;
+				out<<"\tDate: "<<p.GetDate()<<"\tSum: "<<std::setprecision(2)<<std::fixed<<p.GetQuantity()<<std::endl;
 			}
 
 			out<<std::endl;
@@ -166,7 +166,7 @@ namespace Bank
 				
 				p.second.Display(out);
 				
-				out<<"\nTotal: "<<p.second.GetTotal()<<std::endl;
+				out<<"\nTotal: "<<std::setprecision(2)<<std::fixed<<p.second.GetTotal()<<std::endl;
 				
 				out<<std::endl;
 			}
