@@ -13,7 +13,6 @@
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <filesystem>
-#include "Transfer.hpp"
 #include "JSONParser.hpp"
 #include "../Logger/Logger.hpp"
 #include "../Wrapper/Wrapper.hpp"
