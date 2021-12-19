@@ -37,7 +37,7 @@ struct Gas: public CounterType<Gas,Volume>
 };
 
 
-template<typename T, typename U = typename T::Unit, int No = 0>
+template<typename T,  int No = 0, typename U = typename T::Unit>
 struct CounterConfiguration
 {
 	static const uint Number = No;
@@ -65,13 +65,24 @@ class Counter
 	
 public:	
 	using ReadingType = ReadingT;
-	const uint Number = Config::Number;
+	static const uint Number = Config::Number;
 	using Type = Config::Type;
 	using Unit = Config::Unit;
 	
 	Counter(const std::string s):name(s){} 
 	
 	const std::string Name() { return this->name; }
+	
+	static void Display(std::ostream& out) /*const*/
+	{
+		out<<Unit::UnitSign()<<"\t"<<Number<<std::endl;
+// 		for(auto p : this->transfers)
+// 		{
+// 			out<<"\tdate: "<<p.getdate()<<"\tsum: "<<std::setprecision(2)<<std::fixed<<p.getquantity()<<std::endl;
+// 		}
+
+		out<<std::endl;
+	}
 // 	Read
 // 	Write
 };
