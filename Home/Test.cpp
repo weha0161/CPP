@@ -6,9 +6,6 @@
 #include "CounterContainer.hpp"
 #include "../Traits/Traits.h"
 #include "../Unit/Unit.h"
-#include "../Typelist/Typelist.h"
-
-namespace mpl=boost::mpl;
 
 int main()
 {       
@@ -27,13 +24,13 @@ int main()
 	using CW3 = Counter<W3>;
 	
 	using TypeContainer = Tuple<CW1,CW2,CW3,CE1,CG1>;
-	
-	
-	auto typeContainer = TypeContainer();
-	auto cw3 = Get<2>(typeContainer);
+		
+	auto tc = TypeContainer();
+	auto cw3 = Get<2>(tc);
 	cw3.Display(std::cout);
 	
-// 	TypeContainer::Display(std::cout);
+	CounterContainer<CW1,CW2,CW3,CE1,CG1> cc;
+	cc.Display(std::cout);
 	
 	using s = Sum;
 	using work = Work;

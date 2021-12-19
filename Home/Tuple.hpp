@@ -11,8 +11,8 @@
 #include "../Logger/Logger.hpp"
 #include "../Typelist/Typelist.h"
 
-#ifndef COUNTERCONTAINER_HPP
-#define COUNTERCONTAINER_HPP
+#ifndef TUPLE_HPP
+#define TUPLE_HPP
 
 //---------------------------------------------------------------------------------------------------Tuple----------------------------------------------------------------------------------------
 template<typename... Types>
