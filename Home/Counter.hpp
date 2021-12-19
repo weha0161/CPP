@@ -72,6 +72,7 @@ public:
 	using Unit = Config::Unit;
 	
 	Counter(const std::string s):name(s){} 
+	Counter():name(""){} 
 	
 	const std::string Name() { return this->name; }
 	
