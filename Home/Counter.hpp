@@ -59,12 +59,14 @@ template<typename ConfigT>
 class Counter
 {
 	using Config = ConfigT;
-	using ReadingT = Reading<typename Config::Unit>;
+	using ReadinType = Reading<typename Config::Unit>;
+	using ReadingContainerType = std::vector<ReadinType>;
+	
+private:
 	const std::string name;
-	std::unique_ptr<std::vector<ReadingT>> readings = std::unique_ptr<std::vector<ReadingT>>(new std::vector<ReadingT>());
+	std::unique_ptr<ReadingContainerType> readings = std::unique_ptr<ReadingContainerType>(new ReadingContainerType());
 	
 public:	
-	using ReadingType = ReadingT;
 	static const uint Number = Config::Number;
 	using Type = Config::Type;
 	using Unit = Config::Unit;
