@@ -65,7 +65,7 @@ struct TupleGet<0>
 };
 
 template<unsigned N, typename... Types>
-auto get(Tuple<Types...> t)
+auto Get(Tuple<Types...> t)
 {
 	return TupleGet<N>::apply(t);
 };

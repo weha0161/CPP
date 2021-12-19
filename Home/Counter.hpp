@@ -72,9 +72,10 @@ public:
 	using Unit = Config::Unit;
 	
 	Counter(const std::string s):name(s){} 
-	Counter():name(""){} 
+	Counter():name(""){}
+	Counter(const Counter& c):name(c.Name()){}
 	
-	const std::string Name() { return this->name; }
+	const std::string Name() const { return this->name; }
 	
 	static void Display(std::ostream& out) /*const*/
 	{

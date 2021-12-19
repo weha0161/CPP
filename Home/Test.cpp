@@ -26,13 +26,13 @@ int main()
 	using CW2 = Counter<W2>;
 	using CW3 = Counter<W3>;
 	
-// 	using CounterTypes = Typelistd<CW1,CW2,CW3,CE1,CG1>::Type;
-// 	using TypeContainer = CounterContainer<CW1,CW2,CW3,CE1,CG1>;
 	using TypeContainer = Tuple<CW1,CW2,CW3,CE1,CG1>;
-// 	using TypeContainer = Tuple<int,double>;
 	
 	
 	auto typeContainer = TypeContainer();
+	auto cw3 = Get<2>(typeContainer);
+	cw3.Display(std::cout);
+	
 // 	TypeContainer::Display(std::cout);
 	
 	using s = Sum;
