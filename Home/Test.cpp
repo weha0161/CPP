@@ -2,7 +2,7 @@
 #include <boost/mpl/vector.hpp>
 #include "UnitRatio.hpp"
 #include "Counter.hpp"
-#include "Tuple.hpp"
+#include "../Tuple/Tuple.hpp"
 #include "CounterContainer.hpp"
 #include "../Traits/Traits.h"
 #include "../Unit/Unit.h"
@@ -29,8 +29,17 @@ int main()
 	auto cw3 = Get<2>(tc);
 	cw3.Display(std::cout);
 	
+	auto cw3T = Get<CW3>(tc);
+	cw3T.Display(std::cout);
+	
 	CounterContainer<CW1,CW2,CW3,CE1,CG1> cc;
 	cc.Display(std::cout);
+	
+	auto z = cc.GetCounter<1>();
+	z.Display(std::cout);
+	
+	auto zT = cc.GetCounter<CW2>();
+	zT.Display(std::cout);
 	
 	using s = Sum;
 	using work = Work;

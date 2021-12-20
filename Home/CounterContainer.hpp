@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include "../Logger/Logger.hpp"
-#include "Tuple.hpp"
+#include "../Tuple/Tuple.hpp"
 
 #ifndef COUNTERCONTAINER_HPP
 #define COUNTERCONTAINER_HPP
@@ -31,6 +31,12 @@ public:
 		auto cw3 = Get<3>(counters);
 		cw3.Display(os);
 	}
+	
+	template<unsigned N>
+	auto GetCounter() { return Get<N>(counters); }
+
+	template<typename T>
+	auto GetCounter() { return Get<T>(counters); }
 	
 	CounterContainer():counters(CounterTypes()) { };
 };
