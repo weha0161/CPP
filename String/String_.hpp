@@ -45,6 +45,18 @@ namespace String_
 	{
 		return s.find(sub) != std::string::npos; 
 	}
+	
+	template<typename T>
+	struct To
+	{
+		std::string operator()(T t) { return ""; }
+	};
+	
+	template<>
+	struct To<int>
+	{
+		std::string operator()(int t) { return std::to_string(t); }
+	};
 }
 
 #endif
