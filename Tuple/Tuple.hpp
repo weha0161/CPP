@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include "../Logger/Logger.hpp"
+#include "../Wrapper/Wrapper.hpp"
 // #include "../Typelist/Typelist.h"	
 
 #ifndef TUPLE_HPP
@@ -36,6 +37,17 @@ public:
 	
 	Tuple<Tail...>& GetTail() {return tail;}
 	Tuple<Tail...> const& GetTail() const {return tail;}
+
+	template<int N>
+	auto operator[](T::int_<N>)
+	{
+		return Get<N>(*this);
+	}
+// 	template<int N>
+// 	auto operator[](T::int_<N>)
+// 	{
+// 		return Get<N>(*this);
+// 	}
 	
 };
 
@@ -44,6 +56,7 @@ class Tuple<>
 {
 };
 
+//-------------------------------------------------------------Typelist-----------------------------------------------------------
 template<typename... Types>
 struct FrontTuple;
 
@@ -56,12 +69,12 @@ struct FrontTuple<Tuple<Head, Tail...>>
 template<typename... Types>
 struct PopFrontTuple;
 
-// remove front element:
 template<typename Head, typename... Tail>
 struct PopFrontTuple<Tuple<Head, Tail...>> 
 {
 	using Type = Tuple<Tail...>;
 };
+//-------------------------------------------------------------Get by Num-----------------------------------------------------------
 
 template<unsigned N>
 struct TupleGetNum
@@ -89,30 +102,8 @@ auto Get(Tuple<Types...> t)
 	return TupleGetNum<N>::apply(t);
 };
 
-//-------------------------------------------------------
-/*
-// template<typename T>
-template<typename T1, typename T2>
-struct TupleGet
-{
-	template<typename Head, typename... Tail>
-	static auto apply(Tuple<Head,Tail...> const& t)
-	{		
-		return TupleGet<T1,PopFrontTuple<Tuple<Head>>::Type>::apply(t.GetTail());
-	}
-};
+//-------------------------------------------------------------Get by Type-----------------------------------------------------------
 
-// template<typename T, typename Head, typename... Tail>
-template<typename T>
-struct TupleGet<T,T>
-{
-	template<typename Head, typename... Tail>
-	static auto apply(Tuple<Head,Tail...> const& t)
-	{
-		return t.GetHead();
-	}
-};*/
-// template<typename T1, typename T2>
 template<typename T1, typename T2>
 struct TupleGet
 {
@@ -123,7 +114,6 @@ struct TupleGet
 	}
 };
 
-// template<typename T>
 template<typename T>
 struct TupleGet<T,T>
 {
@@ -139,6 +129,8 @@ auto Get(Tuple<Types...> t)
 {
 	return TupleGet<T,typename Tuple<Types...>::Type>::apply(t);
 };
+
+//-------------------------------------------------------------Get by Type-----------------------------------------------------------
 
 //-------------------------------------------------------
 

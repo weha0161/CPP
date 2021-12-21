@@ -34,6 +34,10 @@ int main()
     std::cout<<sizeof(w2)<< std::endl;
     std::cout<<sizeof(w1)<< std::endl;
     std::cout<<sizeof(w0)<< std::endl;
+	
+	auto t2 = T::int_<2>();
+    std::cout<<sizeof(tc[t2])<< std::endl;
+	
     std::cout<<"END"<< std::endl;
 
     return 0;
