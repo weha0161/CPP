@@ -37,11 +37,11 @@ struct Gas: public CounterType<Gas,Volume>
 };
 
 
-template<typename T,  int No = 0, typename U = typename T::Unit>
+template<typename Metertype,  int No = 0, typename U = typename Metertype::Unit>
 struct CounterConfiguration
 {
 	static const uint Number = No;
-	using Type = T;
+	using MeterT = Metertype;
 	using Unit = U;
 };
 
@@ -58,28 +58,28 @@ struct Reading
 template<typename ConfigT>
 class Counter
 {
+private:
 	using Config = ConfigT;
-	using MeterType = Config::Type;
+	using MeterType = Config::MeterT;
 	using ReadinType = Reading<typename Config::Unit>;
 	using ReadingContainerType = std::vector<ReadinType>;
 	
-private:
 	const std::string name;
 	std::unique_ptr<ReadingContainerType> readings = std::unique_ptr<ReadingContainerType>(new ReadingContainerType());
 	
 public:	
 	static const uint Number = Config::Number;
-	using Type = Config::Type;
+	using Type = Config::MeterT;
 	using Unit = Config::Unit;
 	
-	Counter(const std::string s): name(String_::FromInt(Number) + "_" + MeterType::Name + "_" + s)
+	Counter(const std::string s): name(Name() + "_" + s)
 	{
 // 		this->name = String_::FromInt(Number) + "_" + MeterType::Name + "_" + s;
 	} 
-	Counter():name(""){}
+	Counter():name(Name()){}
 	Counter(const Counter& c):name(c.Name()){}
 	
-	const std::string Name() const { return this->name; }
+	const std::string Name() const { return String_::FromInt(Number) + "_" + MeterType::Name; }
 	
 	void Display(std::ostream& out) /*const*/
 	{

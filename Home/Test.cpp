@@ -17,20 +17,25 @@ int main()
 	using W2 = CounterConfiguration<Water,2>;
 	using W3 = CounterConfiguration<Water,3>;
 	
-	using CW1 = Counter<W1>;
-	using CE1 = Counter<E1>;
-	using CG1 = Counter<G1>;
-	using CW2 = Counter<W2>;
-	using CW3 = Counter<GasConfiguration>;
+	using CW1 = Counter<AllWaterConfiguration>;
+	using CE1 = Counter<EnBWEnergyConfiguration>;
+	using CG1 = Counter<GasConfiguration>;
+	using CW2 = Counter<AllWaterConfiguration>;
+	using CW3 = Counter<AllWaterConfiguration>;
 	
 	using TypeContainer = Tuple<CW1,CW2,CW3,CE1,CG1>;
-		
 	auto tc = TypeContainer();
-	auto cw3 = GetNum<2>(tc);
-	cw3.Display(std::cout);
 	
-	auto cw3T = GetType<CW3>(tc);
-	cw3T.Display(std::cout);
+	auto cw1 = GetType<CW1>(tc);
+	cw1.Display(std::cout);
+	auto cw2 = GetType<CW2>(tc);
+	cw2.Display(std::cout);
+	auto cw3 = GetType<CW3>(tc);
+	cw3.Display(std::cout);
+	auto ce1 = GetType<CE1>(tc);
+	ce1.Display(std::cout);
+	auto cg1 = GetType<CG1>(tc);
+	cg1.Display(std::cout);
 	
 	CounterContainer<CW1,CW2,CW3,CE1,CG1> cc;
 	cc.Display(std::cout);
