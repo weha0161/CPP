@@ -91,4 +91,17 @@ public:
 // 	Write
 };
 
+using GasConfiguration = CounterConfiguration<Gas,1202757, Volume>;
+using EnBWEnergyConfiguration = CounterConfiguration<Energy,21740069, Work>;
+using VattenfallEnergyConfiguration = CounterConfiguration<Energy,11144078, Work>;
+using AllWaterConfiguration = CounterConfiguration<Water,18061860, Volume>;
+using OWaterConfiguration = CounterConfiguration<Water,279638, Volume>;
+using OutWaterConfiguration = CounterConfiguration<Water,458711, Volume>;
+using Bottom_HWaterConfiguration = CounterConfiguration<Water,15018324, Volume>;
+using Bottom_KWaterConfiguration = CounterConfiguration<Water,15007241, Volume>;
+using Middle_KWaterConfiguration = CounterConfiguration<Water,23267492, Volume>;
+using Middle_HWaterConfiguration = CounterConfiguration<Water,14524889, Volume>;
+using Top_KWaterConfiguration = CounterConfiguration<Water,25489823, Volume>;
+using Top_HWaterConfiguration = CounterConfiguration<Water,25470737, Volume>;
+
 #endif
