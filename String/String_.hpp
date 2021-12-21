@@ -47,16 +47,18 @@ namespace String_
 	}
 	
 	template<typename T>
-	struct To
+	struct From
 	{
 		std::string operator()(T t) { return ""; }
 	};
 	
 	template<>
-	struct To<int>
+	struct From<int>
 	{
 		std::string operator()(int t) { return std::to_string(t); }
 	};
+	
+	static From<int> FromInt = From<int>();
 }
 
 #endif
