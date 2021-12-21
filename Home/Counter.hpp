@@ -59,6 +59,7 @@ template<typename ConfigT>
 class Counter
 {
 	using Config = ConfigT;
+	using MeterType = Config::Type;
 	using ReadinType = Reading<typename Config::Unit>;
 	using ReadingContainerType = std::vector<ReadinType>;
 	
@@ -71,15 +72,19 @@ public:
 	using Type = Config::Type;
 	using Unit = Config::Unit;
 	
-	Counter(const std::string s):name(s){} 
+	Counter(const std::string s): name(String_::FromInt(Number) + "_" + MeterType::Name + "_" + s)
+	{
+// 		this->name = String_::FromInt(Number) + "_" + MeterType::Name + "_" + s;
+	} 
 	Counter():name(""){}
 	Counter(const Counter& c):name(c.Name()){}
 	
 	const std::string Name() const { return this->name; }
 	
-	static void Display(std::ostream& out) /*const*/
+	void Display(std::ostream& out) /*const*/
 	{
 		out<<Unit::UnitSign()<<"\t"<<Number<<std::endl;
+		out<<this->name<<std::endl;
 // 		for(auto p : this->transfers)
 // 		{
 // 			out<<"\tdate: "<<p.getdate()<<"\tsum: "<<std::setprecision(2)<<std::fixed<<p.getquantity()<<std::endl;

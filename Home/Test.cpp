@@ -21,7 +21,7 @@ int main()
 	using CE1 = Counter<E1>;
 	using CG1 = Counter<G1>;
 	using CW2 = Counter<W2>;
-	using CW3 = Counter<W3>;
+	using CW3 = Counter<GasConfiguration>;
 	
 	using TypeContainer = Tuple<CW1,CW2,CW3,CE1,CG1>;
 		
