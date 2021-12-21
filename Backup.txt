@@ -1,0 +1,17 @@
+/home/markus/Dokumente/cpp/Matrix
+/home/markus/Dokumente/cpp/File
+/home/markus/Dokumente/cpp/Visitor
+/home/markus/Dokumente/cpp/Unit
+/home/markus/Dokumente/cpp/Wrapper
+/home/markus/Dokumente/cpp/Traits
+/home/markus/Dokumente/cpp/SFINAE
+/home/markus/Dokumente/cpp/Quantity
+/home/markus/Dokumente/cpp/Logger
+/home/markus/Dokumente/cpp/Fraction
+/home/markus/Dokumente/cpp/CSV
+/home/markus/Dokumente/cpp/COW
+/home/markus/Dokumente/cpp/AbstractFactory
+/home/markus/Dokumente/cpp/Typelist
+/home/markus/Dokumente/cpp/Parser
+/home/markus/Dokumente/cpp/Home
+/home/markus/Dokumente/cpp/Tuple

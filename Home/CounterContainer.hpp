@@ -24,19 +24,18 @@ public:
 private:
 	CounterTypes counters;
 public:
-// 	using CounterTypes = Head;
 
 	void Display(std::ostream& os)
 	{
-		auto cw3 = Get<3>(counters);
+		auto cw3 = GetNum<3>(counters);
 		cw3.Display(os);
 	}
 	
 	template<unsigned N>
-	auto GetCounter() { return Get<N>(counters); }
+	auto Get() { return GetNum<N>(counters); }
 
 	template<typename T>
-	auto GetCounter() { return Get<T>(counters); }
+	auto Get() { return GetType<T>(counters); }
 	
 	CounterContainer():counters(CounterTypes()) { };
 };

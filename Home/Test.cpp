@@ -26,19 +26,19 @@ int main()
 	using TypeContainer = Tuple<CW1,CW2,CW3,CE1,CG1>;
 		
 	auto tc = TypeContainer();
-	auto cw3 = Get<2>(tc);
+	auto cw3 = GetNum<2>(tc);
 	cw3.Display(std::cout);
 	
-	auto cw3T = Get<CW3>(tc);
+	auto cw3T = GetType<CW3>(tc);
 	cw3T.Display(std::cout);
 	
 	CounterContainer<CW1,CW2,CW3,CE1,CG1> cc;
 	cc.Display(std::cout);
 	
-	auto z = cc.GetCounter<1>();
+	auto z = cc.Get<1>();
 	z.Display(std::cout);
 	
-	auto zT = cc.GetCounter<CW2>();
+	auto zT = cc.Get<CW2>();
 	zT.Display(std::cout);
 	
 	using s = Sum;
