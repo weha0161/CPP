@@ -15,6 +15,7 @@
 #include <filesystem>
 #include "../Logger/Logger.hpp"
 #include "../Typelist/Typelist.h"
+#include "Info.hpp"
 #include "../Visitor/Visitor.hpp"
 
 #ifndef NODE_HPP
@@ -25,6 +26,36 @@ namespace fs = std::filesystem;
 namespace FS
 {
 
+	static std::vector<std::string> ReadLines(std::string path)
+	{
+		std::string line;
+		auto result = std::vector<std::string>();
+		
+		std::ifstream ofs (path);
+		if (ofs.is_open())
+		{
+			while ( getline (ofs,line) )
+			{
+				result.push_back(line);
+			}
+			ofs.close();
+		}
+		
+		return result;
+	}
+	
+	static void WriteLines(std::string path, std::vector<std::string> lines)
+	{
+		std::ofstream ofs(path);
+		if (ofs.is_open())
+		{
+			for(auto line : lines)
+				ofs<<line<<std::endl;
+			
+			ofs.close();
+		}
+	}
+	
 	//---------------------------------------------------------------------------------------------------Node----------------------------------------------------------------------------------------
 	template<typename Derived, typename DerivedInfo,typename T = Derived>
 	struct Node
@@ -83,20 +114,12 @@ namespace FS
 		
 		std::vector<std::string> Read() const
 		{
-			std::string line;
-			std::vector<std::string> result = std::vector<std::string>();
+			return FS::ReadLines(this->info.Path());
+		};
+		
+		void Write(std::vector<std::string> lines)
+		{
 			
-			std::ifstream ifs (this->info.Path());
-			if (ifs.is_open())
-			{
-				while ( getline (ifs,line) )
-				{
-					result.push_back(line);
-				}
-				ifs.close();
-			}
-			
-			return result;
 		};
 		
 		template<typename ParseType, typename ParseTypeContainer = ParseType::ParseCont>
@@ -115,6 +138,7 @@ namespace FS
 	template<typename T>
 	struct FileTypeBase: Node<FileTypeBase<T>, FileInfo, File>
 	{
+		FileTypeBase(FileInfo* fi): Node<FileTypeBase<T>, FileInfo, File>(fi){};
 		using ParseType = std::string;
 		using ParseCont = std::vector<ParseType>;
 		static const char* Extension;		
@@ -123,7 +147,30 @@ namespace FS
 	struct CPP: public FileTypeBase<CPP>{};
 	struct HPP: public FileTypeBase<HPP>{};
 	struct H: public FileTypeBase<H>{};
-	struct CSV: public FileTypeBase<CSV>{};
+	
+	struct CSV: public FileTypeBase<CSV>
+	{
+		CSV(FileInfo* fi): FileTypeBase(fi){};
+		
+		template<typename Separator = T::char_<';'>>
+		std::vector<std::vector<std::string>> GetValues()
+		{
+			auto result = std::vector<std::vector<std::string>>();
+			
+			auto lines = FS::ReadLines(this->info.Path());
+						
+			for(auto line : lines)
+				result.push_back(String_::Split<Separator>(line));
+			
+			return result;
+		};
+		
+		template<typename Separator = T::char_<';'>>
+		static void WriteValues(std::vector<std::vector<std::string>>)
+		{
+// 			File
+		}
+	};
 
 	template<> const char* FileTypeBase<CPP>::Extension = ".cpp";
 	template<> const char* FileTypeBase<HPP>::Extension = ".hpp";

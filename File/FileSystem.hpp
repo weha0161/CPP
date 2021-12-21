@@ -52,6 +52,16 @@ public:
 		return nodes;
 	}
 	
+	static std::vector<std::string> ReadLines(std::string path)
+	{
+		return FS::ReadLines(path);
+	}
+	
+	static void WriteLines(std::string path, std::vector<std::string>)
+	{
+		
+	}
+	
 	static void CreateDirectories(std::string src, std::string dest)
 	{
 		auto srcPath = std::filesystem::path(src);

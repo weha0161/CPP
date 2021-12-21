@@ -85,7 +85,7 @@ namespace FS
 		DEFINE_VISITABLE();
 		~FileInfo(){};
 
-		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm, std::uintmax_t s): Info(p, p.parent_path(),lm, s)
+		FileInfo(std::filesystem::path p, std::filesystem::file_time_type lm = std::filesystem::file_time_type(), std::uintmax_t s = 0): Info(p, p.parent_path(),lm, s)
 		{ 
 			size_t length = strlen( p.extension().c_str() );
 			extension = new char[ length + 1 ];
