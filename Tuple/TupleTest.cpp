@@ -9,17 +9,17 @@ int main()
 		
 	auto tc = TypeContainer();
 	
-	auto cw4 = Get<bool>(tc);
-	auto cw3 = Get<char>(tc);
-	auto cw2 = Get<int>(tc);
-	auto cw1 = Get<double>(tc);
-	auto cw0 = Get<long>(tc);
+	auto cw4 = GetType<bool>(tc);
+	auto cw3 = GetType<char>(tc);
+	auto cw2 = GetType<int>(tc);
+	auto cw1 = GetType<double>(tc);
+	auto cw0 = GetType<long>(tc);
 	
-	auto w4 = Get<4>(tc);
-	auto w3 = Get<3>(tc);
-	auto w2 = Get<2>(tc);
-	auto w1 = Get<1>(tc);
-	auto w0 = Get<0>(tc);
+	auto w4 = GetNum<4>(tc);
+	auto w3 = GetNum<3>(tc);
+	auto w2 = GetNum<2>(tc);
+	auto w1 = GetNum<1>(tc);
+	auto w0 = GetNum<0>(tc);
 	
     std::cout<<sizeof(cw4)<< std::endl;
     std::cout<<sizeof(cw3)<< std::endl;

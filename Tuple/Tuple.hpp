@@ -41,7 +41,7 @@ public:
 	template<int N>
 	auto operator[](T::int_<N>)
 	{
-		return Get<N>(*this);
+		return GetNum<N>(*this);
 	}
 // 	template<int N>
 // 	auto operator[](T::int_<N>)
@@ -97,7 +97,7 @@ struct TupleGetNum<0>
 };
 
 template<unsigned N, typename... Types>
-auto Get(Tuple<Types...> t)
+auto GetNum(Tuple<Types...> t)
 {
 	return TupleGetNum<N>::apply(t);
 };
@@ -125,7 +125,7 @@ struct TupleGet<T,T>
 };
 
 template<typename T, typename... Types>
-auto Get(Tuple<Types...> t)
+auto GetType(Tuple<Types...> t)
 {
 	return TupleGet<T,typename Tuple<Types...>::Type>::apply(t);
 };
