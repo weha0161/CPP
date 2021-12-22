@@ -48,14 +48,14 @@ int main()
 	
 	using s = Sum;
 	using work = Work;
-	auto cw = CW1("W1"); 
+	auto cw = CW1(); 
 		
     std::cout<<"Sum "<<Sum::UnitSign()<<std::endl;
     std::cout<<"Work "<<Work::UnitSign()<<std::endl;
 	
     std::cout<<"Type "<<CW1::Type::Name<<std::endl;
     std::cout<<"Unit "<<CW1::Unit::UnitSign()<<std::endl;
-    std::cout<<"Name "<<cw.Name()<<std::endl;
+    std::cout<<"Name "<<CW1::Name<<std::endl;
     std::cout<<"F "<<Kilo::Type::Den<<std::endl;
     std::cout<<"F "<<Kilo::Type::Num<<std::endl;
     std::cout<<"F "<<Kilo::Sign<<std::endl;

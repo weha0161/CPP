@@ -27,8 +27,9 @@ public:
 
 	void Display(std::ostream& os)
 	{
-		auto cw3 = GetNum<3>(counters);
-		cw3.Display(os);
+// 		auto cw3 = GetNum<3>(counters);
+// 		cw3.Display(os);
+		os<<this->counters;
 	}
 	
 	template<unsigned N>

@@ -76,20 +76,23 @@ public:
 	Counter(){}
 	Counter(const Counter& c){}
 	
-	void Display(std::ostream& out) /*const*/
+	void Display(std::ostream& out) const
 	{
-		out<<Unit::UnitSign()<<"\t"<<Number<<std::endl;
 		out<<Name<<std::endl;
-// 		for(auto p : this->transfers)
-// 		{
-// 			out<<"\tdate: "<<p.getdate()<<"\tsum: "<<std::setprecision(2)<<std::fixed<<p.getquantity()<<std::endl;
-// 		}
 
 		out<<std::endl;
 	}
+	
 // 	Read
 // 	Write
 };
+
+template<typename C>
+std::ostream& operator<<(std::ostream& strm, const Counter<C> c)
+{
+	c.Display(strm);
+	return strm;
+}
 
 using GasConfiguration = CounterConfiguration<Gas,1202757, Volume>;
 using EnBWEnergyConfiguration = CounterConfiguration<Energy,21740069, Work>;
