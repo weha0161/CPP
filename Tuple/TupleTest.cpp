@@ -38,6 +38,7 @@ int main()
 	auto t2 = T::int_<2>();
     std::cout<<sizeof(tc[t2])<< std::endl;
 	
+    std::cout<<tc<< std::endl;
     std::cout<<"END"<< std::endl;
 
     return 0;
