@@ -37,11 +37,12 @@ struct Gas: public CounterType<Gas,Volume>
 };
 
 
-template<typename Metertype,  int No = 0, typename U = typename Metertype::Unit>
+template<typename MeterType,  int No = 0, typename U = typename MeterType::Unit>
 struct CounterConfiguration
 {
 	static const uint Number = No;
-	using MeterT = Metertype;
+	inline static const std::string CounterName = String_::FromInt(No) + "_" + MeterType::Name;
+	using MeterT = MeterType;
 	using Unit = U;
 };
 
@@ -64,27 +65,21 @@ private:
 	using ReadinType = Reading<typename Config::Unit>;
 	using ReadingContainerType = std::vector<ReadinType>;
 	
-	const std::string name;
 	std::unique_ptr<ReadingContainerType> readings = std::unique_ptr<ReadingContainerType>(new ReadingContainerType());
 	
 public:	
-	static const uint Number = Config::Number;
 	using Type = Config::MeterT;
 	using Unit = Config::Unit;
+	static const uint Number = Config::Number;
+	inline static const std::string Name = Config::CounterName;
 	
-	Counter(const std::string s): name(Name() + "_" + s)
-	{
-// 		this->name = String_::FromInt(Number) + "_" + MeterType::Name + "_" + s;
-	} 
-	Counter():name(Name()){}
-	Counter(const Counter& c):name(c.Name()){}
-	
-	const std::string Name() const { return String_::FromInt(Number) + "_" + MeterType::Name; }
+	Counter(){}
+	Counter(const Counter& c){}
 	
 	void Display(std::ostream& out) /*const*/
 	{
 		out<<Unit::UnitSign()<<"\t"<<Number<<std::endl;
-		out<<this->name<<std::endl;
+		out<<Name<<std::endl;
 // 		for(auto p : this->transfers)
 // 		{
 // 			out<<"\tdate: "<<p.getdate()<<"\tsum: "<<std::setprecision(2)<<std::fixed<<p.getquantity()<<std::endl;
