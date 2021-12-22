@@ -26,6 +26,7 @@ int main()
 	using TypeContainer = Tuple<CW1,CW2,CW3,CE1,CG1>;
 	auto tc = TypeContainer();
 	
+    std::cout<<"Single Calls to Get Tuple "<<std::endl;
 	auto cw1 = GetType<CW1>(tc);
 	cw1.Display(std::cout);
 	auto cw2 = GetType<CW2>(tc);
@@ -37,14 +38,9 @@ int main()
 	auto cg1 = GetType<CG1>(tc);
 	cg1.Display(std::cout);
 	
+    std::cout<<"Ostream "<<std::endl;
 	CounterContainer<CW1,CW2,CW3,CE1,CG1> cc;
-	cc.Display(std::cout);
-	
-	auto z = cc.Get<1>();
-	z.Display(std::cout);
-	
-	auto zT = cc.Get<CW2>();
-	zT.Display(std::cout);
+    std::cout<<cc<<std::endl;
 	
 	using s = Sum;
 	using work = Work;

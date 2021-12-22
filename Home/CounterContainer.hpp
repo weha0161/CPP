@@ -25,10 +25,8 @@ private:
 	CounterTypes counters;
 public:
 
-	void Display(std::ostream& os)
+	void Display(std::ostream& os) const
 	{
-// 		auto cw3 = GetNum<3>(counters);
-// 		cw3.Display(os);
 		os<<this->counters;
 	}
 	
@@ -40,5 +38,12 @@ public:
 	
 	CounterContainer():counters(CounterTypes()) { };
 };
+
+template<typename Head, typename... Tail>
+std::ostream& operator<<(std::ostream& strm, const CounterContainer<Head,Tail...> c)
+{
+	c.Display(strm);
+	return strm;
+}
 
 #endif

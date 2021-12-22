@@ -79,8 +79,6 @@ public:
 	void Display(std::ostream& out) const
 	{
 		out<<Name<<std::endl;
-
-		out<<std::endl;
 	}
 	
 // 	Read
