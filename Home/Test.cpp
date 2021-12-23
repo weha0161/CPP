@@ -42,6 +42,8 @@ int main()
 	CounterContainer<CW1,CW2,CW3,CE1,CG1> cc;
     std::cout<<cc<<std::endl;
 	
+	cg1.Write();
+	
 	using s = Sum;
 	using work = Work;
 	auto cw = CW1(); 
@@ -51,7 +53,7 @@ int main()
 	
     std::cout<<"Type "<<CW1::Type::Name<<std::endl;
     std::cout<<"Unit "<<CW1::Unit::UnitSign()<<std::endl;
-    std::cout<<"Name "<<CW1::Name<<std::endl;
+    std::cout<<"Name "<<cw.GetName()<<std::endl;
     std::cout<<"F "<<Kilo::Type::Den<<std::endl;
     std::cout<<"F "<<Kilo::Type::Num<<std::endl;
     std::cout<<"F "<<Kilo::Sign<<std::endl;

@@ -2,6 +2,10 @@
 #include "../Logger/Logger.hpp"
 #include "../Unit/Unit.h"
 #include "../CSV/CSV.hpp"
+#include "../File/Info.hpp"
+#include "../File/Node.hpp"
+#include "../CSV/CSV.hpp"
+#include "../Wrapper/Wrapper.hpp"
 #include "Parser.hpp"
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/vector.hpp>
@@ -42,19 +46,33 @@ struct CounterConfiguration
 {
 	static const uint Number = No;
 	inline static const std::string CounterName = String_::FromInt(No) + "_" + MeterType::Name;
+	inline static const std::string DestinataionPath = "//home//markus//Downloads//";
 	using MeterT = MeterType;
 	using Unit = U;
 };
 
-template<typename U, typename T = double, typename DateT = Date>
+template<typename U, typename ValT = double, typename DateT = Date>
 struct Reading
 {
 	using Unit = U;
 	const DateT Date;
-	const T Value;
+	const ValT Value;
 	
-	Reading(T val, DateT d): Date(d), Value(val){}
+	template<typename Separator = T::char_<';'>>
+	void Display(std::ostream& out) const
+	{
+		out<<Date<<(char)Separator::Value<<Value<<std::endl;
+	}
+	
+	Reading(ValT val, DateT d): Date(d), Value(val){}
 };
+
+template<typename C,typename T = double, typename DateT = Date>
+std::ostream& operator<<(std::ostream& strm, const Reading<C,T,DateT> c)
+{
+	c.Display(strm);
+	return strm;
+}
 
 template<typename ConfigT>
 class Counter
@@ -62,16 +80,19 @@ class Counter
 private:
 	using Config = ConfigT;
 	using MeterType = Config::MeterT;
-	using ReadinType = Reading<typename Config::Unit>;
-	using ReadingContainerType = std::vector<ReadinType>;
+	using ReadingType = Reading<typename Config::Unit>;
+	using ReadingContainerType = std::vector<ReadingType>;
+	inline static const std::string DestinationPath = Config::DestinataionPath;
+	inline static const std::string Name = Config::CounterName;
 	
 	std::unique_ptr<ReadingContainerType> readings = std::unique_ptr<ReadingContainerType>(new ReadingContainerType());
+	std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name)));
+	std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(this->fileInfo.get()));
 	
 public:	
 	using Type = Config::MeterT;
 	using Unit = Config::Unit;
 	static const uint Number = Config::Number;
-	inline static const std::string Name = Config::CounterName;
 	
 	Counter(){}
 	Counter(const Counter& c){}
@@ -81,8 +102,17 @@ public:
 		out<<Name<<std::endl;
 	}
 	
-// 	Read
-// 	Write
+	std::string GetName()
+	{
+		return Name;
+	}
+	
+	void Read(){}
+	void Write(const std::string sourcePath = ".")
+	{
+		this->readings->push_back(ReadingType(9.0, Date("30.09.2021")));
+		csv->Write(readings->cbegin(), readings->cend());
+	}
 };
 
 template<typename C>
