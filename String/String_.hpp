@@ -47,6 +47,15 @@ namespace String_
 	}
 	
 	template<typename T>
+	std::string Remove(const std::string& s)
+	{
+		std::string result = s;
+		result.erase(std::remove(result.begin(), result.end(), T::Value), result.end());
+		
+		return result;
+	}
+	
+	template<typename T>
 	struct From
 	{
 		std::string operator()(T t) { return ""; }
