@@ -31,14 +31,14 @@ namespace FS
 		std::string line;
 		auto result = std::vector<std::string>();
 		
-		std::ifstream ofs (path);
-		if (ofs.is_open())
+		std::ifstream ifs (path);
+		if (ifs.is_open())
 		{
-			while ( getline (ofs,line) )
+			while ( getline (ifs,line) )
 			{
 				result.push_back(line);
 			}
-			ofs.close();
+			ifs.close();
 		}
 		
 		return result;
@@ -150,7 +150,7 @@ namespace FS
 	
 	struct CSV: public FileTypeBase<CSV>
 	{
-		CSV(FileInfo* fi): FileTypeBase(fi){};
+		CSV(FileInfo* fi): FileTypeBase(fi), destinationPath(this->Info().Path() + CSV::Extension){};
 		
 		template<typename Separator = T::char_<';'>>
 		std::vector<std::vector<std::string>> GetValues()
@@ -165,11 +165,20 @@ namespace FS
 			return result;
 		};
 		
-		template<typename Separator = T::char_<';'>>
-		static void WriteValues(std::vector<std::vector<std::string>>)
+		template<typename iterator ,typename Separator = T::char_<';'>>
+		void Write(const iterator& begin, const iterator& end)
 		{
+			std::unique_ptr<std::ofstream> ofs = std::unique_ptr<std::ofstream>(new std::ofstream(destinationPath)); 
+			
+			for(auto it = begin; it != end; ++it)
+				(*it).Display(*ofs.get());
+// 				ofs<<*it;
+			
+			ofs->close();
 // 			File
 		}
+	private:
+		const std::string destinationPath;
 	};
 
 	template<> const char* FileTypeBase<CPP>::Extension = ".cpp";

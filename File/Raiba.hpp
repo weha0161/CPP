@@ -77,7 +77,14 @@ namespace Bank
 				std::string::iterator end_pos = std::remove(val.begin(), val.end(), ' ');
 				val.erase(end_pos, val.end());
 
-				auto sum = std::stod(*(values.end()-2));
+				auto valString = *(values.end()-2);
+// 				valString.erase(std::remove(valString.begin(), valString.end(), ','), valString.end());
+// 				valString.erase(std::remove(valString.begin(), valString.end(), '.'), valString.end());
+				valString = String_::Remove<T::char_<','>>(valString);
+				valString = String_::Remove<T::char_<'.'>>(valString);
+// 				Logger::Log()<<valString<<std::endl;
+// 				auto sum = std::stod(Base::GetNumericValue(valString));
+				auto sum = std::stod(valString) / 100;
 			
 				auto iban =  values.at(IBANIdx);
 				auto bic =  values.at(BICIdx);

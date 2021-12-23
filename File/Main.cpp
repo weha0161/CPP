@@ -62,9 +62,10 @@ int main()
 
 	auto c = CSV::Repository::Read(comdirect);	
 	
+	auto outFile = std::ofstream("out.txt");
     CSV::Repository::Attach();
     CSV::Repository::ParseAll();
-    CSV::Repository::Display(std::cout);
+    CSV::Repository::Display(outFile);
 	
 	std::cout<<"\n TEST Transfers"<<std::endl;
 	std::cout<<"\n TEST Transfers"<<std::endl;
