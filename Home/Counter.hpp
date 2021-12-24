@@ -47,6 +47,7 @@ struct CounterConfiguration
 	static const uint Number = No;
 	inline static const std::string CounterName = String_::FromInt(No) + "_" + MeterType::Name;
 	inline static const std::string DestinataionPath = "//home//markus//Downloads//";
+	inline static const std::string AdditionalInformation = "-";
 	using MeterT = MeterType;
 	using Unit = U;
 };
