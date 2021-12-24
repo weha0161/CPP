@@ -103,7 +103,7 @@ public:
 		out<<Name<<std::endl;
 		out<<Number<<std::endl;
 		out<<Type::Name<<std::endl;
-		out<<Unit::UnitSign<<std::endl;
+		out<<Unit::SiUnit()<<std::endl;
 		out<<std::endl;
 		
 		this->readings->push_back(ReadingType(9.0, Date("30.09.2021")));
