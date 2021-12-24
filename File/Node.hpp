@@ -165,14 +165,25 @@ namespace FS
 			return result;
 		};
 		
-		template<typename iterator ,typename Separator = T::char_<';'>>
-		void Write(const iterator& begin, const iterator& end)
+// 		template<typename iterator ,typename Separator = T::char_<';'>>
+// 		void Write(const iterator& begin, const iterator& end)
+// 		{
+// 			std::unique_ptr<std::ofstream> ofs = std::unique_ptr<std::ofstream>(new std::ofstream(destinationPath)); 
+// 			
+// 			for(auto it = begin; it != end; ++it)
+// 				(*it).Display(*ofs.get());
+// // 				ofs<<*it;
+// 			
+// 			ofs->close();
+// // 			File
+// 		}
+		
+		template<typename Ctr, typename Separator = T::char_<';'>>
+		void Write(const Ctr& counter)
 		{
 			std::unique_ptr<std::ofstream> ofs = std::unique_ptr<std::ofstream>(new std::ofstream(destinationPath)); 
 			
-			for(auto it = begin; it != end; ++it)
-				(*it).Display(*ofs.get());
-// 				ofs<<*it;
+			counter.Display(*ofs);
 			
 			ofs->close();
 // 			File

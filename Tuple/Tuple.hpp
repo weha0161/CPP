@@ -57,24 +57,21 @@ class Tuple<>
 };
 
 //-------------------------------------------------------------Print-----------------------------------------------------------
-void Print(std::ostream& strm, Tuple<> const&, bool isFirst = true) 
-{
-	strm << ( isFirst ? '(' : ')' );
-}
+void Print(std::ostream& strm, Tuple<> const&, unsigned i) {}
 
 template<typename Head, typename... Tail>
 void Print(std::ostream& strm, Tuple<Head, Tail...> const& t, 
-                bool isFirst = true)
+                unsigned i)
 {
-	strm << ( isFirst ? "(" : ", " );
+	strm <<++i<<":\t";
 	strm << t.GetHead();
-	Print(strm, t.GetTail(), false);
+	Print(strm, t.GetTail(), i);
 }
 
 template<typename... Types>
 std::ostream& operator<<(std::ostream& strm, Tuple<Types...> const& t)
 {
-	Print(strm, t);
+	Print(strm, t,0);
 	return strm;
 }
 

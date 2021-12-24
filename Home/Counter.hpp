@@ -100,6 +100,14 @@ public:
 	void Display(std::ostream& out) const
 	{
 		out<<Name<<std::endl;
+		out<<Number<<std::endl;
+		out<<Type::Name<<std::endl;
+		out<<Unit::UnitSign<<std::endl;
+		out<<std::endl;
+		
+		this->readings->push_back(ReadingType(9.0, Date("30.09.2021")));
+		for(auto it = this->readings->cbegin(); it != this->readings->cend(); ++it)
+			(*it).Display(out);
 	}
 	
 	std::string GetName()
@@ -110,8 +118,7 @@ public:
 	void Read(){}
 	void Write(const std::string sourcePath = ".")
 	{
-		this->readings->push_back(ReadingType(9.0, Date("30.09.2021")));
-		csv->Write(readings->cbegin(), readings->cend());
+		csv->Write(*this);
 	}
 };
 
