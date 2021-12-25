@@ -14,9 +14,24 @@ int main()
 	using u3 = Transform<Sum,Unit<2>, MultiplyPolicy>::Type;
 
 	std::cout<<u3::Sum::N<<std::endl;
-	std::cout<<UnitSign<int, 0, 0,0, 0,0, 0,0, 0>::Get()<<std::endl;
+// 	std::cout<<UnitSign<int, 0, 0,0, 0,0, 0,0, 0>::Get()<<std::endl;
 	std::cout<<UnitSign<Mass>::Get()<<std::endl;
 	std::cout<<UnitSign<decltype(u2)>::Get()<<std::endl;
-    std::cout<<"END"<<std::endl;
+    
+	std::cout<<"IMPLIZIT"<<std::endl;
+	
+	std::cout<<Mass::Sign<<std::endl;
+	std::cout<<decltype(u2)::Sign()<<std::endl;
+	std::cout<<decltype(u2)::SiUnit()<<std::endl;
+	
+	std::cout<<"Work"<<std::endl;
+	std::cout<<Work::Sign()<<std::endl;
+	std::cout<<Work::SiUnit()<<std::endl;
+	
+	std::cout<<"Volume"<<std::endl;
+	std::cout<<Volume::Sign()<<std::endl;
+	std::cout<<Volume::SiUnit()<<std::endl;
+    
+	std::cout<<"END"<<std::endl;
     return 0;
 }

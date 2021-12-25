@@ -98,6 +98,13 @@ struct SumType: public UnitTypeBase<SumType<n>>
     inline static const std::string Sign = "€";
 };
 
+template<typename U, int S = U::Sum::N, int L = U::Length::N, int M = U::Mass::N, int T = U::Time::N, int C = U::Current::N, int Te = U::Temperature::N, int Sub = U::SubstanceAmount::N, int Li = U::LightIntensity::N> struct UnitSign
+{
+	using UnitType = U;
+	static std::string Get() { return UnitType::SiUnit(); }
+};
+
+
 template<int SumN = 0, int LengthN = 0, int MassN = 0, int TimeN = 0, int CurrentN = 0, int TemperatureN = 0, int SubstanceN = 0, int LightIntensityN = 0>
 struct Unit
 {
@@ -111,29 +118,10 @@ struct Unit
 	using Sum = typename SumType<SumN>::Type;
 	using Type = Unit<SumN, LengthN, MassN, TimeN, CurrentN, TemperatureN, SubstanceN, LightIntensityN>;
 	
-	static const std::string SiUnit() {return Mass::Unit() + Length::Unit() + Time::Unit() + Current::Unit() + Temperature::Unit() + SubstanceAmount::Unit() + LightIntensity::Unit() + Sum::Unit();};
-// 	static std::string Sign;
+	static const std::string SiUnit() { return Mass::Unit() + Length::Unit() + Time::Unit() + Current::Unit() + Temperature::Unit() + SubstanceAmount::Unit() + LightIntensity::Unit() + Sum::Unit(); };
+	static const std::string Sign() { return UnitSign<Type>::Get(); }; 
 };
 
-// template<int S, int L, int M, int T, int C, int Te, int Sub, int Li> struct UnitSign
-// template<typename U> struct UnitSign
-template<typename U, int S = U::Sum::N, int L = U::Length::N, int M = U::Mass::N, int T = U::Time::N, int C = U::Current::N, int Te = U::Temperature::N, int Sub = U::SubstanceAmount::N, int Li = U::LightIntensity::N> struct UnitSign
-{
-	using UnitType = U;
-	static auto Get()
-	{
-		return UnitType::SiUnit();
-	}
-};
-
-template<typename U>
-struct UnitSign<U, 0, 0,0, 0,0, 0,0, 0>
-{
-	static auto Get()
-	{
-		return "U::SiUnit()";
-	}
-};
 
 
 using Sum = Unit<1>;
@@ -146,6 +134,14 @@ using Scalar = Unit<>;
 
 using Volume = Unit<0,3>;
 using Work = Unit<0,1,2,2>;
+
+template<>
+struct UnitSign<Work>
+{
+	static std::string Get(){ return "W";}
+};
+
+
 
 template<class U1, class U2, template<typename, typename> class TransformPolicy>
 struct Transform
