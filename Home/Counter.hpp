@@ -41,13 +41,32 @@ struct Gas: public CounterType<Gas,Volume>
 };
 
 
-template<typename MeterType,  int No = 0, typename U = typename MeterType::Unit>
+struct None
+{
+	inline static const std::string Value = "_";
+};
+struct Hot
+{
+	inline static const std::string Value = "_Hot";
+};
+struct Cold
+{
+	inline static const std::string Value = "_Cold";
+};
+
+template<typename T>
+struct AdditionalInformation
+{
+	inline static const std::string Value = T::Value;
+};
+
+template<typename MeterType,  int No = 0, typename U = typename MeterType::Unit, typename A = AdditionalInformation<None>>
 struct CounterConfiguration
 {
 	static const uint Number = No;
-	inline static const std::string CounterName = String_::FromInt(No) + "_" + MeterType::Name;
+	inline static const std::string AdditionalInformation = A::Value;
+	inline static const std::string CounterName = String_::FromInt(No) + "_" + MeterType::Name + AdditionalInformation;
 	inline static const std::string DestinataionPath = "//home//markus//Downloads//";
-	inline static const std::string AdditionalInformation = "-";
 	using MeterT = MeterType;
 	using Unit = U;
 };
@@ -138,11 +157,11 @@ using VattenfallEnergyConfiguration = CounterConfiguration<Energy,11144078, Work
 using AllWaterConfiguration = CounterConfiguration<Water,18061860, Volume>;
 using OWaterConfiguration = CounterConfiguration<Water,279638, Volume>;
 using OutWaterConfiguration = CounterConfiguration<Water,458711, Volume>;
-using Bottom_HWaterConfiguration = CounterConfiguration<Water,15018324, Volume>;
-using Bottom_KWaterConfiguration = CounterConfiguration<Water,15007241, Volume>;
-using Middle_KWaterConfiguration = CounterConfiguration<Water,23267492, Volume>;
-using Middle_HWaterConfiguration = CounterConfiguration<Water,14524889, Volume>;
-using Top_KWaterConfiguration = CounterConfiguration<Water,25489823, Volume>;
-using Top_HWaterConfiguration = CounterConfiguration<Water,25470737, Volume>;
+using Bottom_HWaterConfiguration = CounterConfiguration<Water,15018324, Volume, AdditionalInformation<Hot>>;
+using Bottom_CWaterConfiguration = CounterConfiguration<Water,15007241, Volume, AdditionalInformation<Cold>>;
+using Middle_CWaterConfiguration = CounterConfiguration<Water,23267492, Volume, AdditionalInformation<Cold>>;
+using Middle_HWaterConfiguration = CounterConfiguration<Water,14524889, Volume, AdditionalInformation<Hot>>;
+using Top_CWaterConfiguration = CounterConfiguration<Water,25489823, Volume, AdditionalInformation<Cold>>;
+using Top_HWaterConfiguration = CounterConfiguration<Water,25470737, Volume, AdditionalInformation<Hot>>;
 
 #endif

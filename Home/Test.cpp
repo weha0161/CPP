@@ -11,27 +11,34 @@ int main()
 {       
     std::cout<<"START"<<std::endl;
 	
-	using W1 = CounterConfiguration<Water,1>;
-	using G1 = CounterConfiguration<Gas,1>;
-	using E1 = CounterConfiguration<Energy,1>;
-	using W2 = CounterConfiguration<Water,2>;
-	using W3 = CounterConfiguration<Water,3>;
-	
-	using CW1 = Counter<AllWaterConfiguration>;
-	using CE1 = Counter<EnBWEnergyConfiguration>;
+// 	using W1 = CounterConfiguration<Water,1>;
+// 	using G1 = CounterConfiguration<Gas,1>;
+// 	using E1 = CounterConfiguration<Energy,1>;
+// 	using W2 = CounterConfiguration<Water,2>;
+// 	using W3 = CounterConfiguration<Water,3>;
+
 	using CG1 = Counter<GasConfiguration>;
-	using CW2 = Counter<AllWaterConfiguration>;
-	using CW3 = Counter<AllWaterConfiguration>;
+	using CE1 = Counter<EnBWEnergyConfiguration>;
+	using CWA = Counter<AllWaterConfiguration>;
+	using CWO = Counter<OWaterConfiguration>;
+	using CWOut = Counter<OutWaterConfiguration>;
 	
-	using TypeContainer = Tuple<CW1,CW2,CW3,CE1,CG1>;
+	using CBHW = Counter<Bottom_HWaterConfiguration>;
+	using CBCW = Counter<Bottom_CWaterConfiguration>;
+	using CMCW = Counter<Middle_CWaterConfiguration>;
+	using CMHW = Counter<Middle_HWaterConfiguration>;
+	using CTCW = Counter<Top_CWaterConfiguration>;
+	using CTHW = Counter<Top_HWaterConfiguration>;
+	
+	using TypeContainer = Tuple<CE1,CG1,CWA,CWO,CWOut, CBCW,CBHW, CMCW,CMHW,CTCW,CTCW>;
 	auto tc = TypeContainer();
 	
     std::cout<<"Single Calls to Get Tuple "<<std::endl;
-	auto cw1 = GetType<CW1>(tc);
+	auto cw1 = GetType<CWO>(tc);
 	cw1.Display(std::cout);
-	auto cw2 = GetType<CW2>(tc);
+	auto cw2 = GetType<CWA>(tc);
 	cw2.Display(std::cout);
-	auto cw3 = GetType<CW3>(tc);
+	auto cw3 = GetType<CWOut>(tc);
 	cw3.Display(std::cout);
 	auto ce1 = GetType<CE1>(tc);
 	ce1.Display(std::cout);
@@ -39,20 +46,22 @@ int main()
 	cg1.Display(std::cout);
 	
     std::cout<<"Ostream "<<std::endl;
-	CounterContainer<CW1,CW2,CW3,CE1,CG1> cc;
+	CounterContainer<CE1,CG1,CWA,CWO,CWOut, CBCW,CBHW, CMCW,CMHW,CTCW,CTCW> cc;
     std::cout<<cc<<std::endl;
 	
-	cg1.Write();
+	cc.Write();
+
 	
+    std::cout<<"UNIT"<<std::endl;
 	using s = Sum;
 	using work = Work;
-	auto cw = CW1(); 
+	auto cw = CWA(); 
 		
     std::cout<<"Sum "<<Sum::SiUnit()<<std::endl;
     std::cout<<"Work "<<Work::SiUnit()<<std::endl;
 	
-    std::cout<<"Type "<<CW1::Type::Name<<std::endl;
-    std::cout<<"Unit "<<CW1::Unit::SiUnit()<<std::endl;
+    std::cout<<"Type "<<CWA::Type::Name<<std::endl;
+    std::cout<<"Unit "<<CWA::Unit::SiUnit()<<std::endl;
     std::cout<<"Name "<<cw.GetName()<<std::endl;
     std::cout<<"F "<<Kilo::Type::Den<<std::endl;
     std::cout<<"F "<<Kilo::Type::Num<<std::endl;

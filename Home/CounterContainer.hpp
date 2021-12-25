@@ -30,6 +30,11 @@ public:
 		os<<this->counters;
 	}
 	
+	void Write(const std::string sourcePath = ".")
+	{
+		TupleWrite(counters);
+	}
+	
 	template<unsigned N>
 	auto Get() { return GetNum<N>(counters); }
 
