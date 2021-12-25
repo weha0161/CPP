@@ -98,12 +98,14 @@ public:
 	Counter(){}
 	Counter(const Counter& c){}
 	
+	template<typename Separator = T::char_<'\t'>>
 	void Display(std::ostream& out) const
 	{
-		out<<Name<<std::endl;
-		out<<Number<<std::endl;
-		out<<Type::Name<<std::endl;
-		out<<Unit::SiUnit()<<std::endl;
+		out<<"CounterName: "<<Separator::Value<<Name<<std::endl;
+		out<<"Number: "<<Separator::Value<<Number<<std::endl;
+		out<<"Type: "<<Separator::Value<<Type::Name<<std::endl;
+		out<<"SiUnit: "<<Separator::Value<<Unit::SiUnit()<<std::endl;
+		out<<"Unit: "<<Separator::Value<<Unit::Sign()<<std::endl;
 		out<<std::endl;
 		
 		this->readings->push_back(ReadingType(9.0, Date("30.09.2021")));
@@ -123,7 +125,7 @@ public:
 	}
 };
 
-template<typename C>
+template<typename C, typename S = T::char_<'\t'>>
 std::ostream& operator<<(std::ostream& strm, const Counter<C> c)
 {
 	c.Display(strm);
