@@ -83,13 +83,10 @@ struct Reading
 	template<typename Separator = T::char_<';'>>
 	void Display(std::ostream& out) const
 	{
-		out<<Date<<(char)Separator::Value<<Value<<std::endl;
+		out<<Date<<Separator::Value<<Value<<Separator::Value<<U::Sign()<<std::endl;
 	}
 	
-	Reading(ValueType val, DateType d): Date(d), Value(val)
-	{
-		Logger::Log()<<Value<<"\t"<<Date<<std::endl;
-	}
+	Reading(ValueType val, DateType d): Date(d), Value(val)	{}
 };
 
 template<typename C,typename T = double, typename DateT = Date>
@@ -171,7 +168,13 @@ public:
 		auto values = csv->Read();
 		
 		for(int i = Header.size() + 1; i < values.size(); ++i)
-			this->CreateReading(values.at(i));
+		{
+			auto reading = this->CreateReading(values.at(i));
+			this->readings->push_back(reading);
+		}
+		
+			
+		Logger::Log()<<"Size\t"<<this->readings->size()<<std::endl;
 	}
 	
 	void Write(const std::string sourcePath = ".")
