@@ -10,6 +10,7 @@ struct UnitRatio
 {
 	using Type = Fraction<N,D>::Type;
 	static const std::string Sign;
+	static constexpr unsigned Factor = 1;
 };
 
 // template<> std::string UnitRatio<1000,1>::Name = "Kilo"

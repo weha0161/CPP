@@ -105,6 +105,19 @@ private:
 	inline static const std::string DestinationPath = Config::DestinataionPath;
 	inline static const std::string Name = Config::CounterName;
 	
+	static std::map<std::string, std::string> createHeader()
+	{
+		std::map<std::string, std::string> m;
+		m["CounterName"] = Name;
+		m["Number"] =  std::to_string(Config::Number),
+		m["Type"] = MeterType::Name,
+		m["SiUnit"] =  Config::Unit::SiUnit(),
+		m["Unit"] =  Config::Unit::Sign();
+        return m;
+	}
+	
+	inline static const std::map<std::string, std::string> Header = createHeader();
+	
 	std::unique_ptr<ReadingContainerType> readings = std::unique_ptr<ReadingContainerType>(new ReadingContainerType());
 	std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name)));
 	std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(this->fileInfo.get()));
@@ -112,19 +125,22 @@ private:
 public:	
 	using Type = Config::MeterT;
 	using Unit = Config::Unit;
-	static const uint Number = Config::Number;
+	inline static const uint Number = Config::Number;
 	
 	Counter(){}
 	Counter(const Counter& c){}
 	
 	template<typename Separator = T::char_<'\t'>>
+	void DisplayHeader(std::ostream& out) const
+	{
+		for (auto& it : Header)
+			out<<it.first<<Separator::Value<<it.second<<std::endl;
+	}
+	
+	template<typename Separator = T::char_<'\t'>>
 	void Display(std::ostream& out) const
 	{
-		out<<"CounterName: "<<Separator::Value<<Name<<std::endl;
-		out<<"Number: "<<Separator::Value<<Number<<std::endl;
-		out<<"Type: "<<Separator::Value<<Type::Name<<std::endl;
-		out<<"SiUnit: "<<Separator::Value<<Unit::SiUnit()<<std::endl;
-		out<<"Unit: "<<Separator::Value<<Unit::Sign()<<std::endl;
+		DisplayHeader(out);
 		out<<std::endl;
 		
 		this->readings->push_back(ReadingType(9.0, Date("30.09.2021")));
@@ -137,7 +153,11 @@ public:
 		return Name;
 	}
 	
-	void Read(){}
+	void Read()
+	{
+		csv->Read();
+	}
+	
 	void Write(const std::string sourcePath = ".")
 	{
 		csv->Write(*this);

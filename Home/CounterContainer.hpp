@@ -35,6 +35,11 @@ public:
 		TupleWrite(counters);
 	}
 	
+	void Read(const std::string sourcePath = ".")
+	{
+		TupleRead(counters);
+	}
+	
 	template<unsigned N>
 	auto Get() { return GetNum<N>(counters); }
 

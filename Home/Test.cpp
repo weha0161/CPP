@@ -49,8 +49,11 @@ int main()
 	CounterContainer<CE1,CG1,CWA,CWO,CWOut, CBCW,CBHW, CMCW,CMHW,CTCW,CTCW> cc;
     std::cout<<cc<<std::endl;
 	
+    std::cout<<"---------------------WRITE---------------------"<<std::endl;
 	cc.Write();
 
+    std::cout<<"---------------------READ------------------------"<<std::endl;
+	cc.Read();
 	
     std::cout<<"UNIT"<<std::endl;
 	using s = Sum;
