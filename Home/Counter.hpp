@@ -71,12 +71,14 @@ struct CounterConfiguration
 	using Unit = U;
 };
 
-template<typename U, typename ValT = double, typename DateT = Date>
+template<typename U, typename ValT = Value<double>, typename DateT = Date>
 struct Reading
 {
 	using Unit = U;
-	const DateT Date;
-	const ValT Value;
+	using ValueType = ValT;
+	using DateType = DateT;
+	const DateType Date;
+	const ValueType Value;
 	
 	template<typename Separator = T::char_<';'>>
 	void Display(std::ostream& out) const
@@ -84,7 +86,10 @@ struct Reading
 		out<<Date<<(char)Separator::Value<<Value<<std::endl;
 	}
 	
-	Reading(ValT val, DateT d): Date(d), Value(val){}
+	Reading(ValueType val, DateType d): Date(d), Value(val)
+	{
+		Logger::Log()<<Value<<"\t"<<Date<<std::endl;
+	}
 };
 
 template<typename C,typename T = double, typename DateT = Date>
@@ -114,6 +119,14 @@ private:
 		m["SiUnit"] =  Config::Unit::SiUnit(),
 		m["Unit"] =  Config::Unit::Sign();
         return m;
+	}
+	
+	ReadingType CreateReading(std::vector<std::string> values)
+	{
+		auto date = Date(values.at(0));
+		auto value = Value(values.at(1));
+		
+		return ReadingType(typename ReadingType::ValueType(value), typename ReadingType::DateType(date));
 	}
 	
 	inline static const std::map<std::string, std::string> Header = createHeader();
@@ -155,7 +168,10 @@ public:
 	
 	void Read()
 	{
-		csv->Read();
+		auto values = csv->Read();
+		
+		for(int i = Header.size() + 1; i < values.size(); ++i)
+			this->CreateReading(values.at(i));
 	}
 	
 	void Write(const std::string sourcePath = ".")

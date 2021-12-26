@@ -67,6 +67,18 @@ namespace String_
 		std::string operator()(int t) { return std::to_string(t); }
 	};
 	
+	template<>
+	struct From<uint>
+	{
+		std::string operator()(uint t) { return std::to_string(t); }
+	};
+	
+	template<>
+	struct From<double>
+	{
+		std::string operator()(double t) { return std::to_string(t); }
+	};
+	
 	static From<int> FromInt = From<int>();
 }
 

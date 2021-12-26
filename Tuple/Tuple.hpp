@@ -149,6 +149,28 @@ auto GetType(Tuple<Types...> t)
 	return TupleGet<T,typename Tuple<Types...>::Type>::apply(t);
 };
 
+//-------------------------------------------------------------Write-----------------------------------------------------------
+void TupleWrite(Tuple<> const& t){}
+
+template<typename Head, typename... Tail>
+void TupleWrite(Tuple<Head, Tail...> const& t)
+{
+	auto head = t.GetHead();
+	head.Write();
+	TupleWrite( t.GetTail());
+}
+
+//-------------------------------------------------------------Read-----------------------------------------------------------
+void TupleRead(Tuple<> const& t){}
+
+template<typename Head, typename... Tail>
+void TupleRead(Tuple<Head, Tail...> const& t)
+{
+	auto head = t.GetHead();
+	head.Read();
+	TupleRead( t.GetTail());
+}
+
 //-------------------------------------------------------------Get by Type-----------------------------------------------------------
 
 //-------------------------------------------------------

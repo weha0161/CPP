@@ -55,12 +55,22 @@ public:
 
 inline bool operator< (const Key& lhs, const Key& rhs){ return lhs.Value < rhs.Value; }
 
+template<typename T = double>
 class Value: public Element
 {
+	using ConverterT = String_::From<T>;
+	ConverterT converter = ConverterT();
+	
+	T value;
+	T Parse(std::string s){ return std::stod(s); }
 public:
+	using Type = T;
+	
 	inline static const std::string Identifier = "Value";
-	Value(std::string s = ""): Element(s){};
+	Value(std::string s = ""): Element(s), value(this->Parse(s)){};
+	Value(T val, std::string s = ""): Element(this->converter(val)), value(val){};
 	Value* DoCreate(){return this;};
+	T Get(){ return this->value; }
 };
 
 class Entry: public Element
@@ -120,7 +130,7 @@ public:
 
 //--------------------------------Factory------------------------------------------------
 
-using Elements = boost::mpl::vector<Key, Value, Entry, Date>;
+using Elements = boost::mpl::vector<Key, Value<double>, Entry, Date>;
 
 template<class TList = Elements, class Unit = Element,typename T = std::string,class IdentifierType = std::string, template<class> class CreatePolicy = CreateElementNewPolicy>
 class ElementFactory

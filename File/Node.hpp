@@ -29,9 +29,9 @@ namespace FS
 	static std::vector<std::string> ReadLines(std::string path)
 	{
 		std::string line;
-		auto result = std::vector<std::string>();
+		auto result = std::vector<std::string>();		
 		
-		std::ifstream ifs (path);
+		std::ifstream ifs (path + ".csv");
 		if (ifs.is_open())
 		{
 			while ( getline (ifs,line) )
@@ -114,6 +114,7 @@ namespace FS
 		
 		std::vector<std::string> Read() const
 		{
+			Logger::Log()<<"Read: "<<std::endl;
 			return FS::ReadLines(this->info.Path());
 		};
 		
@@ -158,35 +159,34 @@ namespace FS
 			auto result = std::vector<std::vector<std::string>>();
 			
 			auto lines = FS::ReadLines(this->info.Path());
+// 			Logger::Log()<<"result: "<<lines.size()<<std::endl;
 						
 			for(auto line : lines)
+			{
+				Logger::Log()<<line<<std::endl;
 				result.push_back(String_::Split<Separator>(line));
+			}
 			
 			return result;
 		};
 		
-// 		template<typename iterator ,typename Separator = T::char_<';'>>
-// 		void Write(const iterator& begin, const iterator& end)
-// 		{
-// 			std::unique_ptr<std::ofstream> ofs = std::unique_ptr<std::ofstream>(new std::ofstream(destinationPath)); 
-// 			
-// 			for(auto it = begin; it != end; ++it)
-// 				(*it).Display(*ofs.get());
-// // 				ofs<<*it;
-// 			
-// 			ofs->close();
-// // 			File
-// 		}
+		template<typename Separator = T::char_<';'>>
+		std::vector<std::vector<std::string>>			 Read()
+		{
+			auto result = this->GetValues();
+			Logger::Log()<<"result: "<<result.size()<<std::endl;
+			return result;
+		}
 		
 		template<typename Ctr, typename Separator = T::char_<';'>>
 		void Write(const Ctr& counter)
 		{
+			Logger::Log()<<"Write Counter: "<<counter.GetName()<<" to: "<<destinationPath<<std::endl;
 			std::unique_ptr<std::ofstream> ofs = std::unique_ptr<std::ofstream>(new std::ofstream(destinationPath)); 
 			
 			counter.Display(*ofs);
 			
 			ofs->close();
-// 			File
 		}
 	private:
 		const std::string destinationPath;
