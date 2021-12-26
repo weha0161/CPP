@@ -43,7 +43,7 @@ struct Gas: public CounterType<Gas,Volume>
 
 struct None
 {
-	inline static const std::string Value = "_";
+	inline static const std::string Value = "";
 };
 struct Hot
 {
@@ -123,7 +123,7 @@ private:
 	std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(this->fileInfo.get()));
 	
 public:	
-	using Type = Config::MeterT;
+	using Type = MeterType;
 	using Unit = Config::Unit;
 	inline static const uint Number = Config::Number;
 	
@@ -148,7 +148,7 @@ public:
 			(*it).Display(out);
 	}
 	
-	std::string GetName()
+	std::string GetName() const
 	{
 		return Name;
 	}
