@@ -72,22 +72,22 @@ struct CounterConfiguration
 	using Unit = U;
 };
 
-template<typename U, typename ValT = Value<double>, typename DateT = Date>
+template<typename U, typename Pre = SIPrefix<0>, typename Q = Quantity<U,Pre,double>, typename DateT = Date>
 struct Reading
 {
 	using Unit = U;
-	using ValueType = ValT;
+	using QuantityType = Q;
 	using DateType = DateT;
 	const DateType Date;
-	const ValueType Value;
+	const QuantityType QuantityValue;
 	
 	template<typename Separator = T::char_<';'>>
 	void Display(std::ostream& out) const
 	{
-		out<<Date<<Separator::Value<<Value<<Separator::Value<<U::Sign()<<std::endl;
+		out<<Date<<Separator::Value<<QuantityValue.Value()<<Separator::Value<<U::Sign()<<std::endl;
 	}
 	
-	Reading(ValueType val, DateType d): Date(d), Value(val)	{}
+	Reading(QuantityType val, DateType d): Date(d), QuantityValue(val)	{}
 };
 
 template<typename C,typename T = double, typename DateT = Date>
@@ -104,6 +104,8 @@ private:
 	using Config = ConfigT;
 	using MeterType = Config::MeterT;
 	using ReadingType = Reading<typename Config::Unit>;
+	using QuantityType = ReadingType::QuantityType;
+	using DateType = ReadingType::DateType;
 	using ReadingContainerType = std::vector<ReadingType>;
 	inline static const std::string DestinationPath = Config::DestinataionPath;
 	inline static const std::string Name = Config::CounterName;
@@ -122,9 +124,9 @@ private:
 	ReadingType CreateReading(std::vector<std::string> values)
 	{
 		auto date = Date(values.at(0));
-		auto value = Value(values.at(1));
+		auto value = std::stod(values.at(1));
 		
-		return ReadingType(typename ReadingType::ValueType(value), typename ReadingType::DateType(date));
+		return ReadingType(QuantityType(value), DateType(date));
 	}
 	
 	inline static const std::map<std::string, std::string> Header = createHeader();
@@ -154,7 +156,7 @@ public:
 		DisplayHeader(out);
 		out<<std::endl;
 		
-		this->readings->push_back(ReadingType(9.0, Date("30.09.2021")));
+		this->readings->push_back(ReadingType(QuantityType(45.0), Date("30.09.2021")));
 		for(auto it = this->readings->cbegin(); it != this->readings->cend(); ++it)
 			(*it).Display(out);
 	}
