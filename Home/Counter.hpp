@@ -1,6 +1,7 @@
 #include "../String/String_.hpp"
 #include "../Logger/Logger.hpp"
 #include "../Unit/Unit.h"
+#include "../Quantity/Quantity.h"
 #include "../CSV/CSV.hpp"
 #include "../File/Info.hpp"
 #include "../File/Node.hpp"
