@@ -10,6 +10,7 @@ struct SIPrefix
 {
 // 	using Type = Fraction<N,D>::Type;
 	static const std::string Sign;
+	static constexpr int Exponent = Ex;
 	static constexpr double Factor = 1;
 };
 
@@ -19,6 +20,7 @@ struct SIPrefix
 struct Kilo: public SIPrefix<3>
 {
     inline static const std::string Sign = "Kilo";
+	static constexpr double Factor = 1000;
 };
 
 
