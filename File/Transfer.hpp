@@ -170,6 +170,15 @@ namespace Bank
 				
 				out<<std::endl;
 			}
+		}
+		
+		void DisplayKeys(std::ostream& out) const
+		{
+			for(auto p : this->transfers)
+			{
+				out<<p.first<<":"<<std::endl;				
+				out<<std::endl;
+			}
 		}		
 	};
 		
