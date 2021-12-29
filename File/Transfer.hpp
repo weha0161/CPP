@@ -102,7 +102,10 @@ namespace Bank
 		using QunatityType = Quantity<Sum>;
 		
 		AccountEndpoint(std::string ownerKey, std::string i = "IBAN", std::string b = "BIC") : owner(ownerKey), iban(i), bic(b) { };
-		AccountEndpoint(const TransferType& t) : owner(t.GetOwner()), iban(t.GetIBAN()), bic(t.GetBIC()), total(t.GetQuantity()) { };
+		AccountEndpoint(const TransferType& t) : owner(t.GetOwner()), iban(t.GetIBAN()), bic(t.GetBIC()), total(t.GetQuantity()) 
+		{ 
+			this->transfers.push_back(t);
+		};
 		AccountEndpoint():owner("ownerKey"), iban("i"), bic("b"), total(0) { };
 		
 		const Key& GetOwner() const { return owner; }
