@@ -29,9 +29,9 @@ namespace FS
 	static std::vector<std::string> ReadLines(std::string path)
 	{
 		std::string line;
-		auto result = std::vector<std::string>();		
+		auto result = std::vector<std::string>();			
 		
-		std::ifstream ifs (path + ".csv");
+		std::ifstream ifs (path);
 		if (ifs.is_open())
 		{
 			while ( getline (ifs,line) )
