@@ -5,7 +5,7 @@
 #include "../CSV/CSV.hpp"
 #include "../File/Info.hpp"
 #include "../File/Node.hpp"
-#include "../CSV/CSV.hpp"
+#include "../Unit/SIPrefix.hpp"
 #include "../Wrapper/Wrapper.hpp"
 #include "Parser.hpp"
 #include <boost/mpl/for_each.hpp>
@@ -84,7 +84,7 @@ struct Reading
 	template<typename Separator = T::char_<';'>>
 	void Display(std::ostream& out) const
 	{
-		out<<Date<<Separator::Value<<QuantityValue.Value()<<Separator::Value<<U::Sign()<<std::endl;
+		out<<Date<<Separator::Value<<QuantityValue.Value()<<Separator::Value<<QuantityType::UnitPrefix::Sign<<U::Sign()<<std::endl;
 	}
 	
 	Reading(QuantityType val, DateType d): Date(d), QuantityValue(val)	{}
@@ -132,7 +132,7 @@ private:
 	inline static const std::map<std::string, std::string> Header = createHeader();
 	
 	std::unique_ptr<ReadingContainerType> readings = std::unique_ptr<ReadingContainerType>(new ReadingContainerType());
-	std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name)));
+	std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name + FS::CSV::Extension)));
 	std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(this->fileInfo.get()));
 	
 public:	
@@ -168,6 +168,8 @@ public:
 	
 	void Read()
 	{
+		
+		Logger::Log()<<"Read counter in path: "<<this->fileInfo->Path()<<std::endl;
 		auto values = csv->Read();
 		
 		for(int i = Header.size() + 1; i < values.size(); ++i)
@@ -177,7 +179,7 @@ public:
 		}
 		
 			
-		Logger::Log()<<"Size\t"<<this->readings->size()<<std::endl;
+// 		Logger::Log()<<"Size\t"<<this->readings->size()<<std::endl;
 	}
 	
 	void Write(const std::string sourcePath = ".")
