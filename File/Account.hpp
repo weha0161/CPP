@@ -100,12 +100,12 @@ namespace Bank
 			
 			return result;
 		}
-		static void InsertInContainer(std::string key, std::string transaction, double sum, std::string date, std::string iban, std::string bic, char transferSign)
+		static void InsertInContainer(std::string key, std::string transaction, double sum, std::string date, std::string iban, std::string bic, char transferSign, std::string cause = "")
 		{
 			if(Derived::IsOutTransfer(transferSign))
-				Derived::OutCont.Insert(key, OutTransfer(key,transaction,sum, date, iban, bic));
+				Derived::OutCont.Insert(key, OutTransfer(key,transaction,sum, date, iban, bic, cause));
 			else
-				Derived::InCont.Insert(key, InTransfer(key,transaction,sum, date, iban, bic));
+				Derived::InCont.Insert(key, InTransfer(key,transaction,sum, date, iban, bic, cause));
 			
 		}
 		

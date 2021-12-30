@@ -52,7 +52,8 @@ using namespace FS;
 int main()
 {
 	std::ofstream outputfile ("//home//markus//Downloads//Output.txt");
-	std::ofstream keyFike ("//home//markus//Downloads//Keys.txt");
+	auto keyFileN = std::string("//home//markus//Downloads//Keys.txt");
+// 	std::ofstream keyFile ("//home//markus//Downloads//Keys.txt");
 	std::string fileName = "Unit.h";
 	std::string custom = "RaibaKonten2021_1.csv";
 	std::string comdirect = "Umsaetze_1026947527.csv";
@@ -76,7 +77,7 @@ int main()
 	auto out = Transfers<Bank::Raiba<0>>();
 	auto com1 = out();
 	com1.Display(outputfile);
-	com1.DisplayKeys(keyFike);
+// 	com1.DisplayKeys(keyFile);
 	
 	
 	std::cout<<"\n-------------------------------------------------------- Transfers IN --------------------------------------------------------------"<<std::endl;
@@ -84,16 +85,18 @@ int main()
 	auto com2 = in();
 	com2.Display(outputfile);
 
-	std::cout<<"\n TEST GET Werner"<<std::endl;
+	std::cout<<"\n TEST GET Gemeindekasse Dettenheim"<<std::endl;
 	std::cout<<"\n-------------------------------------------------------- Transfers OUT --------------------------------------------------------------"<<std::endl;
-	auto g = Get<Bank::Comdirect<0>>();
-	auto gr = g(Key("Werner"));
+	auto g = Get<Bank::Raiba<0>>();
+	auto gr = g(Key("Gemeindekasse Dettenheim"));
 	gr.Display(std::cout);
 	
+	
 	std::cout<<"\n-------------------------------------------------------- Transfers IN --------------------------------------------------------------"<<std::endl;
-	auto g2 = Get<Bank::Comdirect<0>, Bank::In>();
-	auto gr2 = g2(Key("Werner"));
-	gr2.Display(std::cout);
+	auto raibaOut = Transfers<Bank::Raiba<0>, Bank::Out>();
+	auto rbo = raibaOut();
+	auto keys = FileSystem::ReadLines(keyFileN);
+	rbo.Display(std::cout,keys);
 	
 // 	for(auto i : com)
 // 		std::cout<<*i<<Std::endl;

@@ -78,19 +78,15 @@ namespace Bank
 				val.erase(end_pos, val.end());
 
 				auto valString = *(values.end()-2);
-// 				valString.erase(std::remove(valString.begin(), valString.end(), ','), valString.end());
-// 				valString.erase(std::remove(valString.begin(), valString.end(), '.'), valString.end());
 				valString = String_::Remove<T::char_<','>>(valString);
 				valString = String_::Remove<T::char_<'.'>>(valString);
-// 				Logger::Log()<<valString<<std::endl;
-// 				auto sum = std::stod(Base::GetNumericValue(valString));
 				auto sum = std::stod(valString) / 100;
 			
 				auto iban =  values.at(IBANIdx);
 				auto bic =  values.at(BICIdx);
 				
 				std::string sign = *(values.end()-1);
-				Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0]);
+				Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0], transaction);
 			}
 		}						
 		

@@ -79,7 +79,7 @@ namespace Bank
 				auto iban =  Extract<IBAN>(transaction);
 				auto bic = Extract<BIC>(transaction);
 								
-				Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(values.at(QuantityIdx).begin()+1));
+				Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(values.at(QuantityIdx).begin()+1), String_::Remove<T::char_<'"'>>(transaction));
 			}
 				
 		}		

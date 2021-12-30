@@ -56,6 +56,7 @@ namespace Bank
 		
 		Key owner;
 		Entry transaction;
+		Entry cause;
 		Date date;
 		IBAN iban;
 		BIC bic;
@@ -69,10 +70,14 @@ namespace Bank
 		using KeyType = Key;
 		using QunatityType = Quantity<Sum>;
 		
-		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : owner(k), transaction(c), date(d), value(v), iban(i), bic(b) { };
+		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC", std::string cause_ = "") : owner(k), transaction(c), date(d), value(v), iban(i), bic(b), cause(cause_) 
+		{ 
+			Logger::Log()<<this->cause<<std::endl;
+		};
 		
 		const Key& GetOwner() const { return owner; }
 		const Entry& GetTransaction() const { return transaction; }
+		const Entry& GetCause() const { return cause; }
 		const Date& GetDate() const { return date; }
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
@@ -127,6 +132,7 @@ namespace Bank
 			for(auto p : this->transfers)
 			{
 				out<<"\tDate: "<<p.GetDate()<<"\tSum: "<<std::setprecision(2)<<std::fixed<<p.GetQuantity()<<std::endl;
+				out<<"\t"<<"\t"<<p.GetCause()<<std::endl;
 			}
 
 			out<<std::endl;
@@ -157,9 +163,9 @@ namespace Bank
 			this->transfers[k].Add(t);
 		}
 		
-		bool Contains(KeyType k){ return this->transfers.find(k) != this->transfers.end(); }
+		bool Contains(KeyType k) const { return this->transfers.find(k) != this->transfers.end(); }
 		const Cont<KeyType>& Keys() { return keys; }
-		const AccountEndpointType& operator[](KeyType k){ return this->transfers[k]; }
+		const AccountEndpointType& operator[](KeyType k) { return this->transfers[k]; }
 		
 		void Display(std::ostream& out) const
 		{
@@ -175,12 +181,28 @@ namespace Bank
 			}
 		}
 		
+		void Display(std::ostream& out, const std::vector<std::string>& keys)
+		{
+		
+			for(auto k : keys)
+			{
+				const KeyType key = KeyType(k);
+				if(!this->Contains(key))
+					continue;
+				
+				auto p = this->transfers[key];				
+				p.Display(out);
+				
+				out<<"\nTotal: "<<std::setprecision(2)<<std::fixed<<p.GetTotal()<<std::endl;
+				out<<std::endl;
+			}
+		}
+		
 		void DisplayKeys(std::ostream& out) const
 		{
 			for(auto p : this->transfers)
 			{
-				out<<p.first<<":"<<std::endl;				
-				out<<std::endl;
+				out<<p.first<<std::endl;				
 			}
 		}		
 	};
