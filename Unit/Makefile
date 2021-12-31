@@ -1,6 +1,6 @@
 CXX      = g++
 CXXC      = clang
-OBJECTS = Test.o Unit.o
+OBJECTS = UnitTest.o Unit.o
 CXXFLAGS  = -c -std=c++2a
 DEBUGFLAGS  = -c -g -std=c++17
 
@@ -14,12 +14,9 @@ Release: $(OBJECTS)
 Debug: $(OBJECTS)
 	$(CXX) -o $@ $(OBJECTS) 
 
-%.o: %.cpp %.h
+%.o: %.cpp %.h %.hpp
 	$(CXX) $(DEBUGFLAGS) $<
 
 clean:
 	rm *.o test
-
-
-
 
