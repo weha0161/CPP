@@ -1,4 +1,4 @@
-lsCXX      = g++
+CXX      = g++
 CXXC      = clang
 OBJECTS = Test.o Quantity.o
 CXXFLAGS  = -c -std=c++2a

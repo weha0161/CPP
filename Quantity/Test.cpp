@@ -54,16 +54,16 @@ int main()
     std::cout<<"km: Value() "<<kmMi2.PureValue()<<std::endl;
 		
 	auto kmM = km1 * km2;
-    std::cout<<"km: Pure "<<kmM.Value()<<std::endl;
-    std::cout<<"km: Value() "<<kmM.PureValue()<<std::endl;
+    std::cout<<"km1 * km2: Pure "<<kmM.Value()<<std::endl;
+    std::cout<<"km1 * km2: Value() "<<kmM.PureValue()<<std::endl;
 	
 	auto kmM2 = km1 * q5;
-    std::cout<<"km: Pure "<<kmM2.Value()<<std::endl;
-    std::cout<<"km: Value() "<<kmM2.PureValue()<<std::endl;
+    std::cout<<"km1 * q5: Pure "<<kmM2.Value()<<std::endl;
+    std::cout<<"km1 * q5: Value() "<<kmM2.PureValue()<<std::endl;
 	
 	auto kmD = kmM2 / q5;
-    std::cout<<"km: Pure "<<kmD.Value()<<std::endl;
-    std::cout<<"km: Value() "<<kmD.PureValue()<<std::endl;
+    std::cout<<"kmM2 / q5: Pure "<<kmD.Value()<<std::endl;
+    std::cout<<"kmM2 / q5: Value() "<<kmD.PureValue()<<std::endl;
 	
 	
     std::cout<<"END"<<std::endl;

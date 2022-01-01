@@ -97,16 +97,23 @@ std::ostream& operator<<(std::ostream& strm, const Reading<C,T,DateT> c)
 	return strm;
 }
 
+template<typename T>
+struct Deleter {
+  void operator()(T* t) {	Logger::Log()<<"unique_ptr DELETED!!!!!!!!!!!!"<<std::endl; }
+};
+
 template<typename ConfigT>
 class Counter
 {
-private:
+public:
 	using Config = ConfigT;
 	using MeterType = Config::MeterT;
 	using ReadingType = Reading<typename Config::Unit>;
 	using QuantityType = ReadingType::QuantityType;
 	using DateType = ReadingType::DateType;
 	using ReadingContainerType = std::vector<ReadingType>;
+	using CIterator = std::vector<ReadingType>::const_iterator;
+private:
 	inline static const std::string DestinationPath = Config::DestinataionPath;
 	inline static const std::string Name = Config::CounterName;
 	
@@ -131,7 +138,7 @@ private:
 	
 	inline static const std::map<std::string, std::string> Header = createHeader();
 	
-	std::unique_ptr<ReadingContainerType> readings = std::unique_ptr<ReadingContainerType>(new ReadingContainerType());
+	inline static std::unique_ptr<ReadingContainerType, Deleter<ReadingContainerType>> readings = std::unique_ptr<ReadingContainerType, Deleter<ReadingContainerType>>(new ReadingContainerType(),Deleter<ReadingContainerType>());
 	std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name + FS::CSV::Extension)));
 	std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(this->fileInfo.get()));
 	
@@ -157,8 +164,13 @@ public:
 		out<<std::endl;
 		
 		this->readings->push_back(ReadingType(QuantityType(45.0), Date("30.09.2021")));
+		this->readings->push_back(ReadingType(QuantityType(40.0), Date("30.09.2021")));
+		this->readings->push_back(ReadingType(QuantityType(35.0), Date("30.09.2021")));
+		this->readings->push_back(ReadingType(QuantityType(30.0), Date("30.09.2021")));
 		for(auto it = this->readings->cbegin(); it != this->readings->cend(); ++it)
 			(*it).Display(out);
+		
+		Logger::Log()<<this-readings->size()<<std::endl;
 	}
 	
 	std::string GetName() const
@@ -177,10 +189,22 @@ public:
 			auto reading = this->CreateReading(values.at(i));
 			this->readings->push_back(reading);
 		}
-		
-			
-// 		Logger::Log()<<"Size\t"<<this->readings->size()<<std::endl;
 	}
+	
+// 	const ReadingContainerType& Readings() const { return *(this->readings.get()); }
+	CIterator Begin() const { return this->readings->cbegin(); }
+	CIterator End() const { return this->readings->cend(); }
+	
+	template<template<typename> class TCalc, typename Calc = TCalc<QuantityType>>
+	void Calculate()
+	{
+		for(auto it = this->readings->cbegin(); it != this->readings->cend(); ++it)
+		{
+			auto v = Calc::Calculate(this->Begin()->QuantityValue, (it+1)->QuantityValue);
+			Logger::Log()<<"V RESULT"<<v.Value()<<std::endl;
+		}		
+	};
+
 	
 	void Write(const std::string sourcePath = ".")
 	{

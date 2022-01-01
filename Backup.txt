@@ -15,3 +15,5 @@
 /home/markus/Dokumente/cpp/Parser
 /home/markus/Dokumente/cpp/Home
 /home/markus/Dokumente/cpp/Tuple
+/home/markus/Dokumente/cpp/Math
+/home/markus/Dokumente/cpp/Calculator

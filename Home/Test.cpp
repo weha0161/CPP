@@ -66,9 +66,16 @@ int main()
     std::cout<<"Type "<<CWA::Type::Name<<std::endl;
     std::cout<<"Unit "<<CWA::Unit::SiUnit()<<std::endl;
     std::cout<<"Name "<<cw.GetName()<<std::endl;
-    std::cout<<"F "<<Kilo::Type::Den<<std::endl;
-    std::cout<<"F "<<Kilo::Type::Num<<std::endl;
-    std::cout<<"F "<<Kilo::Sign<<std::endl;
+
+	std::cout<<"Kilo "<<Kilo::Name<<std::endl;
+    std::cout<<"Kilo "<<Kilo::Sign<<std::endl;
+	
+	std::cout<<"Hekto "<<Hekto::Name<<std::endl;
+    std::cout<<"Hekto "<<Hekto::Sign<<std::endl;
+	
+	std::cout<<"Deka "<<Deka::Name<<std::endl;
+    std::cout<<"Deka "<<Deka::Sign<<std::endl;
+	
     std::cout<<"END"<<std::endl;
 
     return 0;

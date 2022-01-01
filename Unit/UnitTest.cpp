@@ -44,7 +44,9 @@ int main()
 	std::cout<<"Deka "<<Deka::Name<<std::endl;
     std::cout<<"Deka "<<Deka::Sign<<std::endl;
     std::cout<<"Deka "<<Deka::BigDistance<<std::endl;
+	
     std::cout<<"Deka Next"<<Deka::Next::Exponent<<std::endl;
+    std::cout<<"Deka Next"<<Deka::Next::Name<<std::endl;
     
 	std::cout<<"END"<<std::endl;
     return 0;
