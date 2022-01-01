@@ -7,6 +7,12 @@
 #ifndef CALCULATOR_HPP
 #define CALCULATOR_HPP
 
+template<typename T>
+struct Difference
+{ 
+	static T Calculate(T t1, T t2) { return t1 - t2; }
+};
+
 template<typename TCalc, typename TCounter>
 class Calculator
 {

@@ -14,9 +14,9 @@ int main()
 	auto ce1 = CtrContainer.Get<CE1>();
 	std::cout<<ce1<<std::endl;
 	
-	std::vector<int> v = std::vector<int>{1,2,3};
+// 	std::vector<int> v = std::vector<int>{1,2,3};
 	
-// 	auto c = Calculator<int, CE1>(v.cbegin(), v.cend());
+	auto c = Calculator<int, CE1>(ce1.Begin(), ce1.End());
 	
 // 	c.Calculate();
 	
