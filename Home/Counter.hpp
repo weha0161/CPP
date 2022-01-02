@@ -67,7 +67,7 @@ struct CounterConfiguration
 	static const uint Number = No;
 	inline static const std::string AdditionalInformation = A::Value;
 	inline static const std::string CounterName = String_::FromInt(No) + "_" + MeterType::Name + AdditionalInformation;
-	inline static const std::string DestinataionPath = "//home//markus//Downloads//";
+	inline static const std::string DestinationPath = "//home//markus//Downloads//";
 	using MeterT = MeterType;
 	using Unit = U;
 };
@@ -114,7 +114,7 @@ public:
 	using ReadingContainerType = std::vector<ReadingType>;
 	using CIterator = std::vector<ReadingType>::const_iterator;
 private:
-	inline static const std::string DestinationPath = Config::DestinataionPath;
+	inline static const std::string DestinationPath = Config::DestinationPath;
 	inline static const std::string Name = Config::CounterName;
 	
 	static std::map<std::string, std::string> createHeader()
@@ -142,13 +142,22 @@ private:
 	std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name + FS::CSV::Extension)));
 	std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(this->fileInfo.get()));
 	
-public:	
+	Counter(){ Logger::Log()<<"Ctor: "<<MeterType::Name<<"_"<<Config::Number<<std::endl; };
+// 	~Counter(){}
+public:
+	Counter& operator=(const Counter&) { return Counter::Instance(); };
+	static Counter& Instance()
+	{
+		static Counter instance;
+		return instance;
+	}
+	
+	Counter(const Counter& c) { *this = Counter::Instance(); };
+	
 	using Type = MeterType;
 	using Unit = Config::Unit;
 	inline static const uint Number = Config::Number;
 	
-	Counter(){}
-	Counter(const Counter& c){}
 	
 	template<typename Separator = T::char_<'\t'>>
 	void DisplayHeader(std::ostream& out) const
@@ -191,7 +200,6 @@ public:
 		}
 	}
 	
-// 	const ReadingContainerType& Readings() const { return *(this->readings.get()); }
 	CIterator Begin() const { return this->readings->cbegin(); }
 	CIterator End() const { return this->readings->cend(); }
 	

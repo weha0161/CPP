@@ -23,7 +23,9 @@ public:
 	using CounterTypes = Tuple<Head,Tail...>;
 private:
 	CounterTypes counters;
+	CounterContainer():counters(CounterTypes()) { Logger::Log()<<"Ctor CounterContainer"<<std::endl; };
 public:
+	CounterContainer(const CounterContainer& c) { *this = CounterContainer::Instance(); };
 
 	void Display(std::ostream& os) const
 	{
@@ -46,7 +48,11 @@ public:
 	template<typename T>
 	auto Get() { return GetType<T>(counters); }
 	
-	CounterContainer():counters(CounterTypes()) { };
+	static CounterContainer& Instance()
+	{
+		static CounterContainer instance;
+		return instance;
+	}	
 };
 
 template<typename Head, typename... Tail>
@@ -69,8 +75,8 @@ using CMHW = Counter<Middle_HWaterConfiguration>;
 using CTCW = Counter<Top_CWaterConfiguration>;
 using CTHW = Counter<Top_HWaterConfiguration>;
 
-using CounterConatinerType = CounterContainer<CE1,CG1,CWA,CWO,CWOut, CBCW,CBHW, CMCW,CMHW,CTCW,CTCW>;
+using CounterConatinerType = CounterContainer<CE1,CG1,CWA,CWO,CWOut, CBCW,CBHW, CMCW,CMHW,CTCW,CTHW>;
 
-static CounterConatinerType CtrContainer = CounterConatinerType();
+// static CounterConatinerType& CtrContainer =	 CounterConatinerType:.Instance;
 
 #endif

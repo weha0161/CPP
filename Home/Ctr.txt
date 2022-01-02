@@ -1,0 +1,902 @@
+Logger started
+[DEBUG]: Instance: 21740069
+[DEBUG]: Ctor: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 1202757
+[DEBUG]: Ctor: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 18061860
+[DEBUG]: Ctor: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 279638
+[DEBUG]: Ctor: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 458711
+[DEBUG]: Ctor: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 15007241
+[DEBUG]: Ctor: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15018324
+[DEBUG]: Ctor: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 23267492
+[DEBUG]: Ctor: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 14524889
+[DEBUG]: Ctor: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 25489823
+[DEBUG]: Ctor: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+START
+Ostream 
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+1:	[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+CounterName	21740069_Energy
+Number	21740069
+SiUnit	kg^(2)ms^(2)
+Type	Energy
+Unit	W
+
+30.09.2021;45;W
+30.09.2021;40;W
+30.09.2021;35;W
+30.09.2021;30;W
+[DEBUG]: 0x7fff53260b10
+2:	[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+CounterName	1202757_Gas
+Number	1202757
+SiUnit	m^(3)
+Type	Gas
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7fff53260ab0
+3:	[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+CounterName	18061860_Water
+Number	18061860
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7fff53260a50
+4:	[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+CounterName	279638_Water
+Number	279638
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7fff532609f0
+5:	[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+CounterName	458711_Water
+Number	458711
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7fff53260990
+6:	[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+CounterName	15007241_Water_Cold
+Number	15007241
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7fff53260930
+7:	[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+CounterName	15018324_Water_Hot
+Number	15018324
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7fff532608d0
+8:	[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+CounterName	23267492_Water_Cold
+Number	23267492
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7fff53260870
+9:	[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+CounterName	14524889_Water_Hot
+Number	14524889
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7fff53260810
+10:	[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+CounterName	25489823_Water_Cold
+Number	25489823
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7fff532607b0
+11:	[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+CounterName	25489823_Water_Cold
+Number	25489823
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7fff53260710
+
+---------------------WRITE---------------------
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Write Counter: 21740069_Energy to: //home//markus//Downloads//21740069_Energy.csv.csv
+[DEBUG]: 0x7fff53260af0
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Write Counter: 1202757_Gas to: //home//markus//Downloads//1202757_Gas.csv.csv
+[DEBUG]: 0x7fff53260a70
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Write Counter: 18061860_Water to: //home//markus//Downloads//18061860_Water.csv.csv
+[DEBUG]: 0x7fff532609f0
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Write Counter: 279638_Water to: //home//markus//Downloads//279638_Water.csv.csv
+[DEBUG]: 0x7fff53260970
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Write Counter: 458711_Water to: //home//markus//Downloads//458711_Water.csv.csv
+[DEBUG]: 0x7fff532608f0
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Write Counter: 15007241_Water_Cold to: //home//markus//Downloads//15007241_Water_Cold.csv.csv
+[DEBUG]: 0x7fff53260870
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Write Counter: 15018324_Water_Hot to: //home//markus//Downloads//15018324_Water_Hot.csv.csv
+[DEBUG]: 0x7fff532607f0
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Write Counter: 23267492_Water_Cold to: //home//markus//Downloads//23267492_Water_Cold.csv.csv
+[DEBUG]: 0x7fff53260770
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Write Counter: 14524889_Water_Hot to: //home//markus//Downloads//14524889_Water_Hot.csv.csv
+[DEBUG]: 0x7fff532606f0
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Write Counter: 25489823_Water_Cold to: //home//markus//Downloads//25489823_Water_Cold.csv.csv
+[DEBUG]: 0x7fff53260630
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Write Counter: 25489823_Water_Cold to: //home//markus//Downloads//25489823_Water_Cold.csv.csv
+[DEBUG]: 0x7fff53260570
+---------------------READ------------------------
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Read counter in path: //home//markus//Downloads//21740069_Energy.csv
+[DEBUG]: CounterName	21740069_Energy
+[DEBUG]: Number	21740069
+[DEBUG]: SiUnit	^(2)^(2)
+[DEBUG]: Type	Energy
+[DEBUG]: Unit	W
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;W
+[DEBUG]: result: 7
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Read counter in path: //home//markus//Downloads//1202757_Gas.csv
+[DEBUG]: CounterName	1202757_Gas
+[DEBUG]: Number	1202757
+[DEBUG]: SiUnit	^(3)
+[DEBUG]: Type	Gas
+[DEBUG]: Unit	^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Read counter in path: //home//markus//Downloads//18061860_Water.csv
+[DEBUG]: CounterName	18061860_Water
+[DEBUG]: Number	18061860
+[DEBUG]: SiUnit	^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Read counter in path: //home//markus//Downloads//279638_Water.csv
+[DEBUG]: CounterName	279638_Water
+[DEBUG]: Number	279638
+[DEBUG]: SiUnit	^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Read counter in path: //home//markus//Downloads//458711_Water.csv
+[DEBUG]: CounterName	458711_Water
+[DEBUG]: Number	458711
+[DEBUG]: SiUnit	^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Read counter in path: //home//markus//Downloads//15007241_Water_Cold.csv
+[DEBUG]: CounterName	15007241_Water_Cold
+[DEBUG]: Number	15007241
+[DEBUG]: SiUnit	m^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	m^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Read counter in path: //home//markus//Downloads//15018324_Water_Hot.csv
+[DEBUG]: CounterName	15018324_Water_Hot
+[DEBUG]: Number	15018324
+[DEBUG]: SiUnit	m^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	m^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Read counter in path: //home//markus//Downloads//23267492_Water_Cold.csv
+[DEBUG]: CounterName	23267492_Water_Cold
+[DEBUG]: Number	23267492
+[DEBUG]: SiUnit	m^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	m^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Read counter in path: //home//markus//Downloads//14524889_Water_Hot.csv
+[DEBUG]: CounterName	14524889_Water_Hot
+[DEBUG]: Number	14524889
+[DEBUG]: SiUnit	m^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	m^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Read counter in path: //home//markus//Downloads//25489823_Water_Cold.csv
+[DEBUG]: CounterName	25489823_Water_Cold
+[DEBUG]: Number	25489823
+[DEBUG]: SiUnit	m^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	m^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Read counter in path: //home//markus//Downloads//25489823_Water_Cold.csv
+[DEBUG]: CounterName	25489823_Water_Cold
+[DEBUG]: Number	25489823
+[DEBUG]: SiUnit	m^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	m^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+UNIT
+Sum €
+Work kg^(2)ms^(2)
+Type Water
+Unit m^(3)
+Kilo Kilo
+Kilo k
+Hekto Hekto
+Hekto h
+Deka Deka
+Deka da
+END
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+START
+Ostream 
+Logger started
+[DEBUG]: ContainerInstance: 
+[DEBUG]: Instance: 21740069
+[DEBUG]: Ctor: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 1202757
+[DEBUG]: Ctor: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 18061860
+[DEBUG]: Ctor: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 279638
+[DEBUG]: Ctor: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 458711
+[DEBUG]: Ctor: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 15007241
+[DEBUG]: Ctor: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15018324
+[DEBUG]: Ctor: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 23267492
+[DEBUG]: Ctor: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 14524889
+[DEBUG]: Ctor: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 25489823
+[DEBUG]: Ctor: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: ContainerInstance: 
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+1:	[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+CounterName	21740069_Energy
+Number	21740069
+SiUnit	kg^(2)ms^(2)
+Type	Energy
+Unit	W
+
+30.09.2021;45;W
+30.09.2021;40;W
+30.09.2021;35;W
+30.09.2021;30;W
+[DEBUG]: 0x7ffc30448cf0
+2:	[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+CounterName	1202757_Gas
+Number	1202757
+SiUnit	m^(3)
+Type	Gas
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7ffc30448c90
+3:	[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+CounterName	18061860_Water
+Number	18061860
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7ffc30448c30
+4:	[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+CounterName	279638_Water
+Number	279638
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7ffc30448bd0
+5:	[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+CounterName	458711_Water
+Number	458711
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7ffc30448b70
+6:	[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+CounterName	15007241_Water_Cold
+Number	15007241
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7ffc30448b10
+7:	[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+CounterName	15018324_Water_Hot
+Number	15018324
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7ffc30448ab0
+8:	[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+CounterName	23267492_Water_Cold
+Number	23267492
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7ffc30448a50
+9:	[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+CounterName	14524889_Water_Hot
+Number	14524889
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7ffc304489f0
+10:	[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+CounterName	25489823_Water_Cold
+Number	25489823
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7ffc30448990
+11:	[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+CounterName	25489823_Water_Cold
+Number	25489823
+SiUnit	m^(3)
+Type	Water
+Unit	m^(3)
+
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+30.09.2021;45;m^(3)
+30.09.2021;40;m^(3)
+30.09.2021;35;m^(3)
+30.09.2021;30;m^(3)
+[DEBUG]: 0x7ffc304488f0
+
+---------------------WRITE---------------------
+[DEBUG]: ContainerInstance: 
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Write Counter: 21740069_Energy to: //home//markus//Downloads//21740069_Energy.csv.csv
+[DEBUG]: 0x7ffc30448cd0
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Write Counter: 1202757_Gas to: //home//markus//Downloads//1202757_Gas.csv.csv
+[DEBUG]: 0x7ffc30448c50
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Write Counter: 18061860_Water to: //home//markus//Downloads//18061860_Water.csv.csv
+[DEBUG]: 0x7ffc30448bd0
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Write Counter: 279638_Water to: //home//markus//Downloads//279638_Water.csv.csv
+[DEBUG]: 0x7ffc30448b50
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Write Counter: 458711_Water to: //home//markus//Downloads//458711_Water.csv.csv
+[DEBUG]: 0x7ffc30448ad0
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Write Counter: 15007241_Water_Cold to: //home//markus//Downloads//15007241_Water_Cold.csv.csv
+[DEBUG]: 0x7ffc30448a50
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Write Counter: 15018324_Water_Hot to: //home//markus//Downloads//15018324_Water_Hot.csv.csv
+[DEBUG]: 0x7ffc304489d0
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Write Counter: 23267492_Water_Cold to: //home//markus//Downloads//23267492_Water_Cold.csv.csv
+[DEBUG]: 0x7ffc30448950
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Write Counter: 14524889_Water_Hot to: //home//markus//Downloads//14524889_Water_Hot.csv.csv
+[DEBUG]: 0x7ffc304488d0
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Write Counter: 25489823_Water_Cold to: //home//markus//Downloads//25489823_Water_Cold.csv.csv
+[DEBUG]: 0x7ffc30448810
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Write Counter: 25489823_Water_Cold to: //home//markus//Downloads//25489823_Water_Cold.csv.csv
+[DEBUG]: 0x7ffc30448750
+---------------------READ------------------------
+[DEBUG]: ContainerInstance: 
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Instance: 21740069
+[DEBUG]: Read counter in path: //home//markus//Downloads//21740069_Energy.csv
+[DEBUG]: CounterName	21740069_Energy
+[DEBUG]: Number	21740069
+[DEBUG]: SiUnit	^(2)^(2)
+[DEBUG]: Type	Energy
+[DEBUG]: Unit	W
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;W
+[DEBUG]: result: 7
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Instance: 1202757
+[DEBUG]: Read counter in path: //home//markus//Downloads//1202757_Gas.csv
+[DEBUG]: CounterName	1202757_Gas
+[DEBUG]: Number	1202757
+[DEBUG]: SiUnit	^(3)
+[DEBUG]: Type	Gas
+[DEBUG]: Unit	^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Instance: 18061860
+[DEBUG]: Read counter in path: //home//markus//Downloads//18061860_Water.csv
+[DEBUG]: CounterName	18061860_Water
+[DEBUG]: Number	18061860
+[DEBUG]: SiUnit	^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Instance: 279638
+[DEBUG]: Read counter in path: //home//markus//Downloads//279638_Water.csv
+[DEBUG]: CounterName	279638_Water
+[DEBUG]: Number	279638
+[DEBUG]: SiUnit	^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Instance: 458711
+[DEBUG]: Read counter in path: //home//markus//Downloads//458711_Water.csv
+[DEBUG]: CounterName	458711_Water
+[DEBUG]: Number	458711
+[DEBUG]: SiUnit	^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Instance: 15007241
+[DEBUG]: Read counter in path: //home//markus//Downloads//15007241_Water_Cold.csv
+[DEBUG]: CounterName	15007241_Water_Cold
+[DEBUG]: Number	15007241
+[DEBUG]: SiUnit	m^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	m^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Instance: 15018324
+[DEBUG]: Read counter in path: //home//markus//Downloads//15018324_Water_Hot.csv
+[DEBUG]: CounterName	15018324_Water_Hot
+[DEBUG]: Number	15018324
+[DEBUG]: SiUnit	m^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	m^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Instance: 23267492
+[DEBUG]: Read counter in path: //home//markus//Downloads//23267492_Water_Cold.csv
+[DEBUG]: CounterName	23267492_Water_Cold
+[DEBUG]: Number	23267492
+[DEBUG]: SiUnit	m^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	m^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Instance: 14524889
+[DEBUG]: Read counter in path: //home//markus//Downloads//14524889_Water_Hot.csv
+[DEBUG]: CounterName	14524889_Water_Hot
+[DEBUG]: Number	14524889
+[DEBUG]: SiUnit	m^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	m^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Read counter in path: //home//markus//Downloads//25489823_Water_Cold.csv
+[DEBUG]: CounterName	25489823_Water_Cold
+[DEBUG]: Number	25489823
+[DEBUG]: SiUnit	m^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	m^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Instance: 25489823
+[DEBUG]: Read counter in path: //home//markus//Downloads//25489823_Water_Cold.csv
+[DEBUG]: CounterName	25489823_Water_Cold
+[DEBUG]: Number	25489823
+[DEBUG]: SiUnit	m^(3)
+[DEBUG]: Type	Water
+[DEBUG]: Unit	m^(3)
+[DEBUG]: 
+[DEBUG]: 30.09.2021;45;m^(3)
+[DEBUG]: result: 7
+UNIT
+Sum €
+Work kg^(2)ms^(2)
+Type Water
+Unit m^(3)
+Kilo Kilo
+Kilo k
+Hekto Hekto
+Hekto h
+Deka Deka
+Deka da
+END
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
+[DEBUG]: unique_ptr DELETED!!!!!!!!!!!!
