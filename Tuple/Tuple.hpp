@@ -28,12 +28,12 @@ private:
 public:
 	using Type = Head;
 		
-	Tuple(): head(Head()) {
+	Tuple(): head(Head::Instance()) {
 	};
-	Tuple(Head const & head, Tuple<Tail...> const& tail): head(head), tail(tail) { };
+	Tuple(Head const & head, Tuple<Tail...> const& tail): head(Head::Instance()), tail(tail) { };
 	
 	Head& GetHead() {return head;}
-	Head const& GetHead() const {return head;}
+	Head const& GetHead() const {return Head::Instance();}
 	
 	Tuple<Tail...>& GetTail() {return tail;}
 	Tuple<Tail...> const& GetTail() const {return tail;}
@@ -43,13 +43,39 @@ public:
 	{
 		return GetNum<N>(*this);
 	}
+	
+};
+// template<typename Head, typename... Tail>
+// class Tuple<Head,Tail...>
+// {
+// private:
+// 	Head head;
+// 	Tuple<Tail...> tail;
+// public:
+// 	using Type = Head;
+// 		
+// 	Tuple(): head(Head()) {
+// 	};
+// 	Tuple(Head const & head, Tuple<Tail...> const& tail): head(head), tail(tail) { };
+// 	
+// 	Head& GetHead() {return head;}
+// 	Head const& GetHead() const {return head;}
+// 	
+// 	Tuple<Tail...>& GetTail() {return tail;}
+// 	Tuple<Tail...> const& GetTail() const {return tail;}
+// 
 // 	template<int N>
 // 	auto operator[](T::int_<N>)
 // 	{
-// 		return Get<N>(*this);
+// 		return GetNum<N>(*this);
 // 	}
-	
-};
+// // 	template<int N>
+// // 	auto operator[](T::int_<N>)
+// // 	{
+// // 		return Get<N>(*this);
+// // 	}
+// 	
+// };
 
 template<>
 class Tuple<>
