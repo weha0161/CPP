@@ -8,10 +8,10 @@ int main()
     std::cout<<"START"<<std::endl;
     
 	std::cout<<"---------------------READ------------------------"<<std::endl;
-	CtrContainer.Read();
+	CounterConatinerType::Instance().Read();
 	
 	std::cout<<"---------------------CE1------------------------"<<std::endl;
-	auto ce1 = CtrContainer.Get<CE1>();
+	auto ce1 = CounterConatinerType::Instance().Get<CE1>();
 	std::cout<<ce1<<std::endl;
 	ce1.Calculate<Difference>();
 	
