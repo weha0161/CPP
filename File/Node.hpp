@@ -151,7 +151,8 @@ namespace FS
 	
 	struct CSV: public FileTypeBase<CSV>
 	{
-		CSV(FileInfo* fi): FileTypeBase(fi), destinationPath(this->Info().Path() + CSV::Extension){};
+// 		CSV(FileInfo* fi): FileTypeBase(fi), destinationPath(this->Info().Path() + CSV::Extension){};
+		CSV(FileInfo* fi): FileTypeBase(fi), destinationPath(this->Info().Path()){};
 		
 		template<typename Separator = T::char_<';'>>
 		std::vector<std::vector<std::string>> GetValues()

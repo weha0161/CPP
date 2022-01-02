@@ -19,7 +19,7 @@ int main()
 	CounterConatinerType::Instance().Write();
 
     std::cout<<"---------------------READ------------------------"<<std::endl;
-	CounterConatinerType::Instance().Read();
+// 	CounterConatinerType::Instance().Read();
 	
     std::cout<<"UNIT"<<std::endl;
 	using s = Sum;
