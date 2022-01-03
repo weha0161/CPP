@@ -8,6 +8,14 @@
 #define CALCULATOR_HPP
 
 template<typename T>
+struct CalculatorResult
+{
+	const T& Prior;
+	const T& First
+	const T& Result;
+}
+
+template<typename T>
 struct Difference
 { 
 	static T Calculate(T t1, T t2) 

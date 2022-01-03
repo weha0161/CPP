@@ -46,7 +46,10 @@ public:
 		return instance;
 	}
 	
-	Counter(const Counter& c) { *this = Counter::Instance(); };	
+	Counter(const Counter& c) 
+	{ 
+		*this = Counter::Instance(); 
+	};	
 	
 	template<typename Separator = T::char_<'\t'>>
 	void DisplayHeader(std::ostream& out) const
@@ -64,7 +67,6 @@ public:
 		for(auto it = this->readings->cbegin(); it != this->readings->cend(); ++it)
 			(*it).Display(out);
 		
-// 		Logger::Log()<<this-readings->size()<<std::endl;
 	}
 	
 	std::string GetName() const
@@ -103,6 +105,11 @@ public:
 	};
 	
 	
+	~Counter()
+	{
+		Logger::Log(this->Begin(), this->End());
+	}
+	
 private:
 	inline static const std::string DestinationPath = Config::DestinationPath;
 	inline static const std::string Name = Config::CounterName;
@@ -129,15 +136,14 @@ private:
 	inline static const std::map<std::string, std::string> Header = createHeader();	
 	inline static std::unique_ptr<ReadingContainerType, DebugDeleter<ReadingContainerType>> readings = std::unique_ptr<ReadingContainerType, DebugDeleter<ReadingContainerType>>(new ReadingContainerType(),DebugDeleter<ReadingContainerType>());
 	
-	std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name + FS::CSV::Extension)));
-	std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(this->fileInfo.get()));
+	inline static std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name)));
+	inline static std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(fileInfo.get()));
 	
 	Counter()
 	{ 
 		Logger::Log()<<"Ctor: "<<this->Name<<MeterType::Name<<"_"<<Config::Number<<std::endl; 
 		this->Read();
 	};
-// 	~Counter(){}
 };
 
 template<typename C, typename S = T::char_<'\t'>>

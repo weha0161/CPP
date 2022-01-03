@@ -16,10 +16,10 @@ int main()
     std::cout<<CounterConatinerType::Instance()<<std::endl;
 	
     std::cout<<"---------------------WRITE---------------------"<<std::endl;
-	CounterConatinerType::Instance().Write();
+// 	CounterConatinerType::Instance().Write();
 
     std::cout<<"---------------------READ------------------------"<<std::endl;
-	CounterConatinerType::Instance().Read();
+// 	CounterConatinerType::Instance().Read();
 	
     std::cout<<"UNIT"<<std::endl;
 	using s = Sum;
@@ -40,8 +40,9 @@ int main()
 	
 	std::cout<<"Deka "<<Deka::Name<<std::endl;
     std::cout<<"Deka "<<Deka::Sign<<std::endl;
-	auto ctw = CounterConatinerType::Instance().Get<CTHW>();
-	
+// 	auto ctw = CounterConatinerType::Instance().Get<CTHW>();
+	auto ctw = CounterConatinerType::Instance().Get<0>();
+	ctw.Display(std::cout);
 	Logger::Log(ctw.Begin(), ctw.End());
 	
     std::cout<<"END"<<std::endl;

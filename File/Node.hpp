@@ -13,9 +13,9 @@
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <filesystem>
+#include "Info.hpp"
 #include "../Logger/Logger.hpp"
 #include "../Typelist/Typelist.h"
-#include "Info.hpp"
 #include "../Visitor/Visitor.hpp"
 
 #ifndef NODE_HPP
@@ -114,7 +114,6 @@ namespace FS
 		
 		std::vector<std::string> Read() const
 		{
-			Logger::Log()<<"Read: "<<std::endl;
 			return FS::ReadLines(this->info.Path());
 		};
 		
@@ -151,15 +150,14 @@ namespace FS
 	
 	struct CSV: public FileTypeBase<CSV>
 	{
-// 		CSV(FileInfo* fi): FileTypeBase(fi), destinationPath(this->Info().Path() + CSV::Extension){};
-		CSV(FileInfo* fi): FileTypeBase(fi), destinationPath(this->Info().Path()){};
+		CSV(FileInfo* fi): FileTypeBase(fi), destinationPath(this->Info().Path() + CSV::Extension){};
 		
 		template<typename Separator = T::char_<';'>>
 		std::vector<std::vector<std::string>> GetValues()
 		{
 			auto result = std::vector<std::vector<std::string>>();
 			
-			auto lines = FS::ReadLines(this->info.Path());
+			auto lines = FS::ReadLines(this->destinationPath);
 // 			Logger::Log()<<"result: "<<lines.size()<<std::endl;
 						
 			for(auto line : lines)
@@ -172,7 +170,7 @@ namespace FS
 		};
 		
 		template<typename Separator = T::char_<';'>>
-		std::vector<std::vector<std::string>>			 Read()
+		std::vector<std::vector<std::string>>Read()
 		{
 			auto result = this->GetValues();
 			Logger::Log()<<"result: "<<result.size()<<std::endl;
