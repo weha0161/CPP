@@ -79,7 +79,7 @@ public:
 		Logger::Log()<<"Read counter in path: "<<this->fileInfo->Path()<<std::endl;
 		auto values = csv->Read();
 		
-		for(int i = Header.size() + 1; i < values.size(); ++i)
+		for(int i = Header.size(); i < values.size(); ++i)
 		{
 			auto reading = this->CreateReading(values.at(i));
 			this->readings->push_back(reading);
