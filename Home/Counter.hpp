@@ -61,7 +61,7 @@ public:
 	template<typename Separator = T::char_<'\t'>>
 	void Display(std::ostream& out) const
 	{
-		DisplayHeader(out);
+		DisplayHeader<Separator>(out);
 		out<<std::endl;
 		
 		for(auto it = this->readings->cbegin(); it != this->readings->cend(); ++it)
@@ -76,10 +76,10 @@ public:
 	
 	void Read()
 	{
-		Logger::Log()<<"Read counter in path: "<<this->fileInfo->Path()<<std::endl;
 		auto values = csv->Read();
+		Logger::Log()<<values.size()<<" "<<Header.size()<<"\tRead counter in path: "<<this->fileInfo->Path()<<FS::CSV::Extension<<std::endl;
 		
-		for(int i = Header.size(); i < values.size(); ++i)
+		for(int i = Header.size(); i < values.size()-1; ++i)
 		{
 			auto reading = this->CreateReading(values.at(i));
 			this->readings->push_back(reading);
@@ -127,6 +127,11 @@ private:
 	
 	ReadingType CreateReading(std::vector<std::string> values)
 	{
+		if(values.size() < 2)
+		{
+			return ReadingType(QuantityType(0.0), DateType(Date("01.01.2000")));
+		}
+		
 		auto date = Date(values.at(0));
 		auto value = std::stod(values.at(1));
 		

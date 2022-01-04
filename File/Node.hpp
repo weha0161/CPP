@@ -173,7 +173,6 @@ namespace FS
 		std::vector<std::vector<std::string>>Read()
 		{
 			auto result = this->GetValues();
-			Logger::Log()<<"result: "<<result.size()<<std::endl;
 			return result;
 		}
 		
@@ -183,7 +182,7 @@ namespace FS
 			Logger::Log()<<"Write Counter: "<<counter.GetName()<<" to: "<<destinationPath<<std::endl;
 			std::unique_ptr<std::ofstream> ofs = std::unique_ptr<std::ofstream>(new std::ofstream(destinationPath)); 
 			
-			counter.Display(*ofs);
+			counter.template Display<Separator>(*ofs);
 			
 			ofs->close();
 		}
