@@ -23,7 +23,7 @@ public:
 	using CounterTypes = Tuple<Head,Tail...>;
 private:
 	CounterTypes counters;
-	CounterContainer():counters(CounterTypes()) { Logger::Log()<<"Ctor CounterContainer"<<std::endl; };
+	CounterContainer():counters(CounterTypes()) { Logger::Log<Info>()<<"CounterContainer created."<<std::endl; };
 public:
 	CounterContainer(const CounterContainer& c) { *this = CounterContainer::Instance(); };
 

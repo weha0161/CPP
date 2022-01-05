@@ -19,11 +19,6 @@
 #ifndef COUNTER_H
 #define COUNTER_H
 
-template<typename T>
-struct DebugDeleter {
-  void operator()(T* t) {	Logger::Log()<<"unique_ptr DELETED!!!!!!!!!!!!"<<std::endl; }
-};
-
 template<typename ConfigT>
 class Counter
 {
@@ -75,7 +70,7 @@ public:
 	void Read()
 	{
 		auto values = csv->Read();
-		Logger::Log()<<values.size()<<" "<<Header.size()<<"\tRead counter in path: "<<this->fileInfo->Path()<<FS::CSV::Extension<<std::endl;
+		Logger::Log<Info>()<<"Read Counter: "<<this->GetName()<<" to: "<<csv->GetDestinationPath()<<std::endl;
 		
 		for(int i = Header.size(); i < values.size(); ++i)
 		{
@@ -86,6 +81,7 @@ public:
 	
 	void Write(const std::string sourcePath = ".")
 	{
+		Logger::Log<Info>()<<"Write Counter: "<<this->GetName()<<" to: "<<csv->GetDestinationPath()<<std::endl;
 		csv->Write(*this);
 	}
 	
@@ -98,14 +94,14 @@ public:
 		for(auto it = this->readings->cbegin(); it != this->readings->cend(); ++it)
 		{
 			auto v = Calc::Calculate(this->Begin()->QuantityValue, (it+1)->QuantityValue);
-			Logger::Log()<<"V RESULT"<<v.Value()<<std::endl;
+// 			Logger::Log()<<"V RESULT"<<v.Value()<<std::endl;
 		}		
 	};
 	
 	
 	~Counter()
 	{
-		Logger::Log(this->Begin(), this->End());
+// 		Logger::Log(this->Begin(), this->End());
 	}
 	
 private:
@@ -155,7 +151,7 @@ private:
 	
 	Counter()
 	{ 
-		Logger::Log()<<"Ctor: "<<this->Name<<MeterType::Name<<"_"<<Config::Number<<std::endl; 
+		Logger::Log<Info>()<<"Initialize Counter: "<<this->Name<<MeterType::Name<<"_"<<Config::Number<<std::endl; 
 		this->Read();
 	};
 };
