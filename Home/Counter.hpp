@@ -61,9 +61,7 @@ public:
 	template<typename Separator = T::char_<'\t'>>
 	void Display(std::ostream& out) const
 	{
-		DisplayHeader<Separator>(out);
-		out<<std::endl;
-		
+		DisplayHeader<Separator>(out);		
 		for(auto it = this->readings->cbegin(); it != this->readings->cend(); ++it)
 			(*it).Display(out);
 		
@@ -79,9 +77,9 @@ public:
 		auto values = csv->Read();
 		Logger::Log()<<values.size()<<" "<<Header.size()<<"\tRead counter in path: "<<this->fileInfo->Path()<<FS::CSV::Extension<<std::endl;
 		
-		for(int i = Header.size(); i < values.size()-1; ++i)
+		for(int i = Header.size(); i < values.size(); ++i)
 		{
-			auto reading = this->CreateReading(values.at(i));
+			auto reading = this->CreateReading(values.at(i).cbegin(), values.at(i).cend());
 			this->readings->push_back(reading);
 		}
 	}
@@ -125,17 +123,28 @@ private:
         return m;
 	}
 	
-	ReadingType CreateReading(std::vector<std::string> values)
+	template<typename Iterator>
+	ReadingType CreateReading(Iterator cbegin, Iterator cend)
 	{
-		if(values.size() < 2)
+		if(cbegin != cend)
 		{
-			return ReadingType(QuantityType(0.0), DateType(Date("01.01.2000")));
+			try 
+			{
+				auto date = Date(*cbegin);
+				auto value = std::stod(*(++cbegin));
+				
+				return ReadingType(QuantityType(value), DateType(date));
+			} 
+			catch (const std::exception& e) 
+			{
+				Logger::Log<Error>()<<"Error: CreateReading"<<e.what()<<std::endl;
+			}		
 		}
-		
-		auto date = Date(values.at(0));
-		auto value = std::stod(values.at(1));
-		
-		return ReadingType(QuantityType(value), DateType(date));
+		else
+			Logger::Log<Error>()<<"Error: CreateReading-> Not enough values"<<std::endl;
+			
+				
+		return ReadingType(QuantityType(0.0), DateType(Date("01.01.2000")));
 	}
 	
 	inline static const std::map<std::string, std::string> Header = createHeader();	
