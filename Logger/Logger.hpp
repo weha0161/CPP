@@ -15,6 +15,11 @@ struct Debug//: LogLevelBase
     static constexpr const char* Identifier ="[DEBUG]: ";
 };
 
+struct Error//: LogLevelBase
+{
+    static constexpr const char* Identifier ="[ERROR]: ";
+};
+
 class Logger
 {   public:
         std::ofstream file;
