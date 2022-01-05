@@ -10,12 +10,17 @@
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
 
-struct Debug//: LogLevelBase
+struct Debug
 {
     static constexpr const char* Identifier ="[DEBUG]: ";
 };
 
-struct Error//: LogLevelBase
+struct Info
+{
+    static constexpr const char* Identifier ="[Info]: ";
+};
+
+struct Error
 {
     static constexpr const char* Identifier ="[ERROR]: ";
 };
@@ -93,5 +98,11 @@ class Logger
 //     return this->logFileName;
 // };
 
+
+template<typename T>
+struct DebugDeleter 
+{
+  void operator()(T* t)  {	/*Logger::Log()<<"Pointer deleted."<<std::endl;*/ }
+};
 
 #endif
