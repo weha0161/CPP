@@ -16,20 +16,64 @@
 
 //---------------------------------------------------------------------------------------------------CounterContainer----------------------------------------------------------------------------------------
 
-template<typename Head, typename... Tail>
-class CounterContainer
+template<typename List>
+class CounterContainer{};
+
+template<typename Head>
+class CounterContainer<Typelist<Head>>
 {
 public:
-	using CounterTypes = Typelist<Head,Tail...>;
-private:
-// 	CounterTypes counters;
+	using Type = Head;
+	using CounterTypes = Typelist<Head>;
+	using ContainerType = CounterContainer<Typelist<Head>>;
+protected:
 	CounterContainer() { Logger::Log<Info>()<<"CounterContainer created."<<std::endl; };
 public:
 // 	CounterContainer(const CounterContainer& c) { *this = CounterContainer::Instance(); };
 
-	void Display(std::ostream& os) const
+	static void Display(std::ostream& os) 
 	{
-// 		os<<this->counters;
+		Type::Display(os);
+	}
+	
+	void Write(const std::string sourcePath = ".")
+	{
+	}
+	
+	void Read(const std::string sourcePath = ".")
+	{
+	}
+	
+	template<unsigned N>
+	auto Get() { return At<CounterTypes,N>::Type; }
+
+	template<typename T>
+	auto Get() { return GetType<CounterTypes,T>; }
+	
+	static CounterContainer& Instance()
+	{
+		static CounterContainer instance;
+		return instance;
+	}	
+};
+
+template<typename Head, typename... Tail>
+class CounterContainer<Typelist<Head,Tail...>>: public CounterContainer<Typelist<Tail...>>
+{
+public:
+	using Type = Head;
+	using CounterTypes = Typelist<Head,Tail...>;
+	using ContainerType = CounterContainer<Typelist<Head,Tail...>>;
+protected:
+	CounterContainer() { Logger::Log<Info>()<<"CounterContainer created."<<std::endl; };
+public:
+// 	CounterContainer(const CounterContainer& c) { *this = CounterContainer::Instance(); };
+
+	static void Display(std::ostream& os) 
+	{
+		Type::Display(os);
+		
+		CounterContainer<Typelist<Tail...>>::Display(os);		
 	}
 	
 	void Write(const std::string sourcePath = ".")
@@ -73,7 +117,7 @@ using CMHW = Counter<Middle_HWaterConfiguration>;
 using CTCW = Counter<Top_CWaterConfiguration>;
 using CTHW = Counter<Top_HWaterConfiguration>;
 
-using CounterConatinerType = CounterContainer<CE1,CG1,CWA,CWO,CWOut, CBCW,CBHW, CMCW,CMHW,CTCW,CTHW>;
+using CounterConatinerType = CounterContainer<Typelist<CE1,CG1,CWA,CWO,CWOut, CBCW,CBHW, CMCW,CMHW,CTCW,CTHW>>::ContainerType;
 
 // static CounterConatinerType& CtrContainer =	 CounterConatinerType:.Instance;
 

@@ -48,17 +48,17 @@ public:
 	};	
 	
 	template<typename Separator = T::char_<'\t'>>
-	void DisplayHeader(std::ostream& out) const
+	static void DisplayHeader(std::ostream& out)
 	{
 		for (auto& it : Header)
 			out<<it.first<<Separator::Value<<it.second<<std::endl;
 	}
 	
 	template<typename Separator = T::char_<'\t'>>
-	void Display(std::ostream& out) const
+	static void Display(std::ostream& out)
 	{
 		DisplayHeader<Separator>(out);		
-		for(auto it = this->readings->cbegin(); it != this->readings->cend(); ++it)
+		for(auto it = readings->cbegin(); it != readings->cend(); ++it)
 			(*it).Display(out);
 		
 	}
