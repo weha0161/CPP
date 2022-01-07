@@ -44,6 +44,7 @@ public:
 	Counter(const Counter& c) 
 	{ 
 		*this = Counter::Instance(); 
+		Logger::Log()<<""<<std::endl;
 	};	
 	
 	template<typename Separator = T::char_<'\t'>>
@@ -101,7 +102,8 @@ public:
 	
 	~Counter()
 	{
-// 		Logger::Log(this->Begin(), this->End());
+		Logger::Log()<<"Destructor"<<std::endl;
+		Logger::Log(this->Begin(), this->End());
 	}
 	
 private:

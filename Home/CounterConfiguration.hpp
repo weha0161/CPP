@@ -78,13 +78,14 @@ struct Reading
 	using Unit = U;
 	using QuantityType = Q;
 	using DateType = DateT;
-	const DateType Date;
-	const QuantityType QuantityValue;
+	const DateType& Date;
+	const QuantityType& QuantityValue;
 	
 	template<typename Separator = T::char_<';'>>
 	void Display(std::ostream& out) const
 	{
-		out<<Date<<Separator::Value<<QuantityValue.Value()<<Separator::Value<<QuantityType::UnitPrefix::Sign<<U::Sign()<<std::endl;
+// 		out<<Date<<Separator::Value<<QuantityValue.Value()<<Separator::Value<<QuantityType::UnitPrefix::Sign<<U::Sign()<<std::endl;
+		out<<Date<<U::Sign()<<std::endl;
 	}
 	
 	Reading(QuantityType val, DateType d): Date(d), QuantityValue(val)	{}

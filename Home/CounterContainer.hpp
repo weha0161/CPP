@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include "../Logger/Logger.hpp"
-#include "../Tuple/Tuple.hpp"
+#include "../Typelist/Typelist.h"
 
 #ifndef COUNTERCONTAINER_HPP
 #define COUNTERCONTAINER_HPP
@@ -20,33 +20,31 @@ template<typename Head, typename... Tail>
 class CounterContainer
 {
 public:
-	using CounterTypes = Tuple<Head,Tail...>;
+	using CounterTypes = Typelist<Head,Tail...>;
 private:
-	CounterTypes counters;
-	CounterContainer():counters(CounterTypes()) { Logger::Log<Info>()<<"CounterContainer created."<<std::endl; };
+// 	CounterTypes counters;
+	CounterContainer() { Logger::Log<Info>()<<"CounterContainer created."<<std::endl; };
 public:
-	CounterContainer(const CounterContainer& c) { *this = CounterContainer::Instance(); };
+// 	CounterContainer(const CounterContainer& c) { *this = CounterContainer::Instance(); };
 
 	void Display(std::ostream& os) const
 	{
-		os<<this->counters;
+// 		os<<this->counters;
 	}
 	
 	void Write(const std::string sourcePath = ".")
 	{
-		TupleWrite(counters);
 	}
 	
 	void Read(const std::string sourcePath = ".")
 	{
-		TupleRead(counters);
 	}
 	
 	template<unsigned N>
-	auto Get() { return GetNum<N>(counters); }
+	auto Get() { return At<CounterTypes,N>::Type; }
 
 	template<typename T>
-	auto Get() { return GetType<T>(counters); }
+	auto Get() { return GetType<CounterTypes,T>; }
 	
 	static CounterContainer& Instance()
 	{
