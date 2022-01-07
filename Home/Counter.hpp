@@ -151,7 +151,7 @@ private:
 	
 	Counter()
 	{ 
-		Logger::Log<Info>()<<"Initialize Counter: "<<this->Name<<MeterType::Name<<"_"<<Config::Number<<std::endl; 
+		Logger::Log<Info>()<<"Initialize Counter: "<<MeterType::Name<<"_"<<Config::Number<<std::endl; 
 		this->Read();
 	};
 };
