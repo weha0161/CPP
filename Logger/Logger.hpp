@@ -102,7 +102,7 @@ class Logger
 template<typename T>
 struct DebugDeleter 
 {
-  void operator()(T* t)  {	/*Logger::Log()<<"Pointer deleted."<<std::endl;*/ }
+  void operator()(T* t)  {	Logger::Log()<<"Pointer deleted."<<std::endl; }
 };
 
 #endif

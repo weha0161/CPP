@@ -30,6 +30,7 @@ public:
 	using DateType = ReadingType::DateType;
 	using ReadingContainerType = std::vector<ReadingType>;
 	using Type = MeterType;
+	using CounterType = Counter<ConfigT>;
 	using Unit = Config::Unit;
 	using CIterator = std::vector<ReadingType>::const_iterator;
 	inline static const uint Number = Config::Number;
@@ -63,27 +64,27 @@ public:
 		
 	}
 	
-	std::string GetName() const
+	static std::string GetName()
 	{
 		return Name;
 	}
 	
-	void Read()
+	static void Read()
 	{
 		auto values = csv->Read();
-		Logger::Log<Info>()<<"Read Counter: "<<this->GetName()<<" to: "<<csv->GetDestinationPath()<<std::endl;
+		Logger::Log<Info>()<<"Read Counter: "<<GetName()<<" to: "<<csv->GetDestinationPath()<<std::endl;
 		
 		for(int i = Header.size(); i < values.size(); ++i)
 		{
-			auto reading = this->CreateReading(values.at(i).cbegin(), values.at(i).cend());
-			this->readings->push_back(reading);
+			auto reading = CreateReading(values.at(i).cbegin(), values.at(i).cend());
+			readings->push_back(reading);
 		}
 	}
 	
-	void Write(const std::string sourcePath = ".")
+	static void Write(const std::string sourcePath = ".")
 	{
-		Logger::Log<Info>()<<"Write Counter: "<<this->GetName()<<" to: "<<csv->GetDestinationPath()<<std::endl;
-		csv->Write(*this);
+		Logger::Log<Info>()<<"Write Counter: "<<GetName()<<" to: "<<csv->GetDestinationPath()<<std::endl;
+		csv->Write<CounterType>();
 	}
 	
 	CIterator Begin() const { return this->readings->cbegin(); }
@@ -122,7 +123,7 @@ private:
 	}
 	
 	template<typename Iterator>
-	ReadingType CreateReading(Iterator cbegin, Iterator cend)
+	static ReadingType CreateReading(Iterator cbegin, Iterator cend)
 	{
 		if(cbegin != cend)
 		{

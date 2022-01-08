@@ -163,6 +163,8 @@ namespace FS
 			for(auto line : lines)
 			{
 // 				Logger::Log()<<line<<std::endl;
+// 				auto values = String_::Split<Separator>(line);
+// 				Logger::Log(values.cbegin(), values.cend());
 				result.push_back(String_::Split<Separator>(line));
 			}
 			
@@ -177,11 +179,12 @@ namespace FS
 		}
 		
 		template<typename Ctr, typename Separator = T::char_<';'>>
-		void Write(const Ctr& counter)
+		void Write()
+// 		void Write(const Ctr& counter)
 		{
 			std::unique_ptr<std::ofstream> ofs = std::unique_ptr<std::ofstream>(new std::ofstream(destinationPath)); 
 			
-			counter.template Display<Separator>(*ofs);
+			Ctr::template Display<Separator>(*ofs);
 			
 			ofs->close();
 		}

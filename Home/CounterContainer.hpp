@@ -38,10 +38,12 @@ public:
 	
 	void Write(const std::string sourcePath = ".")
 	{
+		Type::Write(sourcePath);
 	}
 	
 	void Read(const std::string sourcePath = ".")
 	{
+		Type::Read();
 	}
 	
 	template<unsigned N>
@@ -72,16 +74,19 @@ public:
 	static void Display(std::ostream& os) 
 	{
 		Type::Display(os);
-		
 		CounterContainer<Typelist<Tail...>>::Display(os);		
 	}
 	
 	void Write(const std::string sourcePath = ".")
 	{
+		Type::Write(sourcePath);
+		CounterContainer<Typelist<Tail...>>::Write(sourcePath);		
 	}
 	
 	void Read(const std::string sourcePath = ".")
 	{
+		Type::Read();
+		CounterContainer<Typelist<Tail...>>::Read();		
 	}
 	
 	template<unsigned N>
