@@ -29,8 +29,6 @@ public:
 protected:
 	CounterContainer() { Logger::Log<Info>()<<"CounterContainer created."<<std::endl; };
 public:
-// 	CounterContainer(const CounterContainer& c) { *this = CounterContainer::Instance(); };
-
 	static std::ostream& Display(std::ostream& os) 
 	{
 		return Type::Display(os);
@@ -69,8 +67,6 @@ public:
 protected:
 	CounterContainer() { Logger::Log<Info>()<<"CounterContainer created."<<std::endl; };
 public:
-// 	CounterContainer(const CounterContainer& c) { *this = CounterContainer::Instance(); };
-
 	static std::ostream& Display(std::ostream& os) 
 	{
 		return CounterContainer<Typelist<Tail...>>::Display(Type::Display(os));		
@@ -121,7 +117,5 @@ using CTCW = Counter<Top_CWaterConfiguration>;
 using CTHW = Counter<Top_HWaterConfiguration>;
 
 using CounterConatinerType = CounterContainer<Typelist<CE1,CG1,CWA,CWO,CWOut, CBCW,CBHW, CMCW,CMHW,CTCW,CTHW>>::ContainerType;
-
-// static CounterConatinerType& CtrContainer =	 CounterConatinerType:.Instance;
 
 #endif

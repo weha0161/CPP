@@ -73,7 +73,8 @@ public:
 		
 		for(int i = Header.size(); i < values.size(); ++i)
 		{
-			auto reading = CreateReading(values.at(i).cbegin(), values.at(i).cend());
+			ReadingType reading = CreateReading(values.at(i).cbegin(), values.at(i).cend());
+			Logger::Log<Error>()<<reading.Date<<std::endl;
 			readings->push_back(reading);
 		}
 	}
@@ -88,21 +89,18 @@ public:
 	CIterator End() const { return this->readings->cend(); }
 	
 	template<template<typename> class TCalc, typename Calc = TCalc<QuantityType>>
-	void Calculate()
+	static void Calculate()
 	{
-		for(auto it = this->readings->cbegin(); it != this->readings->cend(); ++it)
+		for(auto it = readings->cbegin(); it != readings->cend(); ++it)
 		{
-			auto v = Calc::Calculate(this->Begin()->QuantityValue, (it+1)->QuantityValue);
-// 			Logger::Log()<<"V RESULT"<<v.Value()<<std::endl;
+			auto v = Calc::Calculate(Begin()->QuantityValue, (it+1)->QuantityValue);
+			Logger::Log()<<"V RESULT"<<v.Value()<<std::endl;
 		}		
 	};
 	
 	
 	
 private:
-	inline static const std::string DestinationPath = Config::DestinationPath;
-	inline static const std::string Name = Config::CounterName;
-	
 	static std::map<std::string, std::string> createHeader()
 	{
 		std::map<std::string, std::string> m;
@@ -114,6 +112,15 @@ private:
         return m;
 	}
 	
+	inline static const std::string DestinationPath = Config::DestinationPath;
+	inline static const std::string Name = Config::CounterName;
+	
+	inline static const std::map<std::string, std::string> Header = createHeader();	
+	inline static std::unique_ptr<ReadingContainerType, DebugDeleter<ReadingContainerType>> readings = std::unique_ptr<ReadingContainerType, DebugDeleter<ReadingContainerType>>(new ReadingContainerType(),DebugDeleter<ReadingContainerType>());
+	
+	inline static std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name)));
+	inline static std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(fileInfo.get()));
+	
 	template<typename Iterator>
 	static ReadingType CreateReading(Iterator cbegin, Iterator cend)
 	{
@@ -124,6 +131,9 @@ private:
 				auto date = Date(*cbegin);
 				auto value = std::stod(*(++cbegin));
 				
+				
+				Logger::Log<Info>()<<value<<std::endl;
+				Logger::Log<Info>()<<ReadingType(QuantityType(value), DateType(date))<<std::endl;
 				return ReadingType(QuantityType(value), DateType(date));
 			} 
 			catch (const std::exception& e) 
@@ -138,11 +148,6 @@ private:
 		return ReadingType(QuantityType(0.0), DateType(Date("01.01.2000")));
 	}
 	
-	inline static const std::map<std::string, std::string> Header = createHeader();	
-	inline static std::unique_ptr<ReadingContainerType, DebugDeleter<ReadingContainerType>> readings = std::unique_ptr<ReadingContainerType, DebugDeleter<ReadingContainerType>>(new ReadingContainerType(),DebugDeleter<ReadingContainerType>());
-	
-	inline static std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name)));
-	inline static std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(fileInfo.get()));
 	
 	Counter()
 	{ 
@@ -158,8 +163,7 @@ private:
 template<typename C, typename S = T::char_<'\t'>>
 std::ostream& operator<<(std::ostream& strm, const Counter<C> c)
 {
-	c.Display(strm);
-	return strm;
+	return c.Display(strm);
 }
 
 #endif

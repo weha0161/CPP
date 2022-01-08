@@ -17,9 +17,10 @@ int main()
 	
     std::cout<<"---------------------READ------------------------"<<std::endl;
 	CounterConatinerType::Instance().Read();
+	CounterConatinerType::Display(std::cout);
     
 	std::cout<<"---------------------WRITE---------------------"<<std::endl;
-	CounterConatinerType::Instance().Write();
+// 	CounterConatinerType::Instance().Write();
 	
     std::cout<<"UNIT"<<std::endl;
 	using s = Sum;
