@@ -35,33 +35,30 @@ public:
 	using CIterator = std::vector<ReadingType>::const_iterator;
 	inline static const uint Number = Config::Number;
 
-	Counter& operator=(const Counter&) { return Counter::Instance(); };
 	static Counter& Instance()
 	{
 		static Counter instance;
 		return instance;
 	}
 	
-	Counter(const Counter& c) 
-	{ 
-		*this = Counter::Instance(); 
-		Logger::Log()<<""<<std::endl;
-	};	
 	
 	template<typename Separator = T::char_<'\t'>>
-	static void DisplayHeader(std::ostream& out)
+	static std::ostream& DisplayHeader(std::ostream& out)
 	{
 		for (auto& it : Header)
 			out<<it.first<<Separator::Value<<it.second<<std::endl;
+		
+		return out;
 	}
 	
 	template<typename Separator = T::char_<'\t'>>
-	static void Display(std::ostream& out)
+	static std::ostream& Display(std::ostream& out)
 	{
 		DisplayHeader<Separator>(out);		
 		for(auto it = readings->cbegin(); it != readings->cend(); ++it)
 			(*it).Display(out);
 		
+		return out;
 	}
 	
 	static std::string GetName()
@@ -101,11 +98,6 @@ public:
 	};
 	
 	
-	~Counter()
-	{
-		Logger::Log()<<"Destructor"<<std::endl;
-		Logger::Log(this->Begin(), this->End());
-	}
 	
 private:
 	inline static const std::string DestinationPath = Config::DestinationPath;
@@ -157,6 +149,10 @@ private:
 		Logger::Log<Info>()<<"Initialize Counter: "<<MeterType::Name<<"_"<<Config::Number<<std::endl; 
 		this->Read();
 	};
+	
+	~Counter()	{ Logger::Log()<<"Destructor"<<std::endl; }
+	Counter& operator=(const Counter&) = delete;
+	Counter(const Counter& c) = delete;
 };
 
 template<typename C, typename S = T::char_<'\t'>>

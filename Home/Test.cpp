@@ -15,11 +15,11 @@ int main()
     std::cout<<"Ostream "<<std::endl;
     std::cout<<CounterConatinerType::Instance()<<std::endl;
 	
-    std::cout<<"---------------------WRITE---------------------"<<std::endl;
-	CounterConatinerType::Instance().Write();
-
     std::cout<<"---------------------READ------------------------"<<std::endl;
 	CounterConatinerType::Instance().Read();
+    
+	std::cout<<"---------------------WRITE---------------------"<<std::endl;
+	CounterConatinerType::Instance().Write();
 	
     std::cout<<"UNIT"<<std::endl;
 	using s = Sum;

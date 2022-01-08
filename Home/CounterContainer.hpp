@@ -31,9 +31,9 @@ protected:
 public:
 // 	CounterContainer(const CounterContainer& c) { *this = CounterContainer::Instance(); };
 
-	static void Display(std::ostream& os) 
+	static std::ostream& Display(std::ostream& os) 
 	{
-		Type::Display(os);
+		return Type::Display(os);
 	}
 	
 	void Write(const std::string sourcePath = ".")
@@ -71,10 +71,9 @@ protected:
 public:
 // 	CounterContainer(const CounterContainer& c) { *this = CounterContainer::Instance(); };
 
-	static void Display(std::ostream& os) 
+	static std::ostream& Display(std::ostream& os) 
 	{
-		Type::Display(os);
-		CounterContainer<Typelist<Tail...>>::Display(os);		
+		return CounterContainer<Typelist<Tail...>>::Display(Type::Display(os));		
 	}
 	
 	void Write(const std::string sourcePath = ".")
@@ -105,8 +104,7 @@ public:
 template<typename Head, typename... Tail>
 std::ostream& operator<<(std::ostream& strm, const CounterContainer<Head,Tail...> c)
 {
-	c.Display(strm);
-	return strm;
+	return c.Display(strm);
 }
 
 using CG1 = Counter<GasConfiguration>;
