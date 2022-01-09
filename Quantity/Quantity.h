@@ -23,36 +23,36 @@ struct Quantity
 	Quantity(Quantity<U2,SiPrefix2,T2> q ):value(q.Value()){ 	}
 	
 	// ----------------------------------------ADD-------------------------------------------------------------
-	Quantity<U,SiPrefix,T1> operator+(const Quantity<U,SiPrefix,T1>& y) { return Quantity<U,SiPrefix,T1>(this->Value() + y.Value()); }
+	Quantity<U,SiPrefix,T1> operator+(const Quantity<U,SiPrefix,T1>& y) const { return Quantity<U,SiPrefix,T1>(this->Value() + y.Value()); }
 	
 	template<typename SiPrefix2 = SiPrefix>
-	Quantity<U,SiPrefix,T1> operator+(const Quantity<U,SiPrefix2,T1>& y) { return Quantity<U,SiPrefix,T1>((this->PureValue() + y.Value())/ SiPrefix::Factor); }
+	Quantity<U,SiPrefix,T1> operator+(const Quantity<U,SiPrefix2,T1>& y) const { return Quantity<U,SiPrefix,T1>((this->PureValue() + y.Value())/ SiPrefix::Factor); }
 	
 	// ----------------------------------------SUB-------------------------------------------------------------
-	Quantity<U,SiPrefix,T1> operator-(const Quantity<U,SiPrefix,T1>& y) { return Quantity<U,SiPrefix,T1>(this->Value() - y.Value()); }
+	Quantity<U,SiPrefix,T1> operator-(const Quantity<U,SiPrefix,T1>& y) const { return Quantity<U,SiPrefix,T1>(this->Value() - y.Value()); }
 	
 	template<typename SiPrefix2 = SiPrefix>
-	Quantity<U,SiPrefix,T1> operator-(const Quantity<U,SiPrefix2,T1>& y) { return Quantity<U,SiPrefix,T1>((this->PureValue() - y.Value())/ SiPrefix::Factor); }
+	Quantity<U,SiPrefix,T1> operator-(const Quantity<U,SiPrefix2,T1>& y) const { return Quantity<U,SiPrefix,T1>((this->PureValue() - y.Value())/ SiPrefix::Factor); }
 	
 	// ----------------------------------------MULTIPLY-------------------------------------------------------------
 	
-	Quantity<typename Transform<U, U,MultiplyPolicy>::Type, SiPrefix,T1> operator*(const Quantity<U,SiPrefix,T1>& q ){ 
+	Quantity<typename Transform<U, U,MultiplyPolicy>::Type, SiPrefix,T1> operator*(const Quantity<U,SiPrefix,T1>& q ) const { 
 		return Quantity<typename Transform<U, U, MultiplyPolicy>::Type, SiPrefix,T1>(this->PureValue() * q.Value());
 	}
 	
 	template<typename U2 = U, typename SiPrefix2 = SiPrefix>
-	Quantity<typename Transform<U, U2,MultiplyPolicy>::Type, SiPrefix,T1> operator*(const Quantity<U2, SiPrefix2,T1>& q ){ 
+	Quantity<typename Transform<U, U2,MultiplyPolicy>::Type, SiPrefix,T1> operator*(const Quantity<U2, SiPrefix2,T1>& q ) const { 
 		return Quantity<typename Transform< U, U2, MultiplyPolicy>::Type, SiPrefix,T1>(this->Value() * q.Value());
 	}
 	
 	// ----------------------------------------DIVISION-------------------------------------------------------------
 	
-	Quantity<typename Transform<U, U,DividePolicy>::Type, SiPrefix,T1> operator/(const Quantity<U,SiPrefix,T1>& q ){ 
+	Quantity<typename Transform<U, U,DividePolicy>::Type, SiPrefix,T1> operator/(const Quantity<U,SiPrefix,T1>& q ) const { 
 		return Quantity<typename Transform<U, U, DividePolicy>::Type, SiPrefix,T1>(this->Value() / q.Value());
 	}
 	
 	template<typename U2 = U, typename SiPrefix2 = SiPrefix>
-	Quantity<typename Transform<U, U2,DividePolicy>::Type, SiPrefix,	T1> operator/(const Quantity<U2,SiPrefix2,T1>& q ){ 
+	Quantity<typename Transform<U, U2,DividePolicy>::Type, SiPrefix,	T1> operator/(const Quantity<U2,SiPrefix2,T1>& q ) const { 
 		return Quantity<typename Transform< U, U2, DividePolicy>::Type, SiPrefix,T1>(this->Value() / q.Value());
 	}
 	
