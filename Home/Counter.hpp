@@ -74,7 +74,6 @@ public:
 		for(int i = Header.size(); i < values.size(); ++i)
 		{
 			ReadingType reading = CreateReading(values.at(i).cbegin(), values.at(i).cend());
-			Logger::Log<Error>()<<reading.Date<<std::endl;
 			readings->push_back(reading);
 		}
 	}
@@ -88,16 +87,16 @@ public:
 	CIterator Begin() const { return this->readings->cbegin(); }
 	CIterator End() const { return this->readings->cend(); }
 	
-	template<template<typename> class TCalc, typename Calc = TCalc<QuantityType>>
+// 	template<template<typename> class TCalc, typename Calc = TCalc<QuantityType>>
+	template<typename TCalc>
 	static void Calculate()
 	{
-		for(auto it = readings->cbegin(); it != readings->cend(); ++it)
+		for(auto it = readings->cbegin(); (it + 1) != readings->cend(); ++it)
 		{
-			auto v = Calc::Calculate(Begin()->QuantityValue, (it+1)->QuantityValue);
-			Logger::Log()<<"V RESULT"<<v.Value()<<std::endl;
+			auto v = TCalc::Calculate(*it, *(it+1));
+			Logger::Log()<<v<<std::endl;
 		}		
 	};
-	
 	
 	
 private:
