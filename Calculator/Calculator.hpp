@@ -29,10 +29,22 @@ std::ostream& operator<<(std::ostream& strm, const CalculatorResult<R,Q> cr)
 	return cr.Display(strm);
 }
 
+template<template<typename> class Derived>
+// template<typename Derived>
+struct CalculatorBase
+{
+	static const char* Name; 
+	static const char* Sign; 
+};
+
 template<typename TC, typename Q = typename TC::QuantityType, typename T = typename  TC::ReadingType>
-struct Difference
+struct Difference: CalculatorBase<Difference>
 { 
+	using Type = Difference<TC>;
 	static CalculatorResult<T,Q> Calculate(const T& t1, const T& t2) {	return CalculatorResult(t1, t2, t1.QuantityValue - t2.QuantityValue); }
 };
+
+template<> const char* CalculatorBase<Difference>::Name = "Difference";
+template<> const char* CalculatorBase<Difference>::Sign = "-";
 
 #endif

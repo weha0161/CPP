@@ -95,6 +95,7 @@ public:
 		{
 			auto v = TCalc::Calculate(*it, *(it+1));
 			Logger::Log()<<v<<std::endl;
+			Logger::Log()<<TCalc::Name<<std::endl;
 		}		
 	};
 	
