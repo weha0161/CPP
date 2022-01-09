@@ -23,38 +23,43 @@ struct CalculatorResult
 	CalculatorResult(TReading r1, TReading r2, TQuantity q): FirstReading(r1), SecondReading(r2), Result(q) {};	
 };
 
+//-------------------------------------------------------------------------------------------------CalculatorOperation----------------------------------------------------------
 template<typename R, typename Q, typename S = T::char_<'\t'>>
 std::ostream& operator<<(std::ostream& strm, const CalculatorResult<R,Q> cr)
 {
 	return cr.Display(strm);
 }
 
-template<template<typename> class Derived>
-// template<typename Derived>
-struct CalculatorBase
+template<class Derived>
+struct CalculatorOperation
 {
 	static const char* Name; 
 	static const char* Sign; 
 };
 
-template<typename TC, typename Q = typename TC::QuantityType, typename T = typename  TC::ReadingType>
-struct Difference: CalculatorBase<Difference>
+struct Difference: CalculatorOperation<Difference>
 { 
-	using Type = Difference<TC>;
+	using Type = Difference;
+	
+	template<typename T, typename Q>
 	static CalculatorResult<T,Q> Calculate(const T& t1, const T& t2) {	return CalculatorResult(t1, t2, t1.QuantityValue - t2.QuantityValue); }
 };
 
-template<> const char* CalculatorBase<Difference>::Name = "Difference";
-template<> const char* CalculatorBase<Difference>::Sign = "-";
+template<> const char* CalculatorOperation<Difference>::Name = "Difference";
+template<> const char* CalculatorOperation<Difference>::Sign = "-";
+
+//-------------------------------------------------------------------------------------------------Calculator----------------------------------------------------------
 
 template<class TCounter, typename TCalc>
 struct Calculator
 {
+	using ReadingType =  TCounter::ReadingType;
+	using QuantityType = TCounter::QuantityType;
 	static void Calculate()
 	{
 		for(auto it = TCounter::Begin(); (it + 1) != TCounter::End(); ++it)
 		{
-			auto v = TCalc::Calculate(*it, *(it+1));
+			auto v = TCalc::template Calculate<ReadingType,QuantityType>(*it, *(it+1));
 			Logger::Log()<<v<<std::endl;
 			Logger::Log()<<TCalc::Name<<TCalc::Sign<<std::endl;
 		}		
