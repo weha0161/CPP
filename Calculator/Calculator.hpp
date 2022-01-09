@@ -47,4 +47,18 @@ struct Difference: CalculatorBase<Difference>
 template<> const char* CalculatorBase<Difference>::Name = "Difference";
 template<> const char* CalculatorBase<Difference>::Sign = "-";
 
+template<class TCounter, typename TCalc>
+struct Calculator
+{
+	static void Calculate()
+	{
+		for(auto it = TCounter::Begin(); (it + 1) != TCounter::End(); ++it)
+		{
+			auto v = TCalc::Calculate(*it, *(it+1));
+			Logger::Log()<<v<<std::endl;
+			Logger::Log()<<TCalc::Name<<TCalc::Sign<<std::endl;
+		}		
+	}
+};
+
 #endif

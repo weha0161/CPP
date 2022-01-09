@@ -12,9 +12,7 @@ int main()
 	CounterConatinerType::Instance().Read();
 	
 	std::cout<<"---------------------CE1------------------------"<<std::endl;
-// 	auto ce1 = CounterConatinerType::Instance().Get<CE1>();
-// 	std::cout<<CE1<<std::endl;
-	CE1::Calculate<Difference<CE1>>();
+	Calculator<CE1,Difference<CE1>>::Calculate();
 	
 	Logger::Log(CE1::Begin(),CE1::End());
 	

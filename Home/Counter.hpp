@@ -84,22 +84,9 @@ public:
 		csv->Write<CounterType>();
 	}
 	
-	CIterator Begin() const { return this->readings->cbegin(); }
-	CIterator End() const { return this->readings->cend(); }
-	
-// 	template<template<typename> class TCalc, typename Calc = TCalc<QuantityType>>
-	template<typename TCalc>
-	static void Calculate()
-	{
-		for(auto it = readings->cbegin(); (it + 1) != readings->cend(); ++it)
-		{
-			auto v = TCalc::Calculate(*it, *(it+1));
-			Logger::Log()<<v<<std::endl;
-			Logger::Log()<<TCalc::Name<<std::endl;
-		}		
-	};
-	
-	
+	static CIterator Begin() { return readings->cbegin(); }
+	static CIterator End() { return readings->cend(); }
+		
 private:
 	static std::map<std::string, std::string> createHeader()
 	{
