@@ -23,30 +23,44 @@ struct CalculatorResult
 	CalculatorResult(TReading r1, TReading r2, TQuantity q): FirstReading(r1), SecondReading(r2), Result(q) {};	
 };
 
-//-------------------------------------------------------------------------------------------------CalculatorOperation----------------------------------------------------------
 template<typename R, typename Q, typename S = T::char_<'\t'>>
 std::ostream& operator<<(std::ostream& strm, const CalculatorResult<R,Q> cr)
 {
 	return cr.Display(strm);
 }
 
-template<class Derived>
-struct CalculatorOperation
+//-------------------------------------------------------------------------------------------------CalculatorOperation----------------------------------------------------------
+namespace OP
 {
-	static const char* Name; 
-	static const char* Sign; 
-};
+	template<class Derived>
+	struct CalculatorOperation
+	{
+		static const char* Name; 
+		static const char* Sign; 
+	};
 
-struct Difference: CalculatorOperation<Difference>
-{ 
-	using Type = Difference;
+	struct Difference: CalculatorOperation<Difference>
+	{ 
+		using Type = Difference;
+		
+		template<typename T, typename Q>
+		static CalculatorResult<T,Q> Calculate(const T& t1, const T& t2) {	return CalculatorResult(t1, t2, t1.QuantityValue - t2.QuantityValue); }
+	};
+
+	template<> const char* CalculatorOperation<Difference>::Name = "Difference";
+	template<> const char* CalculatorOperation<Difference>::Sign = "-";
+
+	struct Sum: CalculatorOperation<Sum>
+	{ 
+		using Type = Sum;
+		
+		template<typename T, typename Q>
+		static CalculatorResult<T,Q> Calculate(const T& t1, const T& t2) {	return CalculatorResult(t1, t2, t1.QuantityValue + t2.QuantityValue); }
+	};
 	
-	template<typename T, typename Q>
-	static CalculatorResult<T,Q> Calculate(const T& t1, const T& t2) {	return CalculatorResult(t1, t2, t1.QuantityValue - t2.QuantityValue); }
-};
-
-template<> const char* CalculatorOperation<Difference>::Name = "Difference";
-template<> const char* CalculatorOperation<Difference>::Sign = "-";
+	template<> const char* CalculatorOperation<Sum>::Name = "Sum";
+	template<> const char* CalculatorOperation<Sum>::Sign = "+";
+}
 
 //-------------------------------------------------------------------------------------------------Calculator----------------------------------------------------------
 
@@ -55,14 +69,16 @@ struct Calculator
 {
 	using ReadingType =  TCounter::ReadingType;
 	using QuantityType = TCounter::QuantityType;
-	static void Calculate()
+	static std::vector<CalculatorResult<ReadingType,QuantityType>> Calculate()
 	{
+		auto result = std::vector<CalculatorResult<ReadingType,QuantityType>>(); 
 		for(auto it = TCounter::Begin(); (it + 1) != TCounter::End(); ++it)
 		{
-			auto v = TCalc::template Calculate<ReadingType,QuantityType>(*it, *(it+1));
-			Logger::Log()<<v<<std::endl;
-			Logger::Log()<<TCalc::Name<<TCalc::Sign<<std::endl;
-		}		
+			auto cr = TCalc::template Calculate<ReadingType,QuantityType>(*it, *(it+1));
+			result.push_back(cr);
+		}
+		
+		return result;
 	}
 };
 

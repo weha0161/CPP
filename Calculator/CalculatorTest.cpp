@@ -12,9 +12,13 @@ int main()
 	CounterConatinerType::Instance().Read();
 	
 	std::cout<<"---------------------CE1------------------------"<<std::endl;
-	Calculator<CE1,Difference<CE1>>::Calculate();
-	
 	Logger::Log(CE1::Begin(),CE1::End());
+	
+	auto rd = Calculator<CE1,OP::Difference>::Calculate();
+	Logger::Log(rd.begin(),rd.end());
+	
+	auto rs =Calculator<CE1,OP::Sum>::Calculate();
+	Logger::Log(rs.begin(),rs.end());
 	
 	std::cout<<"END"<<std::endl;
     return 0;
