@@ -7,31 +7,31 @@
 #ifndef CALCULATOR_HPP
 #define CALCULATOR_HPP
 
-template<typename TReading, typename TQuantity>
-struct CalculatorResult			
+namespace Calculator
 {
-	const TReading FirstReading;
-	const TReading SecondReading;
-	const TQuantity Result;
-	
-	template<typename Separator = T::char_<'\t'>>
-	std::ostream& Display(std::ostream& out) const
+	template<typename TReading, typename TQuantity>
+	struct Result			
 	{
-		return out<<FirstReading<<Separator::Value<<SecondReading<<Separator::Value<<Result<<std::endl;
+		const TReading FirstReading;
+		const TReading SecondReading;
+		const TQuantity Value;
+		
+		template<typename Separator = T::char_<'\t'>>
+		std::ostream& Display(std::ostream& out) const
+		{
+			return out<<FirstReading<<Separator::Value<<SecondReading<<Separator::Value<<Value<<std::endl;
+		}
+		
+		Result(TReading r1, TReading r2, TQuantity q): FirstReading(r1), SecondReading(r2), Value(q) {};	
+	};
+
+	template<typename R, typename Q, typename S = T::char_<'\t'>>
+	std::ostream& operator<<(std::ostream& strm, const Result<R,Q> cr)
+	{
+		return cr.Display(strm);
 	}
-	
-	CalculatorResult(TReading r1, TReading r2, TQuantity q): FirstReading(r1), SecondReading(r2), Result(q) {};	
-};
 
-template<typename R, typename Q, typename S = T::char_<'\t'>>
-std::ostream& operator<<(std::ostream& strm, const CalculatorResult<R,Q> cr)
-{
-	return cr.Display(strm);
-}
-
-//-------------------------------------------------------------------------------------------------CalculatorOperation----------------------------------------------------------
-namespace OP
-{
+	//-------------------------------------------------------------------------------------------------CalculatorOperation----------------------------------------------------------
 	template<class Derived>
 	struct CalculatorOperation
 	{
@@ -44,7 +44,7 @@ namespace OP
 		using Type = Difference;
 		
 		template<typename T, typename Q>
-		static CalculatorResult<T,Q> Calculate(const T& t1, const T& t2) {	return CalculatorResult(t1, t2, t1.QuantityValue - t2.QuantityValue); }
+		static Result<T,Q> Calculate(const T& t1, const T& t2) {	return Result(t1, t2, t1.QuantityValue - t2.QuantityValue); }
 	};
 
 	template<> const char* CalculatorOperation<Difference>::Name = "Difference";
@@ -55,31 +55,33 @@ namespace OP
 		using Type = Sum;
 		
 		template<typename T, typename Q>
-		static CalculatorResult<T,Q> Calculate(const T& t1, const T& t2) {	return CalculatorResult(t1, t2, t1.QuantityValue + t2.QuantityValue); }
+		static Result<T,Q> Calculate(const T& t1, const T& t2) {	return Result(t1, t2, t1.QuantityValue + t2.QuantityValue); }
 	};
 	
 	template<> const char* CalculatorOperation<Sum>::Name = "Sum";
 	template<> const char* CalculatorOperation<Sum>::Sign = "+";
+
+	//-------------------------------------------------------------------------------------------------Calculator----------------------------------------------------------
+
+	template<class TCounter, typename TCalc>
+	struct Counter
+	{
+		using ReadingType =  TCounter::ReadingType;
+		using QuantityType = TCounter::QuantityType;
+		static std::vector<Result<ReadingType,QuantityType>> Calculate()
+		{
+			auto result = std::vector<Result<ReadingType,QuantityType>>(); 
+			for(auto it = TCounter::Begin(); (it + 1) != TCounter::End(); ++it)
+			{
+				auto cr = TCalc::template Calculate<ReadingType,QuantityType>(*it, *(it+1));
+				result.push_back(cr);
+			}
+			
+			return result;
+		}
+	};
+	
 }
 
-//-------------------------------------------------------------------------------------------------Calculator----------------------------------------------------------
-
-template<class TCounter, typename TCalc>
-struct Calculator
-{
-	using ReadingType =  TCounter::ReadingType;
-	using QuantityType = TCounter::QuantityType;
-	static std::vector<CalculatorResult<ReadingType,QuantityType>> Calculate()
-	{
-		auto result = std::vector<CalculatorResult<ReadingType,QuantityType>>(); 
-		for(auto it = TCounter::Begin(); (it + 1) != TCounter::End(); ++it)
-		{
-			auto cr = TCalc::template Calculate<ReadingType,QuantityType>(*it, *(it+1));
-			result.push_back(cr);
-		}
-		
-		return result;
-	}
-};
 
 #endif

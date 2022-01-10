@@ -14,10 +14,10 @@ int main()
 	std::cout<<"---------------------CE1------------------------"<<std::endl;
 	Logger::Log(CE1::Begin(),CE1::End());
 	
-	auto rd = Calculator<CE1,OP::Difference>::Calculate();
+	auto rd = Calculator::Counter<CE1,Calculator::Difference>::Calculate();
 	Logger::Log(rd.begin(),rd.end());
 	
-	auto rs =Calculator<CE1,OP::Sum>::Calculate();
+	auto rs =Calculator::Counter<CE1,Calculator::Sum>::Calculate();
 	Logger::Log(rs.begin(),rs.end());
 	
 	std::cout<<"END"<<std::endl;
