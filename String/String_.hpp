@@ -2,6 +2,7 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
+#include <strstream>
 #include "../Wrapper/Wrapper.hpp"
 #include "../Traits/Traits.h"
 #include "../Typelist/Typelist.h"
@@ -54,6 +55,18 @@ namespace String_
 		
 		return result;
 	}
+	
+	template<class T, unsigned SIZE = 80>
+	std::string AsString(const T& c)
+	{
+		std::string result;
+		char* buf = new char[SIZE];
+		std::strstream str(buf,SIZE);
+		str<<c;
+		str>>result;
+		
+		return result;
+	};
 	
 	template<typename T>
 	struct From
