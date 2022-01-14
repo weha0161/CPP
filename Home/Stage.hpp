@@ -19,7 +19,6 @@
 #ifndef STAGE_HPP
 #define STAGE_HPP
 
-
 template<typename Derived,int N, unsigned A, unsigned R>
 struct StageConfiguration
 {
@@ -38,25 +37,37 @@ template<> const char* StageConfiguration<TopConfiguration, TopConfiguration::Nu
 template<> const char* StageConfiguration<MiddleConfiguration,MiddleConfiguration::Number, MiddleConfiguration::Area, MiddleConfiguration::Rooms>::Name = "Middle";
 template<> const char* StageConfiguration<BottomConfiguration, BottomConfiguration::Number, BottomConfiguration::Area, BottomConfiguration::Rooms>::Name = "BottomConfiguration";
 
-template<typename D, typename U>
+template<typename D, typename U, typename T = double>
 class CSVValue: public Element
 {
 	using Derived = D;
 	using Unit = U;
 public:
-	CSVValue(std::string s = ""): Element(s) {};
+	CSVValue(std::string s = "0.0"): Element(s), quantity(this->to(s)) {};
 	static const char* Key;
+	Element* DoCreate() { return this; };
 private:
-// 	Quantity<U> quantity;
+	Quantity<U> quantity;
+	T val;
+	String_::To<T> to;
 };
 
 class ApartmentArea: public CSVValue<ApartmentArea, Area>
 {
 public:
-	ApartmentArea(std::string s = ""): CSVValue(s) {};
+	ApartmentArea(std::string s = "0.0"): CSVValue(s) {};
 };
 
+
+class Rooms: public CSVValue<Rooms, Scalar, unsigned>
+{
+public:
+	Rooms(std::string s = "0"): CSVValue(s) {};
+};	
+
+
 template<> const char* CSVValue<ApartmentArea, Area>::Key = "Area";
+template<> const char* CSVValue<Rooms, Area>::Key = "Area";
 
 
 template<typename ConfigT>
