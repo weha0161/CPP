@@ -68,6 +68,24 @@ namespace String_
 		return result;
 	};
 	
+	template<typename T = int>
+	struct To
+	{
+		T operator()(std::string s) { return std::stoi(s); }
+	};
+	
+	template<>
+	struct To<double>
+	{
+		double operator()(std::string s) { std::cout<<"TO:"<<s<<std::endl;return std::stod(s); }
+	};
+	
+	template<>
+	struct To<unsigned>
+	{
+		unsigned operator()(std::string s) { std::cout<<"TO:"<<s<<std::endl;return std::stol(s); }
+	};
+	
 	template<typename T>
 	struct From
 	{
