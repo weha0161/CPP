@@ -134,12 +134,10 @@ using Scalar = Unit<>;
 
 using Volume = Unit<0,3>;
 using Work = Unit<0,1,2,2>;
+using Area = Unit<0,2>;
 
-template<>
-struct UnitSign<Work>
-{
-	static std::string Get(){ return "W";}
-};
+template<> struct UnitSign<Work> {	static std::string Get(){ return "W";} };
+// template<> struct UnitSign<Area> {	static std::string Get(){ return "m²";} };
 
 
 
