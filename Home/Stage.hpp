@@ -38,11 +38,37 @@ template<> const char* StageConfiguration<TopConfiguration, TopConfiguration::Nu
 template<> const char* StageConfiguration<MiddleConfiguration,MiddleConfiguration::Number, MiddleConfiguration::Area, MiddleConfiguration::Rooms>::Name = "Middle";
 template<> const char* StageConfiguration<BottomConfiguration, BottomConfiguration::Number, BottomConfiguration::Area, BottomConfiguration::Rooms>::Name = "BottomConfiguration";
 
+template<typename D, typename U>
+class CSVValue: public Element
+{
+	using Derived = D;
+	using Unit = U;
+public:
+	CSVValue(std::string s = ""): Element(s) {};
+	static const char* Key;
+private:
+// 	Quantity<U> quantity;
+};
+
+class ApartmentArea: public CSVValue<ApartmentArea, Area>
+{
+public:
+	ApartmentArea(std::string s = ""): CSVValue(s) {};
+};
+
+template<> const char* CSVValue<ApartmentArea, Area>::Key = "Area";
+
+
 template<typename ConfigT>
 class Stage
 {
 public:
-
+	using Type = Stage<ConfigT>;
+	using Configuration = ConfigT;
+	static constexpr int Number = Configuration::Number;
+	static constexpr unsigned Area = Configuration::Area;
+	static constexpr unsigned Rooms = Configuration::Rooms;
+	inline static const char* Name = Configuration::Name;
 		
 private:
 	
@@ -53,5 +79,9 @@ std::ostream& operator<<(std::ostream& strm, const Stage<C> c)
 {
 	return c.Display(strm);
 }
+
+using Top = Stage<TopConfiguration>;
+using Middle = Stage<MiddleConfiguration>;
+using Bottom = Stage<BottomConfiguration>;
 
 #endif
