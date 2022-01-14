@@ -58,16 +58,39 @@ public:
 	ApartmentArea(std::string s = "0.0"): CSVValue(s) {};
 };
 
-
 class Rooms: public CSVValue<Rooms, Scalar, unsigned>
 {
 public:
 	Rooms(std::string s = "0"): CSVValue(s) {};
 };	
 
+class Persons: public CSVValue<Persons, Scalar, unsigned>
+{
+public:
+	Persons(std::string s = "0"): CSVValue(s) {};
+};	
+
+class Advance: public CSVValue<Advance, Sum>
+{
+public:
+	Advance(std::string s = "0"): CSVValue(s) {};
+};	
+
+class GarageRental: public CSVValue<GarageRental, Sum>
+{
+public:
+	GarageRental(std::string s = "0"): CSVValue(s) {};
+};	
+
+class MonthlyRent: public CSVValue<MonthlyRent, Sum>
+{
+public:
+	MonthlyRent(std::string s = "0"): CSVValue(s) {};
+};	
+
 
 template<> const char* CSVValue<ApartmentArea, Area>::Key = "Area";
-template<> const char* CSVValue<Rooms, Area>::Key = "Area";
+template<> const char* CSVValue<Rooms, Area>::Key = "Rooms";
 
 
 template<typename ConfigT>
@@ -77,12 +100,14 @@ public:
 	using Type = Stage<ConfigT>;
 	using Configuration = ConfigT;
 	static constexpr int Number = Configuration::Number;
-	static constexpr unsigned Area = Configuration::Area;
-	static constexpr unsigned Rooms = Configuration::Rooms;
+	static constexpr unsigned AreaValue = Configuration::Area;
+	static constexpr unsigned RoomsValue = Configuration::Rooms;
 	inline static const char* Name = Configuration::Name;
 		
 private:
-	
+	ApartmentArea area;
+	Rooms rooms;
+	Persons persons;
 };
 
 template<typename C, typename S = T::char_<'\t'>>

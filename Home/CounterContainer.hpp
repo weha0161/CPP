@@ -47,9 +47,9 @@ public:
 	template<unsigned N>
 	auto Get() { return At<CounterTypes,N>::Type; }
 
-	template<typename T>
-	auto Get() { return GetType<CounterTypes,T>; }
-	
+// 	template<typename T>
+// 	auto Get() { return GetType<CounterTypes,T>; }
+// 	
 	static CounterContainer& Instance()
 	{
 		static CounterContainer instance;
@@ -86,10 +86,10 @@ public:
 	
 	template<unsigned N>
 	auto Get() { return At<CounterTypes,N>::Type; }
-
+/*
 	template<typename T>
 	auto Get() { return GetType<CounterTypes,T>; }
-	
+	*/
 	static CounterContainer& Instance()
 	{
 		static CounterContainer instance;

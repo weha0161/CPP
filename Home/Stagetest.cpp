@@ -14,7 +14,16 @@ int main()
 {       
     std::cout<<"START"<<std::endl;
 	
+	auto t = Top();
+    std::cout<<"t: "<<Top::Name<<std::endl;
+    std::cout<<"t: "<<Top::AreaValue<<std::endl;
+    std::cout<<"t: "<<Top::RoomsValue<<std::endl;
+    std::cout<<"t: "<<Top::Number<<std::endl;
     
+    std::cout<<"t: "<<ApartmentArea::Key<<std::endl;
+	
+	ApartmentArea a;
+	Rooms r;
 	
     std::cout<<"END"<<std::endl;
 
