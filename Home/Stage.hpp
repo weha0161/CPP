@@ -31,7 +31,7 @@ struct StageConfiguration
 
 struct TopConfiguration:StageConfiguration<TopConfiguration,2,58,5> { };
 struct MiddleConfiguration:StageConfiguration<MiddleConfiguration,1,101,7> { };
-struct BottomConfiguration:StageConfiguration<BottomConfiguration,1,101,7> { };
+struct BottomConfiguration:StageConfiguration<BottomConfiguration,0,101,7> { };
 
 template<> const char* StageConfiguration<TopConfiguration, TopConfiguration::Number, TopConfiguration::Area, TopConfiguration::Rooms>::Name = "Top";
 template<> const char* StageConfiguration<MiddleConfiguration,MiddleConfiguration::Number, MiddleConfiguration::Area, MiddleConfiguration::Rooms>::Name = "Middle";

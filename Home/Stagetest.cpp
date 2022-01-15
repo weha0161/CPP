@@ -15,9 +15,9 @@ int main()
 {       
     std::cout<<"START"<<std::endl;
 	
-	Top::Instance();
+// 	Top::Instance();
     std::cout<<"t: "<<Top::Name<<std::endl;
-    std::cout<<"t: "<<Top::Instance().Name<<std::endl;
+//     std::cout<<"t: "<<Top::Instance().Name<<std::endl;
     std::cout<<"t: "<<Top::AreaValue<<std::endl;
     std::cout<<"t: "<<Top::RoomsValue<<std::endl;
     std::cout<<"t: "<<Top::Number<<std::endl;
