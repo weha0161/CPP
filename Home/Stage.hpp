@@ -19,6 +19,8 @@
 #ifndef STAGE_HPP
 #define STAGE_HPP
 
+using StageMap = std::map<std::string, std::string>;
+
 template<typename Derived,int N, unsigned A, unsigned R>
 struct StageConfiguration
 {
@@ -103,9 +105,9 @@ public:
 	static constexpr unsigned AreaValue = Configuration::Area;
 	static constexpr unsigned RoomsValue = Configuration::Rooms;
 	inline static const char* Name = Configuration::Name;
-	static Stage& Instance()
+	static Stage& Instance(const StageMap& m)
 	{
-		static Stage instance;
+		static Stage instance = Stage(m);
 		return instance;
 	}
 		
@@ -115,6 +117,7 @@ private:
 	Persons persons;
 	
 	Stage(){ Logger::Log()<<"CTOR: "<<Number<<std::endl;}
+	Stage(const StageMap& m){ Logger::Log()<<"CTOR MAP: "<<Number<<std::endl;}
 	~Stage()	{ Logger::Log()<<"Destructor"<<std::endl; }
 	Stage& operator=(const Stage&) = delete;
 	Stage(const Stage& c) = delete;

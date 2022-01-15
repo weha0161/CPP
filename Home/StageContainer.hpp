@@ -17,6 +17,8 @@
 
 //---------------------------------------------------------------------------------------------------StageContainer----------------------------------------------------------------------------------------
 
+using StagesMap = std::map<std::string, StageMap>;
+
 template<typename List>
 class StageContainer{};
 
@@ -28,7 +30,12 @@ public:
 	using StageTypes = Typelist<Head>;
 	using ContainerType = StageContainer<Typelist<Head>>;
 protected:
-	StageContainer() { Head::Instance(); Logger::Log<Info>()<<"StageContainer created."<<std::endl; };
+	StageContainer() 
+	{ 
+		Head::Instance(StageMap()); 
+		Logger::Log<Info>()<<"StageContainer created."<<std::endl; 
+		
+	};
 public:
 	static std::ostream& Display(std::ostream& os) 
 	{
@@ -53,7 +60,6 @@ public:
 // 	
 	static StageContainer& Instance()
 	{
-		Head::Instance();
 		static StageContainer instance;
 		return instance;
 	}	
@@ -67,7 +73,12 @@ public:
 	using StageTypes = Typelist<Head,Tail...>;
 	using ContainerType = StageContainer<Typelist<Head,Tail...>>;
 protected:
-	StageContainer() { Head::Instance(); Logger::Log<Info>()<<"StageContainer created."<<std::endl; };
+	StageContainer() 
+	{ 
+		Head::Instance(StageMap()); 
+		Logger::Log<Info>()<<"StageContainer created."<<std::endl; 
+		
+	};
 public:
 	static std::ostream& Display(std::ostream& os) 
 	{
