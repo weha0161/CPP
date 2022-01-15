@@ -3,6 +3,7 @@
 #include "Counter.hpp"
 #include "CounterContainer.hpp"
 #include "Stage.hpp"
+#include "StageContainer.hpp"
 #include "../Unit/SIPrefix.hpp"
 #include "../Calculator/Calculator.hpp"
 #include "../Tuple/Tuple.hpp"
@@ -24,6 +25,8 @@ int main()
 	
 	ApartmentArea a;
 	Rooms r;
+	
+	StageContainerType::Instance();
 	
     std::cout<<"END"<<std::endl;
 

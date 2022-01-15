@@ -103,6 +103,7 @@ public:
 	static constexpr unsigned AreaValue = Configuration::Area;
 	static constexpr unsigned RoomsValue = Configuration::Rooms;
 	inline static const char* Name = Configuration::Name;
+	Stage(){ Logger::Log()<<"CTOR: "<<Number<<std::endl;}
 		
 private:
 	ApartmentArea area;
