@@ -103,12 +103,21 @@ public:
 	static constexpr unsigned AreaValue = Configuration::Area;
 	static constexpr unsigned RoomsValue = Configuration::Rooms;
 	inline static const char* Name = Configuration::Name;
-	Stage(){ Logger::Log()<<"CTOR: "<<Number<<std::endl;}
+	static Stage& Instance()
+	{
+		static Stage instance;
+		return instance;
+	}
 		
 private:
 	ApartmentArea area;
 	Rooms rooms;
 	Persons persons;
+	
+	Stage(){ Logger::Log()<<"CTOR: "<<Number<<std::endl;}
+	~Stage()	{ Logger::Log()<<"Destructor"<<std::endl; }
+	Stage& operator=(const Stage&) = delete;
+	Stage(const Stage& c) = delete;
 };
 
 template<typename C, typename S = T::char_<'\t'>>
