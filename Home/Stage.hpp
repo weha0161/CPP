@@ -46,6 +46,7 @@ class CSVValue: public Element
 	using Unit = U;
 public:
 	CSVValue(std::string s = "0.0"): Element(s), quantity(this->to(s)) {};
+	CSVValue(T t): Element(std::to_string(t)), quantity(t) {};
 	static const char* Key;
 	Element* DoCreate() { return this; };
 private:
@@ -54,16 +55,16 @@ private:
 	String_::To<T> to;
 };
 
-class ApartmentArea: public CSVValue<ApartmentArea, Area>
+class ApartmentArea: public CSVValue<ApartmentArea, Area, unsigned>
 {
 public:
-	ApartmentArea(std::string s = "0.0"): CSVValue(s) {};
+	ApartmentArea(unsigned a): CSVValue(a) {};
 };
 
 class Rooms: public CSVValue<Rooms, Scalar, unsigned>
 {
 public:
-	Rooms(std::string s = "0"): CSVValue(s) {};
+	Rooms(unsigned r): CSVValue(r) {};
 };	
 
 class Persons: public CSVValue<Persons, Scalar, unsigned>
@@ -91,7 +92,7 @@ public:
 };	
 
 
-template<> const char* CSVValue<ApartmentArea, Area>::Key = "Area";
+template<> const char* CSVValue<ApartmentArea, Area, unsigned>::Key = "Area";
 template<> const char* CSVValue<Rooms, Area>::Key = "Rooms";
 template<> const char* CSVValue<Persons, Scalar, unsigned>::Key = "Persons";
 
@@ -106,19 +107,23 @@ public:
 	static constexpr unsigned AreaValue = Configuration::Area;
 	static constexpr unsigned RoomsValue = Configuration::Rooms;
 	inline static const char* Name = Configuration::Name;
+	
 	static Stage& Instance(const StageMap& m)
 	{
 		static Stage instance = Stage(m);
 		return instance;
 	}
-		
+	
 private:
 	ApartmentArea area;
 	Rooms rooms;
 	Persons persons;
 	
 	Stage(){ Logger::Log()<<"CTOR: "<<Number<<std::endl;}
-	Stage(const StageMap& m): persons(m.at(Persons::Key))
+	Stage(const StageMap& m): 
+		area(AreaValue),
+		rooms(RoomsValue),
+		persons(m.at(Persons::Key))
 	{ 
 // 		for(auto kv : m)
 // 			Logger::Log()<<kv.first<<": "<<kv.second<<std::endl;
