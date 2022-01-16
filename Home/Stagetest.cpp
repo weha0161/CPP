@@ -24,10 +24,10 @@ int main()
     
     std::cout<<"t: "<<ApartmentArea::Key<<std::endl;
 	
-	ApartmentArea aa;
-	Rooms r;
+	ApartmentArea aa(7);
+	Rooms r(6);
 	
-	StageContainerType::Instance();
+	StageContainerType::Instance().Display(std::cout);
 	
     std::cout<<"END"<<std::endl;
 

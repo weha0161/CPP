@@ -47,7 +47,7 @@
 	public:
 		static std::ostream& Display(std::ostream& os) 
 		{
-			return Type::Display(os);
+			return Type::Instance(stages->at(Head::Name)).Display(os);
 		}
 		
 		void Write(const std::string sourcePath = ".")
@@ -104,13 +104,13 @@
 		StageContainer() 
 		{ 
 			Logger::Log<Info>()<<"StageContainer created."<<Head::Name<<std::endl; 
-			Head::Instance(Base::stages->at(Head::Name)); 
+			Type::Instance(Base::stages->at(Head::Name)); 
 			
 		};
 	public:
 		static std::ostream& Display(std::ostream& os) 
 		{
-			return StageContainer<Typelist<Tail...>>::Display(Type::Display(os));		
+			return StageContainer<Typelist<Tail...>>::Display(Type::Instance(Base::stages->at(Head::Name)).Display(os));		
 		}
 		
 		template<unsigned N>

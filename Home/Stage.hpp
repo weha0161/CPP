@@ -47,6 +47,8 @@ class CSVValue: public Element
 public:
 	CSVValue(std::string s = "0.0"): Element(s), quantity(this->to(s)) {};
 	CSVValue(T t): Element(std::to_string(t)), quantity(t) {};
+	const Quantity<U>& Get() { return this->quantity; }
+	const T& GetValue() { return this->val; }
 	static const char* Key;
 	Element* DoCreate() { return this; };
 private:
@@ -112,6 +114,11 @@ public:
 	{
 		static Stage instance = Stage(m);
 		return instance;
+	}
+	
+	std::ostream& Display(std::ostream& os) 
+	{
+		return os<<"Area: "<<area.Get()<<std::endl;
 	}
 	
 private:
