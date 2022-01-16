@@ -118,13 +118,17 @@ public:
 	
 	std::ostream& Display(std::ostream& os) 
 	{
-		return os<<"Area: "<<area.Get()<<std::endl;
+		os<<"Name: "<<Type::Name<<"\tRooms:"<<rooms.Get()<<"\tArea: "<<area.Get()<<"\tPersons: "<<persons.Get();
+		return os<<"MonthlyRent: "<<monthlyRent.Get()<<"\tAdvance: "<<advance.Get()<<"\tGarage: "<<garageRental.Get()<<std::endl;
 	}
 	
 private:
 	ApartmentArea area;
 	Rooms rooms;
 	Persons persons;
+	Advance advance;
+	GarageRental garageRental;
+	MonthlyRent monthlyRent;
 	
 	Stage(){ Logger::Log()<<"CTOR: "<<Number<<std::endl;}
 	Stage(const StageMap& m): 
