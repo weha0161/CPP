@@ -97,6 +97,9 @@ public:
 template<> const char* CSVValue<ApartmentArea, Area, unsigned>::Key = "Area";
 template<> const char* CSVValue<Rooms, Area>::Key = "Rooms";
 template<> const char* CSVValue<Persons, Scalar, unsigned>::Key = "Persons";
+template<> const char* CSVValue<Advance, Sum>::Key = "Advance";
+template<> const char* CSVValue<MonthlyRent, Sum>::Key = "MonthlyRent";
+template<> const char* CSVValue<GarageRental, Sum>::Key = "GarageRental";
 
 
 template<typename ConfigT>
@@ -134,7 +137,10 @@ private:
 	Stage(const StageMap& m): 
 		area(AreaValue),
 		rooms(RoomsValue),
-		persons(m.at(Persons::Key))
+		persons(m.at(Persons::Key)),
+		advance(m.at(Advance::Key)),
+		monthlyRent(m.at(MonthlyRent::Key)),
+		garageRental(m.at(GarageRental::Key))
 	{ 
 // 		for(auto kv : m)
 // 			Logger::Log()<<kv.first<<": "<<kv.second<<std::endl;
