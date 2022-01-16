@@ -37,7 +37,7 @@ struct BottomConfiguration:StageConfiguration<BottomConfiguration,0,101,7> { };
 
 template<> const char* StageConfiguration<TopConfiguration, TopConfiguration::Number, TopConfiguration::Area, TopConfiguration::Rooms>::Name = "Top";
 template<> const char* StageConfiguration<MiddleConfiguration,MiddleConfiguration::Number, MiddleConfiguration::Area, MiddleConfiguration::Rooms>::Name = "Middle";
-template<> const char* StageConfiguration<BottomConfiguration, BottomConfiguration::Number, BottomConfiguration::Area, BottomConfiguration::Rooms>::Name = "BottomConfiguration";
+template<> const char* StageConfiguration<BottomConfiguration, BottomConfiguration::Number, BottomConfiguration::Area, BottomConfiguration::Rooms>::Name = "Bottom";
 
 template<typename D, typename U, typename T = double>
 class CSVValue: public Element
@@ -69,7 +69,7 @@ public:
 class Persons: public CSVValue<Persons, Scalar, unsigned>
 {
 public:
-	Persons(std::string s = "0"): CSVValue(s) {};
+	Persons(const std::string& s = "0"): CSVValue(s) {};
 };	
 
 class Advance: public CSVValue<Advance, Sum>
@@ -93,6 +93,7 @@ public:
 
 template<> const char* CSVValue<ApartmentArea, Area>::Key = "Area";
 template<> const char* CSVValue<Rooms, Area>::Key = "Rooms";
+template<> const char* CSVValue<Persons, Scalar, unsigned>::Key = "Persons";
 
 
 template<typename ConfigT>
@@ -117,7 +118,12 @@ private:
 	Persons persons;
 	
 	Stage(){ Logger::Log()<<"CTOR: "<<Number<<std::endl;}
-	Stage(const StageMap& m){ Logger::Log()<<"CTOR MAP: "<<Number<<std::endl;}
+	Stage(const StageMap& m): persons(m.at(Persons::Key))
+	{ 
+// 		for(auto kv : m)
+// 			Logger::Log()<<kv.first<<": "<<kv.second<<std::endl;
+// 		Logger::Log()<<"CTOR MAP: "<<Number<<std::endl;
+	}
 	~Stage()	{ Logger::Log()<<"Destructor"<<std::endl; }
 	Stage& operator=(const Stage&) = delete;
 	Stage(const Stage& c) = delete;

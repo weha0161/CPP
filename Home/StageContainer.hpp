@@ -31,7 +31,7 @@
 		using ContainerType = StageContainer<Typelist<Head>>;
 	private:
 		inline static const std::string DestinationPath = "//home//markus//Downloads//";
-		inline static const std::string Name = "18061860_Water";
+		inline static const std::string Name = "Stages";
 	protected:
 		inline static std::unique_ptr<StagesMap, DebugDeleter<StagesMap>> stages = std::unique_ptr<StagesMap, DebugDeleter<StagesMap>>(new StagesMap(),DebugDeleter<StagesMap>());
 		
@@ -40,9 +40,8 @@
 		StageContainer() 
 		{ 
 			Read();
-			stages.get();
-			Head::Instance(StageMap()); 
-			Logger::Log<Info>()<<"StageContainer created."<<std::endl; 
+			Logger::Log<Info>()<<"StageContainer created."<<Head::Name<<std::endl; 
+			Head::Instance(stages->at(Head::Name)); 
 			
 		};
 	public:
@@ -56,12 +55,6 @@
 			Type::Write(sourcePath);
 		}
 		
-		void Read(const std::string sourcePath = ".")
-		{
-			auto values = csv->Read();
-			Logger::Log()<<values.size()<<std::endl;
-		}
-		
 		template<unsigned N>
 		auto Get() { return At<StageTypes,N>::Type; }
 
@@ -69,7 +62,34 @@
 		{
 			static StageContainer instance;
 			return instance;
-		}		
+		}
+	private:
+		void ExtractValues(const std::vector<std::vector<std::string>>& csvValues)
+		{
+			auto keysIt = csvValues.at(0).cbegin();
+			for(int i = 1; i < csvValues.size(); ++i)
+			{
+				auto stage = StageMap();
+				for(int j = 1; j < csvValues.at(i).size(); ++j)
+					stage.insert(std::pair<std::string,std::string>(*(keysIt+j), csvValues.at(i).at(j)));
+				
+				for(auto kv : stage)
+					Logger::Log()<<kv.first<<": "<<kv.second<<std::endl;
+				
+				stages->insert(std::pair<std::string,StageMap>(csvValues.at(i).at(0), stage));
+			}
+			
+			for(auto kv : *stages)
+				Logger::Log()<<kv.first<<std::endl;
+			Logger::Log()<<"END: Extract "<<std::endl;
+		}
+		
+		void Read(const std::string sourcePath = ".")
+		{
+			auto values = csv->Read();
+			ExtractValues(values);
+		}
+		
 	};
 
 	template<typename Head, typename... Tail>
@@ -79,12 +99,12 @@
 		using Type = Head;
 		using StageTypes = Typelist<Head,Tail...>;
 		using ContainerType = StageContainer<Typelist<Head,Tail...>>;
+		using Base = StageContainer<Typelist<Tail...>>;
 	protected:
 		StageContainer() 
 		{ 
-			StageContainer<Typelist<Tail...>>::stages.get();
-			Head::Instance(StageMap()); 
-			Logger::Log<Info>()<<"StageContainer created."<<std::endl; 
+			Logger::Log<Info>()<<"StageContainer created."<<Head::Name<<std::endl; 
+			Head::Instance(Base::stages->at(Head::Name)); 
 			
 		};
 	public:
