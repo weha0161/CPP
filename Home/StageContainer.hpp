@@ -40,23 +40,20 @@
 		StageContainer() 
 		{ 
 			Read();
+			Head::Set(stages->at(Head::Name)); 
+			Head::Instance(); 			
 			Logger::Log<Info>()<<"StageContainer created."<<Head::Name<<std::endl; 
-			Head::Instance(stages->at(Head::Name)); 
-			
 		};
 	public:
 		static std::ostream& Display(std::ostream& os) 
 		{
-			return Type::Instance(stages->at(Head::Name)).Display(os);
+			return Type::Instance().Display(os);
 		}
 		
 		void Write(const std::string sourcePath = ".")
 		{
 			Type::Write(sourcePath);
 		}
-		
-		template<unsigned N>
-		auto Get() { return At<StageTypes,N>::Type; }
 
 		static StageContainer& Instance()
 		{
@@ -104,18 +101,15 @@
 		StageContainer() 
 		{ 
 			Logger::Log<Info>()<<"StageContainer created."<<Head::Name<<std::endl; 
-			Type::Instance(Base::stages->at(Head::Name)); 
-			
+			Type::Set(Base::stages->at(Head::Name)); 			
+			Type::Instance(); 			
 		};
 	public:
 		static std::ostream& Display(std::ostream& os) 
 		{
-			return StageContainer<Typelist<Tail...>>::Display(Type::Instance(Base::stages->at(Head::Name)).Display(os));		
+			return StageContainer<Typelist<Tail...>>::Display(Type::Instance().Display(os));		
 		}
-		
-		template<unsigned N>
-		auto Get() { return At<StageTypes,N>::Type; }
-	
+
 		static StageContainer& Instance()
 		{
 			static StageContainer instance;

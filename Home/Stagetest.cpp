@@ -28,6 +28,8 @@ int main()
 	Rooms r(6);
 	
 	StageContainerType::Instance().Display(std::cout);
+// 	auto m = StageContainerType::Instance().Get<Middle>();
+    std::cout<<"m: "<<Middle::Instance().Name<<std::endl;
 	
     std::cout<<"END"<<std::endl;
 

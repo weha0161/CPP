@@ -128,20 +128,26 @@ public:
 	static constexpr unsigned RoomsValue = Configuration::Rooms;
 	static constexpr unsigned UnitsValue = Configuration::Units;
 	inline static const char* Name = Configuration::Name;
+	inline static StageMap Map = StageMap();
 	
-	const Quantity<Area>& AreaQuantity() { return this->area.Get(); }
-	const Quantity<Area>& RoomsQuantity() { return this->rooms.Get(); }
-	const Quantity<Scalar>& UnitsQuantity() { return this->individualUnit.Get(); }
-	const Quantity<Scalar>& PersonsQuantity() { return this->persons.Get(); }
-	const Quantity<Sum>& AdvanceQuantity() { return this->advance.Get(); }
-	const Quantity<Sum>& IncidentalHeatingCostsQuantity() { return this->incidentalHeatingCosts.Get(); }
-	const Quantity<Sum>& MonthlyRentQuantity() { return this->monthlyRent.Get(); }
-	const Quantity<Sum>& GarageRentalQuantity() { return this->garageRental.Get(); }
+	const Quantity<Area> AreaQuantity() { return this->area.Get(); }
+	const Quantity<Area> RoomsQuantity() { return this->rooms.Get(); }
+	const Quantity<Scalar> UnitsQuantity() { return this->individualUnit.Get(); }
+	const Quantity<Scalar> PersonsQuantity() { return this->persons.Get(); }
+	const Quantity<Sum> AdvanceQuantity() { return this->advance.Get(); }
+	const Quantity<Sum> IncidentalHeatingCostsQuantity() { return this->incidentalHeatingCosts.Get(); }
+	const Quantity<Sum> MonthlyRentQuantity() { return this->monthlyRent.Get(); }
+	const Quantity<Sum> GarageRentalQuantity() { return this->garageRental.Get(); }
 	
-	static Stage& Instance(const StageMap& m)
+	static Stage& Instance()
 	{
-		static Stage instance = Stage(m);
+		static Stage instance = Stage(Map);
 		return instance;
+	}
+	
+	static void Set(const StageMap& m)
+	{
+		Map = m;
 	}
 	
 	std::ostream& Display(std::ostream& os) 
