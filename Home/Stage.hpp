@@ -79,6 +79,12 @@ class Advance: public CSVValue<Advance, Sum>
 {
 public:
 	Advance(std::string s = "0"): CSVValue(s) {};
+};
+
+class IncidentalHeatingCosts: public CSVValue<IncidentalHeatingCosts, Sum>
+{
+public:
+	IncidentalHeatingCosts(std::string s = "0"): CSVValue(s) {};
 };	
 
 class GarageRental: public CSVValue<GarageRental, Sum>
@@ -98,6 +104,7 @@ template<> const char* CSVValue<ApartmentArea, Area, unsigned>::Key = "Area";
 template<> const char* CSVValue<Rooms, Area>::Key = "Rooms";
 template<> const char* CSVValue<Persons, Scalar, unsigned>::Key = "Persons";
 template<> const char* CSVValue<Advance, Sum>::Key = "Advance";
+template<> const char* CSVValue<IncidentalHeatingCosts, Sum>::Key = "IncidentalHeatingCosts";
 template<> const char* CSVValue<MonthlyRent, Sum>::Key = "MonthlyRent";
 template<> const char* CSVValue<GarageRental, Sum>::Key = "GarageRental";
 
@@ -122,7 +129,7 @@ public:
 	std::ostream& Display(std::ostream& os) 
 	{
 		os<<"Name: "<<Type::Name<<"\tRooms:"<<rooms.Get()<<"\tArea: "<<area.Get()<<"\tPersons: "<<persons.Get();
-		return os<<"MonthlyRent: "<<monthlyRent.Get()<<"\tAdvance: "<<advance.Get()<<"\tGarage: "<<garageRental.Get()<<std::endl;
+		return os<<"MonthlyRent: "<<monthlyRent.Get()<<"\tAdvance: "<<advance.Get()<<"\tGarage: "<<garageRental.Get()<<"\tIncidentalHeatingCosts: "<<incidentalHeatingCosts.Get()<<std::endl;
 	}
 	
 private:
@@ -130,6 +137,7 @@ private:
 	Rooms rooms;
 	Persons persons;
 	Advance advance;
+	IncidentalHeatingCosts incidentalHeatingCosts;
 	GarageRental garageRental;
 	MonthlyRent monthlyRent;
 	
@@ -140,6 +148,7 @@ private:
 		persons(m.at(Persons::Key)),
 		advance(m.at(Advance::Key)),
 		monthlyRent(m.at(MonthlyRent::Key)),
+		incidentalHeatingCosts(m.at(IncidentalHeatingCosts::Key)),
 		garageRental(m.at(GarageRental::Key))
 	{ 
 // 		for(auto kv : m)
