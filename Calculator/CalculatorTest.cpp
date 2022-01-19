@@ -3,6 +3,7 @@
 #include "Calculator.hpp"
 #include "../Home/Counter.hpp"
 #include "../Home/CounterContainer.hpp"
+#include "../Home/StageContainer.hpp"
 
 int main()
 {       
@@ -10,6 +11,7 @@ int main()
     
 	std::cout<<"---------------------READ------------------------"<<std::endl;
 	CounterConatinerType::Instance().Read();
+	StageContainerType::Instance();
 	
 	std::cout<<"---------------------CE1------------------------"<<std::endl;
 	Logger::Log(CE1::Begin(),CE1::End());

@@ -38,6 +38,17 @@ namespace Calculator
 		static const char* Name; 
 		static const char* Sign; 
 	};
+	
+	struct Ratio: CalculatorOperation<Ratio>
+	{ 
+		using Type = Ratio;
+		
+		template<typename T, typename Q>
+		static Result<T,Q> Calculate(const T& nom, const T& denom, const Q& sum) {	return Result(nom, denom, nom.QuantityValue / denom.QuantityValue * sum.QuantityValue); }
+	};
+	
+	template<> const char* CalculatorOperation<Ratio>::Name = "Ratio";
+	template<> const char* CalculatorOperation<Ratio>::Sign = "%";
 
 	struct Difference: CalculatorOperation<Difference>
 	{ 
@@ -79,8 +90,25 @@ namespace Calculator
 			
 			return result;
 		}
-	};
+	};	
 	
+	template<class TCounter, typename TCalc>
+	struct StageWater
+	{
+		using ReadingType =  TCounter::ReadingType;
+		using QuantityType = TCounter::QuantityType;
+		static std::vector<Result<ReadingType,QuantityType>> Calculate()
+		{
+			auto result = std::vector<Result<ReadingType,QuantityType>>(); 
+			for(auto it = TCounter::Begin(); (it + 1) != TCounter::End(); ++it)
+			{
+				auto cr = TCalc::template Calculate<ReadingType,QuantityType>(*it, *(it+1));
+				result.push_back(cr);
+			}
+			
+			return result;
+		}
+	};	
 }
 
 
