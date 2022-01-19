@@ -4,6 +4,7 @@
 #include "../Home/Counter.hpp"
 #include "../Home/CounterContainer.hpp"
 #include "../Home/StageContainer.hpp"
+#include "../Home/Stage.hpp"
 
 int main()
 {       
@@ -21,6 +22,10 @@ int main()
 	
 	auto rs =Calculator::Counter<CE1,Calculator::Sum>::Calculate();
 	Logger::Log(rs.begin(),rs.end());
+	
+	Logger::Log()<<Middle::Instance().UnitsQuantity()<<std::endl;
+	auto rat =Calculator::Ratio::Calculate(Middle::Instance().UnitsQuantity(),Top::Instance().UnitsQuantity(), Bottom::Instance().MonthlyRentQuantity());
+	Logger::Log()<<rat.Value<<std::endl;
 	
 	std::cout<<"END"<<std::endl;
     return 0;

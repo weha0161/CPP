@@ -44,7 +44,7 @@ namespace Calculator
 		using Type = Ratio;
 		
 		template<typename T, typename Q>
-		static Result<T,Q> Calculate(const T& nom, const T& denom, const Q& sum) {	return Result(nom, denom, nom.QuantityValue / denom.QuantityValue * sum.QuantityValue); }
+		static Result<T,Q> Calculate(const T& nom, const T& denom, const Q& sum) {	return Result(nom, denom, nom / denom * sum); }
 	};
 	
 	template<> const char* CalculatorOperation<Ratio>::Name = "Ratio";
