@@ -128,10 +128,13 @@ namespace Bank
 	};
 }
 
-template<typename A, typename Direction = Bank::Out>
-struct Get
+template<typename A, typename Direction>
+struct Get{};
+
+template<typename A>
+struct Get<A, Bank::Out>
 {
-	Bank::AccountEndpoint<A, Bank::Transfer<Direction>> operator()(typename A::KeyType k)
+	Bank::AccountEndpoint<A, Bank::Transfer<Bank::Out>> operator()(typename A::KeyType k)
 	{
 		return A::OutCont[k];
 	}

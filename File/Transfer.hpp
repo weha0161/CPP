@@ -166,7 +166,7 @@ namespace Bank
 		bool Contains(KeyType k) const { return this->transfers.find(k) != this->transfers.end(); }
 		const Cont<KeyType>& Keys() { return keys; }
 		const AccountEndpointType& operator[](KeyType k) { return this->transfers[k]; }
-		
+				
 		void Display(std::ostream& out) const
 		{
 			for(auto p : this->transfers)
@@ -183,7 +183,6 @@ namespace Bank
 		
 		void Display(std::ostream& out, const std::vector<std::string>& keys)
 		{
-		
 			for(auto k : keys)
 			{
 				const KeyType key = KeyType(k);

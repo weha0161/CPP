@@ -65,6 +65,7 @@ int main()
 	auto c = CSV::Repository::Read(comdirect);	
 	
 	auto outFile = std::ofstream("out.txt");
+	auto inFile = std::ofstream("//home//markus//Downloads//in.txt");
     CSV::Repository::Attach();
     CSV::Repository::ParseAll();
     CSV::Repository::Display(outFile);
@@ -87,7 +88,7 @@ int main()
 
 	std::cout<<"\n TEST GET Gemeindekasse Dettenheim"<<std::endl;
 	std::cout<<"\n-------------------------------------------------------- Transfers OUT --------------------------------------------------------------"<<std::endl;
-	auto g = Get<Bank::Raiba<0>>();
+	auto g = Get<Bank::Raiba<0>, Bank::Out>();
 	auto gr = g(Key("Gemeindekasse Dettenheim"));
 	gr.Display(std::cout);
 	
@@ -96,7 +97,7 @@ int main()
 	auto raibaOut = Transfers<Bank::Raiba<0>, Bank::Out>();
 	auto rbo = raibaOut();
 	auto keys = FileSystem::ReadLines(keyFileN);
-	rbo.Display(std::cout,keys);
+	rbo.Display(inFile,keys);
 	
 // 	for(auto i : com)
 // 		std::cout<<*i<<Std::endl;
