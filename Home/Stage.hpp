@@ -21,21 +21,22 @@
 
 using StageMap = std::map<std::string, std::string>;
 
-template<typename Derived,int N, unsigned A, unsigned R>
+template<typename Derived,int N, unsigned A, unsigned R, unsigned I = 1>
 struct StageConfiguration
 {
 	using Type = Derived;
+	static constexpr int Units = I;
 	static constexpr int Number = N;
 	static constexpr unsigned Area = A;
 	static constexpr unsigned Rooms = R;
 	static const char* Name;
 };
 
-struct TopConfiguration:StageConfiguration<TopConfiguration,2,58,5> { };
+struct TopConfiguration:StageConfiguration<TopConfiguration,2,58,5,2> { };
 struct MiddleConfiguration:StageConfiguration<MiddleConfiguration,1,101,7> { };
 struct BottomConfiguration:StageConfiguration<BottomConfiguration,0,101,7> { };
 
-template<> const char* StageConfiguration<TopConfiguration, TopConfiguration::Number, TopConfiguration::Area, TopConfiguration::Rooms>::Name = "Top";
+template<> const char* StageConfiguration<TopConfiguration, TopConfiguration::Number, TopConfiguration::Area, TopConfiguration::Rooms, TopConfiguration::Units>::Name = "Top";
 template<> const char* StageConfiguration<MiddleConfiguration,MiddleConfiguration::Number, MiddleConfiguration::Area, MiddleConfiguration::Rooms>::Name = "Middle";
 template<> const char* StageConfiguration<BottomConfiguration, BottomConfiguration::Number, BottomConfiguration::Area, BottomConfiguration::Rooms>::Name = "Bottom";
 
@@ -55,6 +56,12 @@ private:
 	Quantity<U> quantity;
 	T val;
 	String_::To<T> to;
+};
+
+class IndividualUnit: public CSVValue<IndividualUnit, Area, unsigned>
+{
+public:
+	IndividualUnit(unsigned a): CSVValue(a) {};
 };
 
 class ApartmentArea: public CSVValue<ApartmentArea, Area, unsigned>
@@ -100,6 +107,7 @@ public:
 };	
 
 
+template<> const char* CSVValue<IndividualUnit, Scalar, unsigned>::Key = "IndividualUnit";
 template<> const char* CSVValue<ApartmentArea, Area, unsigned>::Key = "Area";
 template<> const char* CSVValue<Rooms, Area>::Key = "Rooms";
 template<> const char* CSVValue<Persons, Scalar, unsigned>::Key = "Persons";
@@ -118,7 +126,13 @@ public:
 	static constexpr int Number = Configuration::Number;
 	static constexpr unsigned AreaValue = Configuration::Area;
 	static constexpr unsigned RoomsValue = Configuration::Rooms;
+	static constexpr unsigned UnitsValue = Configuration::Units;
 	inline static const char* Name = Configuration::Name;
+	
+	const Quantity<Area>& getAreaQuantity() { return this->area.Get(); }
+	const Quantity<Area>& getRoomsQuantity() { return this->rooms.Get(); }
+	const Quantity<Scalar>& getUnitsQuantity() { return this->individualUnit.Get(); }
+	const Quantity<Scalar>& getPersonsQuantity() { return this->individualUnit.Get(); }
 	
 	static Stage& Instance(const StageMap& m)
 	{
@@ -128,13 +142,14 @@ public:
 	
 	std::ostream& Display(std::ostream& os) 
 	{
-		os<<"Name: "<<Type::Name<<"\tRooms:"<<rooms.Get()<<"\tArea: "<<area.Get()<<"\tPersons: "<<persons.Get();
+		os<<"Name: "<<Type::Name<<"\tUnits:"<<individualUnit.Get()<<"\tRooms:"<<rooms.Get()<<"\tArea: "<<area.Get()<<"\tPersons: "<<persons.Get();
 		return os<<"MonthlyRent: "<<monthlyRent.Get()<<"\tAdvance: "<<advance.Get()<<"\tGarage: "<<garageRental.Get()<<"\tIncidentalHeatingCosts: "<<incidentalHeatingCosts.Get()<<std::endl;
 	}
 	
 private:
 	ApartmentArea area;
 	Rooms rooms;
+	IndividualUnit individualUnit;
 	Persons persons;
 	Advance advance;
 	IncidentalHeatingCosts incidentalHeatingCosts;
@@ -145,6 +160,7 @@ private:
 	Stage(const StageMap& m): 
 		area(AreaValue),
 		rooms(RoomsValue),
+		individualUnit(UnitsValue),
 		persons(m.at(Persons::Key)),
 		advance(m.at(Advance::Key)),
 		monthlyRent(m.at(MonthlyRent::Key)),
