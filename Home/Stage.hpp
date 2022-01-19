@@ -129,10 +129,14 @@ public:
 	static constexpr unsigned UnitsValue = Configuration::Units;
 	inline static const char* Name = Configuration::Name;
 	
-	const Quantity<Area>& getAreaQuantity() { return this->area.Get(); }
-	const Quantity<Area>& getRoomsQuantity() { return this->rooms.Get(); }
-	const Quantity<Scalar>& getUnitsQuantity() { return this->individualUnit.Get(); }
-	const Quantity<Scalar>& getPersonsQuantity() { return this->individualUnit.Get(); }
+	const Quantity<Area>& AreaQuantity() { return this->area.Get(); }
+	const Quantity<Area>& RoomsQuantity() { return this->rooms.Get(); }
+	const Quantity<Scalar>& UnitsQuantity() { return this->individualUnit.Get(); }
+	const Quantity<Scalar>& PersonsQuantity() { return this->persons.Get(); }
+	const Quantity<Sum>& AdvanceQuantity() { return this->advance.Get(); }
+	const Quantity<Sum>& IncidentalHeatingCostsQuantity() { return this->incidentalHeatingCosts.Get(); }
+	const Quantity<Sum>& MonthlyRentQuantity() { return this->monthlyRent.Get(); }
+	const Quantity<Sum>& GarageRentalQuantity() { return this->garageRental.Get(); }
 	
 	static Stage& Instance(const StageMap& m)
 	{
@@ -171,6 +175,8 @@ private:
 // 			Logger::Log()<<kv.first<<": "<<kv.second<<std::endl;
 // 		Logger::Log()<<"CTOR MAP: "<<Number<<std::endl;
 	}
+	
+	static Stage INSTANCE;
 	~Stage()	{ Logger::Log()<<"Destructor"<<std::endl; }
 	Stage& operator=(const Stage&) = delete;
 	Stage(const Stage& c) = delete;
