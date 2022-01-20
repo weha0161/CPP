@@ -180,7 +180,6 @@ private:
 // 		Logger::Log()<<"CTOR MAP: "<<Number<<std::endl;
 	}
 	
-	static Stage INSTANCE;
 	~Stage()	{ Logger::Log()<<"Destructor"<<std::endl; }
 	Stage& operator=(const Stage&) = delete;
 	Stage(const Stage& c) = delete;
