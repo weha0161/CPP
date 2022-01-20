@@ -44,8 +44,8 @@ template<typename D, typename U, typename T = double>
 class CSVValue: public Element
 {
 	using Derived = D;
-	using Unit = U;
 public:
+	using Unit = U;
 	CSVValue(std::string s = "0.0"): Element(s), quantity(this->to(s)) {};
 	CSVValue(T t): Element(std::to_string(t)), quantity(t) {};
 	const Quantity<U>& Get() { return this->quantity; }
@@ -199,13 +199,13 @@ struct Get{};
 template<typename T>
 struct Get<T, ApartmentArea>
 {
-	static Quantity<Area> Value() { return T::Instance().AreaQuantity(); }
+	static Quantity<ApartmentArea::Unit> Value() { return T::Instance().AreaQuantity(); }
 };
 
 template<typename T>
 struct Get<T, Persons>
 {
-	static Quantity<Scalar> Value() { return T::Instance().PersonsQuantity(); }
+	static Quantity<Persons::Unit> Value() { return T::Instance().PersonsQuantity(); }
 };
 
 using Top = Stage<TopConfiguration>;
