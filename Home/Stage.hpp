@@ -169,9 +169,6 @@ private:
 	
 	Stage(){ Logger::Log()<<"CTOR: "<<Number<<std::endl;}
 	Stage(const StageMap& m): 
-// 		area(AreaValue),
-// 		rooms(RoomsValue),
-		individualUnit(UnitsValue),
 		persons(m.at(Persons::Key)),
 		advance(m.at(Advance::Key)),
 		monthlyRent(m.at(MonthlyRent::Key)),
