@@ -20,7 +20,11 @@ int main()
 
     auto c = String_::Split<del>(pathToShow);
     
-    for(auto d : c)
-    	std::cout<<d<<std::endl;
+//     for(auto d : c)
+//     	std::cout<<d<<std::endl;
+// 	
+// 	std::cout<<"AsString: "<<String_::AsString(64)<<std::endl;
+	std::cout<<"AsString: "<<std::endl;
+	
     return 0;
 }
