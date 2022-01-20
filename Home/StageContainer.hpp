@@ -1,16 +1,18 @@
-	#include <algorithm>
-	#include <functional>
-	#include <iostream>
-	#include <fstream>
-	#include <chrono>
-	#include <ctime>
-	#include <iterator>
-	#include <vector>
-	#include <cstdlib>
-	#include <filesystem>
-	#include "Stage.hpp"
-	#include "../Logger/Logger.hpp"
-	#include "../Typelist/Typelist.h"
+#include <algorithm>
+#include <functional>
+#include <iostream>
+#include <fstream>
+#include <chrono>
+#include <ctime>
+#include <iterator>
+#include <vector>
+#include <cstdlib>
+#include <filesystem>
+#include "Stage.hpp"
+#include "../Logger/Logger.hpp"
+#include "../Typelist/Typelist.h"
+#include "../Unit/Unit.h"
+#include "../Quantity/Quantity.h"
 
 	#ifndef STAGECONTAINER_HPP
 	#define STAGECONTAINER_HPP
@@ -53,6 +55,12 @@
 		void Write(const std::string sourcePath = ".")
 		{
 			Type::Write(sourcePath);
+		}
+		
+		template<typename T>
+		static Quantity<typename T::Unit> GetTotal()
+		{
+			return Get<Head,T>::Value();
 		}
 
 		static StageContainer& Instance()
@@ -107,7 +115,7 @@
 	public:
 		static std::ostream& Display(std::ostream& os) 
 		{
-			return StageContainer<Typelist<Tail...>>::Display(Type::Instance().Display(os));		
+			return Base::Display(Type::Instance().Display(os));		
 		}
 
 		static StageContainer& Instance()
@@ -115,6 +123,13 @@
 			static StageContainer instance;
 			return instance;
 		}	
+		
+		template<typename T>
+		Quantity<typename T::Unit> GetTotal()
+		{
+// 			return Get<Head,T>::Value() + Base::Instance().template GetTotal<T>();
+			return Get<Head,T>::Value() + Base::template GetTotal<T>();
+		}
 	};
 
 	template<typename Head, typename... Tail>
