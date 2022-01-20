@@ -56,17 +56,17 @@ namespace String_
 		return result;
 	}
 	
-	template<class T, unsigned SIZE = 80>
-	std::string AsString(const T& c)
-	{
-		std::string result;
-		char* buf = new char[SIZE];
-		std::strstream str(buf,SIZE);
-		str<<c;
-		str>>result;
-		
-		return result;
-	};
+// 	template<class T, unsigned SIZE = 80>
+// 	std::string AsString(const T& c)
+// 	{
+// 		std::string result;
+// 		char* buf = new char[SIZE];
+// 		std::strstream str(buf,SIZE);
+// 		str<<c;
+// 		str>>result;
+// 		
+// 		return result;
+// 	};
 	
 	template<typename T = int>
 	struct To
@@ -77,13 +77,13 @@ namespace String_
 	template<>
 	struct To<double>
 	{
-		double operator()(std::string s) { std::cout<<"TO:"<<s<<std::endl;return std::stod(s); }
+		double operator()(std::string s) { return std::stod(s); }
 	};
 	
 	template<>
 	struct To<unsigned>
 	{
-		unsigned operator()(std::string s) { std::cout<<"TO:"<<s<<std::endl;return std::stol(s); }
+		unsigned operator()(std::string s) { return std::stol(s); }
 	};
 	
 	template<typename T>
