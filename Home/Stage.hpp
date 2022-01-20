@@ -124,11 +124,7 @@ public:
 	using Type = Stage<ConfigT>;
 	using Configuration = ConfigT;
 	static constexpr int Number = Configuration::Number;
-	static constexpr unsigned AreaValue = Configuration::Area;
-	static constexpr unsigned RoomsValue = Configuration::Rooms;
-	static constexpr unsigned UnitsValue = Configuration::Units;
 	inline static const char* Name = Configuration::Name;
-	inline static StageMap Map = StageMap();
 	
 	const Quantity<Area> AreaQuantity() { return this->area.Get(); }
 	const Quantity<Area> RoomsQuantity() { return this->rooms.Get(); }
@@ -157,9 +153,14 @@ public:
 	}
 	
 private:
-	ApartmentArea area;
-	Rooms rooms;
-	IndividualUnit individualUnit;
+	inline static StageMap Map = StageMap();
+	static constexpr unsigned AreaValue = Configuration::Area;
+	static constexpr unsigned RoomsValue = Configuration::Rooms;
+	static constexpr unsigned UnitsValue = Configuration::Units;
+	
+	ApartmentArea area = ApartmentArea(AreaValue);
+	Rooms rooms = Rooms(RoomsValue);
+	IndividualUnit individualUnit = IndividualUnit(UnitsValue);
 	Persons persons;
 	Advance advance;
 	IncidentalHeatingCosts incidentalHeatingCosts;
@@ -168,8 +169,8 @@ private:
 	
 	Stage(){ Logger::Log()<<"CTOR: "<<Number<<std::endl;}
 	Stage(const StageMap& m): 
-		area(AreaValue),
-		rooms(RoomsValue),
+// 		area(AreaValue),
+// 		rooms(RoomsValue),
 		individualUnit(UnitsValue),
 		persons(m.at(Persons::Key)),
 		advance(m.at(Advance::Key)),
@@ -193,6 +194,16 @@ std::ostream& operator<<(std::ostream& strm, const Stage<C> c)
 {
 	return c.Display(strm);
 }
+
+
+template<typename T, typename Q>
+struct Get{};
+
+template<typename T>
+struct Get<T, ApartmentArea>
+{
+	static Quantity<Area> Value() { return T::Instance().AreaQuantity(); }
+};
 
 using Top = Stage<TopConfiguration>;
 using Middle = Stage<MiddleConfiguration>;
