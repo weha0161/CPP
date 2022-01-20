@@ -17,9 +17,6 @@ int main()
 	
 // 	Top::Instance();
     std::cout<<"t: "<<Top::Name<<std::endl;
-//     std::cout<<"t: "<<Top::Instance().Name<<std::endl;
-    std::cout<<"t: "<<Top::AreaValue<<std::endl;
-    std::cout<<"t: "<<Top::RoomsValue<<std::endl;
     std::cout<<"t: "<<Top::Number<<std::endl;
     
     std::cout<<"t: "<<ApartmentArea::Key<<std::endl;
@@ -30,6 +27,16 @@ int main()
 	StageContainerType::Instance().Display(std::cout);
 // 	auto m = StageContainerType::Instance().Get<Middle>();
     std::cout<<"m: "<<Middle::Instance().Name<<std::endl;
+    
+    std::cout<<"AREA"<<std::endl;
+	std::cout<<"t: "<<Get<Top,ApartmentArea>::Value()<<std::endl;
+    std::cout<<"m: "<<Get<Middle,ApartmentArea>::Value()<<std::endl;
+    std::cout<<"b: "<<Get<Bottom,ApartmentArea>::Value()<<std::endl;
+	
+    std::cout<<"\nPersons"<<std::endl;
+	std::cout<<"t: "<<Get<Top,Persons>::Value()<<std::endl;
+    std::cout<<"m: "<<Get<Middle,Persons>::Value()<<std::endl;
+    std::cout<<"b: "<<Get<Bottom,Persons>::Value()<<std::endl;
 	
     std::cout<<"END"<<std::endl;
 

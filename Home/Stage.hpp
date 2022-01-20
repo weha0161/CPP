@@ -205,6 +205,12 @@ struct Get<T, ApartmentArea>
 	static Quantity<Area> Value() { return T::Instance().AreaQuantity(); }
 };
 
+template<typename T>
+struct Get<T, Persons>
+{
+	static Quantity<Scalar> Value() { return T::Instance().PersonsQuantity(); }
+};
+
 using Top = Stage<TopConfiguration>;
 using Middle = Stage<MiddleConfiguration>;
 using Bottom = Stage<BottomConfiguration>;
