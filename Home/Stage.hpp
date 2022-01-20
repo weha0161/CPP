@@ -193,16 +193,16 @@ std::ostream& operator<<(std::ostream& strm, const Stage<C> c)
 
 
 template<typename T, typename Q>
-struct Get{};
+struct GetQuantity{};
 
 template<typename T>
-struct Get<T, ApartmentArea>
+struct GetQuantity<T, ApartmentArea>
 {
 	static Quantity<ApartmentArea::Unit> Value() { return T::Instance().AreaQuantity(); }
 };
 
 template<typename T>
-struct Get<T, Persons>
+struct GetQuantity<T, Persons>
 {
 	static Quantity<Persons::Unit> Value() { return T::Instance().PersonsQuantity(); }
 };

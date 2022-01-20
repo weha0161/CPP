@@ -60,7 +60,7 @@
 		template<typename T>
 		static Quantity<typename T::Unit> GetTotal()
 		{
-			return Get<Head,T>::Value();
+			return GetQuantity<Head,T>::Value();
 		}
 
 		static StageContainer& Instance()
@@ -127,8 +127,7 @@
 		template<typename T>
 		Quantity<typename T::Unit> GetTotal()
 		{
-// 			return Get<Head,T>::Value() + Base::Instance().template GetTotal<T>();
-			return Get<Head,T>::Value() + Base::template GetTotal<T>();
+			return GetQuantity<Head,T>::Value() + Base::template GetTotal<T>();
 		}
 	};
 

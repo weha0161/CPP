@@ -29,15 +29,15 @@ int main()
     std::cout<<"m: "<<Middle::Instance().Name<<std::endl;
     
     std::cout<<"AREA"<<std::endl;
-	std::cout<<"t: "<<Get<Top,ApartmentArea>::Value()<<std::endl;
-    std::cout<<"m: "<<Get<Middle,ApartmentArea>::Value()<<std::endl;
-    std::cout<<"b: "<<Get<Bottom,ApartmentArea>::Value()<<std::endl;
+	std::cout<<"t: "<<GetQuantity<Top,ApartmentArea>::Value()<<std::endl;
+    std::cout<<"m: "<<GetQuantity<Middle,ApartmentArea>::Value()<<std::endl;
+    std::cout<<"b: "<<GetQuantity<Bottom,ApartmentArea>::Value()<<std::endl;
     std::cout<<"TOTAL: "<<StageContainerType::Instance().GetTotal<ApartmentArea>()<<std::endl;
 	
     std::cout<<"\nPersons"<<std::endl;
-	std::cout<<"t: "<<Get<Top,Persons>::Value()<<std::endl;
-    std::cout<<"m: "<<Get<Middle,Persons>::Value()<<std::endl;
-    std::cout<<"b: "<<Get<Bottom,Persons>::Value()<<std::endl;
+	std::cout<<"t: "<<GetQuantity<Top,Persons>::Value()<<std::endl;
+    std::cout<<"m: "<<GetQuantity<Middle,Persons>::Value()<<std::endl;
+    std::cout<<"b: "<<GetQuantity<Bottom,Persons>::Value()<<std::endl;
     std::cout<<"TOTAL: "<<StageContainerType::Instance().GetTotal<Persons>()<<std::endl;
 	
     std::cout<<"END"<<std::endl;
