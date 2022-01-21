@@ -9,6 +9,8 @@
 #include "../Wrapper/Wrapper.hpp"
 #include "Parser.hpp"
 #include "CounterConfiguration.hpp"
+#include "StageQuantities.hpp"
+#include "StageConfiguration.hpp"
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/vector.hpp>
 #include <map>
@@ -20,102 +22,6 @@
 #define STAGE_HPP
 
 using StageMap = std::map<std::string, std::string>;
-
-template<typename Derived,int N, unsigned A, unsigned R, unsigned I = 1>
-struct StageConfiguration
-{
-	using Type = Derived;
-	static constexpr int Units = I;
-	static constexpr int Number = N;
-	static constexpr unsigned Area = A;
-	static constexpr unsigned Rooms = R;
-	static const char* Name;
-};
-
-struct TopConfiguration:StageConfiguration<TopConfiguration,2,58,5,2> { };
-struct MiddleConfiguration:StageConfiguration<MiddleConfiguration,1,101,7> { };
-struct BottomConfiguration:StageConfiguration<BottomConfiguration,0,101,7> { };
-
-template<> const char* StageConfiguration<TopConfiguration, TopConfiguration::Number, TopConfiguration::Area, TopConfiguration::Rooms, TopConfiguration::Units>::Name = "Top";
-template<> const char* StageConfiguration<MiddleConfiguration,MiddleConfiguration::Number, MiddleConfiguration::Area, MiddleConfiguration::Rooms>::Name = "Middle";
-template<> const char* StageConfiguration<BottomConfiguration, BottomConfiguration::Number, BottomConfiguration::Area, BottomConfiguration::Rooms>::Name = "Bottom";
-
-template<typename D, typename U, typename T = double>
-class CSVValue: public Element
-{
-	using Derived = D;
-public:
-	using Unit = U;
-	CSVValue(std::string s = "0.0"): Element(s), quantity(this->to(s)) {};
-	CSVValue(T t): Element(std::to_string(t)), quantity(t) {};
-	const Quantity<U>& Get() { return this->quantity; }
-	const T& GetValue() { return this->val; }
-	static const char* Key;
-	Element* DoCreate() { return this; };
-private:
-	Quantity<U> quantity;
-	T val;
-	String_::To<T> to;
-};
-
-class IndividualUnit: public CSVValue<IndividualUnit, Area, unsigned>
-{
-public:
-	IndividualUnit(unsigned a): CSVValue(a) {};
-};
-
-class ApartmentArea: public CSVValue<ApartmentArea, Area, unsigned>
-{
-public:
-	ApartmentArea(unsigned a): CSVValue(a) {};
-};
-
-class Rooms: public CSVValue<Rooms, Scalar, unsigned>
-{
-public:
-	Rooms(unsigned r): CSVValue(r) {};
-};	
-
-class Persons: public CSVValue<Persons, Scalar, unsigned>
-{
-public:
-	Persons(const std::string& s = "0"): CSVValue(s) {};
-};	
-
-class Advance: public CSVValue<Advance, Sum>
-{
-public:
-	Advance(std::string s = "0"): CSVValue(s) {};
-};
-
-class IncidentalHeatingCosts: public CSVValue<IncidentalHeatingCosts, Sum>
-{
-public:
-	IncidentalHeatingCosts(std::string s = "0"): CSVValue(s) {};
-};	
-
-class GarageRental: public CSVValue<GarageRental, Sum>
-{
-public:
-	GarageRental(std::string s = "0"): CSVValue(s) {};
-};	
-
-class MonthlyRent: public CSVValue<MonthlyRent, Sum>
-{
-public:
-	MonthlyRent(std::string s = "0"): CSVValue(s) {};
-};	
-
-
-template<> const char* CSVValue<IndividualUnit, Scalar, unsigned>::Key = "IndividualUnit";
-template<> const char* CSVValue<ApartmentArea, Area, unsigned>::Key = "Area";
-template<> const char* CSVValue<Rooms, Area>::Key = "Rooms";
-template<> const char* CSVValue<Persons, Scalar, unsigned>::Key = "Persons";
-template<> const char* CSVValue<Advance, Sum>::Key = "Advance";
-template<> const char* CSVValue<IncidentalHeatingCosts, Sum>::Key = "IncidentalHeatingCosts";
-template<> const char* CSVValue<MonthlyRent, Sum>::Key = "MonthlyRent";
-template<> const char* CSVValue<GarageRental, Sum>::Key = "GarageRental";
-
 
 template<typename ConfigT>
 class Stage
@@ -190,7 +96,6 @@ std::ostream& operator<<(std::ostream& strm, const Stage<C> c)
 {
 	return c.Display(strm);
 }
-
 
 template<typename T, typename Q>
 struct GetQuantity{};

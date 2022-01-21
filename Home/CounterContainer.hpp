@@ -64,24 +64,25 @@ public:
 	using Type = Head;
 	using CounterTypes = Typelist<Head,Tail...>;
 	using ContainerType = CounterContainer<Typelist<Head,Tail...>>;
+	using Base = CounterContainer<Typelist<Tail...>>;
 protected:
 	CounterContainer() { Logger::Log<Info>()<<"CounterContainer created."<<std::endl; };
 public:
 	static std::ostream& Display(std::ostream& os) 
 	{
-		return CounterContainer<Typelist<Tail...>>::Display(Type::Display(os));		
+		return Base::Display(Type::Display(os));		
 	}
 	
 	void Write(const std::string sourcePath = ".")
 	{
 		Type::Write(sourcePath);
-		CounterContainer<Typelist<Tail...>>::Write(sourcePath);		
+		Base::Write(sourcePath);		
 	}
 	
 	void Read(const std::string sourcePath = ".")
 	{
 		Type::Read();
-		CounterContainer<Typelist<Tail...>>::Read();		
+		Base::Read();		
 	}
 	
 	template<unsigned N>

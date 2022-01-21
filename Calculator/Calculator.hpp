@@ -3,6 +3,8 @@
 #include "../Fraction/Fraction.h"
 #include "../Home/Counter.hpp"
 #include "../Logger/Logger.hpp"
+#include "../File/Raiba.hpp"
+#include "../File/Account.hpp"
 
 #ifndef CALCULATOR_HPP
 #define CALCULATOR_HPP
@@ -74,6 +76,24 @@ namespace Calculator
 
 	//-------------------------------------------------------------------------------------------------Calculator----------------------------------------------------------
 
+	template<class Config>
+	struct Stage
+	{
+		template<typename Stage, typename AllStages>
+		static void Calculate()
+		{
+			auto v = AllStages::Instance().template GetTotal<Persons>();
+			
+			auto g = Get<Bank::Raiba<0>, Bank::Out>();
+			auto gr = g(Key("Gemeindekasse Dettenheim"));
+			gr.Display(std::cout);
+			
+			std::cout<<"CALC: "<<v<<std::endl;
+			std::cout<<"CALC: "<<Config::Name<<std::endl;
+			std::cout<<"CALC: "<<Config::AccountKey<<std::endl;
+		}
+	};
+	
 	template<class TCounter, typename TCalc>
 	struct Counter
 	{

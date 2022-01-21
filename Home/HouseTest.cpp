@@ -17,6 +17,7 @@ int main()
     std::cout<<"START"<<std::endl;
 	
 	House<HouseConfiguration>::Instance().Display(std::cout);
+	House<HouseConfiguration>::Instance().Calculate();
 	
     std::cout<<"END"<<std::endl;
 

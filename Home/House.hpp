@@ -10,6 +10,7 @@
 #include "../File/Account.hpp"
 #include "../File/Repository.hpp"
 #include "../File/FileSystem.hpp"
+#include "../Calculator/CalculatorConfiguration.hpp"
 #include "Parser.hpp"
 #include "CounterConfiguration.hpp"
 #include <boost/mpl/for_each.hpp>
@@ -47,6 +48,11 @@ public:
 	std::ostream& Display(std::ostream& os) 
 	{
 		return os;
+	}
+	
+	void Calculate() 
+	{
+		StageContainerType::Instance().Calculate<BuildingInsuranceConfig>();
 	}
 	
 private:

@@ -4,6 +4,7 @@
 #include "CounterContainer.hpp"
 #include "Stage.hpp"
 #include "StageContainer.hpp"
+#include "../Calculator/CalculatorConfiguration.hpp"
 #include "../Unit/SIPrefix.hpp"
 #include "../Calculator/Calculator.hpp"
 #include "../Tuple/Tuple.hpp"
@@ -40,6 +41,7 @@ int main()
     std::cout<<"b: "<<GetQuantity<Bottom,Persons>::Value()<<std::endl;
     std::cout<<"TOTAL: "<<StageContainerType::Instance().GetTotal<Persons>()<<std::endl;
 	
+	StageContainerType::Instance().Calculate<BuildingInsuranceConfig>();
     std::cout<<"END"<<std::endl;
 
     return 0;
