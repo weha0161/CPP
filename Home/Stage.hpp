@@ -112,6 +112,12 @@ struct GetQuantity<T, Persons>
 	static Quantity<Persons::Unit> Value() { return T::Instance().PersonsQuantity(); }
 };
 
+template<typename T>
+struct GetQuantity<T, IndividualUnit>
+{
+	static Quantity<IndividualUnit::Unit> Value() { return T::Instance().UnitsQuantity(); }
+};
+
 using Top = Stage<TopConfiguration>;
 using Middle = Stage<MiddleConfiguration>;
 using Bottom = Stage<BottomConfiguration>;

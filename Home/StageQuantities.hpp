@@ -37,7 +37,7 @@ private:
 	String_::To<T> to;
 };
 
-class IndividualUnit: public CSVValue<IndividualUnit, Area, unsigned>
+class IndividualUnit: public CSVValue<IndividualUnit, Scalar, unsigned>
 {
 public:
 	IndividualUnit(unsigned a): CSVValue(a) {};

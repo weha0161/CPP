@@ -52,7 +52,7 @@ public:
 	
 	void Calculate() 
 	{
-		StageContainerType::Instance().Calculate<BuildingInsuranceConfig>();
+		StageContainerType::Instance().Calculate<BuildingInsurance>();
 	}
 	
 private:
