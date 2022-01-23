@@ -1,7 +1,9 @@
 #include <memory>
 #include <ratio>
+#include "CalculatorConfiguration.hpp"
 #include "../Fraction/Fraction.h"
 #include "../Home/Counter.hpp"
+#include "../Wrapper/Wrapper.hpp"
 #include "../Logger/Logger.hpp"
 #include "../File/Raiba.hpp"
 #include "../File/Account.hpp"
@@ -63,36 +65,49 @@ namespace Calculator
 	template<> const char* CalculatorOperation<Difference>::Name = "Difference";
 	template<> const char* CalculatorOperation<Difference>::Sign = "-";
 
-	struct Sum: CalculatorOperation<Sum>
+	struct Addition: CalculatorOperation<Addition>
 	{ 
-		using Type = Sum;
+		using Type = Addition;
 		
 		template<typename T, typename Q>
 		static Result<T,Q> Calculate(const T& t1, const T& t2) {	return Result(t1, t2, t1.QuantityValue + t2.QuantityValue); }
 	};
 	
-	template<> const char* CalculatorOperation<Sum>::Name = "Sum";
-	template<> const char* CalculatorOperation<Sum>::Sign = "+";
+	template<> const char* CalculatorOperation<Addition>::Name = "Addition";
+	template<> const char* CalculatorOperation<Addition>::Sign = "+";
 
 	//-------------------------------------------------------------------------------------------------Calculator----------------------------------------------------------
-
 	template<class Config>
 	struct Stage
 	{
+		
 		template<typename Stage, typename AllStages>
 		static void Calculate()
 		{
-			auto v = AllStages::Instance().template GetTotal<Persons>();
+			auto total = AllStages::Instance().template GetTotal<typename Config::QuantityType>();
 			
 			auto g = Get<Bank::Raiba<0>, Bank::Out>();
-			auto gr = g(Key("Gemeindekasse Dettenheim"));
+			auto gr = g(Config::AccountKey);
 			gr.Display(std::cout);
 			
-			std::cout<<"CALC: "<<v<<std::endl;
+			if(T::IsSame<Config,BuildingInsurance>::Value)
+			{
+				if(T::IsSame<Stage,Top>::Value)
+					Ratio::Calculate(IndividualUnit(2).Get(), IndividualUnit(4).Get(), gr.GetTotal());
+				else
+					Ratio::Calculate(IndividualUnit(1).Get(), IndividualUnit(4).Get(), gr.GetTotal());
+				
+				return;
+			}
+			
+			auto result = Ratio::Calculate(GetQuantity<Stage, typename Config::QuantityType>::Value(), total, gr.GetTotal());
+			
+			std::cout<<"CALC: "<<result<<std::endl;
 			std::cout<<"CALC: "<<Config::Name<<std::endl;
 			std::cout<<"CALC: "<<Config::AccountKey<<std::endl;
 		}
 	};
+	
 	
 	template<class TCounter, typename TCalc>
 	struct Counter

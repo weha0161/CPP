@@ -33,7 +33,7 @@ struct StageConfiguration
 	static const char* Name;
 };
 
-struct TopConfiguration:StageConfiguration<TopConfiguration,2,58,5,2> { };
+struct TopConfiguration:StageConfiguration<TopConfiguration,1,58,5,2> { };
 struct MiddleConfiguration:StageConfiguration<MiddleConfiguration,1,101,7> { };
 struct BottomConfiguration:StageConfiguration<BottomConfiguration,0,101,7> { };
 

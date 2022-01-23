@@ -25,6 +25,7 @@ class CSVValue: public Element
 	using Derived = D;
 public:
 	using Unit = U;
+	using TQuantity = Quantity<Unit>;
 	CSVValue(std::string s = "0.0"): Element(s), quantity(this->to(s)) {};
 	CSVValue(T t): Element(std::to_string(t)), quantity(t) {};
 	const Quantity<U>& Get() { return this->quantity; }
