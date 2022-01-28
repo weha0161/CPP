@@ -34,6 +34,16 @@ struct BuildingInsurance: CalculatorConfiguration<BuildingInsurance, IndividualU
 	constexpr static const char* KeyString = "SV Gebaeudeversicherung"; 
 };
 
-// template<> const char* CalculatorConfiguration<BuildingInsurance,Persons>::AccountKey = "SV Gebaeudeversicherung";
-// template<> const char* CSVValue<IndividualUnit, Scalar, unsigned>::Key = "IndividualUnit";
+struct WasteFees: CalculatorConfiguration<WasteFees, Persons> 
+{ 
+	constexpr static const char* Name = "WasteFees"; 
+	constexpr static const char* KeyString = "Abfallwirtschaftsbetrieb"; 
+};
+
+struct ChimneySweeper: CalculatorConfiguration<ChimneySweeper, IndividualUnit> 
+{ 
+	constexpr static const char* Name = "ChimneySweeper"; 
+	constexpr static const char* KeyString = "Sascha Schneider"; 
+};
+
 #endif

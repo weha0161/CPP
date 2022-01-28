@@ -1,7 +1,9 @@
 #include <iostream>
 #include "String_.hpp"
+#include "Parser.hpp"
 #include "../Traits/Traits.h"
 // #include "../AbstractFactory/AbstractFactory.hpp"
+using namespace String_;
 
 int main()
 {       
@@ -19,12 +21,9 @@ int main()
 	const std::string pathToShow{ "/home/markus/Dokumente/cpp/File" };
 
     auto c = String_::Split<del>(pathToShow);
-    
-//     for(auto d : c)
-//     	std::cout<<d<<std::endl;
-// 	
-// 	std::cout<<"AsString: "<<String_::AsString(64)<<std::endl;
-	std::cout<<"AsString: "<<std::endl;
+    std::cout<<"AsString: "<<std::endl;
+	
+	Atom A;
 	
     return 0;
 }
