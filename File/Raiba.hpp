@@ -77,6 +77,8 @@ namespace Bank
 				std::string::iterator end_pos = std::remove(val.begin(), val.end(), ' ');
 				val.erase(end_pos, val.end());
 
+				Logger::Log()<<transaction<<std::endl;
+				
 				auto valString = *(values.end()-2);
 				valString = String_::Remove<T::char_<','>>(valString);
 				valString = String_::Remove<T::char_<'.'>>(valString);
@@ -107,6 +109,11 @@ namespace Bank
 		static std::string ExtractKey(std::string s)
 		{
 			return s;
+		}
+		
+		static void InterpretTransaction(std::string transaction)
+		{
+			;
 		}
 	};
 }

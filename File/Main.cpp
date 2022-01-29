@@ -91,7 +91,13 @@ int main()
 	auto g = Get<Bank::Raiba<0>, Bank::Out>();
 	auto gr = g(Key("Gemeindekasse Dettenheim"));
 	gr.Display(std::cout);
+	auto water = gr.GetCause();
+	Logger::Log(water.begin(), water.end());
+	auto s = Quantity<Sum>(0); 
+	for(auto w : water)
+		s = s + w.GetQuantity();
 	
+	Logger::Log()<<s<<std::endl;
 	
 	std::cout<<"\n-------------------------------------------------------- Transfers IN --------------------------------------------------------------"<<std::endl;
 	auto raibaOut = Transfers<Bank::Raiba<0>, Bank::Out>();

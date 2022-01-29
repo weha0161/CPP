@@ -93,6 +93,7 @@ namespace Bank
 		using Type = AccountEndpoint<Account,Direction> ;
 		using TransferType = AccountTransfer<Account,Direction> ;
 		using ContType = Cont<TransferType> ;
+		using CIterator = ContType::const_iterator;
 		
 		Key owner;
 		IBAN iban;
@@ -131,11 +132,25 @@ namespace Bank
 			out<<"Owner: "<<owner<<"\tIBAN: "<<iban<<"\tBIC: "<<bic<<std::endl;
 			for(auto p : this->transfers)
 			{
+				if(String_::Contains(p.GetCause().Value, "Abschlag/Abwasser"))
+					Logger::Log()<<"Abschlag/Abwasser"<<std::endl;
 				out<<"\tDate: "<<p.GetDate()<<"\tSum: "<<std::setprecision(2)<<std::fixed<<p.GetQuantity()<<std::endl;
 				out<<"\t"<<"\t"<<p.GetCause()<<std::endl;
 			}
 
 			out<<std::endl;
+		}
+		
+		ContType GetCause(std::string name = "")
+		{
+			ContType result;
+			for(auto p : this->transfers)
+			{
+				if(String_::Contains(p.GetCause().Value, "Abschlag/Abwasser"))
+					result.push_back(p);
+			}
+			
+			return result;
 		}
 	};
 	
