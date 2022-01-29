@@ -41,7 +41,7 @@ int main()
     std::cout<<"b: "<<GetQuantity<Bottom,Persons>::Value()<<std::endl;
     std::cout<<"TOTAL: "<<StageContainerType::Instance().GetTotal<Persons>()<<std::endl;
 	
-	StageContainerType::Instance().Calculate<BuildingInsuranceConfig>();
+	StageContainerType::Instance().Calculate<BuildingInsurance>();
     std::cout<<"END"<<std::endl;
 
     return 0;

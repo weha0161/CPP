@@ -55,6 +55,7 @@ public:
 		StageContainerType::Instance().Calculate<BuildingInsurance>();
 		StageContainerType::Instance().Calculate<WasteFees>();
 		StageContainerType::Instance().Calculate<ChimneySweeper>();
+		StageContainerType::Instance().Calculate<PropertyTax>();
 	}
 	
 private:
