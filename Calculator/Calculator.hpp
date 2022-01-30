@@ -118,6 +118,9 @@ namespace Calculator
 			Stage::ColdWaterCounter::Instance();
 			Stage::HotWaterCounter::Instance();
 			Stage::EnergyCounter::Instance(); 
+			
+			
+			Logger::Log(Stage::EnergyCounter::Instance().ConsumptionssBegin(), Stage::EnergyCounter::Instance().ConsumptionsEnd());
 		}
 	};
 	

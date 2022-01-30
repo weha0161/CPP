@@ -29,11 +29,14 @@ public:
 	using ReadingType = Reading<typename Config::Unit>;
 	using QuantityType = ReadingType::QuantityType;
 	using DateType = ReadingType::DateType;
+	using AnnualConsumptionType = Calculator::Result<ReadingType, QuantityType>;
 	using ReadingContainerType = std::vector<ReadingType>;
+	using AnnualConsumptionContainerType = std::vector<AnnualConsumptionType>;
 	using Type = MeterType;
 	using CounterType = Counter<ConfigT>;
 	using Unit = Config::Unit;
-	using CIterator = std::vector<ReadingType>::const_iterator;
+	using CIteratorReading = std::vector<ReadingType>::const_iterator;
+	using CIteratorConsumption = std::vector<AnnualConsumptionType>::const_iterator;
 	inline static const uint Number = Config::Number;
 
 	static Counter& Instance()
@@ -85,8 +88,10 @@ public:
 		csv->Write<CounterType>();
 	}
 	
-	static CIterator Begin() { return readings->cbegin(); }
-	static CIterator End() { return readings->cend(); }
+	static CIteratorReading ReadingsBegin() { return readings->cbegin(); }
+	static CIteratorReading ReadingsEnd() { return readings->cend(); }
+	static CIteratorConsumption ConsumptionssBegin() { return annalConsumptions->cbegin(); }
+	static CIteratorConsumption ConsumptionsEnd() { return annalConsumptions->cend(); }
 		
 private:
 	static std::map<std::string, std::string> createHeader()
@@ -105,6 +110,7 @@ private:
 	
 	inline static const std::map<std::string, std::string> Header = createHeader();	
 	inline static std::unique_ptr<ReadingContainerType, DebugDeleter<ReadingContainerType>> readings = std::unique_ptr<ReadingContainerType, DebugDeleter<ReadingContainerType>>(new ReadingContainerType(),DebugDeleter<ReadingContainerType>());
+	inline static std::unique_ptr<AnnualConsumptionContainerType, DebugDeleter<AnnualConsumptionContainerType>> annalConsumptions = std::unique_ptr<AnnualConsumptionContainerType, DebugDeleter<AnnualConsumptionContainerType>>(new AnnualConsumptionContainerType(),DebugDeleter<AnnualConsumptionContainerType>());
 	
 	inline static std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name)));
 	inline static std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(fileInfo.get()));
@@ -136,14 +142,28 @@ private:
 		return ReadingType(QuantityType(0.0), DateType(Date("01.01.2000")));
 	}
 	
+	static void Calculate()
+	{
+		if(readings->size() > 2)
+		{
+			for(int i = 1; i < readings->size(); ++i)
+			{
+				auto t1 = readings->at(i-1);
+				auto t2 = readings->at(i);
+				annalConsumptions->push_back(AnnualConsumptionType(t1, t2, t1.QuantityValue - t2.QuantityValue));
+			}
+		}
+	}
+	
 	
 	Counter()
 	{ 
 		Logger::Log<Info>()<<"Initialize Counter: "<<MeterType::Name<<"_"<<Config::Number<<std::endl; 
 		this->Read();
+		this->Calculate();
 	};
 	
-	~Counter()	{ Logger::Log()<<"Destructor"<<std::endl; }
+	~Counter()	{ /*Logger::Log()<<"Destructor"<<std::endl;*/ }
 	Counter& operator=(const Counter&) = delete;
 	Counter(const Counter& c) = delete;
 };
