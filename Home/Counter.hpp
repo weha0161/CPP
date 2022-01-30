@@ -153,6 +153,8 @@ private:
 				annalConsumptions->push_back(AnnualConsumptionType(t1, t2, t1.QuantityValue - t2.QuantityValue));
 			}
 		}
+		else
+			Logger::Log<Error>()<<"Error: Calculate-> Not enough values in "<<GetName()<<std::endl;
 	}
 	
 	
