@@ -8,6 +8,7 @@
 #include <vector>
 #include <cstdlib>
 #include <filesystem>
+#include "Counter.hpp"
 #include "../Logger/Logger.hpp"
 #include "../Typelist/Typelist.h"
 

@@ -8,7 +8,7 @@
 #include "../Unit/SIPrefix.hpp"
 #include "../Wrapper/Wrapper.hpp"
 #include "Parser.hpp"
-#include "CounterConfiguration.hpp"
+#include "CounterContainer.hpp"
 #include "StageQuantities.hpp"
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/vector.hpp>

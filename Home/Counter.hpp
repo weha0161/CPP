@@ -7,6 +7,7 @@
 #include "../File/Node.hpp"
 #include "../Unit/SIPrefix.hpp"
 #include "../Wrapper/Wrapper.hpp"
+#include "../Calculator/CalculatorResult.hpp"
 #include "Parser.hpp"
 #include "CounterConfiguration.hpp"
 #include <boost/mpl/for_each.hpp>
