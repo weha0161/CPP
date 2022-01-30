@@ -80,31 +80,66 @@ namespace Calculator
 	template<class Config>
 	struct Stage
 	{
-		
 		template<typename Stage, typename AllStages>
 		static void Calculate()
 		{
 			auto total = AllStages::Instance().template GetTotal<typename Config::QuantityType>();
 			
-			auto g = Get<Bank::Raiba<0>, Bank::Out>();
-			auto gr = g(Config::AccountKey);
-			gr.Display(std::cout);
+			auto raiba = Get<Bank::Raiba<0>, Bank::Out>();
+			auto account = raiba(Config::AccountKey);
+			account.Display(std::cout);
 			
 			if(T::IsSame<Config,BuildingInsurance>::Value)
 			{
 				if(T::IsSame<Stage,Top>::Value)
-					Ratio::Calculate(IndividualUnit(2).Get(), IndividualUnit(4).Get(), gr.GetTotal());
+					Ratio::Calculate(IndividualUnit(2).Get(), IndividualUnit(4).Get(), account.GetTotal());
 				else
-					Ratio::Calculate(IndividualUnit(1).Get(), IndividualUnit(4).Get(), gr.GetTotal());
+					Ratio::Calculate(IndividualUnit(1).Get(), IndividualUnit(4).Get(), account.GetTotal());
 				
 				return;
 			}
 			
-			auto result = Ratio::Calculate(GetQuantity<Stage, typename Config::QuantityType>::Value(), total, gr.GetTotal());
+			auto result = Ratio::Calculate(GetQuantity<Stage, typename Config::QuantityType>::Value(), total, account.GetTotal());
 			
 			std::cout<<"CALC: "<<result<<std::endl;
-			std::cout<<"CALC: "<<Config::Name<<std::endl;
-			std::cout<<"CALC: "<<Config::AccountKey<<std::endl;
+		}
+	};
+	
+	
+	template<>
+	struct Stage<PropertyTax>
+	{
+		template<typename Stage, typename AllStages>
+		static void Calculate()
+		{
+			auto totalQ = AllStages::Instance().template GetTotal<typename PropertyTax::QuantityType>();
+			
+			auto raiba = Get<Bank::Raiba<0>, Bank::Out>();
+			auto account = raiba(PropertyTax::AccountKey);
+			account.Display(std::cout);
+			auto water = account.GetCause(PropertyTax::CauseString);
+			auto totalSum = Quantity<Sum>(0); 
+			
+			for(auto w : water)
+				totalSum = totalSum + w.GetQuantity();
+			
+			Logger::Log()<<totalSum;
+			
+			auto result = Ratio::Calculate(GetQuantity<Stage, typename PropertyTax::QuantityType>::Value(), totalQ, totalSum);
+			
+			std::cout<<"CALC: "<<result<<std::endl;
+		}
+	};
+	
+	template<>
+	struct Stage<Sewage>
+	{
+		template<typename Stage, typename AllStages>
+		static void Calculate()
+		{
+			Stage::ColdWaterCounter::Instance();
+			Stage::HotWaterCounter::Instance();
+			Stage::EnergyCounter::Instance(); 
 		}
 	};
 	

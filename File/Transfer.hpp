@@ -132,8 +132,6 @@ namespace Bank
 			out<<"Owner: "<<owner<<"\tIBAN: "<<iban<<"\tBIC: "<<bic<<std::endl;
 			for(auto p : this->transfers)
 			{
-				if(String_::Contains(p.GetCause().Value, "Abschlag/Abwasser"))
-					Logger::Log()<<"Abschlag/Abwasser"<<std::endl;
 				out<<"\tDate: "<<p.GetDate()<<"\tSum: "<<std::setprecision(2)<<std::fixed<<p.GetQuantity()<<std::endl;
 				out<<"\t"<<"\t"<<p.GetCause()<<std::endl;
 			}
@@ -146,7 +144,7 @@ namespace Bank
 			ContType result;
 			for(auto p : this->transfers)
 			{
-				if(String_::Contains(p.GetCause().Value, "Abschlag/Abwasser"))
+				if(String_::Contains(p.GetCause().Value, name))
 					result.push_back(p);
 			}
 			

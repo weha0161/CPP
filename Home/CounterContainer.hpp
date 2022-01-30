@@ -104,8 +104,10 @@ std::ostream& operator<<(std::ostream& strm, const CounterContainer<Head,Tail...
 	return c.Display(strm);
 }
 
+
 using CG1 = Counter<GasConfiguration>;
 using CE1 = Counter<EnBWEnergyConfiguration>;
+using CVat = Counter<VattenfallEnergyConfiguration>;
 using CWA = Counter<AllWaterConfiguration>;
 using CWO = Counter<OWaterConfiguration>;
 using CWOut = Counter<OutWaterConfiguration>;
@@ -117,6 +119,6 @@ using CMHW = Counter<Middle_HWaterConfiguration>;
 using CTCW = Counter<Top_CWaterConfiguration>;
 using CTHW = Counter<Top_HWaterConfiguration>;
 
-using CounterConatinerType = CounterContainer<Typelist<CE1,CG1,CWA,CWO,CWOut, CBCW,CBHW, CMCW,CMHW,CTCW,CTHW>>::ContainerType;
+using CounterConatinerType = CounterContainer<Typelist<CE1,CVat,CG1,CWA,CWO,CWOut, CBCW,CBHW, CMCW,CMHW,CTCW,CTHW>>::ContainerType;
 
 #endif

@@ -46,4 +46,23 @@ struct ChimneySweeper: CalculatorConfiguration<ChimneySweeper, IndividualUnit>
 	constexpr static const char* KeyString = "Sascha Schneider"; 
 };
 
+
+template<typename Derived, typename Q>
+struct LocalCommunity: CalculatorConfiguration<Derived, Q>
+{
+	constexpr static const char* KeyString = "Gemeindekasse Dettenheim";	
+};
+
+struct PropertyTax: LocalCommunity<PropertyTax, ApartmentArea> 
+{ 
+	constexpr static const char* Name = "PropertyTax"; 
+	constexpr static const char* CauseString = "Grundsteuer"; 
+};
+
+struct Sewage: LocalCommunity<Sewage, ApartmentArea> 
+{ 
+	constexpr static const char* Name = "Sewage"; 
+	constexpr static const char* CauseString = "Abschlag/Abwasser"; 
+};
+
 #endif

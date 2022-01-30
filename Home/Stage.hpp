@@ -29,6 +29,9 @@ class Stage
 public:
 	using Type = Stage<ConfigT>;
 	using Configuration = ConfigT;
+	using ColdWaterCounter = ConfigT::ColdWaterCounter;
+	using HotWaterCounter = ConfigT::HotWaterCounter;
+	using EnergyCounter = ConfigT::EnergyCounter;
 	static constexpr int Number = Configuration::Number;
 	inline static const char* Name = Configuration::Name;
 	
