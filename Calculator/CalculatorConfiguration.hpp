@@ -63,6 +63,7 @@ struct Sewage: LocalCommunity<Sewage, ApartmentArea>
 { 
 	constexpr static const char* Name = "Sewage"; 
 	constexpr static const char* CauseString = "Abschlag/Abwasser"; 
+	constexpr static const char* InvoiceString = "Rechnung/Abwasser"; 
 };
 
 #endif

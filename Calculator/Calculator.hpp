@@ -115,10 +115,30 @@ namespace Calculator
 		template<typename Stage, typename AllStages>
 		static void Calculate()
 		{
-			Stage::ColdWaterCounter::Instance();
-			Stage::HotWaterCounter::Instance();
-			Stage::EnergyCounter::Instance(); 
+			auto raiba = Get<Bank::Raiba<0>, Bank::Out>();
+			auto account = raiba(Sewage::AccountKey);
+			account.Display(std::cout);
+			auto sewage = account.GetCause(Sewage::CauseString);
+			auto totalSum = Quantity<Sum>(0); 
 			
+			for(auto s : sewage)
+				totalSum = totalSum + s.GetQuantity();
+			
+			auto invoice = account.GetCause(Sewage::InvoiceString);
+			totalSum= totalSum + invoice.at(0).GetQuantity();
+			
+				Logger::Log()<<"WATER sum"<<totalSum<<std::endl;
+			auto cwb = Stage::ColdWaterCounter::Instance().ConsumptionssBegin();
+			auto hwb = Stage::HotWaterCounter::Instance().ConsumptionssBegin();
+			auto water = CWA::Instance().ConsumptionssBegin();
+			
+			for(int i = 0; cwb + i != Stage::ColdWaterCounter::Instance().ConsumptionsEnd(); ++i)
+			{
+				auto sum = (cwb + i)->Value + (hwb + i)->Value;
+				auto result = Ratio::Calculate(sum, (water+i)->Value, totalSum);
+				Logger::Log()<<"WATER"<<result<<std::endl;
+				
+			}
 			
 			Logger::Log(Stage::EnergyCounter::Instance().ConsumptionssBegin(), Stage::EnergyCounter::Instance().ConsumptionsEnd());
 		}

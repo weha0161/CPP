@@ -9,6 +9,8 @@ namespace Calculator
 	template<typename TReading, typename TQuantity>
 	struct Result			
 	{
+		using ReadingType = TReading;
+		using QuantityType = TQuantity;
 		const TReading FirstReading;
 		const TReading SecondReading;
 		const TQuantity Value;

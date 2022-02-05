@@ -144,7 +144,7 @@ private:
 	
 	static void Calculate()
 	{
-		if(readings->size() > 2)
+		if(readings->size() > 1)
 		{
 			for(int i = 1; i < readings->size(); ++i)
 			{
