@@ -99,7 +99,7 @@ namespace Calculator
 			auto totalSum = Quantity<Sum>(0); 
 			
 			for(auto w : water)
-				totalSum = totalSum + w.GetQuantity();
+				totalSum = totalSum + w->GetQuantity();
 			
 			Logger::Log()<<totalSum;
 			
@@ -122,10 +122,10 @@ namespace Calculator
 			auto totalSum = Quantity<Sum>(0); 
 			
 			for(auto s : sewage)
-				totalSum = totalSum + s.GetQuantity();
+				totalSum = totalSum + s->GetQuantity();
 			
 			auto invoice = account.GetCause(Sewage::InvoiceString);
-			totalSum= totalSum + invoice.at(0).GetQuantity();
+			totalSum= totalSum + invoice.at(0)->GetQuantity();
 			
 				Logger::Log()<<"WATER sum"<<totalSum<<std::endl;
 			auto cwb = Stage::ColdWaterCounter::Instance().ConsumptionssBegin();

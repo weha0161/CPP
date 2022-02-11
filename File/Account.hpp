@@ -53,8 +53,6 @@ namespace Bank
 			{
 				uint ctr = 0;
 							
-// 				Logger::Log(content.cbegin(), content.cend());
-				
 				auto header = RemoveHeader(content);
 				auto trailer = RemoveTrailer(content);
 	

@@ -92,7 +92,7 @@ int main()
 	auto gr = g(Key("Gemeindekasse Dettenheim"));
 	gr.Display(std::cout);
 	auto water = gr.GetCause();
-	Logger::Log(water.begin(), water.end());
+	Logger::Log()<<**(water.begin())<<std::endl;
 	auto s = Quantity<Sum>(0); 
 	for(auto w : water)
 		s = s + w->GetQuantity();
@@ -110,7 +110,6 @@ int main()
 	
 	Logger::Log()<<"CONTAINER"<<std::endl;
 	Logger::Log()<<**trIt<<std::endl;
-	Logger::Log(trIt,tr.End());
 	
     return 0;
 };
