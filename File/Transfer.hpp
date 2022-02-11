@@ -94,10 +94,9 @@ namespace Bank
 	{
 		using Type = AccountEndpoint<Account,Direction> ;
 		using TransferType = AccountTransfer<Account,Direction> ;
-		using ContType = Cont<TransferType> ;
 		using DataType = std::shared_ptr<TransferType>;
+		using ContType = Cont<DataType> ;
 		using ContainerType = TransactionContainer<DataType>;
-		using PointerType = std::unique_ptr<ContainerType>;
 		using CIterator = ContType::const_iterator;
 		using Iterator = ContainerType::Iterator;
 		
@@ -117,14 +116,13 @@ namespace Bank
 		AccountEndpoint(std::string ownerKey, std::string i = "IBAN", std::string b = "BIC") : owner(ownerKey), iban(i), bic(b) { };
 		AccountEndpoint(const DataType t) : owner(t->GetOwner()), iban(t->GetIBAN()), bic(t->GetBIC()), total(t->GetQuantity()) 
 		{ 
-// 			this->transfers.push_back(t);
 			this->transactions = ContainerType();
 			this->transactions.Add(t);
 		};
 		AccountEndpoint():owner("ownerKey"), iban("i"), bic("b"), total(0) { };
 		
 		const Key& GetOwner() const { return owner; }
-		const ContType& GetTransfers() const { return transfers; }
+		const ContType& GetTransfers() const { return transactions; }
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetTotal() const { return total; }
@@ -132,18 +130,17 @@ namespace Bank
 		
 		void Add(DataType t)
 		{
-// 			this->transfers.push_back(t);
 			this->transactions.Add(t);
 			this->total = this->total + t->GetQuantity();
 		}
 		
-		void Display(std::ostream& out) const
+		void Display(std::ostream& out)
 		{
 			out<<"Owner: "<<owner<<"\tIBAN: "<<iban<<"\tBIC: "<<bic<<std::endl;
-			for(auto p : this->transfers)
+			for(auto it = this->transactions.Begin(); it != this->transactions.End(); ++it)
 			{
-				out<<"\tDate: "<<p.GetDate()<<"\tSum: "<<std::setprecision(2)<<std::fixed<<p.GetQuantity()<<std::endl;
-				out<<"\t"<<"\t"<<p.GetCause()<<std::endl;
+				out<<"\tDate: "<<(*it)->GetDate()<<"\tSum: "<<std::setprecision(2)<<std::fixed<<(*it)->GetQuantity()<<std::endl;
+				out<<"\t"<<"\t"<<(*it)->GetCause()<<std::endl;
 			}
 
 			out<<std::endl;
@@ -152,10 +149,10 @@ namespace Bank
 		ContType GetCause(std::string name = "")
 		{
 			ContType result;
-			for(auto p : this->transfers)
+			for(auto it = this->transactions.Begin(); it != this->transactions.End(); ++it)
 			{
-				if(String_::Contains(p.GetCause().Value, name))
-					result.push_back(p);
+				if(String_::Contains((*it)->GetCause().Value, name))
+					result.push_back(*it);
 			}
 			
 			return result;

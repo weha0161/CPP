@@ -95,7 +95,7 @@ int main()
 	Logger::Log(water.begin(), water.end());
 	auto s = Quantity<Sum>(0); 
 	for(auto w : water)
-		s = s + w.GetQuantity();
+		s = s + w->GetQuantity();
 	
 	Logger::Log()<<s<<std::endl;
 	
