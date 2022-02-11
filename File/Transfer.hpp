@@ -2,6 +2,7 @@
 #include <functional>
 #include <iostream>
 #include <fstream>
+#include <memory>
 #include <chrono>
 #include <ctime>
 #include <iterator>
@@ -13,6 +14,7 @@
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <filesystem>
+#include "TransactionContainer.hpp"
 #include "../Logger/Logger.hpp"
 #include "../CSV/CSV.hpp"
 #include "../Quantity/Quantity.h"
@@ -93,13 +95,17 @@ namespace Bank
 		using Type = AccountEndpoint<Account,Direction> ;
 		using TransferType = AccountTransfer<Account,Direction> ;
 		using ContType = Cont<TransferType> ;
+		using ContainerType = TransactionContainer<TransferType>;
+		using PointerType = std::unique_ptr<ContainerType>;
 		using CIterator = ContType::const_iterator;
+		using Iterator = ContainerType::Iterator;
 		
 		Key owner;
 		IBAN iban;
 		BIC bic;
 		Quantity<Sum> total;
 		ContType transfers;
+		ContainerType transactions;
 
 	protected:
 		using CSVSeparator = T::char_<';'> ;
@@ -111,6 +117,8 @@ namespace Bank
 		AccountEndpoint(const TransferType& t) : owner(t.GetOwner()), iban(t.GetIBAN()), bic(t.GetBIC()), total(t.GetQuantity()) 
 		{ 
 			this->transfers.push_back(t);
+			this->transactions = ContainerType();
+			this->transactions.Add(t);
 		};
 		AccountEndpoint():owner("ownerKey"), iban("i"), bic("b"), total(0) { };
 		
@@ -124,6 +132,7 @@ namespace Bank
 		void Add(TransferType t)
 		{
 			this->transfers.push_back(t);
+			this->transactions.Add(t);
 			this->total = this->total + t.GetQuantity();
 		}
 		
@@ -150,6 +159,8 @@ namespace Bank
 			
 			return result;
 		}
+		
+		const ContainerType& Transactions() { return this->transactions; }
 	};
 	
 	//-----------------------------------------------------------------------------------------------TranferContainer-----------------------------------------------------------------------

@@ -105,13 +105,11 @@ int main()
 	auto keys = FileSystem::ReadLines(keyFileN);
 	rbo.Display(inFile,keys);
 	
-// 	for(auto i : com)
-// 		std::cout<<*i<<Std::endl;
+	auto tr = gr.Transactions();
+	auto trIt = tr[5];
 	
-// 	auto ins = com::InTransfers()
-// 	std::cout<<ins
-	
-// 	FS::Comdirect<0>::Transactions.Display(std::cout);
+	Logger::Log()<<"CONTAINER"<<std::endl;
+	Logger::Log(trIt,tr.End());
 	
     return 0;
 };
