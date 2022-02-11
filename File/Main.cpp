@@ -109,6 +109,7 @@ int main()
 	auto trIt = tr[5];
 	
 	Logger::Log()<<"CONTAINER"<<std::endl;
+	Logger::Log()<<**trIt<<std::endl;
 	Logger::Log(trIt,tr.End());
 	
     return 0;

@@ -71,8 +71,8 @@ namespace Bank
 				auto iban =  Extract<IBAN>(transaction);
 				auto bic = Extract<BIC>(transaction);
 
-				InCont.Insert(key, typename Base::InTransfer(key,transaction,sum, date, iban, bic));
-				OutCont.Insert(key, typename Base::OutTransfer(key,transaction,sum, date, iban, bic));
+				InCont.Insert(key, std::make_shared<typename Base::InTransfer>(key,transaction,sum, date, iban, bic));
+				OutCont.Insert(key, std::make_shared<typename Base::OutTransfer>(key,transaction,sum, date, iban, bic));
 				
 				Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(values.at(QuantityIdx).begin()+1));
 			}

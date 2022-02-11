@@ -17,3 +17,4 @@
 /home/markus/Dokumente/cpp/Tuple
 /home/markus/Dokumente/cpp/Math
 /home/markus/Dokumente/cpp/Calculator
+/home/markus/Dokumente/cpp/String

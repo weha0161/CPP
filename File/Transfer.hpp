@@ -95,7 +95,8 @@ namespace Bank
 		using Type = AccountEndpoint<Account,Direction> ;
 		using TransferType = AccountTransfer<Account,Direction> ;
 		using ContType = Cont<TransferType> ;
-		using ContainerType = TransactionContainer<TransferType>;
+		using DataType = std::shared_ptr<TransferType>;
+		using ContainerType = TransactionContainer<DataType>;
 		using PointerType = std::unique_ptr<ContainerType>;
 		using CIterator = ContType::const_iterator;
 		using Iterator = ContainerType::Iterator;
@@ -114,9 +115,9 @@ namespace Bank
 		using QunatityType = Quantity<Sum>;
 		
 		AccountEndpoint(std::string ownerKey, std::string i = "IBAN", std::string b = "BIC") : owner(ownerKey), iban(i), bic(b) { };
-		AccountEndpoint(const TransferType& t) : owner(t.GetOwner()), iban(t.GetIBAN()), bic(t.GetBIC()), total(t.GetQuantity()) 
+		AccountEndpoint(const DataType t) : owner(t->GetOwner()), iban(t->GetIBAN()), bic(t->GetBIC()), total(t->GetQuantity()) 
 		{ 
-			this->transfers.push_back(t);
+// 			this->transfers.push_back(t);
 			this->transactions = ContainerType();
 			this->transactions.Add(t);
 		};
@@ -129,11 +130,11 @@ namespace Bank
 		const Quantity<Sum>& GetTotal() const { return total; }
 		const Direction& GetDirection() const { return Direction::Id; }		
 		
-		void Add(TransferType t)
+		void Add(DataType t)
 		{
-			this->transfers.push_back(t);
+// 			this->transfers.push_back(t);
 			this->transactions.Add(t);
-			this->total = this->total + t.GetQuantity();
+			this->total = this->total + t->GetQuantity();
 		}
 		
 		void Display(std::ostream& out) const
@@ -170,12 +171,13 @@ namespace Bank
 	{
 	public:
 		using KeyType = typename T::KeyType;
+		using DataType = std::shared_ptr<T>;
 		using AccountEndpointType = AccountEndpoint<typename T::AccountType, typename T::DirectionType>;
 	private:
 		Cont<KeyType> keys;
 		TCont<KeyType, AccountEndpointType> transfers;
 	public:
-		void Insert(KeyType k, T t)
+		void Insert(KeyType k, DataType t)
 		{
 			if(!this->Contains(k))
 			{

@@ -21,9 +21,11 @@ int main()
 	const std::string pathToShow{ "/home/markus/Dokumente/cpp/File" };
 
     auto c = String_::Split<del>(pathToShow);
-    std::cout<<"AsString: "<<std::endl;
 	
 	Atom A;
-	
+	auto ns = std::string("Name 29 Test");
+	atom->make(ns);
+    std::cout<<atom->Value()<<std::endl;
+    std::cout<<NumberInstance.Name()<<std::endl;
     return 0;
 }

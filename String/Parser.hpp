@@ -46,6 +46,76 @@ namespace String_
 	static Atom AtomInstance = Atom(Exemplar());
 	Atom* atom = &AtomInstance;
 	
+	class Number: public Atom
+	{
+	public:
+		Number(Exemplar a): Atom(a) { }
+		Number(std::string& s): Atom()
+		{
+			sum = 0;
+			for(int i = 0; s[i] >= '0' && s[i] <= '9'; ++i)
+			{
+				sum = (sum * 10) + s[i] - '0';
+				char c = s[i];
+				err = !(ispunct(c) || isspace(c));
+			}			
+		}
+		
+		virtual Atom* make(std::string &s)
+		{
+			Atom* ret = new Number(s);
+			if(err)
+			{
+				delete ret;
+				ret = 0;
+			}
+			
+			return ret;
+		}
+		
+		Number(Number& n): sum(n.Value()) {}
+		virtual ~Number() {}
+		virtual unsigned long Value() const { return sum; }
+	private:
+		unsigned long sum;
+	};
+	
+	static Number NumberInstance = Number(Exemplar());
+	
+	class Word: public Atom
+	{
+	public:
+		Word(Exemplar a): Atom(a) { }
+		Word(std::string& s): Atom()
+		{
+			for(int i = 0; s[i] >= 'a' && s[i] <= 'z'; ++i)
+			{
+				n = n + s[i];
+				if (!isalnum(s[i])) err++;
+			}			
+		}
+		
+		virtual Atom* make(std::string &s)
+		{
+			Atom* ret = new Word(s);
+			if(err)
+			{
+				delete ret;
+				ret = 0;
+			}
+			
+			return ret;
+		}
+		
+		Word(Word& n): n(n.Name()) {}
+		std::string Name() { return n; }
+		virtual ~Word() {}
+	private:
+		std::string n;
+	};
+	
+	static Word NameInstance = Word(Exemplar());
+	
 	class Parser
 	{
 		
