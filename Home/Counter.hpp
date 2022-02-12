@@ -29,13 +29,14 @@ public:
 	using ReadingType = Reading<typename Config::Unit>;
 	using QuantityType = ReadingType::QuantityType;
 	using DateType = ReadingType::DateType;
-	using AnnualConsumptionType = Calculator::Result<ReadingType, QuantityType>;
-	using ReadingContainerType = std::vector<ReadingType>;
+	using DataType = std::shared_ptr<ReadingType>;
+	using ReadingContainerType = std::vector<DataType>;
+	using AnnualConsumptionType = Calculator::Result<DataType, QuantityType>;
 	using AnnualConsumptionContainerType = std::vector<AnnualConsumptionType>;
 	using Type = MeterType;
 	using CounterType = Counter<ConfigT>;
 	using Unit = Config::Unit;
-	using CIteratorReading = std::vector<ReadingType>::const_iterator;
+	using CIteratorReading = std::vector<DataType>::const_iterator;
 	using CIteratorConsumption = std::vector<AnnualConsumptionType>::const_iterator;
 	inline static const uint Number = Config::Number;
 
@@ -60,7 +61,7 @@ public:
 	{
 		DisplayHeader<Separator>(out);		
 		for(auto it = readings->cbegin(); it != readings->cend(); ++it)
-			(*it).Display(out);
+			(*it)->Display(out);
 		
 		return out;
 	}
@@ -77,7 +78,7 @@ public:
 		
 		for(int i = Header.size(); i < values.size(); ++i)
 		{
-			ReadingType reading = CreateReading(values.at(i).cbegin(), values.at(i).cend());
+			DataType reading = CreateReading(values.at(i).cbegin(), values.at(i).cend());
 			readings->push_back(reading);
 		}
 	}
@@ -116,7 +117,7 @@ private:
 	inline static std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(fileInfo.get()));
 	
 	template<typename Iterator>
-	static ReadingType CreateReading(Iterator cbegin, Iterator cend)
+	static DataType CreateReading(Iterator cbegin, Iterator cend)
 	{
 		if(cbegin != cend)
 		{
@@ -125,10 +126,9 @@ private:
 				auto date = Date(*cbegin);
 				auto value = std::stod(*(++cbegin));
 				
-				
 				Logger::Log<Info>()<<value<<std::endl;
 				Logger::Log<Info>()<<ReadingType(QuantityType(value), DateType(date))<<std::endl;
-				return ReadingType(QuantityType(value), DateType(date));
+				return DataType(new ReadingType(QuantityType(value), DateType(date)));
 			} 
 			catch (const std::exception& e) 
 			{
@@ -139,7 +139,7 @@ private:
 			Logger::Log<Error>()<<"Error: CreateReading-> Not enough values"<<std::endl;
 			
 				
-		return ReadingType(QuantityType(0.0), DateType(Date("01.01.2000")));
+		return  DataType(new ReadingType(QuantityType(0.0), DateType(Date("01.01.2000"))));
 	}
 	
 	static void Calculate()
@@ -150,7 +150,7 @@ private:
 			{
 				auto t1 = readings->at(i-1);
 				auto t2 = readings->at(i);
-				annalConsumptions->push_back(AnnualConsumptionType(t1, t2, t1.QuantityValue - t2.QuantityValue));
+				annalConsumptions->push_back(AnnualConsumptionType(t1, t2, t1->QuantityValue - t2->QuantityValue));
 			}
 		}
 		else
