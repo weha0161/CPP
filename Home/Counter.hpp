@@ -29,6 +29,7 @@ public:
 	using ReadingType = Reading<typename Config::Unit>;
 	using QuantityType = ReadingType::QuantityType;
 	using DateType = ReadingType::DateType;
+	
 	using DataType = std::shared_ptr<ReadingType>;
 	using ReadingContainerType = std::vector<DataType>;
 	using AnnualConsumptionType = Calculator::Result<DataType, QuantityType>;

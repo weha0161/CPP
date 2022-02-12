@@ -92,8 +92,8 @@ int main()
 	auto gr = g(Key("Gemeindekasse Dettenheim"));
 	gr.Display(std::cout);
 	auto water = gr.GetCause();
-// 	auto water = gr.Transactions[0];
-// 	Logger::Log()<<**(water.begin())<<std::endl;
+	auto t = gr.Transactions().Begin();
+	Logger::Log()<<"T: "<<*(*t)<<std::endl;
 // 	Logger::Log()<<*(gr.Transactions().Begin())<<std::endl;
 	auto s = Quantity<Sum>(0); 
 	for(auto w : water)

@@ -26,8 +26,8 @@ namespace Bank
 		Iterator operator[](std::string s) { return this->Begin(); }
 		Iterator operator[](Date s) { return this->Begin(); }
 		
-		Iterator Begin(){ return this->begin = this->transactions.cbegin(); }
-		Iterator End(){ return this->end = this->transactions.cend(); }
+		const Iterator Begin() const { return this->transactions.cbegin(); }
+		const Iterator End() const { return this->transactions.cend(); }
 		
 		void Add(T t){ this->transactions.push_back(t); }
 	private:
