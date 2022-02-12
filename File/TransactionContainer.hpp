@@ -14,10 +14,8 @@ namespace Bank
 	class TransactionContainer
 	{
 	public:
-		using DataType = std::shared_ptr<T> ;
 		using Type = TransactionContainer<T> ;
 		using ContainerType = std::vector<T>;
-		using PointerType = std::unique_ptr<ContainerType>;
 		using Iterator = ContainerType::const_iterator;
 
 		TransactionContainer(){

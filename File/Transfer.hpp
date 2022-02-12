@@ -95,16 +95,14 @@ namespace Bank
 		using Type = AccountEndpoint<Account,Direction> ;
 		using TransferType = AccountTransfer<Account,Direction> ;
 		using DataType = std::shared_ptr<TransferType>;
-		using ContType = Cont<DataType> ;
+		using ResultContainer = Cont<DataType> ;
 		using ContainerType = TransactionContainer<DataType>;
-		using CIterator = ContType::const_iterator;
 		using Iterator = ContainerType::Iterator;
 		
 		Key owner;
 		IBAN iban;
 		BIC bic;
 		Quantity<Sum> total;
-		ContType transfers;
 		ContainerType transactions;
 
 	protected:
@@ -122,7 +120,6 @@ namespace Bank
 		AccountEndpoint():owner("ownerKey"), iban("i"), bic("b"), total(0) { };
 		
 		const Key& GetOwner() const { return owner; }
-		const ContType& GetTransfers() const { return transactions; }
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetTotal() const { return total; }
@@ -146,9 +143,9 @@ namespace Bank
 			out<<std::endl;
 		}
 		
-		ContType GetCause(std::string name = "")
+		ResultContainer GetCause(std::string name = "")
 		{
-			ContType result;
+			ResultContainer result;
 			for(auto it = this->transactions.Begin(); it != this->transactions.End(); ++it)
 			{
 				if(String_::Contains((*it)->GetCause().Value, name))
@@ -158,7 +155,7 @@ namespace Bank
 			return result;
 		}
 		
-		const ContainerType& Transactions() { return this->transactions; }
+		const ContainerType& Transactions() const { return this->transactions; }
 	};
 	
 	//-----------------------------------------------------------------------------------------------TranferContainer-----------------------------------------------------------------------
