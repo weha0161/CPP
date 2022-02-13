@@ -93,7 +93,7 @@ int main()
 	gr.Display(std::cout);
 	auto water = gr.GetCause();
 	auto t = gr.Transactions().Begin();
-	Logger::Log()<<"T: "<<*(*t)<<std::endl;
+	Logger::Log()<<"T: "<<*(t)<<std::endl;
 // 	Logger::Log()<<*(gr.Transactions().Begin())<<std::endl;
 	auto s = Quantity<Sum>(0); 
 	for(auto w : water)
@@ -109,9 +109,16 @@ int main()
 	
 	auto tr = gr.Transactions();
 	auto trIt = tr[5];
+	auto trIt2 = trIt[5];
+	auto trIt3 = trIt2[keyFileN];
 	
-	Logger::Log()<<"CONTAINER"<<std::endl;
-	Logger::Log()<<**trIt<<std::endl;
+	Logger::Log()<<"CONTAINER Begin"<<std::endl;
+	Logger::Log()<<*trIt.Begin()<<std::endl;
+	Logger::Log()<<*trIt2.Begin()<<std::endl;
+	
+	Logger::Log()<<"CONTAINER Size"<<std::endl;
+	Logger::Log()<<trIt3.Size()<<std::endl;
+	Logger::Log()<<trIt2.Size()<<std::endl;
 	
     return 0;
 };

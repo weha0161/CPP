@@ -1,6 +1,7 @@
 #include <memory>
 #include <vector>
 #include <algorithm>    // std::find
+#include <chrono>    // std::find
 #include "../Logger/Logger.hpp"
 #include "../String/String_.hpp"
 #include "../CSV/CSV.hpp"
@@ -22,18 +23,19 @@ namespace Bank
 			this->transactions = ContainerType();
 		}
 		
-		Iterator operator[](int i) { return this->Begin(); }
-		Iterator operator[](std::string s) { return this->Begin(); }
-		Iterator operator[](Date s) { return this->Begin(); }
+		Type operator[](int i) { return Type(this->transactions); }
+		Type operator[](std::string s) { return Type(ContainerType(this->Begin()+1, this->End()-1)); }
+		Type operator[](Date s) { return Type(); }
+// 		Type operator[](std::chrono::month m) { return Type(); }
+// 		Type operator[](std::chrono::year y) { return Type(); }
 		
 		const Iterator Begin() const { return this->transactions.cbegin(); }
 		const Iterator End() const { return this->transactions.cend(); }
-		
+		const size_t Size() const { return this->transactions.size(); }
 		void Add(T t){ this->transactions.push_back(t); }
 	private:
-		Iterator begin;
-		Iterator end;
 		ContainerType transactions;
+		TransactionContainer(ContainerType c): transactions(ContainerType(c)){ Logger::Log()<<"TransactionContainer: "<<*this->transactions.at(0)<<"\t"<<*this->transactions.at(0)<<std::endl;	}
 	};
 }
 
