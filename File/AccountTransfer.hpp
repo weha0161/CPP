@@ -74,7 +74,7 @@ namespace Bank
 		
 		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC", std::string cause_ = "") : owner(k), transaction(c), date(d), value(v), iban(i), bic(b), cause(cause_) 
 		{ 
-			Logger::Log()<<this->cause<<std::endl;
+// 			Logger::Log()<<this->cause<<std::endl;
 		};
 		
 		const Key& GetOwner() const { return owner; }

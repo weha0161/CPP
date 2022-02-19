@@ -89,7 +89,7 @@ namespace FS
 			{				
 				if(String_::Contains(it->Info().Name() ,name) && std::find(this->readFile.begin(), this->readFile.end(), it->Info().Name()) == this->readFile.end())
 				{
-					Logger::Log()<<it->Info().Name()<<"\t"<<name<<std::endl;
+					Logger::Log()<<it->Info().Path()<<"\t"<<name<<std::endl;
 					this->readFile.push_back(it->Info().Name());
 					result = it->Read();
 					return result;

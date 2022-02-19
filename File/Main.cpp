@@ -51,9 +51,10 @@ using namespace FS;
 
 int main()
 {
-	std::ofstream outputfile ("//home//markus//Downloads//Output.txt");
+	std::ofstream outFile2 ("//home//markus//Downloads//Out.txt");
+// 	std::ofstream inFile ("//home//markus//Downloads//In.txt");
 	auto keyFileN = std::string("//home//markus//Downloads//Keys.txt");
-// 	std::ofstream keyFile ("//home//markus//Downloads//Keys.txt");
+	std::ofstream keyFile ("//home//markus//Downloads//Keys.txt");
 	std::string fileName = "Unit.h";
 	std::string custom = "RaibaKonten2021_1.csv";
 	std::string comdirect = "Umsaetze_1026947527.csv";
@@ -77,14 +78,14 @@ int main()
 
 	auto out = Transfers<Bank::Raiba<0>>();
 	auto com1 = out();
-	com1.Display(outputfile);
-// 	com1.DisplayKeys(keyFile);
+	com1.Display(outFile);
+	com1.DisplayKeys(keyFile);
 	
 	
 	std::cout<<"\n-------------------------------------------------------- Transfers IN --------------------------------------------------------------"<<std::endl;
 	auto in = Transfers<Bank::Raiba<0>, Bank::In>();
 	auto com2 = in();
-	com2.Display(outputfile);
+	com2.Display(inFile);
 
 	std::cout<<"\n TEST GET Gemeindekasse Dettenheim"<<std::endl;
 	std::cout<<"\n-------------------------------------------------------- Transfers OUT --------------------------------------------------------------"<<std::endl;

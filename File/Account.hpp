@@ -54,8 +54,10 @@ namespace Bank
 				uint ctr = 0;
 							
 				auto header = RemoveHeader(content);
+// 				Logger::Log(header.cbegin(),header.cend());
 				auto trailer = RemoveTrailer(content);
 	
+// 				Logger::Log(content.cbegin(),content.cend());
 				for(auto line : content)
 				{
 					auto values = String_::Split<CSVSeparator>(line);
@@ -100,6 +102,7 @@ namespace Bank
 		}
 		static void InsertInContainer(std::string key, std::string transaction, double sum, std::string date, std::string iban, std::string bic, char transferSign, std::string cause = "")
 		{
+// 			Logger::Log()<<date<<"\t"<<sum<<"\t"<<iban<<std::endl;
 			if(Derived::IsOutTransfer(transferSign))
 				Derived::OutCont.Insert(key, std::make_shared<OutTransfer>(key,transaction,sum, date, iban, bic, cause));
 			else

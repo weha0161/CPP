@@ -72,6 +72,11 @@ public:
 		return Name;
 	}
 	
+	static std::string GetFileName()
+	{
+		return Name + ".ctrv";
+	}
+	
 	static void Read()
 	{
 		auto values = csv->Read();
@@ -84,10 +89,30 @@ public:
 		}
 	}
 	
+// 	static void Parse(std::vector<std::string>::const_iterator begin, std::vector<std::string>::const_iterator end)
+	static void Parse(std::vector<std::string> content)
+	{
+// 		auto values = csv->Read();
+		Logger::Log(content.cbegin(), content.cend());
+		
+// 		for(int i = Header.size(); i < values.size(); ++i)
+// 		{
+// 			DataType reading = CreateReading(values.at(i).cbegin(), values.at(i).cend());
+// 			readings->push_back(reading);
+// 		}
+	}
+	
 	static void Write(const std::string sourcePath = ".")
 	{
 		Logger::Log<Info>()<<"Write Counter: "<<GetName()<<" to: "<<csv->GetDestinationPath()<<std::endl;
 		csv->Write<CounterType>();
+	}
+	
+	template<typename Cont>
+	static void AttachTo(Cont& cont)
+	{
+		cont.insert(std::make_pair(Instance().GetFileName(),  &CounterType::Parse));
+		Logger::Log()<<cont.size()<<std::endl;
 	}
 	
 	static CIteratorReading ReadingsBegin() { return readings->cbegin(); }
@@ -161,9 +186,9 @@ private:
 	
 	Counter()
 	{ 
-		Logger::Log<Info>()<<"Initialize Counter: "<<MeterType::Name<<"_"<<Config::Number<<std::endl; 
-		this->Read();
-		this->Calculate();
+// 		Logger::Log<Info>()<<"Initialize Counter: "<<MeterType::Name<<"_"<<Config::Number<<std::endl; 
+// 		this->Read();
+// 		this->Calculate();
 	};
 	
 	~Counter()	{ /*Logger::Log()<<"Destructor"<<std::endl;*/ }

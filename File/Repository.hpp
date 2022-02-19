@@ -9,7 +9,9 @@
 #include <cstdlib>
 #include <unordered_map>
 #include <filesystem>
+#include <memory>
 #include "../Logger/Logger.hpp"
+#include "../String/String_.hpp"
 #include "FileTypeContainer.hpp"
 #include "FileSystem.hpp"
 #include "Info.hpp"
@@ -20,6 +22,7 @@
 #include "Raiba.hpp"
 #include "Custom.hpp"
 #include "../Typelist/Typelist.h"
+#include "../Home/CounterContainer.hpp"
 #include "../Visitor/Visitor.hpp"
 
 
@@ -31,10 +34,10 @@ namespace CSV
 	
 	struct Repository
 	{
-		using FileTypes = Typelist<FS::CSV>::Type;
+		using FileTypes = Typelist<FS::CPP, FS::HPP, FS::CTRV,FS::CSV>::Type;
 		using TypeContainer = FS::FileTypeContainer<FileTypes>;
 		using Direction = Bank::Transfer<Bank::In>;
-		using ParseTypes = Typelist<Bank::Custom<0>, Bank::Raiba<0>, Bank::Comdirect<0>>::Type;
+		using ParseTypes = Typelist<CVat, Bank::Custom<0>, Bank::Raiba<0>, Bank::Comdirect<0>>::Type;
 		using ParseTypeContainer = FS::FileTypeContainer<ParseTypes>;
 		using ParseMethod = void(*)(std::vector<std::string>);
 		using ParserContainer = std::map<std::string, ParseMethod>;
@@ -65,25 +68,16 @@ namespace CSV
 		
 		static void Map(std::string path)
 		{
-			auto nodes = FileSystem::List(path);
+			auto infos = FileSystem::List(path);
+			
+			for(auto i : infos)
+				CSV::Repository::nodes->push_back(i);
 
 			auto root = fs::directory_entry(path);
-			auto dir = new FS::DirectoryInfo(root.path(),root.last_write_time(),nodes);
+			auto dir = new FS::DirectoryInfo(root.path(),root.last_write_time(),infos);
 			
-			nodes.push_back(dir);
-			CSV::Repository::Map(nodes.cbegin(), nodes.cend());
-		}
-		
-		static void Backup(std::string from, std::string to)
-		{
-			Repository::Root = from;
-			Repository::Dest = to;
-			
-			Repository::Map(from);
-			
-			FileSystem::CreateDirectories(from,to);
-			CSV::Repository::List();
-			CSV::Repository::CopyTo(to);
+			CSV::Repository::nodes->push_back(dir);
+			CSV::Repository::Map(CSV::Repository::nodes->cbegin(), CSV::Repository::nodes->cend());
 		}
 		
 		static std::vector<std::string> Read(std::string s)
@@ -99,6 +93,7 @@ namespace CSV
 		template<typename ParseType>
 		static typename ParseType::ParseCont Parse(std::string s)
 		{
+			Logger::Log()<<s<<std::endl;
 			return typeContainer.Parse<ParseType>(s);			
 		}
 		
@@ -106,9 +101,20 @@ namespace CSV
 		{
 			for (auto it = parseContainer.begin(); it != parseContainer.end(); it++)
 			{
-				auto lines = CSV::Repository::Read(it->first);				
-				it->second(lines);
-			}			
+				for(auto itNode = CSV::Repository::nodes->cbegin(); itNode != CSV::Repository::nodes->cend(); ++itNode )
+				{
+					if((String_::Contains((*itNode)->Name(),it->first)))
+					{
+					Logger::Log()<<it->first<<"\t"<<(*itNode)->Path()<<std::endl;
+						auto lines = CSV::Repository::Read((*itNode)->Name());				
+// 						auto lines = FS::ReadLines((*itNode)->Path());
+// 						Logger::Log(lines.begin(), lines.end());
+						it->second(lines);
+						
+					}
+				}			
+				
+			}
 		}
 		
 		static void Display(std::ostream& os)
@@ -134,6 +140,8 @@ namespace CSV
 		};	
 		
 		static inline TreeParserVisitor treeParser = TreeParserVisitor();
+		static inline std::unique_ptr<std::vector<FS::Info*>> nodes = std::unique_ptr<std::vector<FS::Info*>>(new std::vector<FS::Info*>());
+		
 	};
 }
 
