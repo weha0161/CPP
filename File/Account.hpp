@@ -75,7 +75,7 @@ namespace Bank
 		
 				
 		template<typename Cont>
-		static void AttachTo(Cont& cont)
+		static void RegisterTo(Cont& cont)
 		{
 			cont.insert(std::make_pair(Derived::Filename,  &Type::Parse));
 		}	

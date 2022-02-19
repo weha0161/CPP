@@ -85,9 +85,9 @@ namespace CSV
 			return typeContainer.Read(s);			
 		}
 		
-		static void Attach()
+		static void Register()
 		{
-			parseTypeContainer.AttachTo(Repository::parseContainer);	
+			parseTypeContainer.RegisterTo(Repository::parseContainer);	
 		}
 		
 		template<typename ParseType>

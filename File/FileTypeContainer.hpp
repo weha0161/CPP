@@ -113,9 +113,9 @@ namespace FS
 		}
 		
 		template<typename Cont>
-		void AttachTo(Cont& cont)
+		void RegisterTo(Cont& cont)
 		{
-			Head::AttachTo(cont);
+			Head::RegisterTo(cont);
 		}
 		
 		void Display(std::ostream& os)
@@ -197,11 +197,11 @@ namespace FS
 		}
 		
 		template<typename Cont>
-		void AttachTo(Cont& cont)
+		void RegisterTo(Cont& cont)
 		{
-			Head::AttachTo(cont);
+			Head::RegisterTo(cont);
 			
-			FileTypeContainer<Typelist<Tail...>>::AttachTo(cont);
+			FileTypeContainer<Typelist<Tail...>>::RegisterTo(cont);
 		}
 		
 		void Display(std::ostream& os)

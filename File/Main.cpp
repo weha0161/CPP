@@ -67,7 +67,7 @@ int main()
 	
 	auto outFile = std::ofstream("out.txt");
 	auto inFile = std::ofstream("//home//markus//Downloads//in.txt");
-    CSV::Repository::Attach();
+    CSV::Repository::Register();
     CSV::Repository::ParseAll();
     CSV::Repository::Display(outFile);
 	
