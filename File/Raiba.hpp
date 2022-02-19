@@ -41,7 +41,7 @@ namespace Bank
 		
 		inline static T::Is_<IsOutTransferSign> IsOutTransfer;
 		inline static const std::string Name = "Raiba";
-		inline static const std::string Filename = "Umsaetze_DE19660623660009232702.csv";
+		inline static const std::string Filename = "Umsaetze_DE19660623660009232702";
 		inline static constexpr unsigned int OwnerIdx = 4;
 		inline static constexpr unsigned int TranactionIdx = 9;
 		inline static constexpr unsigned int IBANIdx = 6;
@@ -77,18 +77,21 @@ namespace Bank
 				std::string::iterator end_pos = std::remove(val.begin(), val.end(), ' ');
 				val.erase(end_pos, val.end());
 
-				Logger::Log()<<transaction<<std::endl;
 				
 				auto valString = *(values.end()-2);
 				valString = String_::Remove<T::char_<','>>(valString);
 				valString = String_::Remove<T::char_<'.'>>(valString);
-				auto sum = std::stod(valString) / 100;
-			
-				auto iban =  values.at(IBANIdx);
-				auto bic =  values.at(BICIdx);
 				
-				std::string sign = *(values.end()-1);
-				Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0], transaction);
+				if(isdigit(valString.at(0)))
+				{
+					auto sum = std::stod(valString) / 100;
+				
+					auto iban =  values.at(IBANIdx);
+					auto bic =  values.at(BICIdx);
+					
+					std::string sign = *(values.end()-1);
+					Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0], transaction);
+				}
 			}
 		}						
 		
