@@ -52,6 +52,8 @@ namespace FS
 			
 			return std::filesystem::path(std::string(result.cbegin(),(--result.cend())));
 		}
+		
+		 std::vector<std::string> readFile = std::vector<std::string>();
 	public:
 		void SetRootPath(std::string p){ this->rootPath = std::filesystem::path(p);;}
 		using Type = Head;
@@ -82,14 +84,19 @@ namespace FS
 		
 		std::vector<std::string> Read(std::string name)
 		{
+			std::vector<std::string> r, result;
 			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
 			{				
-				if(it->Info().Name() == name)
-					return it->Read();
-			}
-			
+				if(String_::Contains(it->Info().Name() ,name) && std::find(this->readFile.begin(), this->readFile.end(), it->Info().Name()) == this->readFile.end())
+				{
+					Logger::Log()<<it->Info().Name()<<"\t"<<name<<std::endl;
+					this->readFile.push_back(it->Info().Name());
+					result = it->Read();
+					return result;
+				}
+			}			
 
-			return std::vector<std::string>();
+			return result;
 		}
 		
 		template<typename ParseType>
@@ -97,6 +104,7 @@ namespace FS
 		{
 			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
 			{				
+				Logger::Log()<<it->Info().Name()<<"\t"<<name<<std::endl;
 				if(it->Info().Name() == name)
 					return it->template Parse<ParseType>();
 			}
@@ -160,12 +168,19 @@ namespace FS
 		
 		std::vector<std::string> Read(std::string name)
 		{
+			Logger::Log()<<Head::Extension<<std::endl;
+			std::vector<std::string> r, result;
 			for(auto it = Head::Nodes().cbegin(); it != Head::Nodes().cend(); ++it)
 			{				
-				if(it->Info().Name() == name)
-					return it->Read();
-			}
-			
+				if(String_::Contains(it->Info().Name() ,name) && std::find(this->readFile.begin(), this->readFile.end(), it->Info().Name()) == this->readFile.end())
+				{
+					Logger::Log()<<it->Info().Name()<<"\t"<<name<<std::endl;
+					this->readFile.push_back(it->Info().Name());
+					result = it->Read();
+					return result;
+				}
+			}						
+
 			return FileTypeContainer<Typelist<Tail...>>::Read(name);
 		}
 		
