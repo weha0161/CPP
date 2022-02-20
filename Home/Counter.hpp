@@ -39,6 +39,7 @@ public:
 	using Unit = Config::Unit;
 	using CIteratorReading = std::vector<DataType>::const_iterator;
 	using CIteratorConsumption = std::vector<AnnualConsumptionType>::const_iterator;
+	using InputIterator = std::vector<std::string>::const_iterator;
 	inline static const uint Number = Config::Number;
 
 	static Counter& Instance()
@@ -79,25 +80,24 @@ public:
 	
 	static void Read()
 	{
-		auto values = csv->Read();
+		auto content = csv->Read();
 		Logger::Log<Info>()<<"Read Counter: "<<GetName()<<" to: "<<csv->GetDestinationPath()<<std::endl;
 		
-		for(int i = Header.size(); i < values.size(); ++i)
+// 		Parse(values);
+		for(int i = Header.size(); i < content.size(); ++i)
 		{
-			DataType reading = CreateReading(values.at(i).cbegin(), values.at(i).cend());
+			DataType reading = CreateReading(content.at(i).cbegin(), content.at(i).cend());
 			readings->push_back(reading);
 		}
 	}
 	
-// 	static void Parse(std::vector<std::string>::const_iterator begin, std::vector<std::string>::const_iterator end)
-	static void Parse(std::vector<std::string> content)
+	static void Parse(InputIterator begin, InputIterator end)
 	{
-// 		auto values = csv->Read();
-		Logger::Log(content.cbegin(), content.cend());
+		Logger::Log(begin, end);
 		
-// 		for(int i = Header.size(); i < values.size(); ++i)
+// 		for(int i = Header.size(); i < content.size(); ++i)
 // 		{
-// 			DataType reading = CreateReading(values.at(i).cbegin(), values.at(i).cend());
+// 			DataType reading = CreateReading(content.at(i).cbegin(), content.at(i).cend());
 // 			readings->push_back(reading);
 // 		}
 	}
@@ -186,9 +186,9 @@ private:
 	
 	Counter()
 	{ 
-// 		Logger::Log<Info>()<<"Initialize Counter: "<<MeterType::Name<<"_"<<Config::Number<<std::endl; 
-// 		this->Read();
-// 		this->Calculate();
+		Logger::Log<Info>()<<"Initialize Counter: "<<MeterType::Name<<"_"<<Config::Number<<std::endl; 
+		this->Read();
+		this->Calculate();
 	};
 	
 	~Counter()	{ /*Logger::Log()<<"Destructor"<<std::endl;*/ }

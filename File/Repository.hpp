@@ -34,12 +34,13 @@ namespace CSV
 	
 	struct Repository
 	{
+		using InputIterator = std::vector<std::string>::const_iterator;
 		using FileTypes = Typelist<FS::CPP, FS::HPP, FS::CTRV,FS::CSV>::Type;
 		using TypeContainer = FS::FileTypeContainer<FileTypes>;
 		using Direction = Bank::Transfer<Bank::In>;
 		using ParseTypes = Typelist<CVat, Bank::Custom<0>, Bank::Raiba<0>, Bank::Comdirect<0>>::Type;
 		using ParseTypeContainer = FS::FileTypeContainer<ParseTypes>;
-		using ParseMethod = void(*)(std::vector<std::string>);
+		using ParseMethod = void(*)(InputIterator, InputIterator);
 		using ParserContainer = std::map<std::string, ParseMethod>;
 	
 		template<typename Iterator>
@@ -106,10 +107,11 @@ namespace CSV
 					if((String_::Contains((*itNode)->Name(),it->first)))
 					{
 					Logger::Log()<<it->first<<"\t"<<(*itNode)->Path()<<std::endl;
-						auto lines = CSV::Repository::Read((*itNode)->Name());				
+						auto lines = CSV::Repository::Read((*itNode)->Name());	
+// 						Works if multiple Itartions are handled
 // 						auto lines = FS::ReadLines((*itNode)->Path());
 // 						Logger::Log(lines.begin(), lines.end());
-						it->second(lines);
+						it->second(lines.cbegin(), lines.cend());
 						
 					}
 				}			

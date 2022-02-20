@@ -46,27 +46,24 @@ namespace Bank
 		using ParseContIn = TransferContainer<AccountTransfer<Derived,Transfer<In>>>;
 		using ParseContOut = TransferContainer<AccountTransfer<Derived,Transfer<Out>>>;
 		using QunatityType = Quantity<Sum>;
+		using InputIterator = std::vector<std::string>::const_iterator;
 		
-		static void Parse(std::vector<std::string> content)
+// 		static std::vector<std::string> RemoveHeader(InputIterator begin, InputIterator end)
+		static void Parse(InputIterator begin, InputIterator end)
 		{
-			if(content.size() > 0)
+			if(begin != end)
 			{
 				uint ctr = 0;
 							
-				auto header = RemoveHeader(content);
-// 				Logger::Log(header.cbegin(),header.cend());
-				auto trailer = RemoveTrailer(content);
-	
-// 				Logger::Log(content.cbegin(),content.cend());
-				for(auto line : content)
+				auto lines = std::vector<std::string>(begin + Derived::HeaderLength, end - Derived::TrailerLength);
+				for(auto line : lines)
 				{
 					auto values = String_::Split<CSVSeparator>(line);
 					
 					if (values.size() < MaxIdx)
 						continue;
 										
-					Derived::ProcessValues(values);
-					
+					Derived::ProcessValues(values);					
 				}
 			}
 
@@ -111,21 +108,6 @@ namespace Bank
 		}
 		
 	private:
-		static std::vector<std::string> RemoveHeader(std::vector<std::string>&  cont)
-		{
-			std::vector<std::string> header;
-			std::copy(cont.begin(), cont.begin() + Derived::HeaderLength, std::back_inserter(header));
-			cont.erase(cont.begin(), cont.begin() + Derived::HeaderLength);
-			return header;
-		}	
-		
-		static std::vector<std::string> RemoveTrailer(std::vector<std::string>&  cont)
-		{
-			std::vector<std::string> header;
-			std::copy(cont.end() - Derived::TrailerLength, cont.end(), std::back_inserter(header));
-			cont.erase(cont.end() - Derived::TrailerLength, cont.end());
-			return header;
-		}	
 	};
 }
 
