@@ -64,22 +64,23 @@ namespace Bank
 		
 		using TextSeparator = T::char_<' '> ;
 		
-		static void ProcessValues(std::vector<std::string> values)
+		static void ProcessValues(Base::InputIterator begin, Base::InputIterator end)
 		{
-			auto keyLine = values.at(OwnerIdx);
+			auto keyLine = *(begin + OwnerIdx);
 			if(keyLine != "")
 			{
 				auto key = ExtractKey(keyLine);
-				auto date = values.at(DateIdx);
-				auto transaction = values.at(TranactionIdx);
+				auto date = *(begin + DateIdx);
+				auto transaction = *(begin + TranactionIdx);
 				
-				auto n = Base::GetNumericValue(values.at(QuantityIdx));
+				auto n = Base::GetNumericValue(*(begin + QuantityIdx));
 				auto sum = n != "" ? std::stod(n) : 0.0 ;
 			
 				auto iban =  Extract<IBAN>(transaction);
 				auto bic = Extract<BIC>(transaction);
 								
-				Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(values.at(QuantityIdx).begin()+1), String_::Remove<T::char_<'"'>>(transaction));
+				auto q = std::string(*(begin + QuantityIdx));
+				Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(q.cbegin()+1), String_::Remove<T::char_<'"'>>(transaction));
 			}
 				
 		}		

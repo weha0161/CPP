@@ -64,21 +64,21 @@ namespace Bank
 			OutCont.Display(os);
 		}
 		
-		static void ProcessValues(std::vector<std::string> values)
+		static void ProcessValues(Base::InputIterator begin, Base::InputIterator end)
 		{
-			auto keyLine = values.at(OwnerIdx);
+			auto keyLine = *(begin + OwnerIdx);
 			if(keyLine != "")
 			{
 				auto key = ExtractKey(keyLine);
-				auto date = values.at(DateIdx);
-				auto transaction = values.at(TranactionIdx);
+				auto date = *(begin + DateIdx);
+				auto transaction = *(begin + TranactionIdx);
 				
-				auto val = values.at(QuantityIdx);
+				auto val = *(begin + QuantityIdx);
 				std::string::iterator end_pos = std::remove(val.begin(), val.end(), ' ');
 				val.erase(end_pos, val.end());
 
 				
-				auto valString = *(values.end()-2);
+				auto valString = *(end-2);
 				valString = String_::Remove<T::char_<','>>(valString);
 				valString = String_::Remove<T::char_<'.'>>(valString);
 				
@@ -86,14 +86,44 @@ namespace Bank
 				{
 					auto sum = std::stod(valString) / 100;
 				
-					auto iban =  values.at(IBANIdx);
-					auto bic =  values.at(BICIdx);
+					auto iban =  *(begin + IBANIdx);
+					auto bic =  *(begin + BICIdx);
 					
-					std::string sign = *(values.end()-1);
+					std::string sign = *(end-1);
 					Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0], transaction);
 				}
 			}
 		}						
+// 		static void ProcessValues(std::vector<std::string> values)
+// 		{
+// 			auto keyLine = values.at(OwnerIdx);
+// 			if(keyLine != "")
+// 			{
+// 				auto key = ExtractKey(keyLine);
+// 				auto date = values.at(DateIdx);
+// 				auto transaction = values.at(TranactionIdx);
+// 				
+// 				auto val = values.at(QuantityIdx);
+// 				std::string::iterator end_pos = std::remove(val.begin(), val.end(), ' ');
+// 				val.erase(end_pos, val.end());
+// 
+// 				
+// 				auto valString = *(values.end()-2);
+// 				valString = String_::Remove<T::char_<','>>(valString);
+// 				valString = String_::Remove<T::char_<'.'>>(valString);
+// 				
+// 				if(isdigit(valString.at(0)))
+// 				{
+// 					auto sum = std::stod(valString) / 100;
+// 				
+// 					auto iban =  values.at(IBANIdx);
+// 					auto bic =  values.at(BICIdx);
+// 					
+// 					std::string sign = *(values.end()-1);
+// 					Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0], transaction);
+// 				}
+// 			}
+// 		}						
 		
 	protected:
 		template<typename T>

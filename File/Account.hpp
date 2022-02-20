@@ -48,7 +48,6 @@ namespace Bank
 		using QunatityType = Quantity<Sum>;
 		using InputIterator = std::vector<std::string>::const_iterator;
 		
-// 		static std::vector<std::string> RemoveHeader(InputIterator begin, InputIterator end)
 		static void Parse(InputIterator begin, InputIterator end)
 		{
 			if(begin != end)
@@ -63,7 +62,7 @@ namespace Bank
 					if (values.size() < MaxIdx)
 						continue;
 										
-					Derived::ProcessValues(values);					
+					Derived::ProcessValues(values.cbegin(), values.cend());					
 				}
 			}
 
