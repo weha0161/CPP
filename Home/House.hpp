@@ -65,7 +65,7 @@ private:
 		Logger::Log()<<"CTOR: "<<Name<<std::endl;
 		std::string csv = "/home/markus/Downloads/CSV_Files";
 		CSV::Repository::Map(csv);
-		CSV::Repository::Attach();
+		CSV::Repository::Register();
 		CSV::Repository::ParseAll();
 	
 		auto outFile = std::ofstream("out.txt");

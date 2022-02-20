@@ -96,6 +96,7 @@ namespace Bank
 			
 			return result;
 		}
+		
 		static void InsertInContainer(std::string key, std::string transaction, double sum, std::string date, std::string iban, std::string bic, char transferSign, std::string cause = "")
 		{
 // 			Logger::Log()<<date<<"\t"<<sum<<"\t"<<iban<<std::endl;
