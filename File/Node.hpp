@@ -135,13 +135,19 @@ namespace FS
 
 	//---------------------------------------------------------------------------------------------------FileTypes----------------------------------------------------------------------------------------
 
-	template<typename T>
-	struct FileTypeBase: Node<FileTypeBase<T>, FileInfo, File>
+	template<typename FileT>
+	struct FileTypeBase: Node<FileTypeBase<FileT>, FileInfo, File>
 	{
-		FileTypeBase(FileInfo* fi): Node<FileTypeBase<T>, FileInfo, File>(fi){};
+		FileTypeBase(FileInfo* fi): Node<FileTypeBase<FileT>, FileInfo, File>(fi){};
 		using ParseType = std::string;
 		using ParseCont = std::vector<ParseType>;
 		static const char* Extension;		
+		
+		template<typename Separator = T::char_<';'>>
+		static std::vector<std::string> ExtractValues(std::string line)
+		{
+			return String_::Split<Separator>(line);
+		};
 	};
 	
 	struct CTRV: public FileTypeBase<CTRV>{};
@@ -152,33 +158,7 @@ namespace FS
 	struct CSV: public FileTypeBase<CSV>
 	{
 		CSV(FileInfo* fi): FileTypeBase(fi), destinationPath(this->Info().Path() + CSV::Extension){};
-		
-		template<typename Separator = T::char_<';'>>
-		std::vector<std::vector<std::string>> GetValues()
-		{
-			auto result = std::vector<std::vector<std::string>>();
-			
-			auto lines = FS::ReadLines(this->destinationPath);
-// 			Logger::Log()<<"result: "<<lines.size()<<std::endl;
-						
-			for(auto line : lines)
-			{
-// 				Logger::Log()<<line<<std::endl;
-// 				auto values = String_::Split<Separator>(line);
-// 				Logger::Log(values.cbegin(), values.cend());
-				result.push_back(String_::Split<Separator>(line));
-			}
-			
-			return result;
-		};
-		
-		template<typename Separator = T::char_<';'>>
-		std::vector<std::vector<std::string>>Read()
-		{
-			auto result = this->GetValues();
-			return result;
-		}
-		
+
 		template<typename Ctr, typename Separator = T::char_<';'>>
 		void Write()
 // 		void Write(const Ctr& counter)

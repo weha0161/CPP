@@ -9,6 +9,7 @@
 #include "Account.hpp"
 #include "Repository.hpp"
 #include "FileSystem.hpp"
+#include "../Home/House.hpp"
 
 using namespace FS;
 //----------------------------------------------------------------------------PRODUCT----------------------------------------------------------
@@ -59,18 +60,19 @@ int main()
 	std::string custom = "RaibaKonten2021_1.csv";
 	std::string comdirect = "Umsaetze_1026947527.csv";
 	std::string raiba = "Umsaetze_DE19660623660009232702.csv";
-	
-	std::string csv = "/home/markus/Downloads/CSV_Files";
-    CSV::Repository::Map(csv);
 
-	auto c = CSV::Repository::Read(comdirect);	
+	House<HouseConfiguration>::Instance();	
+	std::string csv = "/home/markus/Downloads/CSV_Files";
+//     CSV::Repository::Map(csv);
+
+// 	auto c = CSV::Repository::Read(comdirect);	
 	
 	auto outFile = std::ofstream("out.txt");
 	auto inFile = std::ofstream("//home//markus//Downloads//in.txt");
-    CSV::Repository::Register();
-    CSV::Repository::ParseAll();
-    CSV::Repository::Display(outFile);
-	
+//     CSV::Repository::Register();
+//     CSV::Repository::ParseAll();
+//     CSV::Repository::Display(outFile);
+// 	
 	std::cout<<"\n TEST Transfers"<<std::endl;
 	std::cout<<"\n TEST Transfers"<<std::endl;
 	

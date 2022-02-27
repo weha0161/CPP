@@ -3,6 +3,7 @@
 #include "Counter.hpp"
 #include "CounterContainer.hpp"
 #include "Stage.hpp"
+#include "House.hpp"
 #include "StageContainer.hpp"
 #include "../Calculator/CalculatorConfiguration.hpp"
 #include "../Unit/SIPrefix.hpp"
@@ -16,6 +17,7 @@ int main()
 {       
     std::cout<<"START"<<std::endl;
 	
+	House<HouseConfiguration>::Instance();
 // 	Top::Instance();
     std::cout<<"t: "<<Top::Name<<std::endl;
     std::cout<<"t: "<<Top::Number<<std::endl;

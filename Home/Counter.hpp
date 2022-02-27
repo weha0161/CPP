@@ -78,28 +78,14 @@ public:
 		return Name + ".ctrv";
 	}
 	
-	static void Read()
-	{
-		auto content = csv->Read();
-		Logger::Log<Info>()<<"Read Counter: "<<GetName()<<" to: "<<csv->GetDestinationPath()<<std::endl;
-		
-// 		Parse(values);
-		for(int i = Header.size(); i < content.size(); ++i)
-		{
-			DataType reading = CreateReading(content.at(i).cbegin(), content.at(i).cend());
-			readings->push_back(reading);
-		}
-	}
-	
 	static void Parse(InputIterator begin, InputIterator end)
 	{
-		Logger::Log(begin, end);
-		
-// 		for(int i = Header.size(); i < content.size(); ++i)
-// 		{
-// 			DataType reading = CreateReading(content.at(i).cbegin(), content.at(i).cend());
-// 			readings->push_back(reading);
-// 		}
+		for(auto it = (begin + Header.size()); it != end; ++it)
+		{
+			auto v = csv->ExtractValues(*it);
+			DataType reading = CreateReading(v.cbegin(), v.cend());
+			readings->push_back(reading);
+		}
 	}
 	
 	static void Write(const std::string sourcePath = ".")
@@ -139,7 +125,7 @@ private:
 	inline static std::unique_ptr<ReadingContainerType, DebugDeleter<ReadingContainerType>> readings = std::unique_ptr<ReadingContainerType, DebugDeleter<ReadingContainerType>>(new ReadingContainerType(),DebugDeleter<ReadingContainerType>());
 	inline static std::unique_ptr<AnnualConsumptionContainerType, DebugDeleter<AnnualConsumptionContainerType>> annalConsumptions = std::unique_ptr<AnnualConsumptionContainerType, DebugDeleter<AnnualConsumptionContainerType>>(new AnnualConsumptionContainerType(),DebugDeleter<AnnualConsumptionContainerType>());
 	
-	inline static std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name)));
+	inline static std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name )));
 	inline static std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(fileInfo.get()));
 	
 	template<typename Iterator>
@@ -147,6 +133,7 @@ private:
 	{
 		if(cbegin != cend)
 		{
+			Logger::Log(cbegin, cend);
 			try 
 			{
 				auto date = Date(*cbegin);
@@ -187,8 +174,8 @@ private:
 	Counter()
 	{ 
 		Logger::Log<Info>()<<"Initialize Counter: "<<MeterType::Name<<"_"<<Config::Number<<std::endl; 
-		this->Read();
-		this->Calculate();
+// 		this->Read();
+// 		this->Calculate();
 	};
 	
 	~Counter()	{ /*Logger::Log()<<"Destructor"<<std::endl;*/ }

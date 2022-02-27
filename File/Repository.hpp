@@ -23,6 +23,7 @@
 #include "Custom.hpp"
 #include "../Typelist/Typelist.h"
 #include "../Home/CounterContainer.hpp"
+#include "../Home/StageContainer.hpp"
 #include "../Visitor/Visitor.hpp"
 
 
@@ -38,7 +39,7 @@ namespace CSV
 		using FileTypes = Typelist<FS::CPP, FS::HPP, FS::CTRV,FS::CSV>::Type;
 		using TypeContainer = FS::FileTypeContainer<FileTypes>;
 		using Direction = Bank::Transfer<Bank::In>;
-		using ParseTypes = Typelist<CVat, Bank::Custom<0>, Bank::Raiba<0>, Bank::Comdirect<0>>::Type;
+		using ParseTypes = Typelist<CE1,CVat,CG1,CWA,CWO,CWOut, CBCW,CBHW, CMCW,CMHW,CTCW,CTHW, Bank::Custom<0>, Bank::Raiba<0>, Bank::Comdirect<0>,StageContainerType>::Type;
 		using ParseTypeContainer = FS::FileTypeContainer<ParseTypes>;
 		using ParseMethod = void(*)(InputIterator, InputIterator);
 		using ParserContainer = std::map<std::string, ParseMethod>;
@@ -89,6 +90,9 @@ namespace CSV
 		static void Register()
 		{
 			parseTypeContainer.RegisterTo(Repository::parseContainer);	
+			
+			for(auto kv : parseContainer)
+				Logger::Log()<<kv.first<<std::endl;
 		}
 		
 		template<typename ParseType>

@@ -10,6 +10,7 @@
 #include <filesystem>
 #include "Stage.hpp"
 #include "../Logger/Logger.hpp"
+#include "../File/Node.hpp"
 #include "../Calculator/Calculator.hpp"
 #include "../Typelist/Typelist.h"
 #include "../Unit/Unit.h"
@@ -21,6 +22,7 @@
 //---------------------------------------------------------------------------------------------------StageContainer----------------------------------------------------------------------------------------
 
 using StagesMap = std::map<std::string, StageMap>;
+
 
 template<typename List>
 class StageContainer{};
@@ -37,12 +39,13 @@ private:
 	inline static const std::string Name = "Stages";
 protected:
 	inline static std::unique_ptr<StagesMap, DebugDeleter<StagesMap>> stages = std::unique_ptr<StagesMap, DebugDeleter<StagesMap>>(new StagesMap(),DebugDeleter<StagesMap>());
-	
 	inline static std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name)));
 	inline static std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(fileInfo.get()));
+	using InputIterator = std::vector<std::string>::const_iterator;
+	
 	StageContainer() 
 	{ 
-		Read();
+// 		Read();
 		Head::Set(stages->at(Head::Name)); 
 		Head::Instance(); 			
 		Logger::Log<Info>()<<"StageContainer created."<<Head::Name<<std::endl; 
@@ -56,6 +59,34 @@ public:
 	void Write(const std::string sourcePath = ".")
 	{
 		Type::Write(sourcePath);
+	}
+
+	static std::string GetName()
+	{
+		return Name;
+	}
+	
+	static std::string GetFileName()
+	{
+		return Name + ".csv";
+	}
+	
+	static void Parse(InputIterator begin, InputIterator end)
+	{
+		Logger::Log(begin, end);
+		Logger::Log()<<"PARSE STAGE StageContainer"<<std::endl; 
+		
+		std::vector<std::vector<std::string>> csvValues;
+		for(auto it = begin; it != end; ++it)
+			csvValues.push_back(FS::CSV::ExtractValues(*it));
+		
+		ExtractValues(csvValues);
+	}
+	
+	template<typename Cont>
+	static void RegisterTo(Cont& cont)
+	{
+		cont.insert(std::make_pair(GetFileName(),  &Parse));
 	}
 	
 	template<typename T>
@@ -76,7 +107,7 @@ public:
 		Calculator::Stage<T>::template Calculate<Head,AllT>();
 	}
 private:
-	void ExtractValues(const std::vector<std::vector<std::string>>& csvValues)
+	static void ExtractValues(const std::vector<std::vector<std::string>>& csvValues)
 	{
 		auto keysIt = csvValues.at(0).cbegin();
 		for(int i = 1; i < csvValues.size(); ++i)
@@ -98,7 +129,10 @@ private:
 	
 	void Read(const std::string sourcePath = ".")
 	{
-		auto values = csv->Read();
+		auto lines =  FS::ReadLines(DestinationPath + Name +".csv");
+		std::vector<std::vector<std::string>> values;
+		for(auto line : lines)
+			values.push_back(FS::CSV::ExtractValues(line));
 		ExtractValues(values);
 	}
 	
