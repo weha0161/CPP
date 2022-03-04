@@ -42,6 +42,7 @@ protected:
 	inline static std::unique_ptr<FS::FileInfo> fileInfo = std::unique_ptr<FS::FileInfo>(new FS::FileInfo(std::filesystem::path(DestinationPath + Name)));
 	inline static std::unique_ptr<FS::CSV> csv = std::unique_ptr<FS::CSV>(new FS::CSV(fileInfo.get()));
 	using InputIterator = std::vector<std::string>::const_iterator;
+	using CsvValuesIterator = std::vector<std::vector<std::string>>::const_iterator;
 	
 	StageContainer() 
 	{ 
@@ -80,7 +81,7 @@ public:
 		for(auto it = begin; it != end; ++it)
 			csvValues.push_back(FS::CSV::ExtractValues(*it));
 		
-		ExtractValues(csvValues);
+		ExtractValues(csvValues.cbegin(),csvValues.cend());
 	}
 	
 	template<typename Cont>
@@ -107,19 +108,20 @@ public:
 		Calculator::Stage<T>::template Calculate<Head,AllT>();
 	}
 private:
-	static void ExtractValues(const std::vector<std::vector<std::string>>& csvValues)
+	static void ExtractValues(CsvValuesIterator begin, CsvValuesIterator end)
 	{
-		auto keysIt = csvValues.at(0).cbegin();
-		for(int i = 1; i < csvValues.size(); ++i)
+		auto keysIt = begin->cbegin();
+		for(auto it = ++begin; it != end; ++it)
 		{
 			auto stage = StageMap();
-			for(int j = 1; j < csvValues.at(i).size(); ++j)
-				stage.insert(std::pair<std::string,std::string>(*(keysIt+j), csvValues.at(i).at(j)));
+			int j = 1;
+			for(auto jt = ++(it->cbegin()); jt != it->cend(); ++jt, ++j)
+				stage.insert(std::pair<std::string,std::string>(*(keysIt+j), *jt));
 			
 			for(auto kv : stage)
 				Logger::Log()<<kv.first<<": "<<kv.second<<std::endl;
 			
-			stages->insert(std::pair<std::string,StageMap>(csvValues.at(i).at(0), stage));
+			stages->insert(std::pair<std::string,StageMap>(*(it->cbegin()), stage));
 		}
 		
 		for(auto kv : *stages)
@@ -133,7 +135,7 @@ private:
 		std::vector<std::vector<std::string>> values;
 		for(auto line : lines)
 			values.push_back(FS::CSV::ExtractValues(line));
-		ExtractValues(values);
+		ExtractValues(values.cbegin(),values.cend());
 	}
 	
 };
