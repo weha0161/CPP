@@ -23,9 +23,33 @@ namespace Calculator
 		
 		Result(TReading r1, TReading r2, TQuantity q): FirstReading(r1), SecondReading(r2), Value(q) {};	
 	};
-
+	
 	template<typename R, typename Q, typename S = T::char_<'\t'>>
 	std::ostream& operator<<(std::ostream& strm, const Result<R,Q> cr)
+	{
+		return cr.Display(strm);
+	}
+	
+	template<typename TReading, typename TQuantity>
+	struct CalcResult			
+	{
+		using ReadingType = TReading;
+		using QuantityType = TQuantity;
+		const TReading FirstReading;
+		const TReading SecondReading;
+		const TQuantity Value;
+		
+		template<typename Separator = T::char_<'\t'>>
+		std::ostream& Display(std::ostream& out) const
+		{
+			return out<<FirstReading<<Separator::Value<<SecondReading<<Separator::Value<<Value<<std::endl;
+		}
+		
+		CalcResult(TReading r1, TReading r2, TQuantity q): FirstReading(r1), SecondReading(r2), Value(q) {};	
+	};
+
+	template<typename R, typename Q, typename S = T::char_<'\t'>>
+	std::ostream& operator<<(std::ostream& strm, const CalcResult<R,Q> cr)
 	{
 		return cr.Display(strm);
 	}

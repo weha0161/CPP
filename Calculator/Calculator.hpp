@@ -26,7 +26,7 @@ namespace Calculator
 		using Type = Ratio;
 		
 		template<typename T, typename Q>
-		static Result<T,Q> Calculate(const T& nom, const T& denom, const Q& sum) {	return Result(nom, denom, nom / denom * sum); }
+		static 	CalcResult<T,Q> Calculate(const T& nom, const T& denom, const Q& sum) {	return CalcResult(nom, denom, nom / denom * sum); }
 	};
 	
 	template<> const char* CalculatorOperation<Ratio>::Name = "Ratio";
@@ -37,7 +37,7 @@ namespace Calculator
 		using Type = Difference;
 		
 		template<typename T, typename Q>
-		static Result<T,Q> Calculate(const T& t1, const T& t2) {	return Result(t1, t2, t1.QuantityValue - t2.QuantityValue); }
+		static CalcResult<T,Q> Calculate(const T& t1, const T& t2) {	return CalcResult(t1, t2, t1.QuantityValue - t2.QuantityValue); }
 	};
 
 	template<> const char* CalculatorOperation<Difference>::Name = "Difference";
@@ -48,7 +48,7 @@ namespace Calculator
 		using Type = Addition;
 		
 		template<typename T, typename Q>
-		static Result<T,Q> Calculate(const T& t1, const T& t2) {	return Result(t1, t2, t1.QuantityValue + t2.QuantityValue); }
+		static CalcResult<T,Q> Calculate(const T& t1, const T& t2) {	return CalcResult(t1, t2, t1.QuantityValue + t2.QuantityValue); }
 	};
 	
 	template<> const char* CalculatorOperation<Addition>::Name = "Addition";
@@ -150,9 +150,9 @@ namespace Calculator
 	{
 		using ReadingType =  TCounter::ReadingType;
 		using QuantityType = TCounter::QuantityType;
-		static std::vector<Result<ReadingType,QuantityType>> Calculate()
+		static std::vector<CalcResult<ReadingType,QuantityType>> Calculate()
 		{
-			auto result = std::vector<Result<ReadingType,QuantityType>>(); 
+			auto result = std::vector<CalcResult<ReadingType,QuantityType>>(); 
 			for(auto it = TCounter::Begin(); (it + 1) != TCounter::End(); ++it)
 			{
 				auto cr = TCalc::template Calculate<ReadingType,QuantityType>(*it, *(it+1));
@@ -168,9 +168,9 @@ namespace Calculator
 	{
 		using ReadingType =  TCounter::ReadingType;
 		using QuantityType = TCounter::QuantityType;
-		static std::vector<Result<ReadingType,QuantityType>> Calculate()
+		static std::vector<CalcResult<ReadingType,QuantityType>> Calculate()
 		{
-			auto result = std::vector<Result<ReadingType,QuantityType>>(); 
+			auto result = std::vector<CalcResult<ReadingType,QuantityType>>(); 
 			for(auto it = TCounter::Begin(); (it + 1) != TCounter::End(); ++it)
 			{
 				auto cr = TCalc::template Calculate<ReadingType,QuantityType>(*it, *(it+1));
