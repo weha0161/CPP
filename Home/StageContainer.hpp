@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include "Stage.hpp"
+#include "UtilitiesStatement.hpp"
 #include "../Logger/Logger.hpp"
 #include "../File/Node.hpp"
 #include "../Calculator/Calculator.hpp"
@@ -105,6 +106,7 @@ public:
 	template<typename T, typename AllT>
 	void CalculateInternal()
 	{
+		UtilitiesStatement<T>::Instance();
 		Calculator::Stage<T>::template Calculate<Head,AllT>();
 	}
 private:
@@ -172,6 +174,7 @@ public:
 	{
 		Calculator::Stage<T>::template Calculate<Head,AllT>();
 		Base::template CalculateInternal<T, AllT>();
+		UtilitiesStatement<T>::Instance();
 	}
 	
 	template<typename T>
