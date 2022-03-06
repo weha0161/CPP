@@ -103,11 +103,17 @@ public:
 		return instance;
 	}
 	
-	template<typename T, typename AllT>
+	template<typename AllT>
 	void CalculateInternal()
 	{
-		UtilitiesStatement<T>::Instance();
-		Calculator::Stage<T>::template Calculate<Head,AllT>();
+		struct Config
+		{
+			using Stage = Head;
+			using All = AllT;
+		};
+		
+		using StageUtilitiesStatemenent = UtilitiesStatement<Config>;
+		StageUtilitiesStatemenent::Instance().Calculate();
 	}
 private:
 	static void ExtractValues(CsvValuesIterator begin, CsvValuesIterator end)
@@ -169,18 +175,23 @@ public:
 		return instance;
 	}	
 	
-	template<typename T, typename AllT>
+	template<typename AllT>
 	void CalculateInternal()
 	{
-		Calculator::Stage<T>::template Calculate<Head,AllT>();
-		Base::template CalculateInternal<T, AllT>();
-		UtilitiesStatement<T>::Instance();
+		struct Config
+		{
+			using Stage = Head;
+			using All = AllT;
+		};
+		
+		using StageUtilitiesStatemenent = UtilitiesStatement<Config>;
+		StageUtilitiesStatemenent::Instance().Calculate();
+		Base::template CalculateInternal<AllT>();
 	}
 	
-	template<typename T>
 	void Calculate()
 	{
-		CalculateInternal<T, ContainerType>();
+		CalculateInternal<ContainerType>();
 	}
 	
 	template<typename T>

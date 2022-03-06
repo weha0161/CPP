@@ -2,6 +2,7 @@
 #include "../Logger/Logger.hpp"
 #include "../Unit/Unit.h"
 #include "../Quantity/Quantity.h"
+#include "../Calculator/Calculator.hpp"
 #include "Parser.hpp"
 #include "CounterConfiguration.hpp"
 #include "StageQuantities.hpp"
@@ -16,6 +17,8 @@ class UtilitiesStatement
 public:
 	using Type = UtilitiesStatement<ConfigT>;
 	using Configuration = ConfigT;
+	using Stage = Configuration::Stage;
+	using All = Configuration::All;
 	
 	inline static const char* Name = Configuration::Name;
 		
@@ -25,7 +28,15 @@ public:
 		return instance;
 	}
 	
-	
+	void Calculate() 
+	{
+		Logger::Log()<<"US: "<<Stage::Number<<std::endl;
+		Calculator::Stage<BuildingInsurance>::template Calculate<Stage,All>();
+		Calculator::Stage<WasteFees>::template Calculate<Stage,All>();
+		Calculator::Stage<ChimneySweeper>::template Calculate<Stage,All>();
+		Calculator::Stage<PropertyTax>::template Calculate<Stage,All>();
+		Calculator::Stage<Sewage>::template Calculate<Stage,All>();
+	}
 	
 	std::ostream& Display(std::ostream& os) 
 	{
