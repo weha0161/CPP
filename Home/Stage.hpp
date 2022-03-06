@@ -21,7 +21,12 @@
 #ifndef STAGE_HPP
 #define STAGE_HPP
 
+struct YearData {};
+
 using StageMap = std::map<std::string, std::string>;
+using YearDataMapKey = uint;
+using YearDataMapType = std::shared_ptr<YearData>;
+using YearDataMap = std::map<YearDataMapKey, YearDataMapType>;
 
 template<typename ConfigT>
 class Stage
@@ -43,6 +48,7 @@ public:
 	const Quantity<Sum> IncidentalHeatingCostsQuantity() { return this->incidentalHeatingCosts.Get(); }
 	const Quantity<Sum> MonthlyRentQuantity() { return this->monthlyRent.Get(); }
 	const Quantity<Sum> GarageRentalQuantity() { return this->garageRental.Get(); }
+	YearDataMapType operator[](YearDataMapKey key) { return 0; }
 	
 	static Stage& Instance()
 	{
@@ -66,6 +72,7 @@ private:
 	static constexpr unsigned AreaValue = Configuration::Area;
 	static constexpr unsigned RoomsValue = Configuration::Rooms;
 	static constexpr unsigned UnitsValue = Configuration::Units;
+	inline static std::unique_ptr<YearDataMap> yearData = std::unique_ptr<YearDataMap>(new YearDataMap()); 
 	
 	ApartmentArea area = ApartmentArea(AreaValue);
 	Rooms rooms = Rooms(RoomsValue);
