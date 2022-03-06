@@ -26,7 +26,7 @@ namespace Calculator
 		using Type = Ratio;
 		
 		template<typename T, typename Q>
-		static 	CalcResult<T,Q> Calculate(const T& nom, const T& denom, const Q& sum) {	return CalcResult(nom, denom, nom / denom * sum); }
+		static 	ReadingResult<T,Q> Calculate(const T& nom, const T& denom, const Q& sum) {	return ReadingResult(nom, denom, nom / denom * sum); }
 	};
 	
 	template<> const char* CalculatorOperation<Ratio>::Name = "Ratio";
@@ -37,7 +37,7 @@ namespace Calculator
 		using Type = Difference;
 		
 		template<typename T, typename Q>
-		static CalcResult<T,Q> Calculate(const T& t1, const T& t2) {	return CalcResult(t1, t2, t1.QuantityValue - t2.QuantityValue); }
+		static ReadingResult<T,Q> Calculate(const T& t1, const T& t2) {	return ReadingResult(t1, t2, t1.QuantityValue - t2.QuantityValue); }
 	};
 
 	template<> const char* CalculatorOperation<Difference>::Name = "Difference";
@@ -48,18 +48,26 @@ namespace Calculator
 		using Type = Addition;
 		
 		template<typename T, typename Q>
-		static CalcResult<T,Q> Calculate(const T& t1, const T& t2) {	return CalcResult(t1, t2, t1.QuantityValue + t2.QuantityValue); }
+		static ReadingResult<T,Q> Calculate(const T& t1, const T& t2) {	return ReadingResult(t1, t2, t1.QuantityValue + t2.QuantityValue); }
 	};
 	
 	template<> const char* CalculatorOperation<Addition>::Name = "Addition";
 	template<> const char* CalculatorOperation<Addition>::Sign = "+";
 
 	//-------------------------------------------------------------------------------------------------Calculator----------------------------------------------------------
+	
+	
+	template<typename Property, typename Stage, typename AllStages>
+	struct Configuration
+	{
+		
+	};
+	
 	template<class Config>
 	struct Stage
 	{
-		template<typename Stage, typename AllStages>
-		static void Calculate()
+		template<typename Stage, typename AllStages, typename ConfigT = Configuration<Config, Stage, AllStages>>
+		static Result<ConfigT> Calculate()
 		{
 			auto total = AllStages::Instance().template GetTotal<typename Config::QuantityType>();
 			
@@ -74,12 +82,14 @@ namespace Calculator
 				else
 					Ratio::Calculate(IndividualUnit(1).Get(), IndividualUnit(4).Get(), account.GetTotal());
 				
-				return;
+				return Result<ConfigT>();;
 			}
 			
 			auto result = Ratio::Calculate(GetQuantity<Stage, typename Config::QuantityType>::Value(), total, account.GetTotal());
 			
 			std::cout<<"CALC: "<<result<<std::endl;
+			
+			return Result<ConfigT>();
 		}
 	};
 	
@@ -87,8 +97,8 @@ namespace Calculator
 	template<>
 	struct Stage<PropertyTax>
 	{
-		template<typename Stage, typename AllStages>
-		static void Calculate()
+		template<typename Stage, typename AllStages, typename ConfigT = Configuration<PropertyTax, Stage, AllStages>>
+		static Result<ConfigT> Calculate()
 		{
 			auto totalQ = AllStages::Instance().template GetTotal<typename PropertyTax::QuantityType>();
 			
@@ -106,14 +116,16 @@ namespace Calculator
 			auto result = Ratio::Calculate(GetQuantity<Stage, typename PropertyTax::QuantityType>::Value(), totalQ, totalSum);
 			
 			std::cout<<"CALC: "<<result<<std::endl;
+			
+			return Result<ConfigT>();
 		}
 	};
 	
 	template<>
 	struct Stage<Sewage>
 	{
-		template<typename Stage, typename AllStages>
-		static void Calculate()
+		template<typename Stage, typename AllStages, typename ConfigT = Configuration<Sewage, Stage, AllStages>>
+		static Result<ConfigT> Calculate()
 		{
 			auto raiba = Get<Bank::Raiba<0>, Bank::Out>();
 			auto account = raiba(Sewage::AccountKey);
@@ -141,6 +153,7 @@ namespace Calculator
 			}
 			
 			Logger::Log(Stage::EnergyCounter::Instance().ConsumptionssBegin(), Stage::EnergyCounter::Instance().ConsumptionsEnd());
+			return Result<ConfigT>();
 		}
 	};
 	
@@ -150,9 +163,9 @@ namespace Calculator
 	{
 		using ReadingType =  TCounter::ReadingType;
 		using QuantityType = TCounter::QuantityType;
-		static std::vector<CalcResult<ReadingType,QuantityType>> Calculate()
+		static std::vector<ReadingResult<ReadingType,QuantityType>> Calculate()
 		{
-			auto result = std::vector<CalcResult<ReadingType,QuantityType>>(); 
+			auto result = std::vector<ReadingResult<ReadingType,QuantityType>>(); 
 			for(auto it = TCounter::Begin(); (it + 1) != TCounter::End(); ++it)
 			{
 				auto cr = TCalc::template Calculate<ReadingType,QuantityType>(*it, *(it+1));
@@ -168,9 +181,9 @@ namespace Calculator
 	{
 		using ReadingType =  TCounter::ReadingType;
 		using QuantityType = TCounter::QuantityType;
-		static std::vector<CalcResult<ReadingType,QuantityType>> Calculate()
+		static std::vector<ReadingResult<ReadingType,QuantityType>> Calculate()
 		{
-			auto result = std::vector<CalcResult<ReadingType,QuantityType>>(); 
+			auto result = std::vector<ReadingResult<ReadingType,QuantityType>>(); 
 			for(auto it = TCounter::Begin(); (it + 1) != TCounter::End(); ++it)
 			{
 				auto cr = TCalc::template Calculate<ReadingType,QuantityType>(*it, *(it+1));
