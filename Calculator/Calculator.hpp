@@ -67,7 +67,7 @@ namespace Calculator
 	struct Stage
 	{
 		template<typename Stage, typename AllStages, typename ConfigT = Configuration<Config, Stage, AllStages>>
-		static Result<ConfigT> Calculate()
+		static std::shared_ptr<Result<ConfigT>> Calculate()
 		{
 			auto total = AllStages::Instance().template GetTotal<typename Config::QuantityType>();
 			
@@ -82,14 +82,14 @@ namespace Calculator
 				else
 					Ratio::Calculate(IndividualUnit(1).Get(), IndividualUnit(4).Get(), account.GetTotal());
 				
-				return Result<ConfigT>();;
+				return std::make_shared<Result<ConfigT>>();
 			}
 			
 			auto result = Ratio::Calculate(GetQuantity<Stage, typename Config::QuantityType>::Value(), total, account.GetTotal());
 			
 			std::cout<<"CALC: "<<result<<std::endl;
 			
-			return Result<ConfigT>();
+			return std::make_shared<Result<ConfigT>>();
 		}
 	};
 	
@@ -98,7 +98,7 @@ namespace Calculator
 	struct Stage<PropertyTax>
 	{
 		template<typename Stage, typename AllStages, typename ConfigT = Configuration<PropertyTax, Stage, AllStages>>
-		static Result<ConfigT> Calculate()
+		static std::shared_ptr<Result<ConfigT>> Calculate()
 		{
 			auto totalQ = AllStages::Instance().template GetTotal<typename PropertyTax::QuantityType>();
 			
@@ -117,7 +117,7 @@ namespace Calculator
 			
 			std::cout<<"CALC: "<<result<<std::endl;
 			
-			return Result<ConfigT>();
+			return std::make_shared<Result<ConfigT>>();
 		}
 	};
 	
@@ -125,7 +125,7 @@ namespace Calculator
 	struct Stage<Sewage>
 	{
 		template<typename Stage, typename AllStages, typename ConfigT = Configuration<Sewage, Stage, AllStages>>
-		static Result<ConfigT> Calculate()
+		static std::shared_ptr<Result<ConfigT>> Calculate()
 		{
 			auto raiba = Get<Bank::Raiba<0>, Bank::Out>();
 			auto account = raiba(Sewage::AccountKey);
@@ -153,7 +153,7 @@ namespace Calculator
 			}
 			
 			Logger::Log(Stage::EnergyCounter::Instance().ConsumptionssBegin(), Stage::EnergyCounter::Instance().ConsumptionsEnd());
-			return Result<ConfigT>();
+			return std::make_shared<Result<ConfigT>>();
 		}
 	};
 	
