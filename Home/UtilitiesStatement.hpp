@@ -10,6 +10,7 @@
 
 #ifndef UTILITIESSTATEMENT_HPP
 #define UTILITIESSTATEMENT_HPP
+using YearType = uint;
 
 template<typename ConfigT>
 class UtilitiesStatement
@@ -28,6 +29,10 @@ public:
 		return instance;
 	}
 	
+	UtilitiesStatement(){ Logger::Log()<<"CTOR: "<<"UtilitiesStatement"<<std::endl;}	
+	UtilitiesStatement(YearType y): year(y) { Logger::Log()<<"CTOR: "<<"UtilitiesStatement"<<y<<std::endl;}	
+	~UtilitiesStatement()	{ Logger::Log()<<"Destructor"<<std::endl; }
+	
 	void Calculate() 
 	{
 		Logger::Log()<<"US: "<<Stage::Number<<std::endl;
@@ -44,13 +49,8 @@ public:
 	}
 	
 private:
+	YearType year;
 	
-	
-	UtilitiesStatement(){ Logger::Log()<<"CTOR: "<<"UtilitiesStatement"<<std::endl;}
-	
-	~UtilitiesStatement()	{ Logger::Log()<<"Destructor"<<std::endl; }
-	UtilitiesStatement& operator=(const UtilitiesStatement&) = delete;
-	UtilitiesStatement(const UtilitiesStatement& c) = delete;
 };
 
 template<typename C, typename S = T::char_<'\t'>>
