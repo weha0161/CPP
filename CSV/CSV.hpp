@@ -1,9 +1,11 @@
 #include "../String/String_.hpp"
 #include "../Logger/Logger.hpp"
 #include "../Home/Parser.hpp"
+#include "../Common/DateTimes.hpp"
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/vector.hpp>
 #include <map>
+#include <memory>
 #include <chrono>
 #include <ctime>
 
@@ -81,12 +83,16 @@ public:
 	Entry* DoCreate(){return this;};
 };
 
+using TP = std::chrono::system_clock::time_point;
+
 class Date: public Element
 {
 public:
-	using TP = std::chrono::system_clock::time_point;
 	inline static const std::string Identifier = "Date";
-	Date(std::string s): Element(s){ this->tp = Parsers::Parser<Date,TP>::Parse(s) ;};
+	Date(std::string s): Element(s), 
+					tp{Parsers::Parser<Date,TP>::Parse(s)},
+					m{Parsers::Parser<std::string,Common::Month>::Parse(s)},
+					y{Parsers::Parser<std::string,Common::Year>::Parse(s)} {};
 	Date* DoCreate(){return this;};
 
 	std::string TimeString()
@@ -98,8 +104,8 @@ public:
 	}
 private:
 	TP tp;
-// 	std::chrono::year year_;
-// 	std::chrono::month month_;
+	std::shared_ptr<Common::Month> m;
+	std::shared_ptr<Common::Year> y;
 };
 
 class IBAN: public Element

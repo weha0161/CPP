@@ -3,6 +3,7 @@
 #include <algorithm>    // std::find
 #include <chrono>    // std::find
 #include "../Logger/Logger.hpp"
+#include "../Common/DateTimes.hpp"
 #include "../String/String_.hpp"
 #include "../CSV/CSV.hpp"
 
@@ -11,6 +12,12 @@
 
 namespace Bank
 {
+// 	using MonthType = std::chrono::month;
+// 	using YearType = std::chrono::year;
+	
+	using MonthType = std::shared_ptr<Common::Month>;
+	using YearType = std::shared_ptr<Common::Year>;
+	
 	template<typename T>
 	class TransactionContainer
 	{
@@ -23,11 +30,11 @@ namespace Bank
 			this->transactions = ContainerType();
 		}
 		
-		Type operator[](int i) { return Type(this->transactions); }
 		Type operator[](std::string s) { return Type(ContainerType(this->Begin()+1, this->End()-1)); }
 		Type operator[](Date s) { return Type(); }
-// 		Type operator[](std::chrono::month m) { return Type(); }
-// 		Type operator[](std::chrono::year y) { return Type(); }
+		Type operator[](int) { return Type(this->transactions);; }
+		Type operator[](MonthType m) { return Type(this->transactions); }
+		Type operator[](YearType y) { return Type(this->transactions); }
 		
 		const Iterator Begin() const { return this->transactions.cbegin(); }
 		const Iterator End() const { return this->transactions.cend(); }

@@ -15,7 +15,7 @@ namespace Common
 		Derived Prev() const { return std::make_shared<T>(this->value - 1); };
 		std::string ToString() const { return ""; };
 		uint Value() const { return this->value; }
-		constexpr DateTimeBase(uint v):value(v) {}
+		constexpr DateTimeBase(uint v):value{v} {}
 	protected:
 // 		TP tp;
 		const uint value;
@@ -25,7 +25,14 @@ namespace Common
 	{
 		using Base = DateTimeBase<Month>;
 		static Base::Derived Get(uint i) { return std::make_shared<Month>(i);}
-		constexpr Month(uint v): DateTimeBase<Month>(v){};
+		constexpr Month(uint v): DateTimeBase<Month>(c(v)){};
+	private:
+		constexpr uint c(uint i)
+		{
+			if( i > 12) return 1;
+			if( i < 1) return 12;
+			return i;
+		}
 	};
 	
 	struct Year: DateTimeBase<Year>
@@ -35,18 +42,18 @@ namespace Common
 		Year(uint v): DateTimeBase<Year>(v){};
 	};
 	
-	inline constexpr Month January{1};
-	inline constexpr Month February{2};
-	inline constexpr Month March{3};
-	inline constexpr Month April{4};
-	inline constexpr Month May{5};
-	inline constexpr Month June{6};
-	inline constexpr Month July{7};
-	inline constexpr Month August{8};
-	inline constexpr Month September{9};
-	inline constexpr Month October{10};
-	inline constexpr Month November{11};
-	inline constexpr Month December{12};
+	inline static std::shared_ptr<Month> January = std::make_shared<Month>(1);
+	inline static std::shared_ptr<Month> February= std::make_shared<Month>(2);
+	inline static std::shared_ptr<Month> March= std::make_shared<Month>(3);
+	inline static std::shared_ptr<Month> April= std::make_shared<Month>(4);
+	inline static std::shared_ptr<Month> May= std::make_shared<Month>(5);
+	inline static std::shared_ptr<Month> June= std::make_shared<Month>(6);
+	inline static std::shared_ptr<Month> July= std::make_shared<Month>(7);
+	inline static std::shared_ptr<Month> August= std::make_shared<Month>(8);
+	inline static std::shared_ptr<Month> September= std::make_shared<Month>(9);
+	inline static std::shared_ptr<Month> October= std::make_shared<Month>(10);
+	inline static std::shared_ptr<Month> November= std::make_shared<Month>(11);
+	inline static std::shared_ptr<Month> December= std::make_shared<Month>(12);
 
 }
 
