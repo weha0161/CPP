@@ -91,8 +91,8 @@ public:
 	inline static const std::string Identifier = "Date";
 	Date(std::string s): Element(s), 
 					tp{Parsers::Parser<Date,TP>::Parse(s)},
-					m{Parsers::Parser<std::string,Common::Month>::Parse(s)},
-					y{Parsers::Parser<std::string,Common::Year>::Parse(s)} {};
+					month{Parsers::Parser<std::string,Common::Month>::Parse(s)},
+					year{Parsers::Parser<std::string,Common::Year>::Parse(s)} {};
 	Date* DoCreate(){return this;};
 
 	std::string TimeString()
@@ -102,10 +102,14 @@ public:
 		ts.resize(ts.size()-1);
 		return ts;
 	}
+	
+	std::shared_ptr<Common::Month> Month() const { return this->month; };
+	std::shared_ptr<Common::Year> Year() const { return this->year; };
+	
 private:
 	TP tp;
-	std::shared_ptr<Common::Month> m;
-	std::shared_ptr<Common::Year> y;
+	std::shared_ptr<Common::Month> month;
+	std::shared_ptr<Common::Year> year;
 };
 
 class IBAN: public Element

@@ -32,7 +32,17 @@ namespace Bank
 		
 		Type operator[](std::string s) { return Type(ContainerType(this->Begin()+1, this->End()-1)); }
 		Type operator[](Date s) { return Type(); }
-		Type operator[](int) { return Type(this->transactions);; }
+		Type operator[](int i) 
+		{ 
+			ContainerType result;
+			for(auto t : this->transactions)
+				if((*(t->GetDate().Month())) == (uint)i)
+					result.push_back(t);
+				
+			Logger::Log()<<result.at(0);
+			return Type(this->transactions); 
+			
+		}
 		Type operator[](MonthType m) { return Type(this->transactions); }
 		Type operator[](YearType y) { return Type(this->transactions); }
 		

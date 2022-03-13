@@ -2,6 +2,7 @@
 #include "../Logger/Logger.hpp"
 #include "../Unit/Unit.h"
 // #include "../CSV/CSV.hpp"
+#include "../Common/DateTimes.hpp"
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/vector.hpp>
 #include <map>
@@ -57,9 +58,45 @@ namespace Parsers
 	};
 
 	struct Date;
-
+	
 	template<>
-	struct Parser<Date, std::chrono::system_clock::time_point,std::string>
+	struct Parser<std::string, Common::Month,std::string>
+	{
+		static std::shared_ptr<Common::Month> Parse(std::string s) 
+		{ 
+			std::string res;
+			for(auto c : s)
+				if(isdigit(c))
+					res += c;
+						
+			uint d = std::stoul(std::string(res.begin(),res.begin()+2));
+			uint m = std::stoul(std::string(res.begin()+3,res.begin()+4));
+			uint y = std::stoul(std::string(res.begin()+4,res.begin()+8));
+		
+			return std::make_shared<Common::Month>(m); 		
+		}
+	};
+	
+	template<>
+	struct Parser<std::string, Common::Year,std::string>
+	{
+		static std::shared_ptr<Common::Year> Parse(std::string s) 
+		{ 
+			std::string res;
+			for(auto c : s)
+				if(isdigit(c))
+					res += c;
+						
+			int d = std::stoi(std::string(res.begin(),res.begin()+2));
+			int m = std::stoi(std::string(res.begin()+3,res.begin()+4));
+			int y = std::stoi(std::string(res.begin()+4,res.begin()+8));
+		
+			return std::make_shared<Common::Year>((uint)y); 		
+		}
+	};
+	
+	template<>
+	struct Parser<std::string, std::chrono::system_clock::time_point,std::string>
 	{
 		static std::chrono::system_clock::time_point Parse(std::string s) 
 		{ 
@@ -74,7 +111,10 @@ namespace Parsers
 			int m = std::stoi(std::string(res.begin()+3,res.begin()+4));
 			int y = std::stoi(std::string(res.begin()+4,res.begin()+8));
 			
-			Logger::Log<Debug>()<<d<<"-"<<m<<"-"<<y<<std::endl;
+			auto m2 = Common::Month::Get(m);
+			auto y2 = Common::Year::Get(y);
+// 			
+			Logger::Log()<<d<<"PARSE-"<<m<<"-"<<y<<"\t"<</*m2->Value()<<y2->Value()<<*/std::endl;
 			return CreateTimePoint(y,m,d); 		
 		}
 	private:

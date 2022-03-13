@@ -16,8 +16,9 @@ namespace Common
 		std::string ToString() const { return ""; };
 		uint Value() const { return this->value; }
 		constexpr DateTimeBase(uint v):value{v} {}
+		bool operator==(uint i){ return this->value == i;};
+		bool operator==(int i){ return this->value == i;};
 	protected:
-// 		TP tp;
 		const uint value;
 	};
 
@@ -26,6 +27,7 @@ namespace Common
 		using Base = DateTimeBase<Month>;
 		static Base::Derived Get(uint i) { return std::make_shared<Month>(i);}
 		constexpr Month(uint v): DateTimeBase<Month>(c(v)){};
+		constexpr Month(int v): DateTimeBase<Month>(c((uint)v)){};
 	private:
 		constexpr uint c(uint i)
 		{
@@ -39,7 +41,9 @@ namespace Common
 	{
 		using Base = DateTimeBase<Year>;
 		static Base::Derived Get(uint i) { return std::make_shared<Year>(i);}
+		static Base::Derived Get(int i) { return std::make_shared<Year>((uint)i);}
 		Year(uint v): DateTimeBase<Year>(v){};
+		
 	};
 	
 	inline static std::shared_ptr<Month> January = std::make_shared<Month>(1);
