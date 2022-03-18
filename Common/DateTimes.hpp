@@ -46,6 +46,14 @@ namespace Common
 		
 	};
 	
+	struct Day: DateTimeBase<Day>
+	{
+		using Base = DateTimeBase<Day>;
+		static Base::Derived Get(uint i) { return std::make_shared<Day>(i);}
+		static Base::Derived Get(int i) { return std::make_shared<Day>((uint)i);}
+		Day(uint v): DateTimeBase<Day>(v){};
+	};
+	
 	inline static std::shared_ptr<Month> January = std::make_shared<Month>(1);
 	inline static std::shared_ptr<Month> February= std::make_shared<Month>(2);
 	inline static std::shared_ptr<Month> March= std::make_shared<Month>(3);

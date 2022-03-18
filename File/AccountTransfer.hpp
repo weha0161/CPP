@@ -72,7 +72,7 @@ namespace Bank
 		using KeyType = Key;
 		using QunatityType = Quantity<Sum>;
 		
-		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC", std::string cause_ = "") : owner(k), transaction(c), date(d), value(v), iban(i), bic(b), cause(cause_) 
+		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC", std::string cause_ = "") : owner(k), transaction(c), date(Parsers::Parser<std::string,Date>::Parse(d)), value(v), iban(i), bic(b), cause(cause_) 
 		{ 
 // 			Logger::Log()<<this->cause<<std::endl;
 		};

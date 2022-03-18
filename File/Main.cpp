@@ -10,6 +10,7 @@
 #include "Repository.hpp"
 #include "FileSystem.hpp"
 #include "../Home/House.hpp"
+#include "../Common/DateTimes.hpp"
 
 using namespace FS;
 //----------------------------------------------------------------------------PRODUCT----------------------------------------------------------
@@ -114,10 +115,12 @@ int main()
 	auto trIt = tr[5];
 	auto trIt2 = trIt[5];
 	auto trIt3 = trIt2[keyFileN];
+	auto trIt4 = trIt2[Common::June];
 	
 	Logger::Log()<<"CONTAINER Begin"<<std::endl;
 	Logger::Log()<<*trIt.Begin()<<std::endl;
 	Logger::Log()<<*trIt2.Begin()<<std::endl;
+	Logger::Log()<<*(*trIt4.Begin())<<std::endl;
 	
 	Logger::Log()<<"CONTAINER Size"<<std::endl;
 	Logger::Log()<<trIt3.Size()<<std::endl;

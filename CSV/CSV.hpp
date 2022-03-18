@@ -89,10 +89,15 @@ class Date: public Element
 {
 public:
 	inline static const std::string Identifier = "Date";
-	Date(std::string s): Element(s), 
-					tp{Parsers::Parser<Date,TP>::Parse(s)},
-					month{Parsers::Parser<std::string,Common::Month>::Parse(s)},
-					year{Parsers::Parser<std::string,Common::Year>::Parse(s)} {};
+					
+	Date(std::string s, uint d, uint m, uint y): 
+					Element(s),
+					day(std::make_shared<Common::Day>(d)),
+					month{std::make_shared<Common::Month>(m)},
+					year{std::make_shared<Common::Year>(y)} 
+					{
+						Logger::Log()<<day->Value()<<"\t"<<month->Value()<<std::endl;
+					}; 
 	Date* DoCreate(){return this;};
 
 	std::string TimeString()
@@ -105,12 +110,35 @@ public:
 	
 	std::shared_ptr<Common::Month> Month() const { return this->month; };
 	std::shared_ptr<Common::Year> Year() const { return this->year; };
+	std::shared_ptr<Common::Day> Day() const { return this->day; };
 	
 private:
 	TP tp;
 	std::shared_ptr<Common::Month> month;
 	std::shared_ptr<Common::Year> year;
+	std::shared_ptr<Common::Day> day;
 };
+
+namespace Parsers
+{
+	template<>
+	struct Parser<std::string, Date,std::string>
+	{
+		static Date Parse(std::string s) 
+		{ 
+			std::string res;
+			for(auto c : s)
+				if(isdigit(c))
+					res += c;
+						
+			uint d = std::stoul(std::string(res.begin(),res.begin()+2));
+			uint m = std::stoul(std::string(res.begin()+3,res.begin()+4));
+			uint y = std::stoul(std::string(res.begin()+4,res.begin()+8));
+		
+			return Date(s, d, m, y); 		
+		}
+	};
+}
 
 class IBAN: public Element
 {
