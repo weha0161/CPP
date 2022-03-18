@@ -136,7 +136,7 @@ private:
 			Logger::Log(cbegin, cend);
 			try 
 			{
-				auto date = Date(*cbegin);
+				auto date = Parsers::Parser<std::string,DateType>::Parse(*cbegin);
 				auto value = std::stod(*(++cbegin));
 				
 				Logger::Log<Info>()<<value<<std::endl;
@@ -152,7 +152,7 @@ private:
 			Logger::Log<Error>()<<"Error: CreateReading-> Not enough values"<<std::endl;
 			
 				
-		return  DataType(new ReadingType(QuantityType(0.0), DateType(Date("01.01.2000"))));
+		return  DataType(new ReadingType(QuantityType(0.0), DateType(Parsers::Parser<std::string,DateType>::Parse("01.01.2000"))));
 	}
 	
 	static void Calculate()
