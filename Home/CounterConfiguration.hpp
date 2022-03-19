@@ -7,6 +7,7 @@
 #include "../File/Node.hpp"
 #include "../Unit/SIPrefix.hpp"
 #include "../Wrapper/Wrapper.hpp"
+#include "../Common/DateTimes.hpp"
 #include "Parser.hpp"
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/vector.hpp>
@@ -72,7 +73,7 @@ struct CounterConfiguration
 	using Unit = U;
 };
 
-template<typename U, typename Pre = SIPrefix<0>, typename Q = Quantity<U,Pre,double>, typename DateT = Date>
+template<typename U, typename Pre = SIPrefix<0>, typename Q = Quantity<U,Pre,double>, typename DateT = DateTimes::Date>
 struct Reading
 {
 	using Unit = U;

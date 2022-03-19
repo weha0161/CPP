@@ -21,6 +21,7 @@
 #include "../Typelist/Typelist.h"
 #include "../Visitor/Visitor.hpp"
 #include "../String/String_.hpp"
+#include "../Common/DateTimes.hpp"
 
 #ifndef ACCOUNTTRANSFER_HPP
 #define ACCOUNTTRANSFER_HPP
@@ -59,7 +60,7 @@ namespace Bank
 		Key owner;
 		Entry transaction;
 		Entry cause;
-		Date date;
+		DateTimes::Date date;
 		IBAN iban;
 		BIC bic;
 		Quantity<Sum> value;
@@ -72,7 +73,7 @@ namespace Bank
 		using KeyType = Key;
 		using QunatityType = Quantity<Sum>;
 		
-		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC", std::string cause_ = "") : owner(k), transaction(c), date(Parsers::Parser<std::string,Date>::Parse(d)), value(v), iban(i), bic(b), cause(cause_) 
+		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC", std::string cause_ = "") : owner(k), transaction(c), date(Parsers::Parser<std::string,DateTimes::Date,std::string>::Parse(d)), value(v), iban(i), bic(b), cause(cause_) 
 		{ 
 // 			Logger::Log()<<this->cause<<std::endl;
 		};
@@ -80,7 +81,7 @@ namespace Bank
 		const Key& GetOwner() const { return owner; }
 		const Entry& GetTransaction() const { return transaction; }
 		const Entry& GetCause() const { return cause; }
-		const Date& GetDate() const { return date; }
+		const DateTimes::Date& GetDate() const { return date; }
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetQuantity() const { return value; }

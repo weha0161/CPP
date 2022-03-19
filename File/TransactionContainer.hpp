@@ -31,7 +31,7 @@ namespace Bank
 		}
 		
 		Type operator[](std::string s) { return Type(ContainerType(this->Begin()+1, this->End()-1)); }
-		Type operator[](Date s) { return Type(); }
+		Type operator[](DateTimes::Date s) { return Type(); }
 		Type operator[](int i) 
 		{ 
 			ContainerType result;

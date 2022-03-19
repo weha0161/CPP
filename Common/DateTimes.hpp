@@ -1,6 +1,8 @@
 #include <memory>
 #include <ratio>
 #include <chrono>
+#include "../CSV/CSV.hpp"
+// #include "../Home/Parser.hpp"
 
 #ifndef DATETIMES_HPP
 #define DATETIMES_HPP
@@ -66,8 +68,68 @@ namespace DateTimes
 	inline static std::shared_ptr<Month> October= std::make_shared<Month>(10);
 	inline static std::shared_ptr<Month> November= std::make_shared<Month>(11);
 	inline static std::shared_ptr<Month> December= std::make_shared<Month>(12);
+	
+	using TP = std::chrono::system_clock::time_point;
+
+	class Date: public Element
+	{
+	public:
+		inline static const std::string Identifier = "Date";
+						
+		Date(std::string s, uint d, uint m, uint y): 
+						Element(s),
+						day(std::make_shared<DateTimes::Day>(d)),
+						month{std::make_shared<DateTimes::Month>(m)},
+						year{std::make_shared<DateTimes::Year>(y)} 
+						{
+							Logger::Log()<<day->Value()<<"\t"<<month->Value()<<std::endl;
+						}; 
+		Date* DoCreate(){return this;};
+
+		std::string TimeString()
+		{
+			std::time_t t = std::chrono::system_clock::to_time_t(this->tp);
+			std::string ts = ctime(&t);
+			ts.resize(ts.size()-1);
+			return ts;
+		}
+		
+		std::shared_ptr<DateTimes::Month> Month() const { return this->month; };
+		std::shared_ptr<DateTimes::Year> Year() const { return this->year; };
+		std::shared_ptr<DateTimes::Day> Day() const { return this->day; };
+		
+	private:
+		TP tp;
+		std::shared_ptr<DateTimes::Month> month;
+		std::shared_ptr<DateTimes::Year> year;
+		std::shared_ptr<DateTimes::Day> day;
+	};
+
 
 }
 
+namespace Parsers
+{
+	template<typename, typename, typename>
+	struct Parser;
+	
+	template<>
+	struct Parser<std::string, DateTimes::Date,std::string>
+	{
+		static DateTimes::Date Parse(std::string s) 
+		{ 
+			std::string res;
+			for(auto c : s)
+				if(isdigit(c))
+					res += c;
+						
+			uint d = std::stoul(std::string(res.begin(),res.begin()+2));
+			uint m = std::stoul(std::string(res.begin()+3,res.begin()+4));
+			uint y = std::stoul(std::string(res.begin()+4,res.begin()+8));
+		
+			return DateTimes::Date(s, d, m, y); 		
+		}
+	};
+}
 
 #endif

@@ -27,7 +27,7 @@ int main()
 	
 	auto r = Algorithms::copy_if(ts.cbegin(), ts.cend(), result.begin(), ne2);
 	
-	std::cout<<**r<<std::endl;
+	std::cout<<*r<<std::endl;
 	
 	return 0;
 }

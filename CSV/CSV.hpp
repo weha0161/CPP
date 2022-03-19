@@ -1,7 +1,5 @@
 #include "../String/String_.hpp"
 #include "../Logger/Logger.hpp"
-#include "../Home/Parser.hpp"
-#include "../Common/DateTimes.hpp"
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/vector.hpp>
 #include <map>
@@ -75,71 +73,6 @@ public:
 	T Get(){ return this->value; }
 };
 
-class Entry: public Element
-{
-public:
-	inline static const std::string Identifier = "Entry";
-	Entry(std::string s): Element(s){};
-	Entry* DoCreate(){return this;};
-};
-
-using TP = std::chrono::system_clock::time_point;
-
-class Date: public Element
-{
-public:
-	inline static const std::string Identifier = "Date";
-					
-	Date(std::string s, uint d, uint m, uint y): 
-					Element(s),
-					day(std::make_shared<DateTimes::Day>(d)),
-					month{std::make_shared<DateTimes::Month>(m)},
-					year{std::make_shared<DateTimes::Year>(y)} 
-					{
-						Logger::Log()<<day->Value()<<"\t"<<month->Value()<<std::endl;
-					}; 
-	Date* DoCreate(){return this;};
-
-	std::string TimeString()
-	{
-		std::time_t t = std::chrono::system_clock::to_time_t(this->tp);
-		std::string ts = ctime(&t);
-		ts.resize(ts.size()-1);
-		return ts;
-	}
-	
-	std::shared_ptr<DateTimes::Month> Month() const { return this->month; };
-	std::shared_ptr<DateTimes::Year> Year() const { return this->year; };
-	std::shared_ptr<DateTimes::Day> Day() const { return this->day; };
-	
-private:
-	TP tp;
-	std::shared_ptr<DateTimes::Month> month;
-	std::shared_ptr<DateTimes::Year> year;
-	std::shared_ptr<DateTimes::Day> day;
-};
-
-namespace Parsers
-{
-	template<>
-	struct Parser<std::string, Date,std::string>
-	{
-		static Date Parse(std::string s) 
-		{ 
-			std::string res;
-			for(auto c : s)
-				if(isdigit(c))
-					res += c;
-						
-			uint d = std::stoul(std::string(res.begin(),res.begin()+2));
-			uint m = std::stoul(std::string(res.begin()+3,res.begin()+4));
-			uint y = std::stoul(std::string(res.begin()+4,res.begin()+8));
-		
-			return Date(s, d, m, y); 		
-		}
-	};
-}
-
 class IBAN: public Element
 {
 public:
@@ -166,9 +99,17 @@ public:
 	Item* DoCreate(){return this;};
 };
 
+class Entry: public Element
+{
+public:
+       inline static const std::string Identifier = "Entry";
+       Entry(std::string s): Element(s){};
+       Entry* DoCreate(){return this;};
+};
 
 
 //--------------------------------Factory------------------------------------------------
+class Date;
 
 using Elements = boost::mpl::vector<Key, Value<double>, Entry, Date>;
 
