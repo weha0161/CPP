@@ -5,7 +5,7 @@
 #ifndef DATETIMES_HPP
 #define DATETIMES_HPP
 
-namespace Common
+namespace DateTimes
 {
 	template<typename T>
 	struct DateTimeBase

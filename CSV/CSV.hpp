@@ -92,9 +92,9 @@ public:
 					
 	Date(std::string s, uint d, uint m, uint y): 
 					Element(s),
-					day(std::make_shared<Common::Day>(d)),
-					month{std::make_shared<Common::Month>(m)},
-					year{std::make_shared<Common::Year>(y)} 
+					day(std::make_shared<DateTimes::Day>(d)),
+					month{std::make_shared<DateTimes::Month>(m)},
+					year{std::make_shared<DateTimes::Year>(y)} 
 					{
 						Logger::Log()<<day->Value()<<"\t"<<month->Value()<<std::endl;
 					}; 
@@ -108,15 +108,15 @@ public:
 		return ts;
 	}
 	
-	std::shared_ptr<Common::Month> Month() const { return this->month; };
-	std::shared_ptr<Common::Year> Year() const { return this->year; };
-	std::shared_ptr<Common::Day> Day() const { return this->day; };
+	std::shared_ptr<DateTimes::Month> Month() const { return this->month; };
+	std::shared_ptr<DateTimes::Year> Year() const { return this->year; };
+	std::shared_ptr<DateTimes::Day> Day() const { return this->day; };
 	
 private:
 	TP tp;
-	std::shared_ptr<Common::Month> month;
-	std::shared_ptr<Common::Year> year;
-	std::shared_ptr<Common::Day> day;
+	std::shared_ptr<DateTimes::Month> month;
+	std::shared_ptr<DateTimes::Year> year;
+	std::shared_ptr<DateTimes::Day> day;
 };
 
 namespace Parsers

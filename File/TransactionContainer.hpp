@@ -15,8 +15,8 @@ namespace Bank
 // 	using MonthType = std::chrono::month;
 // 	using YearType = std::chrono::year;
 	
-	using MonthType = std::shared_ptr<Common::Month>;
-	using YearType = std::shared_ptr<Common::Year>;
+	using MonthType = std::shared_ptr<DateTimes::Month>;
+	using YearType = std::shared_ptr<DateTimes::Year>;
 	
 	template<typename T>
 	class TransactionContainer
