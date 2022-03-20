@@ -114,7 +114,7 @@ int main()
 	auto tr = gr.Transactions();
 	auto trIt = tr[5];
 	auto trIt2 = trIt[5];
-	auto trIt3 = trIt2[keyFileN];
+// 	auto trIt3 = trIt2[keyFileN];
 	auto trIt4 = trIt2[DateTimes::June];
 	
 	Logger::Log()<<"CONTAINER Begin"<<std::endl;
@@ -123,7 +123,7 @@ int main()
 	Logger::Log()<<*(*trIt4.Begin())<<std::endl;
 	
 	Logger::Log()<<"CONTAINER Size"<<std::endl;
-	Logger::Log()<<trIt3.Size()<<std::endl;
+// 	Logger::Log()<<trIt3.Size()<<std::endl;
 	Logger::Log()<<trIt2.Size()<<std::endl;
 	
     return 0;
