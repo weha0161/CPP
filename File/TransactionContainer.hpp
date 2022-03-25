@@ -26,32 +26,41 @@ namespace Bank
 		using Type = TransactionContainer<T> ;
 		using ContainerType = std::vector<T>;
 		using ContainerPtr = std::shared_ptr<ContainerType>;
+		using TypePtr = std::shared_ptr<Type>;
 		using Iterator = ContainerType::const_iterator;
 
-		TransactionContainer(){
-			this->transactions = std::make_shared<ContainerType>();
-		}
+		TransactionContainer(): transactions{std::make_shared<ContainerType>()}{}
 		
 // 		Type operator[](std::string s) { return Type(ContainerType(this->Begin()+1, this->End()-1)); }
 		Type operator[](DateTimes::Date s) 
 		{ 
 			return Type(); 
 		}
+		
 		Type operator[](int i) 
 		{ 
 			return Type(); 
 			
 		}
-		Type operator[](MonthType m) 
+		
+		template<typename KeyT>
+		TypePtr operator[](KeyT t) 
 		{ 
-// 			auto result = 
-			return Type(); }
-		Type operator[](YearType y) { return Type(); }
+			auto result = std::make_shared<Type>();
+			std::for_each(this->Begin(), this->End(),[&](auto i){ if(*i == t) result->Add(i);});
+			
+			return result;  
+		}
 		
 		const Iterator Begin() const { return this->transactions->cbegin(); }
 		const Iterator End() const { return this->transactions->cend(); }
 		const size_t Size() const { return this->transactions->size(); }
 		void Add(T t){ this->transactions->push_back(t); }
+		void Display()
+		{ 
+			for(auto i : *(this->transactions))
+			Logger::Log()<<*i<<std::endl;
+		}
 	private:
 		ContainerPtr transactions;
 		TransactionContainer(ContainerPtr c): transactions(c){ Logger::Log()<<"TransactionContainer: "<<*this->transactions.at(0)<<"\t"<<*this->transactions.at(0)<<std::endl;	}

@@ -112,19 +112,25 @@ int main()
 	rbo.Display(inFile,keys);
 	
 	auto tr = gr.Transactions();
-	auto trIt = tr[5];
-	auto trIt2 = trIt[5];
+// 	auto trIt = tr[5];
+	auto y2020 = std::make_shared<DateTimes::Year>(2020);
+// 	auto trIt2 = trIt[5];
 // 	auto trIt3 = trIt2[keyFileN];
-	auto trIt4 = trIt2[DateTimes::June];
+	auto tM = tr[DateTimes::May];
+	auto tY = tr[y2020];
 	
 	Logger::Log()<<"CONTAINER Begin"<<std::endl;
-	Logger::Log()<<*trIt.Begin()<<std::endl;
-	Logger::Log()<<*trIt2.Begin()<<std::endl;
-	Logger::Log()<<*(*trIt4.Begin())<<std::endl;
+// 	Logger::Log()<<*trIt.Begin()<<std::endl;
+// 	Logger::Log()<<*trIt2.Begin()<<std::endl;
+	Logger::Log()<<(tM->Size())<<std::endl;
+	tM->Display();
+	tY->Display();
+// 	for(auto i = tM->Begin(); tM->Begin() != tM->End(); ++i)
+// 		Logger::Log()<<*i<<std::endl;
 	
 	Logger::Log()<<"CONTAINER Size"<<std::endl;
 // 	Logger::Log()<<trIt3.Size()<<std::endl;
-	Logger::Log()<<trIt2.Size()<<std::endl;
+// 	Logger::Log()<<trIt2.Size()<<std::endl;
 	
     return 0;
 };

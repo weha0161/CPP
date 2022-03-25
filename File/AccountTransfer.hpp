@@ -73,10 +73,7 @@ namespace Bank
 		using KeyType = Key;
 		using QunatityType = Quantity<Sum>;
 		
-		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC", std::string cause_ = "") : owner(k), transaction(c), date(Parsers::Parser<std::string,DateTimes::Date,std::string>::Parse(d)), value(v), iban(i), bic(b), cause(cause_) 
-		{ 
-// 			Logger::Log()<<this->cause<<std::endl;
-		};
+		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC", std::string cause_ = "") : owner(k), transaction(c), date(Parsers::Parser<std::string,DateTimes::Date,std::string>::Parse(d)), value(v), iban(i), bic(b), cause(cause_) { 	};
 		
 		const Key& GetOwner() const { return owner; }
 		const Entry& GetTransaction() const { return transaction; }
@@ -86,6 +83,12 @@ namespace Bank
 		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetQuantity() const { return value; }
 		const Direction& GetDirection() const { return Direction::Id; }		
+
+		bool operator==(DateTimes::Day m) const{ return this->date == m;};
+		bool operator==(MonthType m) const{ return this->date == m;};
+		bool operator==(DateTimes::Month m) const{ return this->date == m;};
+		bool operator==(YearType y) const{ return this->date == y;};
+		bool operator==(DateTimes::Year y) const{ return this->date == y;};
 	};
 }
 

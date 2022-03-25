@@ -2,7 +2,6 @@
 #include <ratio>
 #include <chrono>
 #include "../CSV/CSV.hpp"
-// #include "../Home/Parser.hpp"
 
 #ifndef DATETIMES_HPP
 #define DATETIMES_HPP
@@ -20,6 +19,8 @@ namespace DateTimes
 		constexpr DateTimeBase(uint v):value{v} {}
 		bool operator==(uint i){ return this->value == i;};
 		bool operator==(int i){ return this->value == i;};
+		bool operator==(T t){ return this->value == t.Value();};
+		bool operator==(Derived d){ return this->value == d->Value();};
 	protected:
 		const uint value;
 	};
@@ -56,6 +57,7 @@ namespace DateTimes
 		Day(uint v): DateTimeBase<Day>(v){};
 	};
 	
+	
 	inline static std::shared_ptr<Month> January = std::make_shared<Month>(1);
 	inline static std::shared_ptr<Month> February= std::make_shared<Month>(2);
 	inline static std::shared_ptr<Month> March= std::make_shared<Month>(3);
@@ -74,6 +76,9 @@ namespace DateTimes
 	class Date: public Element
 	{
 	public:
+		using DayType = std::shared_ptr<DateTimes::Day>;
+		using MonthType = std::shared_ptr<DateTimes::Month>;
+		using YearType = std::shared_ptr<DateTimes::Year>;
 		inline static const std::string Identifier = "Date";
 						
 		Date(std::string s, uint d, uint m, uint y): 
@@ -94,15 +99,21 @@ namespace DateTimes
 			return ts;
 		}
 		
-		std::shared_ptr<DateTimes::Month> Month() const { return this->month; };
-		std::shared_ptr<DateTimes::Year> Year() const { return this->year; };
-		std::shared_ptr<DateTimes::Day> Day() const { return this->day; };
+		MonthType Month() const { return this->month; };
+		YearType Year() const { return this->year; };
+		DayType Day() const { return this->day; };
 		
+		bool operator==(DayType m) const{ return *(this->day) == m;};
+		bool operator==(DateTimes::Day m) const{ return *(this->day) == m;};
+		bool operator==(MonthType m) const{ return *(this->month) == m;};
+		bool operator==(DateTimes::Month m) const{ return *(this->month) == m;};
+		bool operator==(YearType y) const{ return *(this->year) == y;};
+		bool operator==(DateTimes::Year y) const{ return *(this->year)== y;};
 	private:
 		TP tp;
-		std::shared_ptr<DateTimes::Month> month;
-		std::shared_ptr<DateTimes::Year> year;
-		std::shared_ptr<DateTimes::Day> day;
+		MonthType month;
+		YearType year;
+		DayType day;
 	};
 
 

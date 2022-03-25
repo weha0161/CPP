@@ -27,6 +27,14 @@ namespace Algorithms
 	};
 	
 	template<typename T>
+	struct Equal<std::shared_ptr<T>>: public FunctorBase<T>
+	{
+		using Base = FunctorBase<T>;
+		Equal(Base::Type t):Base(t) {}
+		bool operator() (Base::Type i){ return this->value == i;};
+	};
+	
+	template<typename T>
 	struct NotEqual: public Equal<T>
 	{
 		using Base = Equal<T>;
