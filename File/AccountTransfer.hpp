@@ -84,11 +84,14 @@ namespace Bank
 		const Quantity<Sum>& GetQuantity() const { return value; }
 		const Direction& GetDirection() const { return Direction::Id; }		
 
+		bool operator==(DayType d) const{ return this->date == d;};
 		bool operator==(DateTimes::Day m) const{ return this->date == m;};
 		bool operator==(MonthType m) const{ return this->date == m;};
 		bool operator==(DateTimes::Month m) const{ return this->date == m;};
 		bool operator==(YearType y) const{ return this->date == y;};
 		bool operator==(DateTimes::Year y) const{ return this->date == y;};
+		bool operator==(DateTimes::Date date) const{ return this->date == date;};
+		bool operator==(DateType date) const{ return this->date == date;};
 	};
 }
 

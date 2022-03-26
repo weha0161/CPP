@@ -13,11 +13,10 @@
 
 namespace Bank
 {
-// 	using MonthType = std::chrono::month;
-// 	using YearType = std::chrono::year;
-	
-	using MonthType = std::shared_ptr<DateTimes::Month>;
-	using YearType = std::shared_ptr<DateTimes::Year>;
+	using DayType = DateTimes::Date::DayType;
+	using MonthType = DateTimes::Date::MonthType;
+	using YearType = DateTimes::Date::YearType;
+	using DateType = DateTimes::Date::DateType;
 	
 	template<typename T>
 	class TransactionContainer
@@ -32,16 +31,6 @@ namespace Bank
 		TransactionContainer(): transactions{std::make_shared<ContainerType>()}{}
 		
 // 		Type operator[](std::string s) { return Type(ContainerType(this->Begin()+1, this->End()-1)); }
-		Type operator[](DateTimes::Date s) 
-		{ 
-			return Type(); 
-		}
-		
-		Type operator[](int i) 
-		{ 
-			return Type(); 
-			
-		}
 		
 		template<typename KeyT>
 		TypePtr operator[](KeyT t) 

@@ -79,6 +79,7 @@ namespace DateTimes
 		using DayType = std::shared_ptr<DateTimes::Day>;
 		using MonthType = std::shared_ptr<DateTimes::Month>;
 		using YearType = std::shared_ptr<DateTimes::Year>;
+		using DateType = std::shared_ptr<DateTimes::Date>;
 		inline static const std::string Identifier = "Date";
 						
 		Date(std::string s, uint d, uint m, uint y): 
@@ -89,6 +90,7 @@ namespace DateTimes
 						{
 							Logger::Log()<<day->Value()<<"\t"<<month->Value()<<std::endl;
 						}; 
+		Date(uint d, uint m, uint y): Date(std::string(), d,m, y) { };
 		Date* DoCreate(){return this;};
 
 		std::string TimeString()
@@ -109,6 +111,8 @@ namespace DateTimes
 		bool operator==(DateTimes::Month m) const{ return *(this->month) == m;};
 		bool operator==(YearType y) const{ return *(this->year) == y;};
 		bool operator==(DateTimes::Year y) const{ return *(this->year)== y;};
+		bool operator==(Date date) const{ return *(this->year)== *(date.Year()) && *(this->month)== *(date.Month()) && *(this->day)== *(date.Day());};
+		bool operator==(DateType date) const{ return *(this->year)== date->Year() && *(this->month)== date->Month() && *(this->day)== date->Day();};
 	private:
 		TP tp;
 		MonthType month;

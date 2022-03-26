@@ -118,13 +118,21 @@ int main()
 // 	auto trIt3 = trIt2[keyFileN];
 	auto tM = tr[DateTimes::May];
 	auto tY = tr[y2020];
+	auto tD = tr[DateTimes::Date(15,5,2020)];
+	auto tD2 = tr[std::make_shared<DateTimes::Date>(15,5,2020)];
 	
 	Logger::Log()<<"CONTAINER Begin"<<std::endl;
 // 	Logger::Log()<<*trIt.Begin()<<std::endl;
 // 	Logger::Log()<<*trIt2.Begin()<<std::endl;
 	Logger::Log()<<(tM->Size())<<std::endl;
+	Logger::Log()<<"Month May\n"<<std::endl;
 	tM->Display();
+	Logger::Log()<<"Year 2020\n"<<std::endl;
 	tY->Display();
+	Logger::Log()<<"Date\n"<<std::endl;
+	tD->Display();
+	Logger::Log()<<"Date shared\n"<<std::endl;
+	tD2->Display();
 // 	for(auto i = tM->Begin(); tM->Begin() != tM->End(); ++i)
 // 		Logger::Log()<<*i<<std::endl;
 	
