@@ -16,6 +16,7 @@
 #include "../Typelist/Typelist.h"
 #include "../Unit/Unit.h"
 #include "../Quantity/Quantity.h"
+#include "../Common/DateTimes.hpp"
 
 #ifndef STAGECONTAINER_HPP
 #define STAGECONTAINER_HPP
@@ -113,7 +114,8 @@ public:
 		};
 		
 		using StageUtilitiesStatemenent = UtilitiesStatement<Config>;
-		StageUtilitiesStatemenent::Instance().Calculate();
+		StageUtilitiesStatemenent::Instance(DateTimes::Year(2022))->Calculate();
+		StageUtilitiesStatemenent::Instance(DateTimes::Year(2021));
 	}
 private:
 	static void ExtractValues(CsvValuesIterator begin, CsvValuesIterator end)
@@ -185,7 +187,8 @@ public:
 		};
 		
 		using StageUtilitiesStatemenent = UtilitiesStatement<Config>;
-		StageUtilitiesStatemenent::Instance().Calculate();
+		StageUtilitiesStatemenent::Instance(DateTimes::Year(2022))->Calculate();
+		StageUtilitiesStatemenent::Instance(DateTimes::Year(2021));
 		Base::template CalculateInternal<AllT>();
 	}
 	

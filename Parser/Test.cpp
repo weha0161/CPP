@@ -27,6 +27,7 @@ int main()
 //     std::cout<<(s+a)<<std::endl;
 
 	std::cout<<"END"<<std::endl;
+	std::cout<<"END2"<<std::endl;
 
     return 0;
 }

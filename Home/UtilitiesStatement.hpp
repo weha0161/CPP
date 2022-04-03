@@ -3,6 +3,7 @@
 #include "../Unit/Unit.h"
 #include "../Quantity/Quantity.h"
 #include "../Calculator/Calculator.hpp"
+#include "../Common/DateTimes.hpp"
 #include "Parser.hpp"
 #include "CounterConfiguration.hpp"
 #include "StageQuantities.hpp"
@@ -10,7 +11,9 @@
 
 #ifndef UTILITIESSTATEMENT_HPP
 #define UTILITIESSTATEMENT_HPP
-using YearType = uint;
+using YearType = DateTimes::Year;
+
+struct UtilitiesStatementItem{};
 
 template<typename ConfigT>
 class UtilitiesStatement
@@ -20,19 +23,30 @@ public:
 	using Configuration = ConfigT;
 	using Stage = Configuration::Stage;
 	using All = Configuration::All;
+	template<typename T>
+	using ValueType = std::shared_ptr<T>;
+	using Item = UtilitiesStatementItem;
+	using ItemsType = std::map<std::string, ValueType<Item>>;
+	using StatetementsType = std::map<DateTimes::Year, ValueType<Type>>;
 	
 	inline static const char* Name = Configuration::Name;
 		
-	static UtilitiesStatement& Instance()
+// 	static UtilitiesStatement& Instance()
+	static ValueType<Type> Instance(YearType year)
 	{
-		static UtilitiesStatement instance = UtilitiesStatement();
-		return instance;
+		if(!statements->contains(year))
+			statements->insert({year, std::make_shared<Type>(year)});
+		return statements->at(year);
 	}
 	
-	UtilitiesStatement(){ Logger::Log()<<"CTOR: "<<"UtilitiesStatement"<<std::endl;}	
-	UtilitiesStatement(YearType y): year(y) { Logger::Log()<<"CTOR: "<<"UtilitiesStatement"<<y<<std::endl;}	
-	~UtilitiesStatement()	{ Logger::Log()<<"Destructor"<<std::endl; }
+	UtilitiesStatement(YearType y): year(y), items(std::make_shared<ItemsType>()) 
+	{ 
+		this->items->insert({"TEST",std::make_shared<Item>()});
+		Logger::Log()<<"CTOR: "<<"UtilitiesStatement"<<y.Value()<<std::endl;
+		auto v = this->items->at("TEST");
+	}
 	
+	~UtilitiesStatement()	{ Logger::Log()<<"Destructor"<<std::endl; }
 	void Calculate() 
 	{
 		Logger::Log()<<"US: "<<Stage::Number<<std::endl;
@@ -49,6 +63,15 @@ public:
 	}
 	
 private:
+	UtilitiesStatement(): year(2000), items(std::make_shared<ItemsType>()) { 
+		this->items->insert({"TEST",std::make_shared<Item>()});
+		Logger::Log()<<"CTOR: "<<"UtilitiesStatement"<<year.Value()<<std::endl;
+		auto v = this->items->at("TEST");
+	}	
+	ValueType<ItemsType> items;
+	
+	inline static ValueType<StatetementsType> statements = std::make_shared<StatetementsType>(); 
+	
 	YearType year;
 	
 };

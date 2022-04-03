@@ -1,6 +1,7 @@
 #include <iostream>
 #include "String_.hpp"
-#include "Parser.hpp"
+// #include "Parser.hpp"
+#include "AtomPassingParser.hpp"
 #include "../Traits/Traits.h"
 // #include "../AbstractFactory/AbstractFactory.hpp"
 using namespace String_;
@@ -21,11 +22,17 @@ int main()
 	const std::string pathToShow{ "/home/markus/Dokumente/cpp/File" };
 
     auto c = String_::Split<del>(pathToShow);
-	
+	auto p = String_::Parser();
+	/*
 	Atom A;
 	auto ns = std::string("Name 29 Test");
-	atom->make(ns);
+	auto r = atom->make(ns);
     std::cout<<atom->Value()<<std::endl;
+	std::cout<<"a == 65 "<<isNA(64)<<std::endl;
+	std::cout<<"a == 65 "<<isNA(64)<<std::endl;
     std::cout<<NumberInstance.Name()<<std::endl;
+    std::cout<<NumberInstance.Value()<<std::endl;
+    std::cout<<r->Value()<<std::endl;
+    std::cout<<r->Name()<<std::endl;*/
     return 0;
 }

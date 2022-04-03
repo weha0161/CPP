@@ -4,8 +4,10 @@
 #include <vector>
 // #include <strstream>
 #include "../Wrapper/Wrapper.hpp"
+#include "../Wrapper/Wrapper.hpp"
 #include "../Traits/Traits.h"
 #include "../Typelist/Typelist.h"
+#include "../Logger/Logger.hpp"
 
 #ifndef PARSE_HPP
 #define PARSE_HPP
@@ -25,9 +27,10 @@ namespace String_
 		{
 			Atom* ret = 0;
 			extern Atom* atom;
-			for(Atom* a = list; a; a = a->next)
+			for(Atom* a = list; a != nullptr; a = a->next)
 			{
-				if( a != atom)
+				Logger::Log()<<s<<std::endl;
+// 				if( a != atom)
 					if(ret = a->make(s)) break;
 			}
 			
@@ -58,6 +61,7 @@ namespace String_
 				sum = (sum * 10) + s[i] - '0';
 				char c = s[i];
 				err = !(ispunct(c) || isspace(c));
+				Logger::Log()<<s<<std::endl;
 			}			
 		}
 		
@@ -103,6 +107,7 @@ namespace String_
 				delete ret;
 				ret = 0;
 			}
+			Logger::Log()<<s<<std::endl;
 			
 			return ret;
 		}
@@ -125,9 +130,28 @@ namespace String_
 			
 		};
 				
-		void Parse()
+		void Parse(std::string& s)
 		{
-		
+			Atom* a = nullptr;
+			if(s.length())
+			{
+				switch(s.at(0))
+				{
+					
+					case '0':
+					case '1':
+					case '2':
+					case '3':
+					case '4':
+					case '5':
+					case '6':
+					case '7':
+					case '8':
+					case '9': a = new Number(s); break;
+					case '.': a = new Number(s); break;
+					default: a = new Word(s); break;
+				}
+			}
 		}
 		
 		virtual ~Parser(){};

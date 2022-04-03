@@ -21,6 +21,9 @@ namespace DateTimes
 		bool operator==(int i){ return this->value == i;};
 		bool operator==(T t){ return this->value == t.Value();};
 		bool operator==(Derived d){ return this->value == d->Value();};
+
+		bool operator<(T t) const{ return this->value < t.Value();};
+		bool operator>(T t) const{ return this->value > t.Value();};
 	protected:
 		const uint value;
 	};

@@ -1,16 +1,15 @@
 #include "../String/String_.hpp"
 #include "../Logger/Logger.hpp"
+#include "../Common/DateTimes.hpp"
 #include <memory>
-// #include "UtilitiesStatement.hpp"
 
 #ifndef YEARDATAS_HPP
 #define YEARDATAS_HPP
 
-
 template<typename>
 struct UtilitiesStatement;
 
-using YearType = uint;
+using YearType = DateTimes::Year;
 
 template<typename T>
 struct YearDatas
@@ -19,7 +18,7 @@ struct YearDatas
 	
 	YearDatas(YearType y): year(y) 
 	{ 		
-		Logger::Log()<<"CTOR: "<<"YearDatas"<<y<<std::endl;
+		Logger::Log()<<"CTOR: "<<"YearDatas"<<y.Value()<<std::endl;
 	}	
 	~YearDatas(){ Logger::Log()<<"Destructor"<<std::endl; }
 	
