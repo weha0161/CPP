@@ -5,6 +5,7 @@
 #include <memory>
 #include "AtomContainer.hpp"
 #include "Atoms.hpp"
+#include "ParserState.hpp"
 #include "../Wrapper/Wrapper.hpp"
 #include "../Traits/Traits.h"
 #include "../Typelist/Typelist.h"
@@ -17,24 +18,15 @@ namespace String_
 {
 	class Parser
 	{	
-		struct ParserState
-		{
-			void Set(const std::string& s){ ParserState::value = std::make_shared<std::string>(s); ++ctr;}
-			std::shared_ptr<std::string> Get() const {  return ParserState::value;}
-			uint Counter(){ return ParserState::ctr; }
-		private:
-			inline static uint ctr = 0;
-			inline static std::shared_ptr<std::string> value = std::make_shared<std::string>();
-		};
 	public:
-		using Types = Typelist<Atom<int, ParserState>,Atom<uint, ParserState>,Atom<double, ParserState>,Atom<std::string, ParserState>,Atom<char, ParserState>>;
+		using Types = Typelist<Atom<int>,Atom<uint>,Atom<double>,Atom<std::string>,Atom<char>>;
 		using AtomConatinerType = AtomContainer<Types>::ContainerType;
 		
 		Parser(): state(std::make_shared<ParserState>())
 		{
-			this->state->Set("1");
+			this->state->Set("TEST1");
 			AtomConatinerType::Instance().make(this->state);
-			this->state->Set("2");
+			this->state->Set("TEST2");
 			AtomConatinerType::Instance().make(this->state);
 // 			
 		};

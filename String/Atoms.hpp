@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include "ParserState.hpp"
 #include "../Wrapper/Wrapper.hpp"
 #include "../Traits/Traits.h"
 #include "../Typelist/Typelist.h"
@@ -13,17 +14,17 @@
 
 namespace String_
 {
-	template<typename,typename>
+	template<typename>
 	class Atom;
 	
-	template<typename T,typename ParserState>
+	template<typename T>
 	class AtomBase
 	{
 	public:
 		using State = ParserState;
-		using Base = AtomBase<T, ParserState>;
+		using Base = AtomBase<T>;
 		using ValueType = T;
-		using Type = Atom<T,ParserState>;
+		using Type = Atom<T>;
 		
 		static Type& Instance()
 		{
@@ -31,10 +32,10 @@ namespace String_
 			return instance;
 		}
 		
-		
 		bool make(std::shared_ptr<ParserState> state)
 		{
-			Logger::Log()<<"Atom: "<<state->Counter()<<*state->Get()<<std::endl;
+			state->Increment();
+			Logger::Log()<<"Atom: "<<state->CurrentVal()<<std::endl;
 			if(Type::Instance().Is())
 				return false;
 // 				return Type::Parse(s);
@@ -52,34 +53,34 @@ namespace String_
 		Type& operator=(const Type&){};
 	};
 	
-	template<typename T, typename ParserState>
-	class Atom: public AtomBase<T,ParserState>
+	template<typename T>
+	class Atom: public AtomBase<T>
 	{
-		friend class AtomBase<T,ParserState>;
+		friend class AtomBase<T>;
 	protected:
 		bool Is(){ return true; }
 		Atom() = default;
 	};
 	
-	template<typename ParserState>
-	class Atom<int, ParserState>: public AtomBase<int,ParserState>
+	template<>
+	class Atom<int>: public AtomBase<int>
 	{
-		friend class AtomBase<int,ParserState>;
+		friend class AtomBase<int>;
 	public:
 
 	protected:
 		bool Is(){ return true; }
-		Atom<int,ParserState>() = default;
+		Atom<int>() = default;
 	};
 	
-	template<typename ParserState>
-	class Atom<std::string, ParserState>: public AtomBase<std::string,ParserState>
+	template<>
+	class Atom<std::string>: public AtomBase<std::string>
 	{
-		friend class AtomBase<std::string,ParserState>;
+		friend class AtomBase<std::string>;
 	public:
 	protected:
 		bool Is(){ return true; }
-		Atom<std::string,ParserState>() = default;
+		Atom<std::string>() = default;
 	};	
 }
 
