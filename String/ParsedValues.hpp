@@ -13,8 +13,11 @@
 
 namespace String_
 {
+	struct ParserState;
+	
 	class ParsedValue
 	{
+		friend class ParserState;
 	public:
 		using ParaType = std::shared_ptr<std::string>;
 		using BasePtrType = std::shared_ptr<ParsedValue>;
@@ -30,8 +33,9 @@ namespace String_
 		ParsedValue& operator=(const ParsedValue&){ return *this;};
 		ParsedValue(const ParsedValue& c){};
 		ParsedValue(BasePtrType n = nullptr): next{n}{};
-		ParsedValue(ParaType s,BasePtrType n = nullptr): next{n}, strValue{s}{
-			};
+		ParsedValue(ParaType s,BasePtrType n = nullptr): next{n}, strValue{s}{	};
+	private:
+		void setNext(BasePtrType ptr){ this->next = ptr; Logger::Log()<<"Add"<<std::endl; }
 	};
 	
 	class ParsedInt: public ParsedValue
@@ -50,6 +54,7 @@ namespace String_
 	public:
 		ParsedWord(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
 		{
+			Logger::Log()<<"VAL: "<<*val<<std::endl;
 		}
 		
 		std::string Value(){ return "Test"; }

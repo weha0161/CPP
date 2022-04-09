@@ -24,7 +24,7 @@ namespace String_
 		
 		Parser(): state(std::make_shared<ParserState>())
 		{
-			this->state->Set("TEST1");
+			this->state->Set("TESTFX1");
 			Logger::Log()<<*(this->state->Get())<<std::endl;
 			Logger::Log()<<*(this->state->Begin())<<std::endl;
 			AtomConatinerType::Instance().make(this->state);

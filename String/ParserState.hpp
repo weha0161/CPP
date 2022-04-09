@@ -30,7 +30,13 @@ namespace String_
 		void Set(const std::string& s){ this->value = std::make_shared<std::string>(s);}
 		std::shared_ptr<std::string> Get() const {  return this->value;}
 		
-		void Add(ValueType v){ this->parsedValues->push_back(v); }
+		void Add(ValueType v)
+		{ 
+			if(this->parsedValues->size() > 1)
+				v->setNext(*(this->parsedValues->cbegin()));
+				
+			this->parsedValues->push_back(v); 
+		}
 	private:
 		uint ctr = 0;
 		std::unique_ptr<ContainerType> parsedValues = std::make_unique<ContainerType>();

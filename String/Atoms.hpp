@@ -43,10 +43,13 @@ namespace String_
 			Logger::Log()<<"Atom: "<<*(state->Current())<<std::endl;
 			if(!Type::Instance().Is(state->Current()))
 				return false;
-// 				return Type::Parse(s);
 			
-			Logger::Log()<<"Current: "<<state->CurrentVal()<<std::endl;
-			state->Add(std::make_shared<ParsedInt>(std::make_shared<std::string>("123")));
+			uint ctr = 0;
+			while(Type::Instance().Is(state->Current() + ctr)) 
+				++ctr;
+				
+			Logger::Log()<<"Current: "<<*(state->Current() + ctr)<<std::endl;
+			state->Add(std::make_shared<ParsedWord>(std::make_shared<std::string>(state->Current(),state->Current() + ctr)));
 			return true;
 		}
 		

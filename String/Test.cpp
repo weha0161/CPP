@@ -25,7 +25,7 @@ int main()
 	auto p = String_::Parser();
 	
 	auto pi = std::make_shared<String_::ParsedInt>(std::make_shared<std::string>("3"));
-	auto pw = std::make_shared<String_::ParsedWord>(std::make_shared<std::string>("TRE"), pi);
+	auto pw = std::make_shared<String_::ParsedWord>(std::make_shared<std::string>("TRE_84684"), pi);
 	
 	auto pwn = std::dynamic_pointer_cast<String_::ParsedInt>(pw->Next());
 	
