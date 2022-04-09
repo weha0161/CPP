@@ -1,7 +1,7 @@
 #include <iostream>
 #include "String_.hpp"
-// #include "Parser.hpp"
 #include "AtomPassingParser.hpp"
+#include "ParsedValues.hpp"
 #include "../Traits/Traits.h"
 // #include "../AbstractFactory/AbstractFactory.hpp"
 using namespace String_;
@@ -23,6 +23,13 @@ int main()
 
     auto c = String_::Split<del>(pathToShow);
 	auto p = String_::Parser();
+	
+	auto pi = std::make_shared<String_::ParsedInt>(std::make_shared<std::string>("3"));
+	auto pw = std::make_shared<String_::ParsedWord>(std::make_shared<std::string>("TRE"), pi);
+	
+	auto pwn = std::dynamic_pointer_cast<String_::ParsedInt>(pw->Next());
+	
+    std::cout<<pwn->Value()<<std::endl;
 	/*
 	Atom A;
 	auto ns = std::string("Name 29 Test");
