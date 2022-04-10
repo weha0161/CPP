@@ -19,7 +19,7 @@ int main()
 	std::cout<<"a == a "<<isNA('a')<<std::endl;
 	std::cout<<"a == 64 "<<isNA(64)<<std::endl;
 	
-	const std::string pathToShow{ "/home/markus/Dokumente/cpp/File" };
+	const std::string pathToShow{ "../ home/ markus/Dok umente/cpp/Fi\nle23" };
 
     auto c = String_::Split<del>(pathToShow);
 	auto p = String_::Parser();

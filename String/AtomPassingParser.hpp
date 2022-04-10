@@ -20,7 +20,7 @@ namespace String_
 	class Parser
 	{	
 	public:
-		using Types = Typelist<Atom<ParsedPunct>,Atom<int>,Atom<uint>,Atom<std::string>,Atom<char>>;
+		using Types = Typelist<Atom<ParsedPunct>, Atom<ParsedBlank>, Atom<ParsedSpace>,Atom<uint>,Atom<std::string>,Atom<char>>;
 		using AtomConatinerType = AtomContainer<Types>::ContainerType;
 		
 		Parser(): state(std::make_shared<ParserState>())

@@ -49,11 +49,12 @@ namespace String_
 	{
 		using PtrType = std::shared_ptr<ParsedInt>;
 	public:
-		ParsedInt(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
+		ParsedInt(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): vals(std::make_shared<std::vector<uint>>()), ParsedValue(val, next)
 		{
 			Logger::Log()<<"VAL Constructor Int: "<<*val<<std::endl;
 		}
-		int Value(){ return 5; }
+		uint Value(){ return 5; }
+		std::shared_ptr<std::vector<uint>> vals;
 	};
 	
 	class ParsedWord: public ParsedValue
@@ -75,6 +76,30 @@ namespace String_
 		ParsedPunct(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
 		{
 			Logger::Log()<<"VAL Constructor Point: "<<*val<<std::endl;
+		}
+		
+		std::string Value(){ return "Test"; }
+	};
+	
+	class ParsedBlank: public ParsedValue
+	{
+		using PtrType = std::shared_ptr<ParsedBlank>;
+	public:
+		ParsedBlank(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
+		{
+			Logger::Log()<<"VAL Constructor Blank: "<<*val<<std::endl;
+		}
+		
+		std::string Value(){ return "Test"; }
+	};
+	
+	class ParsedSpace: public ParsedValue
+	{
+		using PtrType = std::shared_ptr<ParsedSpace>;
+	public:
+		ParsedSpace(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
+		{
+			Logger::Log()<<"VAL Constructor Spacce: "<<*val<<std::endl;
 		}
 		
 		std::string Value(){ return "Test"; }

@@ -71,7 +71,7 @@ namespace String_
 	};
 	
 	template<>
-	class Atom<int>: public AtomBase<int, ParsedInt>
+	class Atom<uint>: public AtomBase<uint, ParsedInt>
 	{
 		friend class AtomBase<int,ParsedInt>;
 	public:
@@ -89,9 +89,25 @@ namespace String_
 	template<>
 	class Atom<ParsedPunct>: public AtomBase<ParsedPunct, ParsedPunct>
 	{
-		friend class AtomBase<std::string,ParsedPunct>;
+		friend class AtomBase<ParsedPunct,ParsedPunct>;
 	public:
 		bool Is(It it){ return std::ispunct(*it); }
+	};
+		
+	template<>
+	class Atom<ParsedBlank>: public AtomBase<ParsedBlank, ParsedBlank>
+	{
+		friend class AtomBase<ParsedBlank, ParsedBlank>;
+	public:
+		bool Is(It it){ return std::isblank(*it); }
+	};
+		
+	template<>
+	class Atom<ParsedSpace>: public AtomBase<ParsedSpace, ParsedSpace>
+	{
+		friend class AtomBase<ParsedSpace, ParsedSpace>;
+	public:
+		bool Is(It it){ return std::isspace(*it); }
 	};	
 }
 
