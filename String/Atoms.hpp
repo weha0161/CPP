@@ -44,12 +44,13 @@ namespace String_
 			if(!Type::Instance().Is(state->Current()))
 				return false;
 			
+			Logger::Log()<<"Current 1: "<<*(state->Current())<<std::endl;
 			uint ctr = 0;
 			while(Type::Instance().Is(state->Current() + ctr)) 
 				++ctr;
 				
-			Logger::Log()<<"Current: "<<*(state->Current() + ctr)<<std::endl;
-			state->Add(std::make_shared<ParsedWord>(std::make_shared<std::string>(state->Current(),state->Current() + ctr)));
+			Logger::Log()<<"Current: "<<*(state->Current() + ctr-1)<<std::endl;
+			state->Add(std::make_shared<ParsedT>(std::make_shared<std::string>(state->Current(),state->Current() + ctr)));
 			return true;
 		}
 		
@@ -65,12 +66,11 @@ namespace String_
 	};
 	
 	template<typename T>
-	class Atom: public AtomBase<T,void>
+	class Atom: public AtomBase<T,ParsedWord>
 	{
-		friend class AtomBase<T,void>;
+		friend class AtomBase<T,ParsedWord>;
 	public:
 		bool Is(It it){ return false; }
-		bool Parse(AtomBase<T,void>::StatePara state){ return true; }
 	};
 	
 	template<>

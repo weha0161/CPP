@@ -22,8 +22,15 @@ namespace String_
 		using ParaType = std::shared_ptr<std::string>;
 		using BasePtrType = std::shared_ptr<ParsedValue>;
 		BasePtrType Next() { return this->next; };
-		//~ static str Make
+
+		ParaType ParseValue(){ return this->strValue;}
 		
+		std::ostream& Display(std::ostream& out)
+        {
+			out<<*(this->strValue)<<std::endl;
+			
+			return out;
+        }
 	protected:
 		int ctr;
 		ParaType strValue;
@@ -44,6 +51,7 @@ namespace String_
 	public:
 		ParsedInt(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
 		{
+			Logger::Log()<<"VAL Constructor Int: "<<*val<<std::endl;
 		}
 		int Value(){ return 5; }
 	};
@@ -54,7 +62,7 @@ namespace String_
 	public:
 		ParsedWord(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
 		{
-			Logger::Log()<<"VAL: "<<*val<<std::endl;
+			Logger::Log()<<"VAL Constructor Word: "<<*val<<std::endl;
 		}
 		
 		std::string Value(){ return "Test"; }

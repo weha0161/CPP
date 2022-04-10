@@ -32,16 +32,32 @@ namespace String_
 		
 		void Add(ValueType v)
 		{ 
-			if(this->parsedValues->size() > 1)
-				v->setNext(*(this->parsedValues->cbegin()));
-				
+			if(this->parsedValues->size() > 0)
+				(*(this->parsedValues->end()-1))->setNext(v);
+			
+			this->ctr += v->ParseValue()->size();	
 			this->parsedValues->push_back(v); 
 		}
+		
+		std::ostream& Display(std::ostream& out)
+        {
+			for(auto it = this->parsedValues->cbegin(); it != this->parsedValues->cend(); ++it)
+				(*it)->Display(out);
+			
+			return out;
+        }
+
 	private:
 		uint ctr = 0;
 		std::unique_ptr<ContainerType> parsedValues = std::make_unique<ContainerType>();
 		std::shared_ptr<std::string> value = std::make_shared<std::string>();
 	};
+	
+	std::ostream& operator<<(std::ostream& strm, std::shared_ptr<ParserState> c)
+	{
+	        return c->Display(strm);
+	}
+
 }
 
 #endif

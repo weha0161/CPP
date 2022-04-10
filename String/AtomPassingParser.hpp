@@ -24,12 +24,15 @@ namespace String_
 		
 		Parser(): state(std::make_shared<ParserState>())
 		{
-			this->state->Set("TESTFX1");
-			Logger::Log()<<*(this->state->Get())<<std::endl;
-			Logger::Log()<<*(this->state->Begin())<<std::endl;
-			AtomConatinerType::Instance().make(this->state);
-			this->state->Set("TEST2");
-			AtomConatinerType::Instance().make(this->state);
+			this->state->Set("TESTFX1123MMM456UKI");
+			//~ Logger::Log()<<*(this->state->Get())<<std::endl;
+			//~ Logger::Log()<<*(this->state->Begin())<<std::endl;
+			while(this->state->Current()!= this->state->End())
+				AtomConatinerType::Instance().make(this->state);
+			
+			this->state->Display(std::cout);
+			//~ this->state->Set("TEST2");
+			//~ AtomConatinerType::Instance().make(this->state);
 // 			
 		};
 				
