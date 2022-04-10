@@ -42,7 +42,7 @@ namespace String_
 		ParsedValue(BasePtrType n = nullptr): next{n}{};
 		ParsedValue(ParaType s,BasePtrType n = nullptr): next{n}, strValue{s}{	};
 	private:
-		void setNext(BasePtrType ptr){ this->next = ptr; Logger::Log()<<"Add"<<std::endl; }
+		void setNext(BasePtrType ptr){ this->next = ptr; }
 	};
 	
 	class ParsedInt: public ParsedValue
@@ -63,6 +63,18 @@ namespace String_
 		ParsedWord(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
 		{
 			Logger::Log()<<"VAL Constructor Word: "<<*val<<std::endl;
+		}
+		
+		std::string Value(){ return "Test"; }
+	};
+	
+	class ParsedPunct: public ParsedValue
+	{
+		using PtrType = std::shared_ptr<ParsedPunct>;
+	public:
+		ParsedPunct(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
+		{
+			Logger::Log()<<"VAL Constructor Point: "<<*val<<std::endl;
 		}
 		
 		std::string Value(){ return "Test"; }

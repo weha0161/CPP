@@ -27,7 +27,7 @@ namespace String_
 		void Increment() { ++ctr; }
 		uint Counter(){ return this->ctr; }
 		
-		void Set(const std::string& s){ this->value = std::make_shared<std::string>(s);}
+		void Set(std::shared_ptr<std::string> s){ this->value = s;}
 		std::shared_ptr<std::string> Get() const {  return this->value;}
 		
 		void Add(ValueType v)

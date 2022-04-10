@@ -40,16 +40,13 @@ namespace String_
 		
 		bool make(StatePara state)
 		{
-			Logger::Log()<<"Atom: "<<*(state->Current())<<std::endl;
 			if(!Type::Instance().Is(state->Current()))
 				return false;
 			
-			Logger::Log()<<"Current 1: "<<*(state->Current())<<std::endl;
 			uint ctr = 0;
 			while(Type::Instance().Is(state->Current() + ctr)) 
 				++ctr;
 				
-			Logger::Log()<<"Current: "<<*(state->Current() + ctr-1)<<std::endl;
 			state->Add(std::make_shared<ParsedT>(std::make_shared<std::string>(state->Current(),state->Current() + ctr)));
 			return true;
 		}
@@ -58,7 +55,7 @@ namespace String_
 	protected:
 		inline static std::shared_ptr<ContainerType> values = std::make_shared<ContainerType>();
 
-		~AtomBase()	{ /*Logger::Log()<<"Destructor"<<std::endl;*/ }
+		~AtomBase()	{  }
 		AtomBase& operator=(const AtomBase&){};
 		AtomBase(const AtomBase& c){};
 		AtomBase(){};
@@ -87,6 +84,14 @@ namespace String_
 		friend class AtomBase<std::string,ParsedWord>;
 	public:
 		bool Is(It it){ return std::isalpha(*it); }
+	};	
+	
+	template<>
+	class Atom<ParsedPunct>: public AtomBase<ParsedPunct, ParsedPunct>
+	{
+		friend class AtomBase<std::string,ParsedPunct>;
+	public:
+		bool Is(It it){ return std::ispunct(*it); }
 	};	
 }
 

@@ -6,6 +6,7 @@
 #include "AtomContainer.hpp"
 #include "Atoms.hpp"
 #include "ParserState.hpp"
+#include "ParsedValues.hpp"
 #include "../Wrapper/Wrapper.hpp"
 #include "../Traits/Traits.h"
 #include "../Typelist/Typelist.h"
@@ -19,28 +20,24 @@ namespace String_
 	class Parser
 	{	
 	public:
-		using Types = Typelist<Atom<int>,Atom<uint>,Atom<double>,Atom<std::string>,Atom<char>>;
+		using Types = Typelist<Atom<ParsedPunct>,Atom<int>,Atom<uint>,Atom<std::string>,Atom<char>>;
 		using AtomConatinerType = AtomContainer<Types>::ContainerType;
 		
 		Parser(): state(std::make_shared<ParserState>())
 		{
-			this->state->Set("TESTFX1123MMM456UKI");
-			//~ Logger::Log()<<*(this->state->Get())<<std::endl;
-			//~ Logger::Log()<<*(this->state->Begin())<<std::endl;
+		};
+				
+		void Parse(std::shared_ptr<std::string> sp)
+		{
+			this->state->Set(sp);
 			while(this->state->Current()!= this->state->End())
 				AtomConatinerType::Instance().make(this->state);
 			
 			this->state->Display(std::cout);
-			//~ this->state->Set("TEST2");
-			//~ AtomConatinerType::Instance().make(this->state);
-// 			
-		};
-				
-		void Parse(std::string& s)
+		}
+		void Parse(const std::string& s)
 		{
-// 			Atom* a = nullptr;
-			if(s.length())
-				{}
+			this->Parse(std::make_shared<std::string>(s));
 		}
 		
 		virtual ~Parser(){};
