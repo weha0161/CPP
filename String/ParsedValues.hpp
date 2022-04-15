@@ -123,11 +123,10 @@ namespace String_
 			
 			for(auto it = ret->cbegin(); it != ret->cend();++it)
 			{
-				Logger::Log()<<"VALS "<<**it<<std::endl;
-				
+				Logger::Log()<<"VALS "<<**it<<std::endl;				
+				SpecialAtomContainerType::Instance().Parse(*it);
 			}
 			
-			SpecialAtomContainerType::Instance().Parse(val);
 			Logger::Log()<<"VAL Constructor Point: "<<*val<<std::endl;
 		}
 		
@@ -139,7 +138,7 @@ namespace String_
 	{
 	public:
 		using Base = ParsedPunct;
-		SpecializedPunctation(): ParsedPunct(){};
+		SpecializedPunctation(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedPunct(val, next){};
 	};
 	
 	class ParsedBlank: public ParsedValue

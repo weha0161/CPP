@@ -38,10 +38,10 @@ namespace String_
 			return Type::Display(os);
 		}
 		
-		ReturnType Parse(ParaType state)
+		ReturnType Parse(ParaType p)
 		{
-			Logger::Log()<<"IS: "<<(state->at(0)==Head::Value)<<" "<<Head::Value<<" "<<state->at(0)<<std::endl;
-			return std::make_shared<B>();
+			Logger::Log()<<"IS: "<<(p->at(0)==Head::Value)<<" "<<Head::Value<<" "<<p->at(0)<<std::endl;
+			return std::make_shared<B>(p);
 		}
 
 		template<unsigned N>
@@ -75,10 +75,10 @@ namespace String_
 		template<unsigned N>
 		auto Get() { return At<SpecialAtomTypes,N>::Type; }
 		
-		Base::ReturnType Parse(ParaType state)
+		Base::ReturnType Parse(ParaType p)
 		{
-			Logger::Log()<<"IS: "<<(state->at(0)==Head::Value)<<" "<<Head::Value<<" "<<state->at(0)<<std::endl;
-			return std::make_shared<T<Head>>();
+			Logger::Log()<<"IS: "<<(p->at(0)==Head::Value)<<" "<<Head::Value<<" "<<p->at(0)<<std::endl;
+			return std::make_shared<T<Head>>(p);
 		}
 
 		static SpecialAtomContainer& Instance()
