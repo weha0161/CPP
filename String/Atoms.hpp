@@ -47,7 +47,9 @@ namespace String_
 			while(Type::Instance().Is(state->Current() + ctr)) 
 				++ctr;
 				
-			state->Add(std::make_shared<ParsedT>(std::make_shared<std::string>(state->Current(),state->Current() + ctr)));
+			auto para = std::make_shared<std::string>(state->Current(),state->Current() + ctr);
+			
+			state->Add(std::make_shared<ParsedT>(para));
 			return true;
 		}
 		

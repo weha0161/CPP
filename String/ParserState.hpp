@@ -18,6 +18,7 @@ namespace String_
 		using Iterator = std::string::const_iterator;
 		using ValueType = std::shared_ptr<ParsedValue>;
 		using ContainerType = std::vector<ValueType>;
+		using ContainerParaType = std::shared_ptr<ContainerType>;
 		
 		Iterator Current() { return (this->value->cbegin() + ctr);}
 		Iterator End() { return this->value->cend();}
@@ -30,9 +31,14 @@ namespace String_
 		void Set(std::shared_ptr<std::string> s){ this->value = s;}
 		std::shared_ptr<std::string> Get() const {  return this->value;}
 		
+		void Add(ContainerParaType v)
+		{ 
+			std::for_each(v->cbegin(), v->cend(), [this](auto i){ this->Add(i); });
+		}
+		
 		void Add(ValueType v)
 		{ 
-			if(this->parsedValues->size() > 0)
+			if(this->parsedValues->size() > 0 && (*(this->parsedValues->end()-1))->Next() == nullptr)
 				(*(this->parsedValues->end()-1))->setNext(v);
 			
 			this->ctr += v->ParseValue()->size();	
