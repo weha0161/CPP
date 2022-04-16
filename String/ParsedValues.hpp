@@ -53,14 +53,26 @@ namespace String_
 		ParsedValue(BasePtrType n = nullptr): next{n}{};
 		ParsedValue(ParaType s,BasePtrType n = nullptr): next{n}, strValue{s}{	};
         
-        void P()
+        auto extractCommonAtom(ParsedValue::ParaType val)
         {
-			uint i = 1;
-			auto it = strValue->cend();
-			for(; (it-i) != strValue->cbegin();++i)
-				Logger::Log()<<"VAL Constructor Word: "<<*(it-i)<<std::endl;
+			auto ret = std::make_shared<std::vector<ParaType>>();
+			auto first = *(val->cbegin());
+			auto temp = std::string(val->cbegin(),val->cbegin()+1);
 			
-			Logger::Log()<<"VAL Constructor Word: "<<*(it-i)<<std::endl;
+			for(auto it = val->cbegin() + 1; it != val->cend();++it)
+			{
+				if(temp.at(0) == *it)
+					temp +=*it;
+				else
+				{
+					ret->push_back(std::make_shared<std::string>(temp.cbegin(), temp.cend()));
+					temp = std::string(it,it+1);
+				}
+			}
+
+			ret->push_back(std::make_shared<std::string>(temp.cbegin(), temp.cend()));
+			
+			return ret;
 		}
 	private:
 		void setNext(BasePtrType ptr){ this->next = ptr; }
@@ -100,33 +112,8 @@ namespace String_
 		using Types = Typelist<T::char_<'.'>,T::char_<','>>;
 		using SpecialAtomContainerType = SpecialAtomContainer<ParsedPunct, SpecializedPunctation, Types>::ContainerType;
 	public:
-		ParsedPunct(){};
 		ParsedPunct(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
-		{
-			
-			auto ret = std::make_shared<std::vector<ParaType>>();
-			auto first = *(val->cbegin());
-			auto temp = std::string(val->cbegin(),val->cbegin()+1);
-			
-			for(auto it = val->cbegin() + 1; it != val->cend();++it)
-			{
-				if(temp.at(0) == *it)
-					temp +=*it;
-				else
-				{
-					ret->push_back(std::make_shared<std::string>(temp.cbegin(), temp.cend()));
-					temp = std::string(it,it+1);
-				}
-			}
-
-			ret->push_back(std::make_shared<std::string>(temp.cbegin(), temp.cend()));
-			
-			for(auto it = ret->cbegin(); it != ret->cend();++it)
-			{
-				Logger::Log()<<"VALS "<<**it<<std::endl;				
-				SpecialAtomContainerType::Instance().Parse(*it);
-			}
-			
+		{						
 			Logger::Log()<<"VAL Constructor Point: "<<*val<<std::endl;
 		}
 		
