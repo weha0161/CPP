@@ -75,7 +75,11 @@ namespace String_
 			return ret;
 		}
 	private:
-		void setNext(BasePtrType ptr){ this->next = ptr; }
+		void setNext(BasePtrType ptr)
+		{ 
+			Logger::LOg()<<"Current: "<<this->*strValue<<"Next: "<<ptr->*ParsedValue()<<std::endl;
+			this->next = ptr; 
+		}
 	};
 	
 	class ParsedInt: public ParsedValue
