@@ -48,8 +48,7 @@ namespace String_
 				++ctr;
 				
 			auto para = std::make_shared<std::string>(state->Current(),state->Current() + ctr);
-			
-			state->Add(std::make_shared<ParsedT>(para));
+			state->Add(Creator<ParsedT>::Parse(para));
 			return true;
 		}
 		

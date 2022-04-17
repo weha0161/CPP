@@ -42,6 +42,7 @@ namespace String_
 				(*(this->parsedValues->end()-1))->setNext(v);
 			
 			this->ctr += v->ParseValue()->size();	
+			v->setCounter(this->parsedValues->size());
 			this->parsedValues->push_back(v); 
 		}
 		

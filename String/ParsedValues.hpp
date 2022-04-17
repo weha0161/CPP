@@ -37,13 +37,13 @@ namespace String_
 		
 		std::ostream& Display(std::ostream& out)
         {
-			out<<*(this->strValue)<<std::endl;
+			out<<this->ctr<<": "<<*(this->strValue)<<std::endl;
 			
 			return out;
         }
-        
+                
 	protected:
-		int ctr;
+		uint ctr;
 		ParaType strValue;
 		BasePtrType next;
 
@@ -53,7 +53,7 @@ namespace String_
 		ParsedValue(BasePtrType n = nullptr): next{n}{};
 		ParsedValue(ParaType s,BasePtrType n = nullptr): next{n}, strValue{s}{	};
         
-        auto extractCommonAtom(ParsedValue::ParaType val)
+        static auto extractCommonAtoms(ParsedValue::ParaType val)
         {
 			auto ret = std::make_shared<std::vector<ParaType>>();
 			auto first = *(val->cbegin());
@@ -77,9 +77,11 @@ namespace String_
 	private:
 		void setNext(BasePtrType ptr)
 		{ 
-			Logger::LOg()<<"Current: "<<this->*strValue<<"Next: "<<ptr->*ParsedValue()<<std::endl;
+			//~ Logger::Log()<<"Current: "<<*(this->strValue)<<"Next: "<<*(ptr->ParseValue())<<std::endl;
 			this->next = ptr; 
 		}
+		
+		void setCounter(uint c)	{ this->ctr = c; }
 	};
 	
 	class ParsedInt: public ParsedValue
@@ -121,6 +123,15 @@ namespace String_
 			Logger::Log()<<"VAL Constructor Point: "<<*val<<std::endl;
 		}
 		
+		static auto Create(ParsedValue::ParaType p)
+		{
+			auto commons = extractCommonAtoms(p);
+			ReturnType ret = std::make_shared<std::vector<PtrType>>();
+			for(auto it = commons->cbegin(); it != commons->cend(); ++it)
+				ret->push_back(SpecialAtomContainerType::Instance().Parse(*it));
+			return ret;
+		}
+		
 		std::string Value(){ return "Test"; }
 	};
 	
@@ -154,6 +165,31 @@ namespace String_
 		}
 		
 		std::string Value(){ return "Test"; }
+	};
+	
+	template<typename T>
+	struct Creator
+	{
+		//~ typename T::ContainerParaType operator()(typename T::ParaType p)
+		static typename T::ContainerParaType Parse(typename T::ParaType p)
+		{
+			auto ret = std::make_shared<typename T::ContainerType>();
+			ret->push_back(std::make_shared<T>(p));
+			return ret;
+		}
+	};
+	
+	template<>
+	struct Creator<ParsedPunct>
+	{
+		//~ typename ParsedPunct::ContainerParaType operator()(typename ParsedPunct::ParaType p)
+		static typename ParsedPunct::ContainerParaType Parse(typename ParsedPunct::ParaType p)
+		{
+			auto ret = std::make_shared<typename ParsedPunct::ContainerType>();
+			auto vals = ParsedPunct::Create(p);
+			ret->insert(ret->end(), vals->begin(), vals->end());
+			return ret;
+		}
 	};
 }
 
