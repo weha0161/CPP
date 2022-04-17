@@ -87,10 +87,20 @@ namespace String_
 	class ParsedInt: public ParsedValue
 	{
 		using PtrType = std::shared_ptr<ParsedInt>;
+		inline static auto ZERO = T::char_<'0'>(); 
 	public:
 		ParsedInt(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): vals(std::make_shared<std::vector<uint>>()), ParsedValue(val, next)
 		{
-			Logger::Log()<<"VAL Constructor Int: "<<*val<<std::endl;
+			if(val->size() > 0)
+			{
+				for(auto  i = (val->size())-1;i > 0; --i)
+					vals->push_back((uint)(val->at(i) - ZERO));
+
+				vals->push_back((uint)(val->at(0) - ZERO));
+				Logger::Log()<<"INT Res"<<(vals->size() ? *(vals->cend()-1)  : 0)<<"_"<<(vals->size() ? *(vals->cbegin())  : 0)<<std::endl;
+				//~ std::stoll(*val);
+			}
+				
 		}
 		uint Value(){ return 5; }
 		std::shared_ptr<std::vector<uint>> vals;
