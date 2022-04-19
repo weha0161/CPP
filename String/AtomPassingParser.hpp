@@ -44,7 +44,6 @@ namespace String_
 		
 		
 		ParserState::ContainerParaType Values(){ return this->state->Values(); };
-		void Reset(){ this->state->Reset(); }
 		
 		virtual ~Parser(){};
 	private:		

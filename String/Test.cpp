@@ -22,18 +22,12 @@ int main()
 	const std::string pathToShow{ "05 Basislastschrift;931;Bausparkasse Schwaebisch Hall Aktiengesellschaft - Bau;0;DE96500604000000011404;50060400;GENODEFFXXX;Lastschrift 26219070T01 07.2021 EREF: BSH-2021-06-24LS-358260203 MREF: BSH0000062533540 CRED: DE87BSH00000024981 IBAN: DE96500604000000011404 BIC: GENODEFF ANAM: Bausparkasse Schwaebisch Hall Aktiengesellschaft - Bausparkasse der Vo;BSH-2021-06-24LS-358260203" };
 
 	auto p = String_::Parser();
-	
-	
-	
-	//~ p.Parse(pathToShow);
-    
+	    
 	const std::string dc{ "920_08" };
 	p.Parse(dc);
 	auto v = p.Values();
 	auto vi = std::dynamic_pointer_cast<String_::ParsedInt>(*(v->cbegin()));
 	std::cout<<"Result IS"<<vi->IsDouble()<<std::endl;
-
-	p.Reset();
 
 	const std::string dc1{ "9,8" };
 	p.Parse(dc1);
@@ -41,5 +35,7 @@ int main()
 	auto vi1 = std::dynamic_pointer_cast<String_::ParsedInt>(*(v->cbegin()));
 	std::cout<<vi1->IsDouble()<<std::endl;
 	
+	p.Parse(pathToShow);
+    
     return 0;
 }

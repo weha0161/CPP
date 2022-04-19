@@ -28,7 +28,11 @@ namespace String_
 		void Increment() { ++ctr; }
 		uint Counter(){ return this->ctr; }
 		
-		void Set(std::shared_ptr<std::string> s){ this->value = s;}
+		void Set(std::shared_ptr<std::string> s)
+		{
+			this->reset();
+			this->value = s;
+		}
 		std::shared_ptr<std::string> Get() const {  return this->value;}
 		ContainerParaType Values(){ return this->parsedValues; }
 		
@@ -55,17 +59,17 @@ namespace String_
 			return out;
         }
         
-        void Reset()
-        { 
-			this->parsedValues->clear(); 
-			this->value = nullptr;
-			this->ctr = 0;
-			}
 	private:
 		uint ctr = 0;
 		std::shared_ptr<ContainerType> parsedValues = std::make_shared<ContainerType>();
 		//~ std::unique_ptr<ContainerType> parsedValues = std::make_unique<ContainerType>();
 		std::shared_ptr<std::string> value = std::make_shared<std::string>();
+        void reset()
+        { 
+			this->parsedValues->clear(); 
+			this->value = nullptr;
+			this->ctr = 0;
+		}
 	};
 	
 	std::ostream& operator<<(std::ostream& strm, std::shared_ptr<ParserState> c)

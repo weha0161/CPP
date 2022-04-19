@@ -40,6 +40,9 @@ namespace String_
 			
 			return out;
         }
+        
+        char operator[](uint i) const{ return this->strValue->at(i); }
+        size_t Size() const { return this->strValue->size(); }
                 
 	protected:
 		uint ctr;
@@ -167,13 +170,17 @@ namespace String_
 		uint Cast(){ return 5; }
 		ValuesType Values() { return this->vals; }
 		
-		uint operator[](uint i)	{ return i >= this->vals->size() ? this->vals->at(i) : 0;	}
+		//~ uint operator[](uint i)	const { return i >= this->vals->size() ? this->vals->at(i) : 0;	}
 		
 		bool operator==(const ParsedInt& pi)
 		{
-			//~ if(this->vals->size() == pi->Values()->size())
-				//~ for(auto i = 0; i < this->vals->size())
-					//~ if(this->vals->at(i))
+			if(this->vals->size() != pi.Size())
+				return false;
+				
+			for(auto i = 0; i < this->vals->size(); ++i)
+				if(this->strValue->at(i) != pi[i])
+					return false;
+					
 			return true;
 		}
 	};
