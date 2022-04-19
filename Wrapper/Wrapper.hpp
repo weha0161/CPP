@@ -80,6 +80,11 @@ struct char_
 	
 	operator int() const { return  N; }
 	operator char() const { return  N; }
+	static bool Is(char c) 
+	{ 
+		std::cout<<"CHAR_IS Para:"<<c<<"== T:"<<Value<<std::endl;
+		return c == Value; 
+	}
 
 	explicit char_() { }
 };

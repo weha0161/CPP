@@ -30,6 +30,7 @@ namespace String_
 		
 		void Set(std::shared_ptr<std::string> s){ this->value = s;}
 		std::shared_ptr<std::string> Get() const {  return this->value;}
+		ContainerParaType Values(){ return this->parsedValues; }
 		
 		void Add(ContainerParaType v)
 		{ 
@@ -41,7 +42,7 @@ namespace String_
 			if(this->parsedValues->size() > 0 && (*(this->parsedValues->end()-1))->Next() == nullptr)
 				(*(this->parsedValues->end()-1))->setNext(v);
 			
-			this->ctr += v->ParseValue()->size();	
+			this->ctr += v->Value()->size();	
 			v->setCounter(this->parsedValues->size());
 			this->parsedValues->push_back(v); 
 		}
@@ -50,13 +51,20 @@ namespace String_
         {
 			for(auto it = this->parsedValues->cbegin(); it != this->parsedValues->cend(); ++it)
 				(*it)->Display(out);
-			
+								
 			return out;
         }
-
+        
+        void Reset()
+        { 
+			this->parsedValues->clear(); 
+			this->value = nullptr;
+			this->ctr = 0;
+			}
 	private:
 		uint ctr = 0;
-		std::unique_ptr<ContainerType> parsedValues = std::make_unique<ContainerType>();
+		std::shared_ptr<ContainerType> parsedValues = std::make_shared<ContainerType>();
+		//~ std::unique_ptr<ContainerType> parsedValues = std::make_unique<ContainerType>();
 		std::shared_ptr<std::string> value = std::make_shared<std::string>();
 	};
 	

@@ -21,29 +21,33 @@ namespace String_
 	{	
 	public:
 		using Types = Typelist<Atom<ParsedPunct>, Atom<ParsedBlank>, Atom<ParsedSpace>,Atom<uint>,Atom<std::string>,Atom<char>>;
-		using AtomConatinerType = AtomContainer<Types>::ContainerType;
+		using AtomContainerType = AtomContainer<Types>::ContainerType;
 		
-		Parser(): state(std::make_shared<ParserState>())
-		{
-		};
+		Parser(): state(std::make_shared<ParserState>()){	};
 				
 		void Parse(std::shared_ptr<std::string> sp)
 		{
 			this->state->Set(sp);
 			while(this->state->Current()!= this->state->End())
-				AtomConatinerType::Instance().make(this->state);
+				AtomContainerType::Instance().make(this->state);
 			
 			this->state->Display(std::cout);
 		}
+		
 		void Parse(const std::string& s)
 		{
 			this->Parse(std::make_shared<std::string>(s));
 		}
 		
+		using ValueType = std::shared_ptr<ParsedValue>;
+		//~ ValueType First(){ return this->state}
+		
+		
+		ParserState::ContainerParaType Values(){ return this->state->Values(); };
+		void Reset(){ this->state->Reset(); }
+		
 		virtual ~Parser(){};
-	private:
-		
-		
+	private:		
 		std::shared_ptr<ParserState> state;
 	};
 	

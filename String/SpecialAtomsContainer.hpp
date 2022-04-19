@@ -15,22 +15,22 @@ namespace String_
 {
 	using ParaType = std::shared_ptr<std::string>;
 	
-	template<class B,template<typename> class T, typename List>
+	template<class B, typename List>
 	class SpecialAtomContainer{};
 
-	template<class B, template<typename> class T, typename Head>
-	class SpecialAtomContainer<B, T, Typelist<Head>>
+	template<class B, typename Head>
+	class SpecialAtomContainer<B, Typelist<Head>>
 	{
 	public:
 		using Type = Head;
 		using BaseType = Head;
 		using SpecialAtomTypes = Typelist<Head>;
-		using ContainerType = SpecialAtomContainer<B, T,Typelist<Head>>;
+		using ContainerType = SpecialAtomContainer<B, Typelist<Head>>;
 		using ReturnType = std::shared_ptr<B>;
 	protected:
 		SpecialAtomContainer() 
 		{ 
-			Logger::Log<Info>()<<"SpecialAtomContainer created."<<std::endl; 
+			Logger::Log<Info>()<<Head::Value<<std::endl; 
 		};
 	public:
 		static std::ostream& Display(std::ostream& os) 
@@ -41,7 +41,7 @@ namespace String_
 		ReturnType Parse(ParaType p)
 		{
 			Logger::Log()<<"IS: "<<(p->at(0)==Head::Value)<<" "<<Head::Value<<" "<<p->at(0)<<std::endl;
-			return std::make_shared<B>(p);
+				return std::make_shared<B>(p, &Head::Is);
 		}
 
 		template<unsigned N>
@@ -54,17 +54,17 @@ namespace String_
 		}	
 	};
 
-	template<class B, template<typename> class T, typename Head, typename... Tail>
-	class SpecialAtomContainer<B, T, Typelist<Head,Tail...>>: public SpecialAtomContainer<B, T,Typelist<Tail...>>
+	template<class B, typename Head, typename... Tail>
+	class SpecialAtomContainer<B, Typelist<Head,Tail...>>: public SpecialAtomContainer<B, Typelist<Tail...>>
 	{
 	public:
 		using Type = Head;
 		using SpecialAtomTypes = Typelist<Head,Tail...>;
-		using ContainerType = SpecialAtomContainer<B, T, Typelist<Head,Tail...>>;
-		using Base = SpecialAtomContainer<B,T,Typelist<Tail...>>;
+		using ContainerType = SpecialAtomContainer<B, Typelist<Head,Tail...>>;
+		using Base = SpecialAtomContainer<B,Typelist<Tail...>>;
 	protected:
 		SpecialAtomContainer() { 
-			Logger::Log<Info>()<<"SpecialAtomContainer created."<<std::endl; 
+			Logger::Log<Info>()<<Head::Value<<std::endl; 
 		};
 	public:
 		static std::ostream& Display(std::ostream& os) 
@@ -77,8 +77,13 @@ namespace String_
 		
 		Base::ReturnType Parse(ParaType p)
 		{
-			Logger::Log()<<"IS: "<<(p->at(0)==Head::Value)<<" "<<Head::Value<<" "<<p->at(0)<<std::endl;
-			return std::make_shared<T<Head>>(p);
+			if(p->at(0)==Head::Value)
+			{
+				Logger::Log()<<"IS1: "<<(p->at(0)==Head::Value)<<" "<<Head::Value<<" "<<p->at(0)<<std::endl;
+				return std::make_shared<B>(p, &Head::Is);
+			}
+				
+			return Base::Parse(p);
 		}
 
 		static SpecialAtomContainer& Instance()
@@ -88,8 +93,8 @@ namespace String_
 		}	
 	};
 
-	template<class B, template<typename> class T, typename Head, typename... Tail>
-	std::ostream& operator<<(std::ostream& strm, const SpecialAtomContainer<B,T, Head,Tail...> c)
+	template<class B, typename Head, typename... Tail>
+	std::ostream& operator<<(std::ostream& strm, const SpecialAtomContainer<B, Head,Tail...> c)
 	{
 		return c.Display(strm);
 	}

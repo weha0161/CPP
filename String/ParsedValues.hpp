@@ -3,7 +3,6 @@
 #include <iostream>
 #include <vector>
 #include <memory>
-
 #include "SpecialAtomsContainer.hpp"
 #include "../Wrapper/Wrapper.hpp"
 #include "../Traits/Traits.h"
@@ -31,7 +30,7 @@ namespace String_
 		
 		BasePtrType Next() { return this->next; };
 
-		ParaType ParseValue(){ return this->strValue;}
+		ParaType Value(){ return this->strValue;}
 		
 		virtual ContainerParaType Get(ParaType p) { return ContainerParaType(); } 
 		
@@ -77,43 +76,28 @@ namespace String_
 	private:
 		void setNext(BasePtrType ptr)
 		{ 
-			//~ Logger::Log()<<"Current: "<<*(this->strValue)<<"Next: "<<*(ptr->ParseValue())<<std::endl;
+			//~ Logger::Log()<<"Current: "<<*(this->strValue)<<"Next: "<<*(ptr->Value())<<std::endl;
 			this->next = ptr; 
 		}
 		
 		void setCounter(uint c)	{ this->ctr = c; }
 	};
 	
-	class ParsedInt: public ParsedValue
-	{
-		using PtrType = std::shared_ptr<ParsedInt>;
-		inline static auto ZERO = T::char_<'0'>(); 
-	public:
-		ParsedInt(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): vals(std::make_shared<std::vector<uint>>()), ParsedValue(val, next)
-		{
-			if(val->size() > 0)
-			{
-				for(auto  i = (val->size())-1;i > 0; --i)
-					vals->push_back((uint)(val->at(i) - ZERO));
-
-				vals->push_back((uint)(val->at(0) - ZERO));
-				Logger::Log()<<"INT Res"<<(vals->size() ? *(vals->cend()-1)  : 0)<<"_"<<(vals->size() ? *(vals->cbegin())  : 0)<<std::endl;
-				//~ std::stoll(*val);
-			}
-				
-		}
-		uint Value(){ return 5; }
-		std::shared_ptr<std::vector<uint>> vals;
-	};
 	
 	class ParsedWord: public ParsedValue
 	{
 		using PtrType = std::shared_ptr<ParsedWord>;
 	public:
-		ParsedWord(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
-		{			
-			Logger::Log()<<"VAL Constructor Word: "<<*val<<std::endl;
-		}
+		ParsedWord(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next){	Logger::Log()<<"VAL Constructor Word: "<<*val<<std::endl;}
+		
+		std::string Cast(){ return "Test"; }
+	};
+	
+	class ParsedBlank: public ParsedValue
+	{
+		using PtrType = std::shared_ptr<ParsedBlank>;
+	public:
+		ParsedBlank(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)	{	Logger::Log()<<"VAL Constructor Blank: "<<*val<<std::endl;	}
 		
 		std::string Value(){ return "Test"; }
 	};
@@ -125,13 +109,15 @@ namespace String_
 	{
 		using PtrType = std::shared_ptr<ParsedPunct>;
 		using ReturnType = ReturnT<ParsedPunct>;
-		using Types = Typelist<T::char_<'.'>,T::char_<','>>;
-		using SpecialAtomContainerType = SpecialAtomContainer<ParsedPunct, SpecializedPunctation, Types>::ContainerType;
+		using Types = Typelist<T::char_<'.'>,T::char_<','>,  T::char_<'!'>, T::char_<'"'>,T::char_<'#'>,T::char_<'$'>,T::char_<'%'>,T::char_<'&'>,T::char_<'\''>,T::char_<'<'>,
+		T::char_<'('>,T::char_<')'>,T::char_<'*'>,T::char_<'+'>,T::char_<'-'>,T::char_<'/'>,T::char_<':'>,T::char_<';'>,T::char_<'<'>,T::char_<'='>,T::char_<'?'>,
+		T::char_<'@'>,T::char_<'['>,T::char_<'\\'>,T::char_<']'>,T::char_<'^'>,T::char_<'_'>,T::char_<'`'>,T::char_<'{'>,T::char_<'|'>,T::char_<'}'>, T::char_<'~'>>;
+		
+		using SpecialAtomContainerType = SpecialAtomContainer<ParsedPunct, Types>::ContainerType;
+	protected:
+		std::function<bool(char)> isImpl;
 	public:
-		ParsedPunct(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
-		{						
-			Logger::Log()<<"VAL Constructor Point: "<<*val<<std::endl;
-		}
+		ParsedPunct(ParsedValue::ParaType val, std::function<bool(char)> isPara, ParsedValue::BasePtrType next = nullptr): isImpl(isPara),ParsedValue(val, next){	}
 		
 		static auto Create(ParsedValue::ParaType p)
 		{
@@ -142,45 +128,67 @@ namespace String_
 			return ret;
 		}
 		
-		std::string Value(){ return "Test"; }
+		template<typename P>
+		bool Is() { return this->isImpl(P::Value); }
+
+		std::string Cast(){ return "Test"; }
 	};
 	
-	template<typename T>
-	class SpecializedPunctation: public ParsedPunct
+	class ParsedInt: public ParsedValue
 	{
+		using PtrType = std::shared_ptr<ParsedInt>;
+		using ValuesType = std::shared_ptr<std::vector<uint>>;
+		inline static auto ZERO = T::char_<'0'>(); 
+		ValuesType vals;
 	public:
-		using Base = ParsedPunct;
-		SpecializedPunctation(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedPunct(val, next){};
-	};
-	
-	class ParsedBlank: public ParsedValue
-	{
-		using PtrType = std::shared_ptr<ParsedBlank>;
-	public:
-		ParsedBlank(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
+		ParsedInt(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): vals(std::make_shared<std::vector<uint>>()), ParsedValue(val, next)
 		{
-			Logger::Log()<<"VAL Constructor Blank: "<<*val<<std::endl;
+			if(val->size() > 0)
+			{
+				for(auto  i = (val->size())-1;i > 0; --i)
+					vals->push_back((uint)(val->at(i) - ZERO));
+
+				vals->push_back((uint)(val->at(0) - ZERO));
+				//~ std::stoll(*val);
+			}				
 		}
 		
-		std::string Value(){ return "Test"; }
+		bool IsDouble()
+		{
+			if(this->next == nullptr) return false;
+			if(this->next->Next() == nullptr) return false;
+			if(!std::dynamic_pointer_cast<ParsedInt>(this->next->Next())) return false;
+
+			auto pp = std::dynamic_pointer_cast<ParsedPunct>(this->next);
+			if(!pp) return false;
+			
+			return pp->template Is<T::char_<','>>();
+		}
+		uint Cast(){ return 5; }
+		ValuesType Values() { return this->vals; }
+		
+		uint operator[](uint i)	{ return i >= this->vals->size() ? this->vals->at(i) : 0;	}
+		
+		bool operator==(const ParsedInt& pi)
+		{
+			//~ if(this->vals->size() == pi->Values()->size())
+				//~ for(auto i = 0; i < this->vals->size())
+					//~ if(this->vals->at(i))
+			return true;
+		}
 	};
-	
 	class ParsedSpace: public ParsedValue
 	{
 		using PtrType = std::shared_ptr<ParsedSpace>;
 	public:
-		ParsedSpace(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)
-		{
-			Logger::Log()<<"VAL Constructor Spacce: "<<*val<<std::endl;
-		}
+		ParsedSpace(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)	{ Logger::Log()<<"VAL Constructor Spacce: "<<*val<<std::endl;	}
 		
-		std::string Value(){ return "Test"; }
+		std::string Cast(){ return "Test"; }
 	};
 	
 	template<typename T>
 	struct Creator
 	{
-		//~ typename T::ContainerParaType operator()(typename T::ParaType p)
 		static typename T::ContainerParaType Parse(typename T::ParaType p)
 		{
 			auto ret = std::make_shared<typename T::ContainerType>();
@@ -192,7 +200,6 @@ namespace String_
 	template<>
 	struct Creator<ParsedPunct>
 	{
-		//~ typename ParsedPunct::ContainerParaType operator()(typename ParsedPunct::ParaType p)
 		static typename ParsedPunct::ContainerParaType Parse(typename ParsedPunct::ParaType p)
 		{
 			auto ret = std::make_shared<typename ParsedPunct::ContainerType>();
