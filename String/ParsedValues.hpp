@@ -5,6 +5,7 @@
 #include <memory>
 #include "SpecialAtomsContainer.hpp"
 #include "ParsedValue.hpp"
+#include "../Common/Number.hpp"
 #include "../Wrapper/Wrapper.hpp"
 #include "../Traits/Traits.h"
 #include "../Typelist/Typelist.h"
@@ -84,14 +85,25 @@ namespace String_
 			}				
 		}
 		
-		uint Cast(){ return 5; }
 		ValuesType Values() { return this->vals; }
 		
 		//~ uint operator[](uint i)	const { return i >= this->vals->size() ? this->vals->at(i) : 0;	}
 		
 		bool operator==(const ParsedNumber& pi)
 		{
-			if(this->vals->size() != pi.Size())
+			if(this->Size() != pi.Size())
+				return false;
+				
+			for(auto i = 0; i < this->Size(); ++i)
+				if(this->strValue->at(i) != pi[i])
+					return false;
+					
+			return true;
+		}
+		
+		bool operator<(const ParsedNumber& pi)
+		{
+			if(this->Size() >= pi.Size())
 				return false;
 				
 			for(auto i = 0; i < this->vals->size(); ++i)

@@ -35,6 +35,14 @@ int main()
 	std::cout<<vi1->Is<double>()<<std::endl;
 	std::cout<<vi1->Is<uint>()<<std::endl;
 	std::cout<<vi1->Is<char>()<<std::endl;
+	std::cout<<vi1->Cast<uint>()<<std::endl;
+	
+	const std::string din{ "112312321545" };
+	p.Parse(din);
+	v1 = p.Values();
+	vi1 = std::dynamic_pointer_cast<String_::ParsedNumber>(*(v->cbegin()));
+	
+	std::cout<<vi1->Cast<uint>()<<std::endl;
 	
 	//~ p.Parse(pathToShow);
     

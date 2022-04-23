@@ -1,9 +1,12 @@
 #include <string>
 #include <cstring>
 #include <iostream>
+#include <cmath>
 #include <vector>
 #include <memory>
+#include <limits>
 #include "SpecialAtomsContainer.hpp"
+#include "../Common/Number.hpp"
 #include "../Wrapper/Wrapper.hpp"
 #include "../Traits/Traits.h"
 #include "../Typelist/Typelist.h"
@@ -23,6 +26,7 @@ namespace String_
 	using BasePtrType = std::shared_ptr<ParsedValue>;
     
     template<typename TVal, typename TParsed> struct IsImpl{ bool operator ()(TParsed bp){ Logger::Log()<<"T"<<std::endl; return false;}};
+    template<typename TVal, typename TParsed> struct CastImpl{ bool operator ()(TParsed bp){ Logger::Log()<<"T"<<std::endl; return false;}};
 	
 	class ParsedValue
 	{
@@ -49,6 +53,32 @@ namespace String_
         {
 			auto is = std::make_shared<IsImpl<TVal,BasePtrType>>();
 			return (*is)(std::make_shared<ParsedValue>(*this));
+		}
+		
+        template<typename TVal>
+        TVal Cast()
+        {
+			constexpr auto max = std::numeric_limits<TVal>::max();
+			uint digitsMax = Number::Digits<max>::Value;
+
+			if(digitsMax < this->Size())
+				throw "Cast Error";
+				
+			std::ostringstream os;
+			os << max;
+			std::string digits = os.str();
+			
+			if(digitsMax == this->Size())
+				for(auto i = digitsMax; i >= 0; --i)
+					if(this->strValue->at(i) > digits.at(i))
+						throw "Cast Error";
+			
+			TVal result = 0;
+			for(uint i = 0; i < this->Size(); ++i)
+				result += (TVal)(std::pow(10,i) * (this->strValue->at(i) - '0'));
+				
+			Logger::Log()<<"MAX D: "<<digits<<" "<<digits[0]<<"_"<<digits.size()<<" RES: "<<result<<std::endl;
+			return result;
 		}
         
         char operator[](uint i) const{ return this->strValue->at(i); }
