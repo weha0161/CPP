@@ -72,9 +72,9 @@ namespace String_
 	};
 	
 	template<>
-	class Atom<uint>: public AtomBase<uint, ParsedInt>
+	class Atom<uint>: public AtomBase<uint, ParsedNumber>
 	{
-		friend class AtomBase<int,ParsedInt>;
+		friend class AtomBase<int,ParsedNumber>;
 	public:
 		bool Is(It it){ return std::isdigit(*it); }
 	};

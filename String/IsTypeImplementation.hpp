@@ -22,7 +22,7 @@ namespace String_
 		{ 
 			if(bp->Next() == nullptr) return false;
 			if(bp->Next()->Next() == nullptr) return false;
-			if(!std::dynamic_pointer_cast<ParsedInt>(bp->Next()->Next())) return false;
+			if(!std::dynamic_pointer_cast<ParsedNumber>(bp->Next()->Next())) return false;
 
 			auto pp = std::dynamic_pointer_cast<ParsedPunct>(bp->Next());
 			if(!pp) return false;

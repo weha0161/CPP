@@ -151,14 +151,14 @@ namespace String_
 		std::string Cast(){ return "Test"; }
 	};
 	
-	class ParsedInt: public ParsedValue
+	class ParsedNumber: public ParsedValue
 	{
-		using PtrType = std::shared_ptr<ParsedInt>;
+		using PtrType = std::shared_ptr<ParsedNumber>;
 		using ValuesType = std::shared_ptr<std::vector<uint>>;
 		inline static auto ZERO = T::char_<'0'>(); 
 		ValuesType vals;
 	public:
-		ParsedInt(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): vals(std::make_shared<std::vector<uint>>()), ParsedValue(val, next)
+		ParsedNumber(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): vals(std::make_shared<std::vector<uint>>()), ParsedValue(val, next)
 		{
 			if(val->size() > 0)
 			{
@@ -175,7 +175,7 @@ namespace String_
 		
 		//~ uint operator[](uint i)	const { return i >= this->vals->size() ? this->vals->at(i) : 0;	}
 		
-		bool operator==(const ParsedInt& pi)
+		bool operator==(const ParsedNumber& pi)
 		{
 			if(this->vals->size() != pi.Size())
 				return false;
@@ -227,7 +227,7 @@ namespace String_
 		{ 
 			if(bp->Next() == nullptr) return false;
 			if(bp->Next()->Next() == nullptr) return false;
-			if(!std::dynamic_pointer_cast<ParsedInt>(bp->Next()->Next())) return false;
+			if(!std::dynamic_pointer_cast<ParsedNumber>(bp->Next()->Next())) return false;
 
 			auto pp = std::dynamic_pointer_cast<ParsedPunct>(bp->Next());
 			if(!pp) return false;

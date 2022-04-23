@@ -26,12 +26,12 @@ int main()
 	const std::string dc{ "920_08" };
 	p.Parse(dc);
 	auto v = p.Values();
-	auto vi = std::dynamic_pointer_cast<String_::ParsedInt>(*(v->cbegin()));
+	auto vi = std::dynamic_pointer_cast<String_::ParsedNumber>(*(v->cbegin()));
 
 	const std::string dc1{ "9,8" };
 	p.Parse(dc1);
 	auto v1 = p.Values();
-	auto vi1 = std::dynamic_pointer_cast<String_::ParsedInt>(*(v->cbegin()));
+	auto vi1 = std::dynamic_pointer_cast<String_::ParsedNumber>(*(v->cbegin()));
 	std::cout<<vi1->Is<double>()<<std::endl;
 	std::cout<<vi1->Is<uint>()<<std::endl;
 	std::cout<<vi1->Is<char>()<<std::endl;
