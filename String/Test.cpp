@@ -27,15 +27,16 @@ int main()
 	p.Parse(dc);
 	auto v = p.Values();
 	auto vi = std::dynamic_pointer_cast<String_::ParsedInt>(*(v->cbegin()));
-	std::cout<<"Result IS"<<vi->IsDouble()<<std::endl;
 
 	const std::string dc1{ "9,8" };
 	p.Parse(dc1);
 	auto v1 = p.Values();
 	auto vi1 = std::dynamic_pointer_cast<String_::ParsedInt>(*(v->cbegin()));
-	std::cout<<vi1->IsDouble()<<std::endl;
+	std::cout<<vi1->Is<double>()<<std::endl;
+	std::cout<<vi1->Is<uint>()<<std::endl;
+	std::cout<<vi1->Is<char>()<<std::endl;
 	
-	p.Parse(pathToShow);
+	//~ p.Parse(pathToShow);
     
     return 0;
 }

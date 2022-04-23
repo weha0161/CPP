@@ -18,6 +18,11 @@ namespace String_
 	
 	template<typename T>
 	using ReturnT = std::shared_ptr<std::vector<std::shared_ptr<T>>>;
+        
+    class ParsedValue;
+	using BasePtrType = std::shared_ptr<ParsedValue>;
+    
+    template<typename TVal, typename TParsed> struct IsImpl{ bool operator ()(TParsed bp){ Logger::Log()<<"T"<<std::endl; return false;}};
 	
 	class ParsedValue
 	{
@@ -28,9 +33,8 @@ namespace String_
 		using ContainerType = std::vector<BasePtrType>;
 		using ContainerParaType = std::shared_ptr<ContainerType>;
 		
-		BasePtrType Next() { return this->next; };
-
-		ParaType Value(){ return this->strValue;}
+		BasePtrType Next() const { return this->next; };
+		ParaType Value() const { return this->strValue;}
 		
 		virtual ContainerParaType Get(ParaType p) { return ContainerParaType(); } 
 		
@@ -40,18 +44,28 @@ namespace String_
 			
 			return out;
         }
+        template<typename TVal>
+        bool Is()
+        {
+			auto is = std::make_shared<IsImpl<TVal,BasePtrType>>();
+			return (*is)(std::make_shared<ParsedValue>(*this));
+		}
         
         char operator[](uint i) const{ return this->strValue->at(i); }
         size_t Size() const { return this->strValue->size(); }
                 
+		ParsedValue(const ParsedValue& c)
+		{
+			this->next = c.Next();
+			this->strValue = c.Value();
+		};
+		virtual ~ParsedValue()	{ }
 	protected:
 		uint ctr;
 		ParaType strValue;
 		BasePtrType next;
 
-		virtual ~ParsedValue()	{ /*Logger::Log()<<"Destructor"<<std::endl;*/ }
 		ParsedValue& operator=(const ParsedValue&){ return *this;};
-		ParsedValue(const ParsedValue& c){};
 		ParsedValue(BasePtrType n = nullptr): next{n}{};
 		ParsedValue(ParaType s,BasePtrType n = nullptr): next{n}, strValue{s}{	};
         
@@ -156,17 +170,6 @@ namespace String_
 			}				
 		}
 		
-		bool IsDouble()
-		{
-			if(this->next == nullptr) return false;
-			if(this->next->Next() == nullptr) return false;
-			if(!std::dynamic_pointer_cast<ParsedInt>(this->next->Next())) return false;
-
-			auto pp = std::dynamic_pointer_cast<ParsedPunct>(this->next);
-			if(!pp) return false;
-			
-			return pp->template Is<T::char_<','>>();
-		}
 		uint Cast(){ return 5; }
 		ValuesType Values() { return this->vals; }
 		
@@ -184,6 +187,7 @@ namespace String_
 			return true;
 		}
 	};
+	
 	class ParsedSpace: public ParsedValue
 	{
 		using PtrType = std::shared_ptr<ParsedSpace>;
@@ -215,6 +219,23 @@ namespace String_
 			return ret;
 		}
 	};
+	
+	template<> struct IsImpl<uint,ParsedValue::BasePtrType>{ bool operator ()(ParsedValue::BasePtrType bp){ Logger::Log()<<"UINT"<<std::endl; return true;}	};
+	template<> struct IsImpl<double, ParsedValue::BasePtrType>
+	{ 
+		bool operator ()(ParsedValue::BasePtrType bp)
+		{ 
+			if(bp->Next() == nullptr) return false;
+			if(bp->Next()->Next() == nullptr) return false;
+			if(!std::dynamic_pointer_cast<ParsedInt>(bp->Next()->Next())) return false;
+
+			auto pp = std::dynamic_pointer_cast<ParsedPunct>(bp->Next());
+			if(!pp) return false;
+			
+			return pp->template Is<T::char_<','>>();
+		}	
+	};
+        
 }
 
 #endif

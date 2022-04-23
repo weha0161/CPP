@@ -21,6 +21,7 @@ namespace String_
 		using ContainerParaType = std::shared_ptr<ContainerType>;
 		
 		Iterator Current() { return (this->value->cbegin() + ctr);}
+		uint CurrentPos() { return 3;}
 		Iterator End() { return this->value->cend();}
 		Iterator Begin() { return this->value->cbegin();}
 		
