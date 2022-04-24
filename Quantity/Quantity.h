@@ -10,14 +10,19 @@
 template<typename U, typename SiPrefix = SIPrefix<0>,typename T1 = double>
 struct Quantity
 {
-	explicit Quantity(const T1& v): value(v * SiPrefix::Factor) {}
-	
-	T1 Value() const { return value / SiPrefix::Factor;}
-	T1 PureValue() const { return value;}
 	using ValueType = T1;
 	using UnitType = U;
 	using UnitPrefix = SiPrefix;
 	using Type = Quantity<U,SiPrefix,T1>;	
+	
+    //~ const std::string UnitName() {  return UnitType::Name; }
+    //~ const std::string UnitSymbol() { return UnitType::Symbol;}
+    const std::string UnitSign() { return UnitType::Sign(); }
+    const std::string SiUnit() { return UnitType::SiUnit(); }
+	explicit Quantity(const T1& v): value(v * SiPrefix::Factor) {}
+	
+	T1 Value() const { return value / SiPrefix::Factor;}
+	T1 PureValue() const { return value;}
 	
 	template<typename U2 = U, typename SiPrefix2 = SiPrefix, typename T2 = T1>
 	Quantity(Quantity<U2,SiPrefix2,T2> q ):value(q.Value()){ 	}

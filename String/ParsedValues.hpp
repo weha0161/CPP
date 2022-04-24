@@ -4,7 +4,9 @@
 #include <vector>
 #include <memory>
 #include "SpecialAtomsContainer.hpp"
+#include "QuantityContainer.hpp"
 #include "ParsedValue.hpp"
+#include "../Quantity/Quantity.h"
 #include "../Common/Number.hpp"
 #include "../Wrapper/Wrapper.hpp"
 #include "../Traits/Traits.h"
@@ -72,6 +74,11 @@ namespace String_
 		using ValuesType = std::shared_ptr<std::vector<uint>>;
 		inline static auto ZERO = T::char_<'0'>(); 
 		ValuesType vals;
+		
+		using Types = Typelist<Quantity<Sum>,Quantity<Length>,Quantity<Mass>,Quantity<Time>,Quantity<Current>,Quantity<Temperature>, Quantity<Volume>,Quantity<Work>,Quantity<Area>,Quantity<Scalar>>;
+		
+		using QuantityContainerType = QuantityContainer<Types>::ContainerType;
+		
 	public:
 		ParsedNumber(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): vals(std::make_shared<std::vector<uint>>()), ParsedValue(val, next)
 		{
@@ -83,6 +90,11 @@ namespace String_
 				vals->push_back((uint)(val->at(0) - ZERO));
 				//~ std::stoll(*val);
 			}				
+		}
+		
+		auto AsQuantity()
+		{
+			return QuantityContainerType::Instance().Get(this->Cast<int>(),this->next->Value());
 		}
 		
 		ValuesType Values() { return this->vals; }
