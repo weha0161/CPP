@@ -1,6 +1,6 @@
 #include <string>
 #include <iostream>
-// #include "../Wrapper/Wrapper.hpp" 
+#include "../Logger/Logger.hpp" 
 
 #ifndef UNIT_H
 #define UNIT_H
@@ -13,6 +13,8 @@ struct UnitTypeBase
 {
 	static std::string Unit() 
 	{ 
+		//~ Logger::Log()<<Derived::Name<<"_"<<Derived::N<<std::endl;
+		
 		if(Derived::N == 0) return "";
 		if(Derived::N == 1) return Derived::Sign;
 		return Derived::Sign + "^(" + std::to_string(Derived::N) + ")"; };
@@ -98,7 +100,8 @@ struct SumType: public UnitTypeBase<SumType<n>>
     inline static const std::string Sign = "€";
 };
 
-template<typename U, int S = U::Sum::N, int L = U::Length::N, int M = U::Mass::N, int T = U::Time::N, int C = U::Current::N, int Te = U::Temperature::N, int Sub = U::SubstanceAmount::N, int Li = U::LightIntensity::N> struct UnitSign
+template<typename U, int S = U::Sum::N, int L = U::Length::N, int M = U::Mass::N, int T = U::Time::N, int C = U::Current::N, int Te = U::Temperature::N, int Sub = U::SubstanceAmount::N, int Li = U::LightIntensity::N> 
+struct UnitSign
 {
 	using UnitType = U;
 	static std::string Get() { return UnitType::SiUnit(); }

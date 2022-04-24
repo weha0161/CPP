@@ -3,6 +3,9 @@
 #include "AtomPassingParser.hpp"
 #include "ParsedValues.hpp"
 #include "../Traits/Traits.h"
+#include "../Quantity/Quantity.h"
+#include <typeinfo>
+#include <typeindex>
 // #include "../AbstractFactory/AbstractFactory.hpp"
 using namespace String_;
 
@@ -37,13 +40,24 @@ int main()
 	std::cout<<vi1->Is<char>()<<std::endl;
 	std::cout<<vi1->Cast<uint>()<<std::endl;
 	
-	const std::string din{ "1123s" };
+	const std::string din{ "1123A" };
 	p.Parse(din);
 	v1 = p.Values();
 	vi1 = std::dynamic_pointer_cast<String_::ParsedNumber>(*(v->cbegin()));
 	
 	std::cout<<vi1->Cast<uint>()<<std::endl;
-	std::cout<<vi1->AsQuantity()<<std::endl;
+	vi1->AsQuantity();
+	
+	const std::string din2{ "1123W" };
+	p.Parse(din2);
+	auto v12 = p.Values();
+	auto vi12 = std::dynamic_pointer_cast<String_::ParsedNumber>(*(v->cbegin()));
+	
+	std::cout<<vi1->Cast<uint>()<<std::endl;
+	vi12->AsQuantity();
+
+	//~ std::cout<<q.Value()<<q.UnitSign()<<"  "<<q<<std::endl;
+	//~ std::cout<<q.Value()<<q.UnitSign()<<"  "<<q<<std::type_index(q)<<std::endl;
 	
 	//~ p.Parse(pathToShow);
     

@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <functional>
 #include <iostream>
+#include <map>
 #include <vector>
 #include <cstdlib>
 #include <filesystem>
@@ -14,6 +15,8 @@
 namespace String_
 {
 	using ParaType = std::shared_ptr<std::string>;
+	template<typename QuantityT>
+	using QuantityMap = std::map<uint, QuantityT> ;
 	
 	template<typename List>
 	class QuantityContainer{};
@@ -44,11 +47,21 @@ namespace String_
 			return Head(0.0);
 		}
 		
+		template<typename ValueType>
+		void Add(ValueType v,ParaType p)
+		{
+			this->quantities->insert(std::pair<uint,Head>(0,Head(v) ));
+			Logger::Log()<<"Unit "<<Head::UnitType::Sign()<<std::endl;
+		}
+		
+		
 		static QuantityContainer& Instance()
 		{
 			static QuantityContainer instance;
 			return instance;
 		}	
+	private:
+		inline static std::unique_ptr<QuantityMap<Head>> quantities = std::make_unique<QuantityMap<Head>>();
 	};
 
 	template<typename Head, typename... Tail>
@@ -72,14 +85,23 @@ namespace String_
 		template<typename ValueType>
 		Head Get(ValueType v,ParaType p)
 		{
-			Logger::Log()<<"Unit "<<Head::UnitType::Sign()<<" == "<<*p<<std::endl;
+			  if(*p==Head::UnitType::Sign())
+					return Head(v);
+
+              return Base::Get(v,p);
+		}
+		
+		template<typename ValueType>
+		void Add(ValueType v,ParaType p)
+		{
 			if(*p==Head::UnitType::Sign())
 			{
-				//~ Logger::Log()<<"IS1: "<<(p->at(0)==Head::Value)<<" "<<Head::Value<<" "<<p->at(0)<<std::endl;
-				return Head(v);
+				this->quantities->insert(std::pair<uint,Head>(0,Head(v) ));
+				Logger::Log()<<"RETURN"<<" "<<this->quantities->cbegin()->second<<std::endl;
+				return;
 			}
 				
-			return Base::Get(v,p);
+			Base::Add(v,p);
 		}
 
 		static QuantityContainer& Instance()
@@ -87,6 +109,8 @@ namespace String_
 			static QuantityContainer instance;
 			return instance;
 		}	
+	private:
+		inline static std::unique_ptr<QuantityMap<Head>> quantities = std::make_unique<QuantityMap<Head>>();
 	};
 
 	template<typename Head, typename... Tail>

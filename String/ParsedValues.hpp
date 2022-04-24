@@ -92,9 +92,9 @@ namespace String_
 			}				
 		}
 		
-		auto AsQuantity()
+		decltype(auto) AsQuantity()
 		{
-			return QuantityContainerType::Instance().Get(this->Cast<int>(),this->next->Value());
+			QuantityContainerType::Instance().Add(this->Cast<int>(),this->next->Value());
 		}
 		
 		ValuesType Values() { return this->vals; }
