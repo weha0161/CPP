@@ -92,9 +92,15 @@ namespace String_
 			}				
 		}
 		
+		decltype(auto) GetQuantityUnit()
+		{
+			return QuantityContainerType::Instance().Get(this->Cast<int>(),this->next->Value());
+		}
+		
 		decltype(auto) AsQuantity()
 		{
-			QuantityContainerType::Instance().Add(this->Cast<int>(),this->next->Value());
+			Logger::Log()<<"GET Quanr: "<<QuantityContainerType::Instance().Get(this->Cast<int>(),this->next->Value())<<std::endl;
+			return QuantityContainerType::Instance().Add(this->Cast<int>(),this->next->Value());
 		}
 		
 		ValuesType Values() { return this->vals; }

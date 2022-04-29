@@ -78,7 +78,7 @@ namespace String_
 			for(uint i = 0; i < this->Size(); ++i)
 				result += (TVal)(std::pow(10,e-i) * (this->strValue->at(i) - '0'));
 				
-			Logger::Log()<<"MAX D: "<<digits<<" "<<digits[0]<<"_"<<digits.size()<<" RES: "<<result<<std::endl;
+			//~ Logger::Log()<<"MAX D: "<<digits<<" "<<digits[0]<<"_"<<digits.size()<<" RES: "<<result<<std::endl;
 			return result;
 		}
         

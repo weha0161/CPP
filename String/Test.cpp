@@ -48,13 +48,14 @@ int main()
 	std::cout<<vi1->Cast<uint>()<<std::endl;
 	vi1->AsQuantity();
 	
-	const std::string din2{ "1123W" };
+	const std::string din2{ "1123B" };
 	p.Parse(din2);
 	auto v12 = p.Values();
 	auto vi12 = std::dynamic_pointer_cast<String_::ParsedNumber>(*(v->cbegin()));
 	
 	std::cout<<vi1->Cast<uint>()<<std::endl;
 	vi12->AsQuantity();
+	std::cout<<"UNIT"<<vi1->GetQuantityUnit()<<std::endl;
 
 	//~ std::cout<<q.Value()<<q.UnitSign()<<"  "<<q<<std::endl;
 	//~ std::cout<<q.Value()<<q.UnitSign()<<"  "<<q<<std::type_index(q)<<std::endl;

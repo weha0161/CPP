@@ -13,8 +13,6 @@ struct UnitTypeBase
 {
 	static std::string Unit() 
 	{ 
-		//~ Logger::Log()<<Derived::Name<<"_"<<Derived::N<<std::endl;
-		
 		if(Derived::N == 0) return "";
 		if(Derived::N == 1) return Derived::Sign;
 		return Derived::Sign + "^(" + std::to_string(Derived::N) + ")"; };

@@ -19,10 +19,7 @@ struct Quantity
     //~ const std::string UnitSymbol() { return UnitType::Symbol;}
     const std::string UnitSign() { return U::Sign(); }
     const std::string SiUnit() { return UnitType::SiUnit(); }
-	explicit Quantity(const T1& v): value(v * SiPrefix::Factor) 
-	{
-		Logger::Log()<<"QUANTITY"<<"_"<<U::Sign()<<std::endl;
-	}
+	explicit Quantity(const T1& v): value(v * SiPrefix::Factor) {	}
 	
 	T1 Value() const { return value / SiPrefix::Factor;}
 	T1 PureValue() const { return value;}

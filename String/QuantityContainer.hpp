@@ -41,10 +41,10 @@ namespace String_
 		}
 		
 		template<typename ValueType>
-		Head Get(ValueType v,ParaType p)
+		const std::string Get(ValueType v,ParaType p)
 		{
 			Logger::Log()<<"Unit "<<Head::UnitType::Sign()<<std::endl;
-			return Head(0.0);
+			return Head::UnitType::Sign();
 		}
 		
 		template<typename ValueType>
@@ -83,10 +83,10 @@ namespace String_
 		}
 		
 		template<typename ValueType>
-		Head Get(ValueType v,ParaType p)
+		const std::string Get(ValueType v,ParaType p)
 		{
 			  if(*p==Head::UnitType::Sign())
-					return Head(v);
+					return Head::UnitType::Sign();
 
               return Base::Get(v,p);
 		}
