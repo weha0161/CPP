@@ -77,9 +77,9 @@ namespace String_
 		
 		using Types = Typelist<Quantity<Sum>,Quantity<Length>,Quantity<Mass>,Quantity<Time>,Quantity<Current>,Quantity<Temperature>, Quantity<Volume>,Quantity<Work>,Quantity<Area>,Quantity<Scalar>>;
 		
-		using QuantityContainerType = QuantityContainer<Types>::ContainerType;
 		
 	public:
+		using QuantityContainerType = QuantityContainer<Types>::ContainerType;
 		ParsedNumber(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): vals(std::make_shared<std::vector<uint>>()), ParsedValue(val, next)
 		{
 			if(val->size() > 0)
@@ -129,6 +129,11 @@ namespace String_
 					return false;
 					
 			return true;
+		}
+		
+		static std::ostream& Display(std::ostream& os) 
+		{
+			return QuantityContainerType::Display(os);
 		}
 	};
 	

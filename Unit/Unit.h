@@ -119,11 +119,12 @@ struct Unit
 	using Sum = typename SumType<SumN>::Type;
 	using Type = Unit<SumN, LengthN, MassN, TimeN, CurrentN, TemperatureN, SubstanceN, LightIntensityN>;
 	
+	static const std::string Name;
 	static const std::string SiUnit() { return Mass::Unit() + Length::Unit() + Time::Unit() + Current::Unit() + Temperature::Unit() + SubstanceAmount::Unit() + LightIntensity::Unit() + Sum::Unit(); };
 	static const std::string Sign() { return UnitSign<Type>::Get(); }; 
 };
 
-
+template<int a,int b,int c,int d,int e,int f,int g,int h> const std::string Unit<a,b,c,d,e,f,g,h>::Name = "unknown";
 
 using Sum = Unit<1>;
 using Length = Unit<0,1>;
@@ -136,6 +137,10 @@ using Scalar = Unit<>;
 using Volume = Unit<0,3>;
 using Work = Unit<0,1,2,2>;
 using Area = Unit<0,2>;
+
+template<> const std::string Sum::Name = SumType<0>::Name;
+template<> const std::string Current::Name = CurrentType<0>::Name;
+template<> const std::string Scalar::Name = "Scalar";
 
 template<> struct UnitSign<Work> {	static std::string Get(){ return "W";} };
 // template<> struct UnitSign<Area> {	static std::string Get(){ return "m²";} };
