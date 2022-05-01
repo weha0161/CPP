@@ -59,7 +59,7 @@ namespace String_
 		template<typename ValueType>
 		void Add(ValueType v,ParaType p){ this->quantities->insert(std::pair<uint,Head>(0,Head(v) )); }
 		
-		auto Quantities() { return quantities; }
+		const auto Quantities() { return quantities; }
 
 		static QuantityContainer& Instance()
 		{
@@ -105,7 +105,7 @@ namespace String_
 		template<typename Q>
 		size_t Size(){ return QuantityGet<Q,Type, ContainerType>::apply()->size();	}
 		
-		auto Quantities() { return quantities; }
+		const auto Quantities() { return quantities; }
 		
 		template<typename ValueType>
 		void Add(ValueType v,ParaType p)

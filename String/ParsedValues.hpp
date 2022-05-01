@@ -92,10 +92,7 @@ namespace String_
 			}				
 		}
 		
-		decltype(auto) GetQuantityUnit()
-		{
-			return QuantityContainerType::Instance().Get(this->Cast<int>(),this->next->Value());
-		}
+		decltype(auto) GetQuantityUnit(){ return QuantityContainerType::Instance().Get(this->Cast<int>(),this->next->Value());	}
 		
 		template<typename Q>
 		static decltype(auto) Get()
@@ -137,10 +134,7 @@ namespace String_
 			return true;
 		}
 		
-		static std::ostream& Display(std::ostream& os) 
-		{
-			return QuantityContainerType::Display(os);
-		}
+		static std::ostream& Display(std::ostream& os) { return QuantityContainerType::Display(os);	}
 	};
 	
 	class ParsedSpace: public ParsedValue
