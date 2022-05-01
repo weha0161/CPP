@@ -64,8 +64,12 @@ int main()
 	std::cout<<"Display"<<std::endl;
 	ParsedNumber::Display(std::cout);
 
+	ParsedNumber::Get<Quantity<Current>>()->size();
 	
-	auto ps = ParsedNumber::QuantityContainerType::Instance().Size<Quantity<int>>();
+	std::cout<<"Size2: "<<ParsedNumber::Get<Quantity<Current>>()->size()<<std::endl;
+	std::cout<<"Size2: "<<qs<<std::endl;
+	
+	//~ auto ps = ParsedNumber::QuantityContainerType::Instance().Size<Quantity<int>>();
 	//~ std::cout<<q.Value()<<q.UnitSign()<<"  "<<q<<std::endl;
 	//~ std::cout<<q.Value()<<q.UnitSign()<<"  "<<q<<std::type_index(q)<<std::endl;
 	

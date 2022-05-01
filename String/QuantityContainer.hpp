@@ -18,6 +18,18 @@ namespace String_
 	template<typename QuantityT>
 	using QuantityMap = std::map<uint, QuantityT> ;
 	
+	template<typename T1, typename T2, typename Cont>
+	struct QuantityGet
+	{
+		static auto apply()	{	return QuantityGet<T1,typename Cont::Base::Type, typename Cont::Base>::apply();	}
+	};
+	
+	template<typename T, typename Cont>
+	struct QuantityGet<T,T, Cont>
+	{
+		static auto apply()	{	return Cont::Instance().Quantities();	}
+	};
+	
 	template<typename List>
 	class QuantityContainer{};
 
@@ -42,36 +54,20 @@ namespace String_
 		}
 		
 		template<typename ValueType>
-		const std::string Get(ValueType v,ParaType p)
-		{
-			Logger::Log()<<"Unit "<<Head::UnitType::Name<<std::endl;
-			return Head::UnitType::Name;
-		}
+		const std::string Get(ValueType v,ParaType p){	return Head::UnitType::Name; }
 		
-		template<typename Q>
-		size_t Size()
-		{
-			  if(std::is_same<Head,Q>::value)
-					return quantities->size();
-
-             throw "Unknown Type";
-		}
-
 		template<typename ValueType>
-		void Add(ValueType v,ParaType p)
-		{
-			this->quantities->insert(std::pair<uint,Head>(0,Head(v) ));
-			Logger::Log()<<"Unit "<<Head::UnitType::Sign()<<std::endl;
-		}
+		void Add(ValueType v,ParaType p){ this->quantities->insert(std::pair<uint,Head>(0,Head(v) )); }
 		
-		
+		auto Quantities() { return quantities; }
+
 		static QuantityContainer& Instance()
 		{
 			static QuantityContainer instance;
 			return instance;
 		}	
 	private:
-		inline static std::shared_ptr<QuantityMap<Head>> quantities = std::make_shared<QuantityMap<Head>>();
+		static inline std::shared_ptr<QuantityMap<Head>> quantities = std::make_shared<QuantityMap<Head>>();
 	};
 
 	template<typename Head, typename... Tail>
@@ -92,7 +88,6 @@ namespace String_
 			for(auto it = quantities->cbegin(); it != quantities->cend(); ++it)
 				os<<it->second<<std::endl;
 			return Base::Display(os);		
-			//~ return Base::Display(Type::Display(os));		
 		}
 		
 		template<typename ValueType>
@@ -104,25 +99,23 @@ namespace String_
               return Base::Instance().Get(v,p);
 		}
 		
+		template<typename T>
+		const auto Get(){	return QuantityGet<T,Type, ContainerType>::apply();	};
+				
 		template<typename Q>
-		size_t Size()
-		{
-			  if(std::is_same<Head,Q>::value)
-					return quantities->size();
-
-              return Base::Instance().template Size<Q>();
-		}
+		size_t Size(){ return QuantityGet<Q,Type, ContainerType>::apply()->size();	}
+		
+		auto Quantities() { return quantities; }
 		
 		template<typename ValueType>
 		void Add(ValueType v,ParaType p)
 		{
 			if(*p==Head::UnitType::Sign())
-			{
+			{	
 				this->quantities->insert(std::pair<uint,Head>(0,Head(v) ));
-				Logger::Log()<<"RETURN"<<" "<<this->quantities->cbegin()->second<<std::endl;
-				return;
+				Logger::Log()<<"Add "<<this->quantities<<" "<<Type::UnitType::Name<<" "<<this->quantities->size()<<std::endl;
+				return;	
 			}
-				
 			Base::Add(v,p);
 		}
 
@@ -131,40 +124,13 @@ namespace String_
 			static QuantityContainer instance;
 			return instance;
 		}	
+		
 	private:
-		inline static std::shared_ptr<QuantityMap<Head>> quantities = std::make_shared<QuantityMap<Head>>();
+		static inline std::shared_ptr<QuantityMap<Head>> quantities = std::make_shared<QuantityMap<Head>>();
 	};
 
 	template<typename Head, typename... Tail>
-	std::ostream& operator<<(std::ostream& strm, const QuantityContainer<Head,Tail...> c)
-	{
-		return c.Display(strm);
-	}
+	std::ostream& operator<<(std::ostream& strm, const QuantityContainer<Head,Tail...> c){	return c.Display(strm);	}
 	
-	//~ template<typename T1, typename T2>
-	//~ struct QuantityGet
-	//~ {
-		//~ template<typename Head, typename... Tail>
-		//~ static auto apply()
-		//~ {	
-			//~ return QuantityGet<T1,typename QuantityContainer<Tail...>::Type>::apply(t.GetTail());
-		//~ }
-	//~ };
-	
-	//~ template<typename T>
-	//~ struct QuantityGet<T,T>
-	//~ {
-		//~ template<typename Head, typename... Tail>
-		//~ static auto apply(QuantityContainer<Head,Tail...> const& t)
-		//~ {
-			//~ return t.GetHead();
-		//~ }
-	//~ };
-	
-	//~ template<typename T, typename... Types>
-	//~ auto Get()
-	//~ {
-		//~ return QuantityGet<T,typename QuantityContainer<Types...>::Type>::apply();
-	//~ };
 }
 #endif

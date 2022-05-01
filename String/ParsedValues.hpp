@@ -97,6 +97,12 @@ namespace String_
 			return QuantityContainerType::Instance().Get(this->Cast<int>(),this->next->Value());
 		}
 		
+		template<typename Q>
+		static decltype(auto) Get()
+		{
+			return QuantityContainerType::Instance().Get<Q>();
+		}
+		
 		decltype(auto) AsQuantity()
 		{
 			Logger::Log()<<"GET Quanr: "<<QuantityContainerType::Instance().Get(this->Cast<int>(),this->next->Value())<<std::endl;
