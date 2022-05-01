@@ -44,10 +44,10 @@ namespace String_
 		
 		std::ostream& Display(std::ostream& out)
         {
-			out<<this->ctr<<": "<<*(this->strValue)<<std::endl;
-			
+			out<<this->ctr<<": "<<*(this->strValue)<<std::endl;			
 			return out;
         }
+        
         template<typename TVal>
         bool Is()
         {
@@ -84,21 +84,29 @@ namespace String_
         
         char operator[](uint i) const{ return this->strValue->at(i); }
         size_t Size() const { return this->strValue->size(); }
+        uint Counter() const { return this->ctr; }
+        uint Start() const { return this->startIndex; }
+        uint End() const { return this->endIndex; }
                 
 		ParsedValue(const ParsedValue& c)
 		{
 			this->next = c.Next();
 			this->strValue = c.Value();
+			this->ctr = c.Counter();
+			this->startIndex = c.Start();
+			this->endIndex = c.End();
 		};
 		virtual ~ParsedValue()	{ }
 	protected:
 		uint ctr;
+		uint startIndex;
+		uint endIndex;
 		ParaType strValue;
 		BasePtrType next;
 
 		ParsedValue& operator=(const ParsedValue&){ return *this;};
 		ParsedValue(BasePtrType n = nullptr): next{n}{};
-		ParsedValue(ParaType s,BasePtrType n = nullptr): next{n}, strValue{s}{	};
+		ParsedValue(ParaType s, uint start = 0, uint end = 0, uint c = 0, BasePtrType n = nullptr): next{n}, strValue{s}, startIndex{start},endIndex{end},ctr{c}{ Logger::Log()<<"ParsedV: Ctr: "<<ctr<<"/ Start: "<<startIndex<<"/ End: "<<endIndex<<std::endl; };
         
         static auto extractCommonAtoms(ParsedValue::ParaType val)
         {

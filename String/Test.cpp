@@ -27,6 +27,7 @@ int main()
 	    
 	const std::string dc{ "920_08" };
 	p.Parse(dc);
+	p.Parse(pathToShow);
 	auto v = p.Values();
 	auto vi = std::dynamic_pointer_cast<String_::ParsedNumber>(*(v->cbegin()));
 

@@ -22,7 +22,7 @@ namespace String_
 	{
 		using PtrType = std::shared_ptr<ParsedWord>;
 	public:
-		ParsedWord(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next){	Logger::Log()<<"VAL Constructor Word: "<<*val<<std::endl;}
+		ParsedWord(ParsedValue::ParaType val, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, start, end , c, next){	Logger::Log()<<"VAL Constructor Word: "<<*val<<std::endl;}
 		
 		std::string Cast(){ return "Test"; }
 	};
@@ -31,7 +31,7 @@ namespace String_
 	{
 		using PtrType = std::shared_ptr<ParsedBlank>;
 	public:
-		ParsedBlank(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)	{	Logger::Log()<<"VAL Constructor Blank: "<<*val<<std::endl;	}
+		ParsedBlank(ParsedValue::ParaType val,  uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, start, end , c, next)	{	Logger::Log()<<"VAL Constructor Blank: "<<*val<<std::endl;	}
 		
 		std::string Value(){ return "Test"; }
 	};
@@ -51,7 +51,7 @@ namespace String_
 	protected:
 		std::function<bool(char)> isImpl;
 	public:
-		ParsedPunct(ParsedValue::ParaType val, std::function<bool(char)> isPara, ParsedValue::BasePtrType next = nullptr): isImpl(isPara),ParsedValue(val, next){	}
+		ParsedPunct(ParsedValue::ParaType val, std::function<bool(char)> isPara, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): isImpl(isPara),ParsedValue(val, start, end , c, next){	}
 		
 		static auto Create(ParsedValue::ParaType p)
 		{
@@ -73,14 +73,11 @@ namespace String_
 		using PtrType = std::shared_ptr<ParsedNumber>;
 		using ValuesType = std::shared_ptr<std::vector<uint>>;
 		inline static auto ZERO = T::char_<'0'>(); 
-		ValuesType vals;
-		
-		using Types = Typelist<Quantity<Sum>,Quantity<Length>,Quantity<Mass>,Quantity<Time>,Quantity<Current>,Quantity<Temperature>, Quantity<Volume>,Quantity<Work>,Quantity<Area>,Quantity<Scalar>>;
-		
-		
+		ValuesType vals;		
+		using Types = Typelist<Quantity<Sum>,Quantity<Length>,Quantity<Mass>,Quantity<Time>,Quantity<Current>,Quantity<Temperature>, Quantity<Volume>,Quantity<Work>,Quantity<Area>,Quantity<Scalar>>;		
 	public:
 		using QuantityContainerType = QuantityContainer<Types>::ContainerType;
-		ParsedNumber(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): vals(std::make_shared<std::vector<uint>>()), ParsedValue(val, next)
+		ParsedNumber(ParsedValue::ParaType val, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): vals(std::make_shared<std::vector<uint>>()), ParsedValue(val, start, end , c, next)
 		{
 			if(val->size() > 0)
 			{
@@ -141,7 +138,7 @@ namespace String_
 	{
 		using PtrType = std::shared_ptr<ParsedSpace>;
 	public:
-		ParsedSpace(ParsedValue::ParaType val, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, next)	{ Logger::Log()<<"VAL Constructor Spacce: "<<*val<<std::endl;	}
+		ParsedSpace(ParsedValue::ParaType val, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, start, end , c, next)	{ Logger::Log()<<"VAL Constructor Spacce: "<<*val<<std::endl;	}
 		
 		std::string Cast(){ return "Test"; }
 	};
@@ -149,10 +146,10 @@ namespace String_
 	template<typename T>
 	struct Creator
 	{
-		static typename T::ContainerParaType Parse(typename T::ParaType p)
+		static typename T::ContainerParaType Parse(typename T::ParaType p,  uint start = 0, uint end = 0, uint c = 0)
 		{
 			auto ret = std::make_shared<typename T::ContainerType>();
-			ret->push_back(std::make_shared<T>(p));
+			ret->push_back(std::make_shared<T>(p,start,end,c));
 			return ret;
 		}
 	};
@@ -160,7 +157,7 @@ namespace String_
 	template<>
 	struct Creator<ParsedPunct>
 	{
-		static typename ParsedPunct::ContainerParaType Parse(typename ParsedPunct::ParaType p)
+		static typename ParsedPunct::ContainerParaType Parse(typename ParsedPunct::ParaType p, uint start = 0, uint end = 0, uint c = 0)
 		{
 			auto ret = std::make_shared<typename ParsedPunct::ContainerType>();
 			auto vals = ParsedPunct::Create(p);
