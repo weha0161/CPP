@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <map>
 #include "ParsedValues.hpp"
 #include "../Wrapper/Wrapper.hpp"
 #include "../Traits/Traits.h"
@@ -13,10 +14,19 @@
 
 namespace String_
 {
+	struct ParseKey
+	{
+		const size_t Hash;
+		const char* Key;
+		constexpr ParseKey(size_t h, const char* k): Hash{h}, Key{k} { }
+		bool operator<(const ParseKey& k) const{ return Key < k.Key;}
+	};
+	
 	struct ParserState
 	{
 		using Iterator = std::string::const_iterator;
 		using ValueType = std::shared_ptr<ParsedValue>;
+		using MapType = std::map<ParseKey, std::shared_ptr<std::vector<uint>>>;
 		using ContainerType = std::vector<ValueType>;
 		using ContainerParaType = std::shared_ptr<ContainerType>;
 		
@@ -52,18 +62,35 @@ namespace String_
 			this->parsedValues->push_back(v); 
 		}
 		
+		void UpdateMap(ParseKey k, uint begin) 
+		{
+			if ( !this->valuesMap->contains(k) )  
+				this->valuesMap->insert({k,std::make_shared<std::vector<uint>>()} );
+			
+			this->valuesMap->find(k)->second->push_back(begin);
+		}
+		
 		std::ostream& Display(std::ostream& out)
         {
 			for(auto it = this->parsedValues->cbegin(); it != this->parsedValues->cend(); ++it)
 				(*it)->Display(out);
-								
+					
+			for(auto it = this->valuesMap->cbegin(); it != this->valuesMap->cend(); ++it)
+			{
+				out<<"\n"<<it->first.Key<<": ";
+				for(auto i = it->second->cbegin(); i != it->second->cend(); ++i)
+					out<<*i<<",";				
+			}
+					
+			out<<std::endl;
+			
 			return out;
         }
         
 	private:
 		uint ctr = 0;
 		std::shared_ptr<ContainerType> parsedValues = std::make_shared<ContainerType>();
-		//~ std::unique_ptr<ContainerType> parsedValues = std::make_unique<ContainerType>();
+		std::shared_ptr<MapType> valuesMap = std::make_shared<MapType>();
 		std::shared_ptr<std::string> value = std::make_shared<std::string>();
         void reset()
         { 
