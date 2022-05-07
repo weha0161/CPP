@@ -22,6 +22,7 @@ namespace String_
 	{
 		using PtrType = std::shared_ptr<ParsedWord>;
 	public:
+		static constexpr const char* Key = "Word";
 		ParsedWord(ParsedValue::ParaType val, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, start, end , c, next){	Logger::Log()<<"VAL Constructor Word: "<<*val<<std::endl;}
 		
 		std::string Cast(){ return "Test"; }
@@ -31,6 +32,7 @@ namespace String_
 	{
 		using PtrType = std::shared_ptr<ParsedBlank>;
 	public:
+		static constexpr const char* Key = "Blank";
 		ParsedBlank(ParsedValue::ParaType val,  uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, start, end , c, next)	{	Logger::Log()<<"VAL Constructor Blank: "<<*val<<std::endl;	}
 		
 		std::string Value(){ return "Test"; }
@@ -51,6 +53,7 @@ namespace String_
 	protected:
 		std::function<bool(char)> isImpl;
 	public:
+		static constexpr const char* Key = "Punct";
 		ParsedPunct(ParsedValue::ParaType val, std::function<bool(char)> isPara, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): isImpl(isPara),ParsedValue(val, start, end , c, next){	}
 		
 		static auto Create(ParsedValue::ParaType p)
@@ -76,6 +79,7 @@ namespace String_
 		ValuesType vals;		
 		using Types = Typelist<Quantity<Sum>,Quantity<Length>,Quantity<Mass>,Quantity<Time>,Quantity<Current>,Quantity<Temperature>, Quantity<Volume>,Quantity<Work>,Quantity<Area>,Quantity<Scalar>>;		
 	public:
+		static constexpr const char* Key = "Number";
 		using QuantityContainerType = QuantityContainer<Types>::ContainerType;
 		ParsedNumber(ParsedValue::ParaType val, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): vals(std::make_shared<std::vector<uint>>()), ParsedValue(val, start, end , c, next)
 		{
@@ -138,6 +142,7 @@ namespace String_
 	{
 		using PtrType = std::shared_ptr<ParsedSpace>;
 	public:
+		static constexpr const char* Key = "Space";
 		ParsedSpace(ParsedValue::ParaType val, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, start, end , c, next)	{ Logger::Log()<<"VAL Constructor Spacce: "<<*val<<std::endl;	}
 		
 		std::string Cast(){ return "Test"; }
