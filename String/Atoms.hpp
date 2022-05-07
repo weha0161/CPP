@@ -2,6 +2,7 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
+#include <typeinfo>
 #include <memory>
 #include "ParserState.hpp"
 #include "ParsedValues.hpp"
@@ -31,6 +32,7 @@ namespace String_
 		using ParsedValueType = ParsedT;
 		using Type = Atom<T>;
 		using ContainerType = std::vector<T>;
+		static inline constexpr ParseKey Key = ParseKey(typeid(T).hash_code(), ParsedT::Key);
 		
 		static Type& Instance()
 		{
@@ -48,8 +50,9 @@ namespace String_
 				++ctr;
 				
 			auto para = std::make_shared<std::string>(state->Current(),state->Current() + ctr);
-	
 			state->Add(Creator<ParsedT>::Parse(para, state->Counter(), state->Counter()+ctr, ctr));
+			state->UpdateMap(ParseKey(typeid(T).hash_code(), ParsedT::Key), state->Counter());
+
 			return true;
 		}
 		
