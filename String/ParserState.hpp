@@ -92,9 +92,11 @@ namespace String_
 		std::shared_ptr<ContainerType> parsedValues = std::make_shared<ContainerType>();
 		std::shared_ptr<MapType> valuesMap = std::make_shared<MapType>();
 		std::shared_ptr<std::string> value = std::make_shared<std::string>();
+        
         void reset()
         { 
 			this->parsedValues->clear(); 
+			this->valuesMap->clear();
 			this->value = nullptr;
 			this->ctr = 0;
 		}
