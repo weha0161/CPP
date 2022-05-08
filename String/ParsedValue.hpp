@@ -130,12 +130,7 @@ namespace String_
 			return ret;
 		}
 	private:
-		void setNext(BasePtrType ptr)
-		{ 
-			//~ Logger::Log()<<"Current: "<<*(this->strValue)<<"Next: "<<*(ptr->Value())<<std::endl;
-			this->next = ptr; 
-		}
-		
+		void setNext(BasePtrType ptr){	this->next = ptr; 	}
 		void setCounter(uint c)	{ this->ctr = c; }
 	};        
 }

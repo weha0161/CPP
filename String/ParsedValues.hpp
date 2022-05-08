@@ -113,6 +113,29 @@ namespace String_
 		ValuesType Values() { return this->vals; }		
 		uint operator[](uint i)	const {	return (uint)(this->vals->at(i) );	}
 		
+        bool IsCastable()
+        {
+			constexpr auto max = std::numeric_limits<long>::max();
+			uint digitsMax = Number::Digits<max>::Value;
+			
+			std::ostringstream os;
+			os << max;
+			std::string digits = os.str();
+			
+			if(this->Size() < digitsMax) return true;
+			
+			if(this->Size() == digitsMax)
+			{
+				for(auto i = digitsMax; i >= 0; --i)
+					if(this->strValue->at(i) > digits.at(i))
+						return false;
+							
+				return true;	
+			}			
+			
+			return false;				
+		}
+		
 		bool operator==(const ParsedNumber& pi)
 		{
 			if(this->Size() != pi.Size())
