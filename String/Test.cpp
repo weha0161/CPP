@@ -20,7 +20,7 @@ int main()
 	std::cout<<"a == a "<<isA('a')<<std::endl;
 	std::cout<<"a == a "<<isNA('a')<<std::endl;
 	
-	const std::string pathToShow{ "94565467864,,ZWEI\\/;;../3home/VIERmarkus/Dok_umente/cpp/Fi\nle" };
+	const std::string pathToShow{ "94565467864,,ZWEI\\/;;../3home/VIERmarkus/Dok_um45ente/45cpp/F95i\nle" };
 	//~ const std::string pathToShow{ "05 Basislastschrift;931;Bausparkasse Schwaebisch Hall Aktiengesellschaft - Bau;0;DE96500604000000011404;50060400;GENODEFFXXX;Lastschrift 26219070T01 07.2021 EREF: BSH-2021-06-24LS-358260203 MREF: BSH0000062533540 CRED: DE87BSH00000024981 IBAN: DE96500604000000011404 BIC: GENODEFF ANAM: Bausparkasse Schwaebisch Hall Aktiengesellschaft - Bausparkasse der Vo;BSH-2021-06-24LS-358260203" };
 
 	auto p = String_::Parser();
@@ -29,6 +29,7 @@ int main()
 	p.Parse(dc);
 	p.Parse(pathToShow);
 	auto v = p.Values();
+	auto vals = p.Get<String_::ParsedNumber>();
 	auto vi = std::dynamic_pointer_cast<String_::ParsedNumber>(*(v->cbegin()));
 
 	//~ std::cout<<"13:___"<<(*vi)[13]<<std::endl;
@@ -39,7 +40,11 @@ int main()
 
 	std::cout<<"CASTABLE:___"<<vi->IsCastable()<<std::endl;
 	
+	std::cout<<"ALL________________"<<vals->size()<<std::endl;
+	for(auto it = vals->cbegin(); it != vals->end(); ++it)
+		Logger::Log()<<*((*it)->Value())<<std::endl;
 
+	std::cout<<"ALL________________END"<<vals->size()<<std::endl;
 	const std::string dc1{ "9,8" };
 	p.Parse(dc1);
 	auto v1 = p.Values();

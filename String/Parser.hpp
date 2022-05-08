@@ -19,9 +19,12 @@ namespace String_
 {
 	class Parser
 	{	
+		template<typename T>
+		using ReturnType = std::shared_ptr<std::vector<std::shared_ptr<T>>>;
 	public:
 		using Types = Typelist<Atom<ParsedPunct>, Atom<ParsedBlank>, Atom<ParsedSpace>,Atom<uint>,Atom<std::string>,Atom<char>>;
 		using AtomContainerType = AtomContainer<Types>::ContainerType;
+		using ValueType = std::shared_ptr<ParsedValue>;
 		
 		Parser(): state(std::make_shared<ParserState>()){	};
 				
@@ -39,9 +42,18 @@ namespace String_
 			this->Parse(std::make_shared<std::string>(s));
 		}
 		
-		using ValueType = std::shared_ptr<ParsedValue>;
-		//~ ValueType First(){ return this->state}
 		
+		template<typename T>
+		ReturnType<T> Get()
+		{
+			auto ret = std::make_shared<std::vector<std::shared_ptr<T>>>();
+			
+			for(auto it = this->state->Values()->begin(); it != this->state->Values()->end(); ++it)
+				if(auto cv = std::dynamic_pointer_cast<T>(*it))
+					ret->push_back(cv);
+					
+			return ret;
+		}		
 		
 		ParserState::ContainerParaType Values(){ return this->state->Values(); };
 		

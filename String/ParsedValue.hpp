@@ -42,7 +42,7 @@ namespace String_
 		
 		virtual ContainerParaType Get(ParaType p) { return ContainerParaType(); } 
 		
-		std::ostream& Display(std::ostream& out)
+		std::ostream& Display(std::ostream& out) const
         {
 			out<<this->ctr<<": "<<*(this->strValue)<<std::endl;			
 			return out;
@@ -87,7 +87,7 @@ namespace String_
         uint Counter() const { return this->ctr; }
         uint Start() const { return this->startIndex; }
         uint End() const { return this->endIndex; }
-                
+        
 		ParsedValue(const ParsedValue& c)
 		{
 			this->next = c.Next();
