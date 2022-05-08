@@ -110,7 +110,9 @@ namespace String_
 		
 		ValuesType Values() { return this->vals; }
 		
-		//~ uint operator[](uint i)	const { return i >= this->vals->size() ? this->vals->at(i) : 0;	}
+		uint operator[](uint i)	const 
+		{ Logger::Log()<<this->vals->at(i)<<std::endl;
+			return (uint)(this->vals->at(i) );	}
 		
 		bool operator==(const ParsedNumber& pi)
 		{

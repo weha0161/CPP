@@ -31,6 +31,13 @@ int main()
 	auto v = p.Values();
 	auto vi = std::dynamic_pointer_cast<String_::ParsedNumber>(*(v->cbegin()));
 
+	std::cout<<"13:___"<<(*vi)[13]<<std::endl;
+	std::cout<<"14:___"<<(*vi)[14]<<std::endl;
+	std::cout<<"15:___"<<(*vi)[15]<<std::endl;
+	std::cout<<"16:___"<<(*vi)[16]<<std::endl;
+	std::cout<<"17:___"<<(*vi)[17]<<std::endl;
+	
+
 	const std::string dc1{ "9,8" };
 	p.Parse(dc1);
 	auto v1 = p.Values();

@@ -106,7 +106,7 @@ namespace String_
 
 		ParsedValue& operator=(const ParsedValue&){ return *this;};
 		ParsedValue(BasePtrType n = nullptr): next{n}{};
-		ParsedValue(ParaType s, uint start = 0, uint end = 0, uint c = 0, BasePtrType n = nullptr): next{n}, strValue{s}, startIndex{start},endIndex{end},ctr{c}{ Logger::Log()<<"ParsedV: Ctr: "<<ctr<<"/ Start: "<<startIndex<<"/ End: "<<endIndex<<std::endl; };
+		ParsedValue(ParaType s, uint start = 0, uint end = 0, uint c = 0, BasePtrType n = nullptr): next{n}, strValue{s}, startIndex{start},endIndex{end},ctr{c}{ };
         
         static auto extractCommonAtoms(ParsedValue::ParaType val)
         {
