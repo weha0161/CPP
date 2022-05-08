@@ -35,7 +35,7 @@ namespace String_
 		static constexpr const char* Key = "Blank";
 		ParsedBlank(ParsedValue::ParaType val,  uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, start, end , c, next)	{	Logger::Log()<<"VAL Constructor Blank: "<<*val<<std::endl;	}
 		
-		std::string Value(){ return "Test"; }
+		std::string Value(){ return Key; }
 	};
 	
 	template<typename T>
@@ -81,7 +81,8 @@ namespace String_
 	public:
 		static constexpr const char* Key = "Number";
 		using QuantityContainerType = QuantityContainer<Types>::ContainerType;
-		ParsedNumber(ParsedValue::ParaType val, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): vals(std::make_shared<std::vector<uint>>()), ParsedValue(val, start, end , c, next)
+		ParsedNumber(ParsedValue::ParaType val, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): 
+			vals(std::make_shared<std::vector<uint>>()), 	ParsedValue(val, start, end , c, next)
 		{
 			if(val->size() > 0)
 			{
@@ -143,50 +144,10 @@ namespace String_
 		using PtrType = std::shared_ptr<ParsedSpace>;
 	public:
 		static constexpr const char* Key = "Space";
-		ParsedSpace(ParsedValue::ParaType val, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, start, end , c, next)	{ Logger::Log()<<"VAL Constructor Spacce: "<<*val<<std::endl;	}
+		ParsedSpace(ParsedValue::ParaType val, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, start, end , c, next){}
 		
-		std::string Cast(){ return "Test"; }
-	};
-	
-	template<typename T>
-	struct Creator
-	{
-		static typename T::ContainerParaType Parse(typename T::ParaType p,  uint start = 0, uint end = 0, uint c = 0)
-		{
-			auto ret = std::make_shared<typename T::ContainerType>();
-			ret->push_back(std::make_shared<T>(p,start,end,c));
-			return ret;
-		}
-	};
-	
-	template<>
-	struct Creator<ParsedPunct>
-	{
-		static typename ParsedPunct::ContainerParaType Parse(typename ParsedPunct::ParaType p, uint start = 0, uint end = 0, uint c = 0)
-		{
-			auto ret = std::make_shared<typename ParsedPunct::ContainerType>();
-			auto vals = ParsedPunct::Create(p);
-			ret->insert(ret->end(), vals->begin(), vals->end());
-			return ret;
-		}
-	};
-	
-	template<> struct IsImpl<uint,ParsedValue::BasePtrType>{ bool operator ()(ParsedValue::BasePtrType bp){ Logger::Log()<<"UINT"<<std::endl; return true;}	};
-	template<> struct IsImpl<double, ParsedValue::BasePtrType>
-	{ 
-		bool operator ()(ParsedValue::BasePtrType bp)
-		{ 
-			if(bp->Next() == nullptr) return false;
-			if(bp->Next()->Next() == nullptr) return false;
-			if(!std::dynamic_pointer_cast<ParsedNumber>(bp->Next()->Next())) return false;
-
-			auto pp = std::dynamic_pointer_cast<ParsedPunct>(bp->Next());
-			if(!pp) return false;
-			
-			return pp->template Is<T::char_<','>>();
-		}	
-	};
-        
+		std::string Cast(){ return Key; }
+	};        
 }
 
 #endif
