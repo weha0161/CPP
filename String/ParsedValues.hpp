@@ -38,6 +38,16 @@ namespace String_
 		std::string Value(){ return Key; }
 	};
 	
+	class ParsedSpace: public ParsedValue
+	{
+		using PtrType = std::shared_ptr<ParsedSpace>;
+	public:
+		static constexpr const char* Key = "Space";
+		ParsedSpace(ParsedValue::ParaType val, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, start, end , c, next){}
+		
+		std::string Cast(){ return Key; }
+	};        
+	
 	template<typename T>
 	class SpecializedPunctation;
 	
@@ -95,24 +105,13 @@ namespace String_
 		}
 		
 		decltype(auto) GetQuantityUnit(){ return QuantityContainerType::Instance().Get(this->Cast<int>(),this->next->Value());	}
+		decltype(auto) AsQuantity()	{ return QuantityContainerType::Instance().Add(this->Cast<int>(),this->next->Value());	}
 		
 		template<typename Q>
-		static decltype(auto) Get()
-		{
-			return QuantityContainerType::Instance().Get<Q>();
-		}
-		
-		decltype(auto) AsQuantity()
-		{
-			Logger::Log()<<"GET Quanr: "<<QuantityContainerType::Instance().Get(this->Cast<int>(),this->next->Value())<<std::endl;
-			return QuantityContainerType::Instance().Add(this->Cast<int>(),this->next->Value());
-		}
-		
-		ValuesType Values() { return this->vals; }
-		
-		uint operator[](uint i)	const 
-		{ Logger::Log()<<this->vals->at(i)<<std::endl;
-			return (uint)(this->vals->at(i) );	}
+		static decltype(auto) Get()	{	return QuantityContainerType::Instance().Get<Q>();	}
+				
+		ValuesType Values() { return this->vals; }		
+		uint operator[](uint i)	const {	return (uint)(this->vals->at(i) );	}
 		
 		bool operator==(const ParsedNumber& pi)
 		{
@@ -139,17 +138,7 @@ namespace String_
 		}
 		
 		static std::ostream& Display(std::ostream& os) { return QuantityContainerType::Display(os);	}
-	};
-	
-	class ParsedSpace: public ParsedValue
-	{
-		using PtrType = std::shared_ptr<ParsedSpace>;
-	public:
-		static constexpr const char* Key = "Space";
-		ParsedSpace(ParsedValue::ParaType val, uint start = 0, uint end = 0, uint c = 0, ParsedValue::BasePtrType next = nullptr): ParsedValue(val, start, end , c, next){}
-		
-		std::string Cast(){ return Key; }
-	};        
+	};	
 }
 
 #endif
