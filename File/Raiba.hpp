@@ -21,6 +21,7 @@
 #include "../Visitor/Visitor.hpp"
 #include "../String/String_.hpp"
 #include "../Home/Parser.hpp"
+#include "../String/Parser.hpp"
 
 #ifndef RAIBA_HPP
 #define RAIBA_HPP
@@ -69,6 +70,7 @@ namespace Bank
 			auto keyLine = *(begin + OwnerIdx);
 			if(keyLine != "")
 			{
+				parser.Parse(keyLine);
 				auto key = ExtractKey(keyLine);
 				auto date = *(begin + DateIdx);
 				auto transaction = *(begin + TranactionIdx);
@@ -94,36 +96,6 @@ namespace Bank
 				}
 			}
 		}						
-// 		static void ProcessValues(std::vector<std::string> values)
-// 		{
-// 			auto keyLine = values.at(OwnerIdx);
-// 			if(keyLine != "")
-// 			{
-// 				auto key = ExtractKey(keyLine);
-// 				auto date = values.at(DateIdx);
-// 				auto transaction = values.at(TranactionIdx);
-// 				
-// 				auto val = values.at(QuantityIdx);
-// 				std::string::iterator end_pos = std::remove(val.begin(), val.end(), ' ');
-// 				val.erase(end_pos, val.end());
-// 
-// 				
-// 				auto valString = *(values.end()-2);
-// 				valString = String_::Remove<T::char_<','>>(valString);
-// 				valString = String_::Remove<T::char_<'.'>>(valString);
-// 				
-// 				if(isdigit(valString.at(0)))
-// 				{
-// 					auto sum = std::stod(valString) / 100;
-// 				
-// 					auto iban =  values.at(IBANIdx);
-// 					auto bic =  values.at(BICIdx);
-// 					
-// 					std::string sign = *(values.end()-1);
-// 					Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0], transaction);
-// 				}
-// 			}
-// 		}						
 		
 	protected:
 		template<typename T>
@@ -148,6 +120,8 @@ namespace Bank
 		{
 			;
 		}
+	private:
+		inline static String_::Parser parser = String_::Parser();
 	};
 }
 
