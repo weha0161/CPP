@@ -37,7 +37,7 @@ namespace CSV
 	struct Repository
 	{
 		using InputIterator = std::vector<std::string>::const_iterator;
-		using FileTypes = Typelist<FS::CPP, FS::HPP, FS::CTRV,FS::CSV>::Type;
+		using FileTypes = Typelist<FS::KEYS,FS::CPP, FS::HPP, FS::CTRV,FS::CSV>::Type;
 		using TypeContainer = FS::FileTypeContainer<FileTypes>;
 		using Direction = Bank::Transfer<Bank::In>;
 		using ParseTypes = Typelist<CE1,CVat,CG1,CWA,CWO,CWOut, CBCW,CBHW, CMCW,CMHW,CTCW,CTHW, Bank::Custom<0>, Bank::Raiba<0>, Bank::Comdirect<0>,StageContainerType>::Type;
@@ -113,9 +113,6 @@ namespace CSV
 					{
 					Logger::Log()<<it->first<<"\t"<<(*itNode)->Path()<<std::endl;
 						auto lines = CSV::Repository::Read((*itNode)->Name());	
-// 						Works if multiple Itartions are handled
-// 						auto lines = FS::ReadLines((*itNode)->Path());
-// 						Logger::Log(lines.begin(), lines.end());
 						it->second(lines.cbegin(), lines.cend());
 						
 					}

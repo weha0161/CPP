@@ -57,7 +57,7 @@ namespace Bank
 	{
 		using Type = AccountTransfer<Account,Direction> ;
 		
-		Key owner;
+		Key<std::string> owner;
 		Entry transaction;
 		Entry cause;
 		DateTimes::Date date;
@@ -70,12 +70,12 @@ namespace Bank
 	public:
 		using AccountType = Account ;
 		using DirectionType = Direction ;
-		using KeyType = Key;
+		using KeyType = Key<std::string>;
 		using QunatityType = Quantity<Sum>;
 		
 		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC", std::string cause_ = "") : owner(k), transaction(c), date(Parsers::Parser<std::string,DateTimes::Date,std::string>::Parse(d)), value(v), iban(i), bic(b), cause(cause_) { 	};
 		
-		const Key& GetOwner() const { return owner; }
+		const KeyType& GetOwner() const { return owner; }
 		const Entry& GetTransaction() const { return transaction; }
 		const Entry& GetCause() const { return cause; }
 		const DateTimes::Date& GetDate() const { return date; }

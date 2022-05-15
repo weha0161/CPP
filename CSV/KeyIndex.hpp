@@ -8,21 +8,7 @@
 //--------------------------------KeyIndex------------------------------------------------
 namespace CSV
 {
-	template<typename T = std::string>
-	class Key
-	{
-		public:
-			using ValueType = T;
-			using Type = Key<T>;
-			using ContainerType  = std::vector<T>;
-			using ContainerPtrType  = std::shared_ptr<ContainerType>;
-
-			//~ bool Matches(ValueType k){ return std::find(this->patterns->cbegin(), this->patterns->cend(), k) != this->patterns->cend(); }
-			bool Matches(std::string k){ return std::find(this->patterns->cbegin(), this->patterns->cend(), k) != this->patterns->cend(); }
-			//~ bool Matches(std::string k){ return "123" == k; }
-		private:
-			ContainerPtrType patterns = std::make_shared<ContainerType>();
-	};
+	
 	
 	template<typename T = uint>
 	class Index

@@ -38,7 +38,7 @@ namespace Bank
 		using OutType = AccountTransfer<Raiba,Transfer<Out>>;
 		using IsOutTransferSign = T::char_<'S'>;
 		using Base = Account<Raiba>;
-		
+		friend class Account<Raiba>;
 		
 		inline static T::Is_<IsOutTransferSign> IsOutTransfer;
 		inline static const std::string Name = "Raiba";
@@ -70,8 +70,7 @@ namespace Bank
 			auto keyLine = *(begin + OwnerIdx);
 			if(keyLine != "")
 			{
-				parser.Parse(keyLine);
-				auto key = ExtractKey(keyLine);
+				auto key = keyLine;
 				auto date = *(begin + DateIdx);
 				auto transaction = *(begin + TranactionIdx);
 				
@@ -81,6 +80,8 @@ namespace Bank
 
 				
 				auto valString = *(end-2);
+				//~ parser.Parse(transaction);
+				Logger::Log()<<"TRANSACTION:\n"<<transaction<<std::endl;
 				valString = String_::Remove<T::char_<','>>(valString);
 				valString = String_::Remove<T::char_<'.'>>(valString);
 				
@@ -92,7 +93,18 @@ namespace Bank
 					auto bic =  *(begin + BICIdx);
 					
 					std::string sign = *(end-1);
+					//~ Logger::Log()<<"Base:\n"<<Base::keyIndex<<std::endl;
+					//~ Base::keyMap->insert({Base::keyIndex, 1});
+					//~ Logger::Log()<<"Base:\n"<<(Base::keyMap->cbegin())->second<<std::endl;
+					//~ Logger::Log()<<"key:\n"<<key<<std::endl;
+					//~ Logger::Log()<<"sum:\n"<<sum<<std::endl;
+					//~ Logger::Log()<<"date:\n"<<date<<std::endl;
+					//~ Logger::Log()<<"iban:\n"<<iban<<std::endl;
+					//~ Logger::Log()<<"bic:\n"<<bic<<std::endl;
+					//~ Logger::Log()<<"sign:\n"<<sign[0]<<std::endl;
+					//~ Logger::Log()<<"Trans:\n"<<transaction<<std::endl;
 					Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0], transaction);
+					Logger::Log()<<"VAL:\n"<<valString<<std::endl;
 				}
 			}
 		}						
@@ -110,10 +122,6 @@ namespace Bank
 				return "";
 						
 			return (it)->second;
-		}
-		static std::string ExtractKey(std::string s)
-		{
-			return s;
 		}
 		
 		static void InterpretTransaction(std::string transaction)

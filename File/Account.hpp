@@ -21,7 +21,7 @@
 #include "../Typelist/Typelist.h"
 #include "../Visitor/Visitor.hpp"
 #include "../String/String_.hpp"
-// #include "../Home/Parser.hpp"
+#include "../CSV/KeyIndex.hpp"
 
 #ifndef ACCOUNT_HPP
 #define ACCOUNT_HPP
@@ -35,18 +35,25 @@ namespace Bank
 	{
 	protected:		
 		using CSVSeparator = T::char_<';'> ;
-		Key owner;
+		Key<std::string> owner;
 		IBAN iban;
 		BIC bic;
+		
+		inline static const std::string  KeysFilename = Derived::Name + ".keys";
 	public:
 		using Type = Account<Derived> ;
 		using InTransfer = AccountTransfer<Derived,Transfer<In>>;
 		using OutTransfer = AccountTransfer<Derived, Transfer<Out>>;
-		using KeyType = Key ;
+		using KeyType = Key<std::string>;
 		using ParseContIn = TransferContainer<AccountTransfer<Derived,Transfer<In>>>;
 		using ParseContOut = TransferContainer<AccountTransfer<Derived,Transfer<Out>>>;
 		using QunatityType = Quantity<Sum>;
 		using InputIterator = std::vector<std::string>::const_iterator;
+		using KeyMapType = std::map<const char*, uint>;
+		using KeyMapPtrType = std::unique_ptr<KeyMapType>;
+		using KeyIndexType = CSV::KeyIndex<KeyType,uint>;
+		using KeyIndexContainerType = CSV::KeyIndexContainer<std::string,uint>;
+		using KeyIndexContainerPtrType = std::unique_ptr<KeyIndexContainerType>;
 		
 		static void Parse(InputIterator begin, InputIterator end)
 		{
@@ -55,6 +62,8 @@ namespace Bank
 				uint ctr = 0;
 							
 				auto lines = std::vector<std::string>(begin + Derived::HeaderLength, end - Derived::TrailerLength);
+				keyIndices->UpdateKeys(lines);
+				
 				for(auto line : lines)
 				{
 					auto values = String_::Split<CSVSeparator>(line);
@@ -62,24 +71,37 @@ namespace Bank
 					if (values.size() < MaxIdx)
 						continue;
 										
-					Derived::ProcessValues(values.cbegin(), values.cend());					
+					//~ Derived::ProcessValues(values.cbegin(), values.cend());					
 				}
 			}
 
 			return;
 		}
-		
+		static void CreacteKeys(InputIterator begin, InputIterator end)
+		{
+				Logger::Log()<<"CREATEKEYS"<<std::endl;
+			for(auto it = begin; it != end; ++it)
+			{
+				auto values = String_::Split<T::char_<':'>>(*it);
+				auto keyItem = *values.cbegin();
+				auto keys = String_::Split<T::char_<':'>>(*(values.cbegin() + 1));
+				Logger::Log()<<keyItem<<"\t"<<keys[0]<<std::endl;
+			}
+		}
 				
 		template<typename Cont>
 		static void RegisterTo(Cont& cont)
 		{
 			cont.insert(std::make_pair(Derived::Filename,  &Type::Parse));
+			cont.insert(std::make_pair(Type::KeysFilename,  &Type::CreacteKeys));
 		}	
 		
 	protected:
 		Account(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : owner(k), iban(i), bic(b) { };
 		
 		static constexpr unsigned int Indices[4] = {Derived::OwnerIdx, Derived::DateIdx, Derived::TranactionIdx, Derived::QuantityIdx};
+		inline static KeyMapPtrType keyMap = std::make_unique<KeyMapType>();
+		inline static KeyIndexContainerPtrType keyIndices = std::make_unique<KeyIndexContainerType>();
 		static const unsigned int MaxIdx = *std::max_element(Indices,Indices+4);
 		
 		static std::string GetNumericValue(std::string s)
@@ -106,8 +128,6 @@ namespace Bank
 				Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));
 			
 		}
-		
-	private:
 	};
 }
 

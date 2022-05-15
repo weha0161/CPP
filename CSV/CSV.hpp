@@ -43,8 +43,7 @@ public:
 
 
 //--------------------------------TYPES------------------------------------------------
-
-
+template<typename T = std::string>
 class Key: public Element
 {
 public:
@@ -53,11 +52,24 @@ public:
 	Key* DoCreate(){return this;};
 	bool operator==(std::string s) const{ return s == this->Value; }
 	bool operator!=(std::string s) const{ return s != this->Value; }
+	using ValueType = T;
+	using Type = Key<T>;
+	using ContainerType  = std::vector<T>;
+	using ContainerPtrType  = std::shared_ptr<ContainerType>;
+
+	//~ bool Matches(ValueType k){ return std::find(this->patterns->cbegin(), this->patterns->cend(), k) != this->patterns->cend(); }
+	bool Matches(std::string k){ return std::find(this->patterns->cbegin(), this->patterns->cend(), k) != this->patterns->cend(); }
+	//~ bool Matches(std::string k){ return "123" == k; }
+private:
+	ContainerPtrType patterns = std::make_shared<ContainerType>();
 };
 
-bool operator==(std::string s, const Key& k) { return k == s; }
-bool operator!=(std::string s, const Key& k) { return k != s; }
-inline bool operator< (const Key& lhs, const Key& rhs){ return lhs.Value < rhs.Value; }
+template<typename T = std::string>
+bool operator==(std::string s, const Key<T>& k) { return k == s; }
+template<typename T = std::string>
+bool operator!=(std::string s, const Key<T>& k) { return k != s; }
+template<typename T = std::string>
+inline bool operator< (const Key<T>& lhs, const Key<T>& rhs){ return lhs.Value < rhs.Value; }
 
 template<typename T = double>
 class Value: public Element
@@ -94,11 +106,12 @@ public:
 };
 
 
+template<typename T = std::string>
 class Item: public Element
 {
 public:
 	inline static const std::string Identifier = "Item";
-	Key key;
+	Key<T> key;
 	Item(std::string s): Element(s), key(s){};
 	Item* DoCreate(){return this;};
 };
@@ -115,7 +128,7 @@ public:
 //--------------------------------Factory------------------------------------------------
 class Date;
 
-using Elements = boost::mpl::vector<Key, Value<double>, Entry, Date>;
+using Elements = boost::mpl::vector<Key<std::string>, Value<double>, Entry, Date>;
 
 template<class TList = Elements, class Unit = Element,typename T = std::string,class IdentifierType = std::string, template<class> class CreatePolicy = CreateElementNewPolicy>
 class ElementFactory

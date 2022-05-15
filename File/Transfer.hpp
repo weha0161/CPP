@@ -43,7 +43,7 @@ namespace Bank
 		using ContainerType = TransactionContainer<DataType>;
 		using Iterator = ContainerType::Iterator;
 		
-		Key owner;
+		Key<std::string> owner;
 		IBAN iban;
 		BIC bic;
 		Quantity<Sum> total;
@@ -52,7 +52,7 @@ namespace Bank
 	protected:
 		using CSVSeparator = T::char_<';'> ;
 	public:
-		using KeyType = Key;
+		using KeyType = Key<std::string>;
 		using QunatityType = Quantity<Sum>;
 		
 		AccountEndpoint(std::string ownerKey, std::string i = "IBAN", std::string b = "BIC") : owner(ownerKey), iban(i), bic(b) { };
@@ -63,7 +63,7 @@ namespace Bank
 		};
 		AccountEndpoint():owner("ownerKey"), iban("i"), bic("b"), total(0) { };
 		
-		const Key& GetOwner() const { return owner; }
+		const KeyType& GetOwner() const { return owner; }
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetTotal() const { return total; }
