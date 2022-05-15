@@ -151,6 +151,7 @@ namespace FS
 	};
 	
 	struct CTRV: public FileTypeBase<CTRV>{};
+	struct KEYS: public FileTypeBase<KEYS>{};
 	struct CPP: public FileTypeBase<CPP>{};
 	struct HPP: public FileTypeBase<HPP>{};
 	struct H: public FileTypeBase<H>{};
@@ -177,6 +178,7 @@ namespace FS
 
 	
 	template<> const char* FileTypeBase<CTRV>::Extension = ".ctrv";
+	template<> const char* FileTypeBase<KEYS>::Extension = ".keys";
 	template<> const char* FileTypeBase<CPP>::Extension = ".cpp";
 	template<> const char* FileTypeBase<HPP>::Extension = ".hpp";
 	template<> const char* FileTypeBase<H>::Extension = ".h";

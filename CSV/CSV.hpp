@@ -51,8 +51,12 @@ public:
 	inline static const std::string Identifier = "Key";
 	Key(std::string s = ""): Element(s) {};
 	Key* DoCreate(){return this;};
+	bool operator==(std::string s) const{ return s == this->Value; }
+	bool operator!=(std::string s) const{ return s != this->Value; }
 };
 
+bool operator==(std::string s, const Key& k) { return k == s; }
+bool operator!=(std::string s, const Key& k) { return k != s; }
 inline bool operator< (const Key& lhs, const Key& rhs){ return lhs.Value < rhs.Value; }
 
 template<typename T = double>
