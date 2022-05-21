@@ -29,6 +29,13 @@ public:
 	using ContainerType = TransferItemContainer<Typelist<Head>>;
 protected:
 	TransferItemContainer() { Logger::Log<Info>()<<"TransferItemContainer created."<<std::endl; };
+
+	template<typename T, typename Cont = T::KeyIndexContainerType::ContainerType>
+	auto Create(const std::string sourcePath, Cont ret)
+	{
+		ret->push_back(typename T::KeyIndexContainerType::KeyIndexType(Type::Identifier));
+		return ret;		
+	}
 public:
 	static std::ostream& Display(std::ostream& os) 
 	{
@@ -40,6 +47,7 @@ public:
 		Logger::Log()<<Type::Identifier<<std::endl;
 	}
 	
+
 	template<unsigned N>
 	auto Get() { return At<CounterTypes,N>::Type; }
 
@@ -70,6 +78,14 @@ public:
 	{
 		Logger::Log()<<Type::Identifier<<std::endl;
 		Base::Read();		
+	}
+	
+	template<typename T>
+	auto Create(const std::string sourcePath = ".")
+	{
+		auto ret = std::make_unique<typename T::KeyIndexContainerType::ContainerType>();
+		ret->push_back(typename T::KeyIndexContainerType::KeyIndexType(Type::Identifier));
+		return Base::template Create<T>(sourcePath, std::move(ret));		
 	}
 	
 	template<unsigned N>
