@@ -13,6 +13,7 @@
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <filesystem>
+#include "TransferItemContainer.hpp"
 #include "JSONParser.hpp"
 #include "../Logger/Logger.hpp"
 #include "../Wrapper/Wrapper.hpp"
@@ -52,7 +53,7 @@ namespace Bank
 		using KeyMapType = std::map<const char*, uint>;
 		using KeyMapPtrType = std::unique_ptr<KeyMapType>;
 		using KeyIndexType = CSV::KeyIndex<KeyType,uint>;
-		using KeyIndexContainerType = CSV::KeyIndexContainer<std::string,uint>;
+		using KeyIndexContainerType = CSV::KeyIndexContainer<Derived, std::string,uint>;
 		using KeyIndexContainerPtrType = std::unique_ptr<KeyIndexContainerType>;
 		
 		static void Parse(InputIterator begin, InputIterator end)
@@ -79,6 +80,7 @@ namespace Bank
 		}
 		static void CreacteKeys(InputIterator begin, InputIterator end)
 		{
+			TransferItemContainerType::Instance().Read();
 				Logger::Log()<<"CREATEKEYS"<<std::endl;
 			for(auto it = begin; it != end; ++it)
 			{

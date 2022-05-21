@@ -34,7 +34,7 @@ namespace CSV
 			Index<TIndex> index;
 	};
 	
-	template<typename TKey = std::string, typename TIndex = uint>
+	template<typename AccountType,typename TKey = std::string, typename TIndex = uint>
 	class KeyIndexContainer
 	{
 		public:
