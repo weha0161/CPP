@@ -81,7 +81,7 @@ namespace Bank
 		static void CreacteKeys(InputIterator begin, InputIterator end)
 		{
 			TransferItemContainerType::Instance().Read();
-				Logger::Log()<<"CREATEKEYS"<<std::endl;
+						
 			for(auto it = begin; it != end; ++it)
 			{
 				auto values = String_::Split<T::char_<':'>>(*it);
@@ -103,7 +103,7 @@ namespace Bank
 		
 		static constexpr unsigned int Indices[4] = {Derived::OwnerIdx, Derived::DateIdx, Derived::TranactionIdx, Derived::QuantityIdx};
 		inline static KeyMapPtrType keyMap = std::make_unique<KeyMapType>();
-		inline static KeyIndexContainerPtrType keyIndices = std::make_unique<KeyIndexContainerType>();
+		inline static KeyIndexContainerPtrType keyIndices = std::make_unique<KeyIndexContainerType>(TransferItemContainerType::Instance().template Create<Derived>());
 		static const unsigned int MaxIdx = *std::max_element(Indices,Indices+4);
 		
 		static std::string GetNumericValue(std::string s)

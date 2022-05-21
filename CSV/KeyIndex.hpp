@@ -55,6 +55,7 @@ namespace CSV
 			using KeyIndexType = KeyIndex<TKey,TIndex>;
 			using ContainerType  = std::vector<KeyIndexType>;
 			using ContainerPtrType  = std::unique_ptr<ContainerType>;
+			KeyIndexContainer(ContainerPtrType k): keyIndices{std::move(k)} { Logger::Log()<<AccountType::Name<<": "<<keyIndices->at(0);};
 			
 			void UpdateKeys(const std::vector<std::string> keys)
 			{
@@ -64,7 +65,7 @@ namespace CSV
 							it->setIndex(i);
 			}
 		private:
-			ContainerPtrType keyIndices = std::make_unique<ContainerType>();
+			ContainerPtrType keyIndices;
 	};	
 }
 
