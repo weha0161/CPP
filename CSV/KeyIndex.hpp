@@ -42,7 +42,7 @@ namespace CSV
 			using IndexType = TIndex;
 			using KeyIndexType = KeyIndex<TKey,TIndex>;
 			using ContainerType  = std::vector<KeyIndexType>;
-			using ContainerPtrType  = std::shared_ptr<std::vector<KeyIndexType>>;
+			using ContainerPtrType  = std::unique_ptr<ContainerType>;
 			
 			void UpdateKeys(const std::vector<std::string> keys)
 			{
@@ -52,7 +52,7 @@ namespace CSV
 							it->setIndex(i);
 			}
 		private:
-			ContainerPtrType keyIndices = std::make_shared<ContainerType>();
+			ContainerPtrType keyIndices = std::make_unique<ContainerType>();
 	};	
 }
 
