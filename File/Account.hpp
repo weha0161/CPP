@@ -127,7 +127,6 @@ namespace Bank
 		Account(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : owner(k), iban(i), bic(b) { };
 		
 		static constexpr unsigned int Indices[4] = {Derived::OwnerIdx, Derived::DateIdx, Derived::TranactionIdx, Derived::QuantityIdx};
-		//~ inline static KeyMapPtrType keyMap = std::make_unique<KeyMapType>();
 		inline static KeyIndexContainerPtrType keyIndices = std::make_unique<KeyIndexContainerType>(TransferItemContainerType::Instance().template Create<Derived>());
 		static const unsigned int MaxIdx = *std::max_element(Indices,Indices+4);
 		
