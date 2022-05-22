@@ -41,7 +41,7 @@ namespace Bank
 		
 		inline static T::Is_<IsOutTransferSign> IsOutTransfer;
 		inline static const std::string Name = "Comdirect";
-		inline static const std::string Filename = "Umsaetze_1026947527.csv";
+		inline static const std::string Filename = "Umsaetze_DE832004113306947527";
 		inline static constexpr unsigned int OwnerIdx = 3;
 		inline static constexpr unsigned int TranactionIdx = 3;
 		inline static constexpr unsigned int DateIdx = 0;
