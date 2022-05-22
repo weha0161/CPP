@@ -55,21 +55,26 @@ public:
 	using ValueType = T;
 	using Type = Key<T>;
 	using ContainerType  = std::vector<T>;
+	using Iterator  = std::vector<T>::const_iterator;
 	using ContainerPtrType  = std::shared_ptr<ContainerType>;
 
-	//~ bool Matches(ValueType k){ return std::find(this->patterns->cbegin(), this->patterns->cend(), k) != this->patterns->cend(); }
 	bool Matches(std::string k){ return std::find(this->patterns->cbegin(), this->patterns->cend(), k) != this->patterns->cend(); }
-	//~ bool Matches(std::string k){ return "123" == k; }
+	void UpdatePatterns(Iterator begin, Iterator end) { this->patterns =  std::make_shared<ContainerType>(begin, end);}
 private:
 	ContainerPtrType patterns = std::make_shared<ContainerType>();
 };
 
 template<typename T = std::string>
 bool operator==(std::string s, const Key<T>& k) { return k == s; }
+
 template<typename T = std::string>
 bool operator!=(std::string s, const Key<T>& k) { return k != s; }
+
 template<typename T = std::string>
 inline bool operator< (const Key<T>& lhs, const Key<T>& rhs){ return lhs.Value < rhs.Value; }
+
+template<typename T = std::string>
+inline bool operator== (const Key<T>& lhs, const Key<T>& rhs){ return lhs.Value == rhs.Value; }
 
 template<typename T = double>
 class Value: public Element
