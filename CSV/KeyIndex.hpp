@@ -1,6 +1,7 @@
 #include "CSV.hpp"
 #include "../Logger/Logger.hpp"
 #include <memory>
+#include <exception>
 
 #ifndef KEYINDEX_H
 #define KEYINDEX_H
@@ -27,18 +28,28 @@ namespace CSV
 			KeyIndex(TKey k): key{k}{};
 			using KeyType = Key<TKey>;
 			using IndexType = Index<TIndex>;
+			using KeyIndexType = KeyIndex<TKey,TIndex>;
+			using Iterator = typename KeyType::Iterator;
 			bool Is(std::string k){ return this->key.Matches(k);}
 			void setIndex(TIndex i) { this->index.setValue(i); }
+			void setKeyPatterns(Iterator begin, Iterator end) { this->key.UpdatePatterns(begin,end); }
 			
 			std::ostream& Display(std::ostream& os) const
 			{
 				return os<<this->key<<": "<<std::endl;		
 			}
+			
+			bool operator ==(const KeyType& k){ return this->key == k;  }
 		
 		private:
 			Key<TKey> key;
 			Index<TIndex> index;
 	};
+	template<typename TKey = std::string, typename TIndex = uint>
+	bool operator ==(const Key<TKey>& k, const KeyIndex<TKey,TIndex>& ki){ return ki == k; }
+	
+	template<typename TKey = std::string, typename TIndex = uint>
+	bool operator ==(const KeyIndex<TKey,TIndex>& ki, const Key<TKey>& k){ return ki == k; }
 	
 	template<typename TKey = std::string, typename TIndex = uint>
 	std::ostream& operator<<(std::ostream& strm, const KeyIndex<TKey,TIndex> c)
@@ -50,7 +61,7 @@ namespace CSV
 	class KeyIndexContainer
 	{
 		public:
-			using KeyType = TKey;
+			using KeyType = Key<TKey>;
 			using IndexType = TIndex;
 			using KeyIndexType = KeyIndex<TKey,TIndex>;
 			using ContainerType  = std::vector<KeyIndexType>;
@@ -64,6 +75,25 @@ namespace CSV
 						if(it->Is(keys.at(i)))
 							it->setIndex(i);
 			}
+			
+			void UpdateKeyPatterns(const KeyType&  k, const std::vector<std::string>& patterns)
+			{
+				try
+				{
+					auto i = std::find(this->keyIndices->begin(),this->keyIndices->end(),k);
+					if(i != this->keyIndices->cend())
+						i->setKeyPatterns(patterns.cbegin(),patterns.cend());
+					else
+						Logger::Log<Error>()<<"UpdateKeyPatterns Key "<<k<<" not found!"<<std::endl;					
+				}
+				catch(std::exception e)
+				{
+					Logger::Log<Error>()<<"UpdateKeyPatterns Key "<<k<<"\t"<<e.what()<<std::endl;					
+				}
+					
+			}
+			
+			
 		private:
 			ContainerPtrType keyIndices;
 	};	
