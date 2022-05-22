@@ -7,6 +7,7 @@
 #include <iterator>
 #include <vector>
 #include <cstdlib>
+#include <exception>
 #include <unordered_map>
 #include <boost/mpl/vector.hpp>
 #include <boost/filesystem.hpp>
@@ -78,16 +79,34 @@ namespace Bank
 
 			return;
 		}
-		static void CreacteKeys(InputIterator begin, InputIterator end)
+		
+		static void ReadKeyPatterns(InputIterator begin, InputIterator end)
 		{
 			TransferItemContainerType::Instance().Read();
+			if(begin==end)
+			{
+	 			Logger::Log<Error>()<<"ReadKeyPatterns: No Items found for "<<Derived::Name<<std::endl;
+	 			// Todo weiter Fehlerbehandlung für weiter Bearbeitung
+	 			return;
+			}
 						
 			for(auto it = begin; it != end; ++it)
 			{
-				auto values = String_::Split<T::char_<':'>>(*it);
-				auto keyItem = *values.cbegin();
-				auto keys = String_::Split<T::char_<':'>>(*(values.cbegin() + 1));
-				Logger::Log()<<keyItem<<"\t"<<keys[0]<<std::endl;
+				try
+				{
+					auto values = String_::Split<T::char_<':'>>(*it);
+					auto keyItem = *values.cbegin();
+					auto keys = String_::Split<T::char_<';'>>(*(values.cbegin() + 1));
+		 			
+		 			if(keys.cbegin() == keys.cend())
+			 			Logger::Log<Error>()<<Derived::Name<<" ReadKeyPatterns: No keys found for item"<<keyItem<<std::endl;
+					else
+						keyIndices->UpdateKeyPatterns(Key(keyItem), values);
+				}
+				catch(std::exception e)
+				{
+		 			Logger::Log<Error>()<<"ReadKeyPatterns: "<<Derived::Name<<"\t"<<e.what()<<std::endl;
+				}
 			}
 		}
 				
@@ -95,7 +114,7 @@ namespace Bank
 		static void RegisterTo(Cont& cont)
 		{
 			cont.insert(std::make_pair(Derived::Filename,  &Type::Parse));
-			cont.insert(std::make_pair(Type::KeysFilename,  &Type::CreacteKeys));
+			cont.insert(std::make_pair(Type::KeysFilename,  &Type::ReadKeyPatterns));
 		}	
 		
 	protected:
@@ -123,7 +142,6 @@ namespace Bank
 		
 		static void InsertInContainer(std::string key, std::string transaction, double sum, std::string date, std::string iban, std::string bic, char transferSign, std::string cause = "")
 		{
-// 			Logger::Log()<<date<<"\t"<<sum<<"\t"<<iban<<std::endl;
 			if(Derived::IsOutTransfer(transferSign))
 				Derived::OutCont.Insert(key, std::make_shared<OutTransfer>(key,transaction,sum, date, iban, bic, cause));
 			else
