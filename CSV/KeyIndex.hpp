@@ -93,7 +93,7 @@ namespace CSV
 					
 			}
 			
-			
+			bool Empty() { return this->keyIndices->size() == 0;}
 		private:
 			ContainerPtrType keyIndices;
 	};	
