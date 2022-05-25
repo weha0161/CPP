@@ -36,13 +36,18 @@ namespace CSV
 			
 			std::ostream& Display(std::ostream& os) const
 			{
-				return os<<this->key<<": "<<std::endl;		
+				os<<this->key<<": "<<std::endl;	
+				auto patterns = this->key.Patterns();
+				for(auto it = patterns->cbegin(); it != patterns->cend(); ++it)
+					os<<*it<<std::endl;
+				return os;		
 			}
 			
 			bool operator ==(const KeyType& k){ return this->key == k;  }
+			bool operator ()(const std::string& s) { return this->key(s);}
 			const KeyType& GetKey() { return this->key; }
 			const IndexType& GetIndex() { return this->index; }
-		
+					
 		private:
 			KeyType key;
 			IndexType index;
@@ -100,10 +105,24 @@ namespace CSV
 					
 			}
 			
+			std::ostream& Display(std::ostream& os) const
+			{
+				for(auto it = this->keyIndices->begin(); it != this->keyIndices->end(); ++it)
+					os<<*it;
+					
+				return os;		
+			}
+			
 			bool Empty() { return this->keyIndices->size() == 0;}
 		private:
 			ContainerPtrType keyIndices;
 	};	
+	
+	template<typename AccountType,typename TKeyValue = std::string, typename TIndexValue = uint>
+	std::ostream& operator<<(std::ostream& strm, const KeyIndexContainer<AccountType,TKeyValue,TIndexValue> c)
+	{
+		return c.Display(strm);
+	}
 }
 
 #endif
