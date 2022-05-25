@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
+#include <string>
 #include <ctime>
 #include <iterator>
 #include <vector>
@@ -67,6 +68,9 @@ namespace Bank
 			
 			if(begin != end)
 			{
+				uint keyline = findKeyLine(begin,end);
+	 			Logger::Log<Error>()<<"KEYLINE "<<keyline<<std::endl;
+	 			keyIndices->Display(std::cout);
 				uint ctr = 0;
 							
 				auto lines = std::vector<std::string>(begin + Derived::HeaderLength, end - Derived::TrailerLength);
@@ -85,6 +89,7 @@ namespace Bank
 
 			return;
 		}
+		
 		
 		static void ReadKeyPatterns(InputIterator begin, InputIterator end)
 		{
@@ -152,6 +157,20 @@ namespace Bank
 			else
 				Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));
 			
+		}
+	private:
+		static uint findKeyLine(InputIterator begin, InputIterator end)
+		{
+			uint ret = 0;
+			for(auto line = begin; (line + ret) != end; ++ret)
+			{
+				if(String_::Contains(*(line + ret), "IBAN"))
+				{
+					return ret;
+				}
+			}
+			
+			return ret;
 		}
 	};
 }
