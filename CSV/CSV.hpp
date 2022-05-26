@@ -58,9 +58,28 @@ public:
 	using Iterator  = std::vector<T>::const_iterator;
 	using ContainerPtrType  = std::shared_ptr<ContainerType>;
 
-	bool Matches(std::string k){ return std::find(this->patterns->cbegin(), this->patterns->cend(), k) != this->patterns->cend(); }
+	const ContainerPtrType Patterns() const { return this->patterns; }
+	bool Matches(const std::string& k)
+	{ 
+		auto comparer = keyCompare(k);
+		return std::find_if(this->patterns->cbegin(), this->patterns->cend(), comparer) != this->patterns->cend(); 
+	}
 	void UpdatePatterns(Iterator begin, Iterator end) { this->patterns =  std::make_shared<ContainerType>(begin, end);}
+	bool operator ()(const std::string& s)
+	{
+		//~ if(String_::Contains(s))
+			//~ return true;
+		return false;
+	}
 private:
+	class keyCompare
+	{
+		const std::string key;
+	public:
+		keyCompare(const std::string& k): key{k}{}
+		bool operator ()(const T& t) { return t == key; }
+	};
+	
 	ContainerPtrType patterns = std::make_shared<ContainerType>();
 };
 
