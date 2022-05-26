@@ -43,6 +43,20 @@ namespace CSV
 				return os;		
 			}
 			
+			bool Update(const std::vector<std::string>& values)
+			{
+				for(uint i = 0; i < values.size(); ++i)
+				{
+					if(this->Is(values.at(i)))
+                    {
+						this->seTIndexValue(i);
+                        return true;
+                    }
+                }
+                 
+                return false;
+			}
+			
 			bool operator ==(const KeyType& k){ return this->key == k;  }
 			bool operator ()(const std::string& s) { return this->key(s);}
 			const KeyType& GetKey() { return this->key; }
@@ -75,12 +89,13 @@ namespace CSV
 			using ContainerPtrType  = std::unique_ptr<ContainerType>;
 			KeyIndexContainer(ContainerPtrType k): keyIndices{std::move(k)} { Logger::Log()<<AccountType::Name<<": Key index container created "<<this->keyIndices->size()<<std::endl;};
 			
-			void UpdateKeys(const std::vector<std::string> keys)
+			bool UpdateKeys(const std::vector<std::string>& values)
 			{
-				for(uint i = 0; i < keys.size(); ++i)
-					for(auto it = this->keyIndices->begin(); it != this->keyIndices->end(); ++it)
-						if(it->Is(keys.at(i)))
-							it->seTIndexValue(i);
+				for(auto it = this->keyIndices->begin(); it != this->keyIndices->end(); ++it)
+					if(!it->Update(values))
+						return false;
+							
+				return true;
 			}
 			
 			void UpdateKeyPatterns(const KeyType&  k, const std::vector<std::string>& patterns)
