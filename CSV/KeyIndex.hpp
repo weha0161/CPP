@@ -49,6 +49,7 @@ namespace CSV
 				{
 					if(this->Is(values.at(i)))
                     {
+					Logger::Log()<<"KEYIS: "<<this->key<<"_"<<values.at(i)<<std::endl;
 						this->seTIndexValue(i);
                         return true;
                     }
@@ -91,11 +92,12 @@ namespace CSV
 			
 			bool UpdateKeys(const std::vector<std::string>& values)
 			{
+				bool result = false;
 				for(auto it = this->keyIndices->begin(); it != this->keyIndices->end(); ++it)
-					if(!it->Update(values))
-						return false;
+					if(it->Update(values))
+						result = true;
 							
-				return true;
+				return result;
 			}
 			
 			void UpdateKeyPatterns(const KeyType&  k, const std::vector<std::string>& patterns)

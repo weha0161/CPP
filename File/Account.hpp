@@ -68,20 +68,17 @@ namespace Bank
 			
 			if(begin != end)
 			{
-				uint keyline = findKeyLine(begin,end);
-	 			Logger::Log<Error>()<<"KEYLINE "<<keyline<<std::endl;
 	 			keyIndices->Display(std::cout);
-				uint ctr = 0;
-							
-				auto lines = std::vector<std::string>(begin + Derived::HeaderLength, end - Derived::TrailerLength);
-				keyIndices->UpdateKeys(lines);
-				
-				for(auto line : lines)
+				for(auto it = begin;it != end; ++it)
 				{
-					auto values = String_::Split<CSVSeparator>(line);
-					
-					if (values.size() < MaxIdx)
-						continue;
+					auto values = String_::Split<CSVSeparator>(*it);
+					if(keyIndices->UpdateKeys(values))
+					{
+						Logger::Log()<<"KEYLINE"<<*it<<std::endl;
+						break;
+					}
+					//~ if (values.size() < MaxIdx)
+						//~ continue;
 										
 					//~ Derived::ProcessValues(values.cbegin(), values.cend());					
 				}
@@ -112,7 +109,7 @@ namespace Bank
 		 			if(keys.cbegin() == keys.cend())
 			 			Logger::Log<Error>()<<Derived::Name<<" ReadKeyPatterns: No keys found for item"<<keyItem<<std::endl;
 					else
-						keyIndices->UpdateKeyPatterns(Key(keyItem), values);
+						keyIndices->UpdateKeyPatterns(Key(keyItem), keys);
 				}
 				catch(std::exception e)
 				{
