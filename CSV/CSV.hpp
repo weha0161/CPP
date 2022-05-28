@@ -62,33 +62,9 @@ public:
 	bool Matches(const std::string& k)
 	{ 
 		auto comparer = keyCompare(k);
-		
-		//~ for(uint i = 0; i <this->patterns->size();++i )
-			//~ if(this->patterns->at(i) =="Primanota")
-				//~ Logger::Log()<<"MATCH: "<<this->patterns->at(i)<<"\t"<<k<<" "<<*(this->patterns->cend()-1)<<std::endl;
-		
-		for(uint i = 0; i <this->patterns->size();++i )
-		{
-			//~ if(k=="Primanota" && i > 0)
-			if(k==this->patterns->at(i)) //|| k == "Primanota")
-			{
-				Logger::Log()<<"MATCH: "<<this->patterns->at(i)<<"\t"<<k<<std::endl;
-				return true;
-			}
-			//~ if(k==*p)
-				//~ return true;
-		}
-		
-		return false;
-		//~ return std::find_if(this->patterns->cbegin(), this->patterns->cend(), comparer) != this->patterns->cend(); 
+		return std::find_if(this->patterns->cbegin(), this->patterns->cend(), comparer) != this->patterns->cend(); 
 	}
 	void UpdatePatterns(Iterator begin, Iterator end) { this->patterns =  std::make_shared<ContainerType>(begin, end);}
-	bool operator ()(const std::string& s)
-	{
-		//~ if(String_::Contains(s))
-			//~ return true;
-		return false;
-	}
 private:
 	class keyCompare
 	{
