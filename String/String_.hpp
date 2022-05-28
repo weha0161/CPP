@@ -15,6 +15,7 @@ namespace String_
 	//---------------------------------------------------------------------------------------------------Split----------------------------------------------------------------------------------------
 
 	using Delimiter = T::char_<'/'> ;
+	using Newline = T::char_<'\n'> ;
 	
 	T::Is_<Delimiter> isDelimiter;
 	T::IsNot_<Delimiter> isNotDelimiter;
