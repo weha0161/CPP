@@ -16,10 +16,26 @@ namespace CSV
 	{
 		public:
 			using ValueType = T;
+			Index(ValueType v = ValueType{}): value{v}{};
 			void setValue(ValueType v){ this->value = v; }
+			ValueType Get() const { return this->value; }
+			
+			std::ostream& Display(std::ostream& os) const
+			{
+					os<<this->value;
+					
+				return os;		
+			}
+			
 		private:
 			ValueType value;
 	};
+	
+	template<typename TIndexValue = uint>
+	std::ostream& operator<<(std::ostream& strm, const Index<TIndexValue>& c)
+	{
+		return c.Display(strm);
+	}
 	
 	template<typename TKeyValue = std::string, typename TIndexValue = uint>
 	class KeyIndex
@@ -31,15 +47,16 @@ namespace CSV
 			using KeyIndexType = KeyIndex<TKeyValue,TIndexValue>;
 			using Iterator = typename KeyType::Iterator;
 			bool Is(std::string k){ return this->key.Matches(k);}
-			void seTIndexValue(TIndexValue i) { this->index.setValue(i); }
-			void seTKeyValuePatterns(Iterator begin, Iterator end) { this->key.UpdatePatterns(begin,end); }
+			void setIndexValue(TIndexValue i) { this->index.setValue(i); }
+			void setKeyPatterns(Iterator begin, Iterator end) { this->key.UpdatePatterns(begin,end); }
 			
 			std::ostream& Display(std::ostream& os) const
 			{
-				os<<this->key<<": "<<std::endl;	
 				auto patterns = this->key.Patterns();
+				os<<this->key<<": "<<std::endl;	
 				for(auto it = patterns->cbegin(); it != patterns->cend(); ++it)
 					os<<*it<<std::endl;
+				os<<"Current: "<<this->key.Current()<<" at "<<this->index<<std::endl;	
 				return os;		
 			}
 			
@@ -49,8 +66,8 @@ namespace CSV
 				{
 					if(this->Is(values.at(i)))
                     {
-					Logger::Log()<<"KEYIS: "<<this->key<<"_"<<values.at(i)<<std::endl;
-						this->seTIndexValue(i);
+						this->setIndexValue(i);
+						this->key.setCurrent(values.at(i));
                         return true;
                     }
                 }
@@ -111,7 +128,7 @@ namespace CSV
 				{
 					auto i = std::find(this->keyIndices->begin(),this->keyIndices->end(),k);
 					if(i != this->keyIndices->cend())
-						i->seTKeyValuePatterns(patterns.cbegin(),patterns.cend());
+						i->setKeyPatterns(patterns.cbegin(),patterns.cend());
 					else
 						Logger::Log<Error>()<<"UpdateKeyPatterns Key "<<k<<" not found!"<<std::endl;					
 				}

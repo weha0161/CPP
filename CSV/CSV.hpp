@@ -65,6 +65,8 @@ public:
 		return std::find_if(this->patterns->cbegin(), this->patterns->cend(), comparer) != this->patterns->cend(); 
 	}
 	void UpdatePatterns(Iterator begin, Iterator end) { this->patterns =  std::make_shared<ContainerType>(begin, end);}
+	ValueType Current() const { return this->currentPattern; }
+	void setCurrent(ValueType v) { this->currentPattern = v; }
 private:
 	class keyCompare
 	{
@@ -74,6 +76,7 @@ private:
 		bool operator ()(const T& t) { return t == key; }
 	};
 	
+	ValueType currentPattern;
 	ContainerPtrType patterns = std::make_shared<ContainerType>();
 };
 
