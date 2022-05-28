@@ -62,11 +62,13 @@ int main()
 	std::string comdirect = "Umsaetze_1026947527.csv";
 	std::string raiba = "Umsaetze_DE19660623660009232702.csv";
 
-	House<HouseConfiguration>::Instance();	
+	//~ House<HouseConfiguration>::Instance();	
 	std::string csv = "/home/markus/Downloads/CSV_Files";
-//     CSV::Repository::Map(csv);
+    CSV::Repository::Map(csv);
+	CSV::Repository::Register();
+    CSV::Repository::ParseAll();
 
-// 	auto c = CSV::Repository::Read(comdirect);	
+	//~ auto c = CSV::Repository::Read(csv);	
 	
 	auto outFile = std::ofstream("out.txt");
 	auto inFile = std::ofstream("//home//markus//Downloads//in.txt");
