@@ -109,10 +109,10 @@ namespace CSV
 			
 			bool UpdateKeys(const std::vector<std::string>& values)
 			{
-				bool result = false;
+				bool result = true;
 				for(auto it = this->keyIndices->begin(); it != this->keyIndices->end(); ++it)
-					if(it->Update(values))
-						result = true;
+					if(!(it->Update(values)))
+						result = false;
 							
 				return result;
 			}
