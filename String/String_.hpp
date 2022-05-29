@@ -16,6 +16,12 @@ namespace String_
 
 	using Delimiter = T::char_<'/'> ;
 	using Newline = T::char_<'\n'> ;
+	using CR = T::char_<'\r'> ;
+	using Tab = T::char_<'\t'> ;
+	using Space = T::char_<' '> ;
+	using Comma = T::char_<','> ;
+	using Semicolon = T::char_<';'> ;
+	using Point = T::char_<';'> ;
 	
 	T::Is_<Delimiter> isDelimiter;
 	T::IsNot_<Delimiter> isNotDelimiter;
