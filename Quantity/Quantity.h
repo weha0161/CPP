@@ -19,6 +19,7 @@ struct Quantity
     //~ const std::string UnitSymbol() { return UnitType::Symbol;}
     const std::string UnitSign() { return U::Sign(); }
     const std::string SiUnit() { return UnitType::SiUnit(); }
+    inline static const std::string Identifier = U::Name;
 	explicit Quantity(const T1& v): value(v * SiPrefix::Factor) {	}
 	
 	T1 Value() const { return value / SiPrefix::Factor;}

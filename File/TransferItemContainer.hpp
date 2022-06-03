@@ -8,7 +8,11 @@
 #include <vector>
 #include <cstdlib>
 #include <filesystem>
+#include "AccountTransfer.hpp"
 #include "../CSV/CSV.hpp"
+#include "../Unit/Unit.h"
+#include "../Quantity/Quantity.h"
+#include "../Common/DateTimes.hpp"
 #include "../Logger/Logger.hpp"
 #include "../Typelist/Typelist.h"
 
@@ -33,6 +37,7 @@ protected:
 	template<typename T, typename Cont = T::KeyIndexContainerType::ContainerType>
 	auto Create(const std::string sourcePath, Cont ret)
 	{
+		Logger::Log()<<"CREATE: "<<Head::Identifier<<std::endl;
 		ret->push_back(typename T::KeyIndexContainerType::KeyIndexType(Type::Identifier));
 		return ret;		
 	}
@@ -68,6 +73,14 @@ public:
 	using Base = TransferItemContainer<Typelist<Tail...>>;
 protected:
 	TransferItemContainer() { Logger::Log<Info>()<<"TransferItemContainer created."<<std::endl; };
+	
+	template<typename T, typename Cont = T::KeyIndexContainerType::ContainerType>
+	auto Create(const std::string sourcePath, Cont ret)
+	{
+		Logger::Log()<<"CREATE: "<<Head::Identifier<<std::endl;
+		ret->push_back(typename T::KeyIndexContainerType::KeyIndexType(Type::Identifier));
+		return Base::template Create<T>(sourcePath, std::move(ret));	
+	}
 public:
 	static std::ostream& Display(std::ostream& os) 
 	{
@@ -83,6 +96,8 @@ public:
 	template<typename T>
 	auto Create(const std::string sourcePath = ".")
 	{
+		Logger::Log()<<"CREATE: "<<Head::Identifier<<std::endl;
+		Logger::Log()<<"CREATE: "<<Base::Type::Identifier<<std::endl;
 		auto ret = std::make_unique<typename T::KeyIndexContainerType::ContainerType>();
 		ret->push_back(typename T::KeyIndexContainerType::KeyIndexType(Type::Identifier));
 		return Base::template Create<T>(sourcePath, std::move(ret));		
@@ -104,6 +119,8 @@ std::ostream& operator<<(std::ostream& strm, const TransferItemContainer<Head,Ta
 	return c.Display(strm);
 }
 
-using TransferItemContainerType = TransferItemContainer<Typelist<IBAN,BIC>>::ContainerType;
+
+//Buchungstag;Valuta;Textschlüssel;Primanota;Zahlungsempfänger;ZahlungsempfängerKto;ZahlungsempfängerIBAN;ZahlungsempfängerBLZ;ZahlungsempfängerBIC;Vorgang/Verwendungszweck;Kundenreferenz;Währung;Umsatz;Soll/Haben
+using TransferItemContainerType = TransferItemContainer<Typelist<IBAN,BIC,DateTimes::Date,IBAN, Quantity<Sum>, Bank::Transfer<Bank::In>, Bank::Transfer<Bank::Out>>>::ContainerType;
 
 #endif

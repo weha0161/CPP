@@ -35,7 +35,7 @@ namespace Bank
 	{
 		using Type = Transfer<Direction>;
 		using ValueType = Direction;
-		inline static const std::string Id = Direction::Id;
+		inline static const std::string Identifier = Direction::Id;
 	};
 	
 	struct In

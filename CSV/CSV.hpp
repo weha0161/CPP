@@ -145,6 +145,8 @@ public:
        Entry* DoCreate(){return this;};
 };
 
+//Buchungstag;Valuta;Textschlüssel;Primanota;Zahlungsempfänger;ZahlungsempfängerKto;ZahlungsempfängerIBAN;ZahlungsempfängerBLZ;ZahlungsempfängerBIC;Vorgang/Verwendungszweck;Kundenreferenz;Währung;Umsatz;Soll/Haben
+
 
 //--------------------------------Factory------------------------------------------------
 class Date;

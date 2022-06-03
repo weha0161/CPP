@@ -85,7 +85,7 @@ namespace DateTimes
 		using DateType = std::shared_ptr<DateTimes::Date>;
 		inline static const std::string Identifier = "Date";
 						
-		Date(std::string s, uint d, uint m, uint y): 
+		Date(std::string s, uint d = 0, uint m = 0, uint y = 0): 
 						Element(s),
 						day(std::make_shared<DateTimes::Day>(d)),
 						month{std::make_shared<DateTimes::Month>(m)},

@@ -52,8 +52,6 @@ namespace Bank
 		using ParseContOut = TransferContainer<AccountTransfer<Derived,Transfer<Out>>>;
 		using QunatityType = Quantity<Sum>;
 		using InputIterator = std::vector<std::string>::const_iterator;
-		using KeyMapType = std::map<const char*, uint>;
-		using KeyMapPtrType = std::unique_ptr<KeyMapType>;
 		using KeyIndexType = CSV::KeyIndex<KeyType,uint>;
 		using KeyIndexContainerType = CSV::KeyIndexContainer<Derived, std::string,uint>;
 		using KeyIndexContainerPtrType = std::unique_ptr<KeyIndexContainerType>;
@@ -68,19 +66,26 @@ namespace Bank
 			
 			if(begin != end)
 			{
+	 			Logger::Log<Error>()<<Derived::Name<<" Before"<<std::endl;
 	 			keyIndices->Display(std::cout);
 				for(auto it = begin;it != end; ++it)
 				{
-					auto values = String_::Split<CSVSeparator>(*it);
+					auto values = String_::Split<CSVSeparator>(String_::Remove<String_::Newline>(*it));
+					
 					if(keyIndices->UpdateKeys(values))
 					{
 						Logger::Log()<<"KEYLINE"<<*it<<std::endl;
-						break;
+			 			Logger::Log<Error>()<<Derived::Name<<" After"<<std::endl;
+						keyIndices->Display(std::cout);
+						
+						Logger::Log<Error>()<<*(values.cbegin()+6)<<std::endl;
+						
+						return;
+						//~ Derived::ProcessValues(values.cbegin(), values.cend());					
 					}
 					//~ if (values.size() < MaxIdx)
 						//~ continue;
 										
-					//~ Derived::ProcessValues(values.cbegin(), values.cend());					
 				}
 			}
 
@@ -104,7 +109,7 @@ namespace Bank
 				{
 					auto values = String_::Split<T::char_<':'>>(*it);
 					auto keyItem = *values.cbegin();
-					auto keys = String_::Split<T::char_<';'>>(*(values.cbegin() + 1));
+					auto keys = String_::Split<T::char_<';'>>(String_::Remove<String_::CR>(*(values.cbegin()+1)));
 		 			
 		 			if(keys.cbegin() == keys.cend())
 			 			Logger::Log<Error>()<<Derived::Name<<" ReadKeyPatterns: No keys found for item"<<keyItem<<std::endl;
@@ -129,8 +134,8 @@ namespace Bank
 		Account(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : owner(k), iban(i), bic(b) { };
 		
 		static constexpr unsigned int Indices[4] = {Derived::OwnerIdx, Derived::DateIdx, Derived::TranactionIdx, Derived::QuantityIdx};
-		inline static KeyIndexContainerPtrType keyIndices = std::make_unique<KeyIndexContainerType>(TransferItemContainerType::Instance().template Create<Derived>());
 		static const unsigned int MaxIdx = *std::max_element(Indices,Indices+4);
+		inline static KeyIndexContainerPtrType keyIndices = std::make_unique<KeyIndexContainerType>(TransferItemContainerType::Instance().template Create<Derived>());
 		
 		static std::string GetNumericValue(std::string s)
 		{
