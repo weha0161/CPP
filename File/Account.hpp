@@ -66,26 +66,20 @@ namespace Bank
 			
 			if(begin != end)
 			{
-	 			Logger::Log<Error>()<<Derived::Name<<" Before"<<std::endl;
-	 			keyIndices->Display(std::cout);
 				for(auto it = begin;it != end; ++it)
 				{
-					auto values = String_::Split<CSVSeparator>(String_::Remove<String_::Newline>(*it));
+					auto values = String_::Split<CSVSeparator>(String_::Remove<String_::CR>(*it));
 					
 					if(keyIndices->UpdateKeys(values))
 					{
-						Logger::Log()<<"KEYLINE"<<*it<<std::endl;
-			 			Logger::Log<Error>()<<Derived::Name<<" After"<<std::endl;
+						Logger::Log()<<"Updatet Keys"<<*it<<std::endl;
 						keyIndices->Display(std::cout);
-						
-						Logger::Log<Error>()<<*(values.cbegin()+6)<<std::endl;
 						
 						return;
 						//~ Derived::ProcessValues(values.cbegin(), values.cend());					
 					}
 					//~ if (values.size() < MaxIdx)
-						//~ continue;
-										
+						//~ continue;										
 				}
 			}
 
@@ -110,7 +104,7 @@ namespace Bank
 					auto values = String_::Split<T::char_<':'>>(*it);
 					auto keyItem = *values.cbegin();
 					auto keys = String_::Split<T::char_<';'>>(String_::Remove<String_::CR>(*(values.cbegin()+1)));
-		 			
+					
 		 			if(keys.cbegin() == keys.cend())
 			 			Logger::Log<Error>()<<Derived::Name<<" ReadKeyPatterns: No keys found for item"<<keyItem<<std::endl;
 					else
