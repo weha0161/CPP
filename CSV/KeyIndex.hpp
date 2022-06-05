@@ -55,8 +55,8 @@ namespace CSV
 				auto patterns = this->key.Patterns();
 				os<<this->key<<": "<<std::endl;	
 				for(auto it = patterns->cbegin(); it != patterns->cend(); ++it)
-					os<<*it<<std::endl;
-				os<<"Current: "<<this->key.Current()<<" at "<<this->index<<std::endl;	
+					os<<"\t"<<*it<<std::endl;
+				os<<" Current: "<<this->key.Current()<<" at "<<this->index<<"\n"<<std::endl;	
 				return os;		
 			}
 			

@@ -72,7 +72,7 @@ namespace Bank
 					
 					if(keyIndices->UpdateKeys(values))
 					{
-						Logger::Log()<<"Updatet Keys"<<*it<<std::endl;
+						Logger::Log()<<"Updatet Keys from Line:\n\t"<<*it<<std::endl;
 						keyIndices->Display(std::cout);
 						
 						return;
