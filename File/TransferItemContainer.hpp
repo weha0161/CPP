@@ -121,6 +121,7 @@ std::ostream& operator<<(std::ostream& strm, const TransferItemContainer<Head,Ta
 
 
 //Buchungstag;Valuta;Textschlüssel;Primanota;Zahlungsempfänger;ZahlungsempfängerKto;ZahlungsempfängerIBAN;ZahlungsempfängerBLZ;ZahlungsempfängerBIC;Vorgang/Verwendungszweck;Kundenreferenz;Währung;Umsatz;Soll/Haben
-using TransferItemContainerType = TransferItemContainer<Typelist<IBAN,BIC,DateTimes::Date,IBAN, Quantity<Sum>, Bank::Transfer<Bank::In>, Bank::Transfer<Bank::Out>>>::ContainerType;
+using TransferItemContainerType = TransferItemContainer<Typelist<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::In>>>::ContainerType;
+//~ using TransferItemContainerType = TransferItemContainer<Typelist<IBAN,BIC,DateTimes::Date,IBAN, Quantity<Sum>, Bank::Transfer<Bank::In>, Bank::Transfer<Bank::Out>>>::ContainerType;
 
 #endif
