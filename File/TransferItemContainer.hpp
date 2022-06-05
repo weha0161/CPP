@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
-#include <ctime>
+#include <tuple>
 #include <iterator>
 #include <vector>
 #include <cstdlib>
@@ -31,9 +31,12 @@ public:
 	using Type = Head;
 	using CounterTypes = Typelist<Head>;
 	using ContainerType = TransferItemContainer<Typelist<Head>>;
+	using TupleType = std::tuple<Type>;
 protected:
 	TransferItemContainer() { Logger::Log<Info>()<<"TransferItemContainer created."<<std::endl; };
 
+	auto createTransfer(const std::string& s) { return TupleType(Type(Type::Identifier));}
+	
 	template<typename T, typename Cont = T::KeyIndexContainerType::ContainerType>
 	auto Create(const std::string sourcePath, Cont ret)
 	{
@@ -47,7 +50,7 @@ public:
 		return Type::Display(os);
 	}
 		
-	void Read(const std::string sourcePath = ".")
+	void Read(const std::string& sourcePath = ".")
 	{
 		Logger::Log()<<Type::Identifier<<std::endl;
 	}
@@ -71,11 +74,19 @@ public:
 	using CounterTypes = Typelist<Head,Tail...>;
 	using ContainerType = TransferItemContainer<Typelist<Head,Tail...>>;
 	using Base = TransferItemContainer<Typelist<Tail...>>;
+	using TupleType = std::tuple<Type>;
 protected:
 	TransferItemContainer() { Logger::Log<Info>()<<"TransferItemContainer created."<<std::endl; };
 	
+	auto createTransfer(const std::string& s) 
+	{
+		auto bT = Base::createTransfer(s); 
+		auto result = std::tuple_cat(TupleType(Type(Type::Identifier)), bT);
+		return result;
+	} 
+	
 	template<typename T, typename Cont = T::KeyIndexContainerType::ContainerType>
-	auto Create(const std::string sourcePath, Cont ret)
+	auto Create(const std::string& sourcePath, Cont ret)
 	{
 		Logger::Log()<<"CREATE: "<<Head::Identifier<<std::endl;
 		ret->push_back(typename T::KeyIndexContainerType::KeyIndexType(Type::Identifier));
@@ -87,18 +98,27 @@ public:
 		return Base::Display(Type::Display(os));		
 	}
 		
-	void Read(const std::string sourcePath = ".")
+	void Read(const std::string& sourcePath = ".")
 	{
 		Logger::Log()<<Type::Identifier<<std::endl;
 		Base::Read();		
 	}
 	
-	template<typename T>
-	auto Create(const std::string sourcePath = ".")
+	auto CreateTransfer(const std::string& s)
 	{
-		Logger::Log()<<"CREATE: "<<Head::Identifier<<std::endl;
-		Logger::Log()<<"CREATE: "<<Base::Type::Identifier<<std::endl;
+		auto t = this->createTransfer(s);
+		return Bank::AccountTransfer("","",0.0,"");
+	}
+	
+	template<typename T>
+	auto Create(const std::string& sourcePath = ".")
+	{
 		auto ret = std::make_unique<typename T::KeyIndexContainerType::ContainerType>();
+		
+		auto t = this->createTransfer(sourcePath);
+		auto ib = std::get<IBAN>(t);
+		Logger::Log<Error>()<<"CREATE Tuple: "<<ib.Value<<"\t"<<std::tuple_size<decltype(t)>::value<<std::endl;
+		
 		ret->push_back(typename T::KeyIndexContainerType::KeyIndexType(Type::Identifier));
 		return Base::template Create<T>(sourcePath, std::move(ret));		
 	}

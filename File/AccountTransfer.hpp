@@ -33,6 +33,7 @@ namespace Bank
 	template<typename Direction>
 	struct Transfer
 	{
+		Transfer(std::string s){};
 		using Type = Transfer<Direction>;
 		using ValueType = Direction;
 		inline static const std::string Identifier = "Direction";
