@@ -21,16 +21,16 @@
 
 //---------------------------------------------------------------------------------------------------CounterContainer----------------------------------------------------------------------------------------
 
-template<typename List>
+template<typename KeyIndexContainerType, typename List>
 class TransferItemContainer{};
 
-template<typename Head>
-class TransferItemContainer<Typelist<Head>>
+template<typename KeyIndexContainerType,typename Head>
+class TransferItemContainer<KeyIndexContainerType,Typelist<Head>>
 {
 public:
 	using Type = Head;
 	using CounterTypes = Typelist<Head>;
-	using ContainerType = TransferItemContainer<Typelist<Head>>;
+	using ContainerType = TransferItemContainer<KeyIndexContainerType,Typelist<Head>>;
 	using TupleType = std::tuple<Type>;
 protected:
 	TransferItemContainer() { Logger::Log<Info>()<<"TransferItemContainer created."<<std::endl; };
@@ -49,7 +49,7 @@ public:
 	{
 		return Type::Display(os);
 	}
-		
+	
 	void Read(const std::string& sourcePath = ".")
 	{
 		Logger::Log()<<Type::Identifier<<std::endl;
@@ -66,14 +66,14 @@ public:
 	}	
 };
 
-template<typename Head, typename... Tail>
-class TransferItemContainer<Typelist<Head,Tail...>>: public TransferItemContainer<Typelist<Tail...>>
+template<typename KeyIndexContainerType,typename Head, typename... Tail>
+class TransferItemContainer<KeyIndexContainerType,Typelist<Head,Tail...>>: public TransferItemContainer<KeyIndexContainerType,Typelist<Tail...>>
 {
 public:
 	using Type = Head;
 	using CounterTypes = Typelist<Head,Tail...>;
-	using ContainerType = TransferItemContainer<Typelist<Head,Tail...>>;
-	using Base = TransferItemContainer<Typelist<Tail...>>;
+	using ContainerType = TransferItemContainer<KeyIndexContainerType,Typelist<Head,Tail...>>;
+	using Base = TransferItemContainer<KeyIndexContainerType, Typelist<Tail...>>;
 	using TupleType = std::tuple<Type>;
 protected:
 	TransferItemContainer() { Logger::Log<Info>()<<"TransferItemContainer created."<<std::endl; };
@@ -115,9 +115,9 @@ public:
 	{
 		auto ret = std::make_unique<typename T::KeyIndexContainerType::ContainerType>();
 		
-		auto t = this->createTransfer(sourcePath);
-		auto ib = std::get<IBAN>(t);
-		Logger::Log<Error>()<<"CREATE Tuple: "<<ib.Value<<"\t"<<std::tuple_size<decltype(t)>::value<<std::endl;
+		//~ auto t = this->createTransfer(sourcePath);
+		//~ auto ib = std::get<IBAN>(t);
+		//~ Logger::Log<Error>()<<"CREATE Tuple: "<<ib.Value<<"\t"<<std::tuple_size<decltype(t)>::value<<std::endl;
 		
 		ret->push_back(typename T::KeyIndexContainerType::KeyIndexType(Type::Identifier));
 		return Base::template Create<T>(sourcePath, std::move(ret));		
@@ -141,7 +141,6 @@ std::ostream& operator<<(std::ostream& strm, const TransferItemContainer<Head,Ta
 
 
 //Buchungstag;Valuta;Textschlüssel;Primanota;Zahlungsempfänger;ZahlungsempfängerKto;ZahlungsempfängerIBAN;ZahlungsempfängerBLZ;ZahlungsempfängerBIC;Vorgang/Verwendungszweck;Kundenreferenz;Währung;Umsatz;Soll/Haben
-using TransferItemContainerType = TransferItemContainer<Typelist<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::In>>>::ContainerType;
 //~ using TransferItemContainerType = TransferItemContainer<Typelist<IBAN,BIC,DateTimes::Date,IBAN, Quantity<Sum>, Bank::Transfer<Bank::In>, Bank::Transfer<Bank::Out>>>::ContainerType;
 
 #endif

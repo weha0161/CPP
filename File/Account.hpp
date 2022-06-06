@@ -75,6 +75,9 @@ namespace Bank
 						Logger::Log()<<"Updatet Keys from Line:\n\t"<<*it<<std::endl;
 						keyIndices->Display(std::cout);
 						
+						
+			 			Logger::Log<Error>()<<"(*keyIndices)[IBAN::Identifier] "<<((*keyIndices)[IBAN::Identifier])<<std::endl;
+						
 						return;
 						//~ Derived::ProcessValues(values.cbegin(), values.cend());					
 					}
