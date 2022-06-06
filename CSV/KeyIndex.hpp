@@ -2,6 +2,7 @@
 #include "../Logger/Logger.hpp"
 #include <memory>
 #include <exception>
+#include <stdexcept>
 
 #ifndef KEYINDEX_H
 #define KEYINDEX_H
@@ -77,8 +78,8 @@ namespace CSV
 			
 			bool operator ==(const KeyType& k){ return this->key == k;  }
 			bool operator ()(const std::string& s) { return this->key(s);}
-			const KeyType& GetKey() { return this->key; }
-			const IndexType& GetIndex() { return this->index; }
+			const KeyType& GetKey() const { return this->key; }
+			const IndexType& GetIndex() const { return this->index; }
 					
 		private:
 			KeyType key;
@@ -90,22 +91,26 @@ namespace CSV
 	template<typename TKeyValue = std::string, typename TIndexValue = uint>
 	bool operator ==(const KeyIndex<TKeyValue,TIndexValue>& ki, const Key<TKeyValue>& k){ return ki == k; }
 	
+	//~ template<typename TKeyValue = std::string, typename TIndexValue = uint>
+	//~ bool operator ==(const KeyIndex<TKeyValue,TIndexValue>& ki, const TKeyValue& kv){ return ki == Key<TKeyValue>(kv); }
+	
 	template<typename TKeyValue = std::string, typename TIndexValue = uint>
 	std::ostream& operator<<(std::ostream& strm, const KeyIndex<TKeyValue,TIndexValue> c)
 	{
 		return c.Display(strm);
 	}
 	
-	template<typename AccountType,typename TKeyValue = std::string, typename TIndexValue = uint>
+	template<typename AccountT,typename TKeyValue = std::string, typename TIndexValue = uint>
 	class KeyIndexContainer
 	{
 		public:
 			using KeyType = Key<TKeyValue>;
 			using IndexType = TIndexValue;
+			using AccountType = AccountT;
 			using KeyIndexType = KeyIndex<TKeyValue,TIndexValue>;
 			using ContainerType  = std::vector<KeyIndexType>;
 			using ContainerPtrType  = std::unique_ptr<ContainerType>;
-			KeyIndexContainer(ContainerPtrType k): keyIndices{std::move(k)} { Logger::Log()<<AccountType::Name<<": Key index container created "<<this->keyIndices->size()<<std::endl;};
+			KeyIndexContainer(ContainerPtrType k): keyIndices{std::move(k)} { Logger::Log()<<AccountT::Name<<": Key index container created "<<this->keyIndices->size()<<std::endl;};
 			
 			bool UpdateKeys(const std::vector<std::string>& values)
 			{
@@ -147,13 +152,35 @@ namespace CSV
 				return os;		
 			}
 			
+			IndexType Get(TKeyValue key) 
+			{
+				//~ auto result = std::find(this->keyIndices->cbegin(), this->keyIndices->cend(), Key<TKeyValue>(key));
+				//~ if( result != this->keyIndices->cend())
+					//~ return (result->GetIndex()).Get();
+				//~ else
+				
+					for(auto it = this->keyIndices->cbegin(); it != this->keyIndices->cend(); ++it)
+						if((it->GetKey()).Value == key)
+							return (it->GetIndex()).Get();
+					return 99;
+					
+				//~ throw std::invalid_argument( "received negative value" );
+			}
+			
+			IndexType operator[](TKeyValue key) 
+			{
+				return this->Get(key);
+					
+				//~ throw std::invalid_argument( "received negative value" );
+			}
+			
 			bool Empty() { return this->keyIndices->size() == 0;}
 		private:
 			ContainerPtrType keyIndices;
 	};	
 	
-	template<typename AccountType,typename TKeyValue = std::string, typename TIndexValue = uint>
-	std::ostream& operator<<(std::ostream& strm, const KeyIndexContainer<AccountType,TKeyValue,TIndexValue> c)
+	template<typename AccountT,typename TKeyValue = std::string, typename TIndexValue = uint>
+	std::ostream& operator<<(std::ostream& strm, const KeyIndexContainer<AccountT,TKeyValue,TIndexValue> c)
 	{
 		return c.Display(strm);
 	}

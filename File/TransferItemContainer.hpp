@@ -30,12 +30,18 @@ class TransferItemContainer<KeyIndexContainerType,Typelist<Head>>
 public:
 	using Type = Head;
 	using CounterTypes = Typelist<Head>;
+	using InputIterator = std::vector<std::string>::const_iterator;
 	using ContainerType = TransferItemContainer<KeyIndexContainerType,Typelist<Head>>;
+	using KeyIndexContainerPtrType = std::shared_ptr<KeyIndexContainerType>;
 	using TupleType = std::tuple<Type>;
 protected:
 	TransferItemContainer() { Logger::Log<Info>()<<"TransferItemContainer created."<<std::endl; };
-
-	auto createTransfer(const std::string& s) { return TupleType(Type(Type::Identifier));}
+	KeyIndexContainerPtrType keyIndices;
+	auto createTransfer(InputIterator begin, InputIterator end) 
+	{ 
+		Logger::Log()<<Head::Identifier<<"_"<<(*(this->keyIndices))[Head::Identifier]<<" => "<<*(begin + (*(this->keyIndices))[Head::Identifier])<<std::endl;
+		return TupleType(Type(Type::Identifier));
+	}
 	
 	template<typename T, typename Cont = T::KeyIndexContainerType::ContainerType>
 	auto Create(const std::string sourcePath, Cont ret)
@@ -55,6 +61,7 @@ public:
 		Logger::Log()<<Type::Identifier<<std::endl;
 	}
 	
+	void setKeyIndexContainer(KeyIndexContainerPtrType ptr){ this->keyIndices = ptr; }
 
 	template<unsigned N>
 	auto Get() { return At<CounterTypes,N>::Type; }
@@ -78,9 +85,10 @@ public:
 protected:
 	TransferItemContainer() { Logger::Log<Info>()<<"TransferItemContainer created."<<std::endl; };
 	
-	auto createTransfer(const std::string& s) 
+	auto createTransfer(Base::InputIterator begin, Base::InputIterator end) 
 	{
-		auto bT = Base::createTransfer(s); 
+		Logger::Log()<<Head::Identifier<<"_"<<(*(this->keyIndices))[Head::Identifier]<<" => "<<*(begin + (*(this->keyIndices))[Head::Identifier])<<std::endl;
+		auto bT = Base::createTransfer(begin,end); 
 		auto result = std::tuple_cat(TupleType(Type(Type::Identifier)), bT);
 		return result;
 	} 
@@ -104,20 +112,19 @@ public:
 		Base::Read();		
 	}
 	
-	auto CreateTransfer(const std::string& s)
+	template<typename TransferType>
+	auto CreateTransfer(Base::InputIterator begin, Base::InputIterator end)
 	{
-		auto t = this->createTransfer(s);
-		return Bank::AccountTransfer("","",0.0,"");
+		Logger::Log()<<Head::Identifier<<"_"<<(*(this->keyIndices))[Head::Identifier]<<" => "<<*(begin + (*(this->keyIndices))[Head::Identifier])<<std::endl;
+		auto t = Base::createTransfer(begin,end);
+		//~ return std::make_shared<TransferType>("","",0.0,"");
+		return 0;
 	}
 	
 	template<typename T>
 	auto Create(const std::string& sourcePath = ".")
 	{
 		auto ret = std::make_unique<typename T::KeyIndexContainerType::ContainerType>();
-		
-		//~ auto t = this->createTransfer(sourcePath);
-		//~ auto ib = std::get<IBAN>(t);
-		//~ Logger::Log<Error>()<<"CREATE Tuple: "<<ib.Value<<"\t"<<std::tuple_size<decltype(t)>::value<<std::endl;
 		
 		ret->push_back(typename T::KeyIndexContainerType::KeyIndexType(Type::Identifier));
 		return Base::template Create<T>(sourcePath, std::move(ret));		

@@ -50,11 +50,12 @@ namespace Bank
 		using KeyType = Key<std::string>;
 		using ParseContIn = TransferContainer<AccountTransfer<Derived,Transfer<In>>>;
 		using ParseContOut = TransferContainer<AccountTransfer<Derived,Transfer<Out>>>;
-		using QunatityType = Quantity<Sum>;
+		using QuantityType = Quantity<Sum>;
 		using InputIterator = std::vector<std::string>::const_iterator;
 		using KeyIndexType = CSV::KeyIndex<KeyType,uint>;
 		using KeyIndexContainerType = CSV::KeyIndexContainer<Derived, std::string,uint>;
-		using KeyIndexContainerPtrType = std::unique_ptr<KeyIndexContainerType>;
+		using KeyIndexContainerPtrType = std::shared_ptr<KeyIndexContainerType>;
+		using TransferItemContainerType = TransferItemContainer<KeyIndexContainerType,Typelist<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>>::ContainerType;
 		
 		static void Parse(InputIterator begin, InputIterator end)
 		{
@@ -74,9 +75,19 @@ namespace Bank
 					{
 						Logger::Log()<<"Updatet Keys from Line:\n\t"<<*it<<std::endl;
 						keyIndices->Display(std::cout);
-						
-						
-			 			Logger::Log<Error>()<<"(*keyIndices)[IBAN::Identifier] "<<((*keyIndices)[IBAN::Identifier])<<std::endl;
+										
+						++it;		
+						for(;it != end; ++it)
+						{
+							auto values = String_::Split<CSVSeparator>(String_::Remove<String_::CR>(*it));
+							
+							//~ if(Derived::IsOutTransfer(transferSign))
+								//~ Derived::OutCont.Insert(key, std::make_shared<OutTransfer>(key,transaction,sum, date, iban, bic, cause));
+							//~ else
+								//~ Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));
+							
+							TransferItemContainerType::Instance().template CreateTransfer<OutTransfer>(values.cbegin(),values.end());
+						}
 						
 						return;
 						//~ Derived::ProcessValues(values.cbegin(), values.cend());					
@@ -92,6 +103,7 @@ namespace Bank
 		
 		static void ReadKeyPatterns(InputIterator begin, InputIterator end)
 		{
+			TransferItemContainerType::Instance().setKeyIndexContainer(keyIndices);
 			TransferItemContainerType::Instance().Read();
 			if(begin==end)
 			{
@@ -154,23 +166,10 @@ namespace Bank
 			if(Derived::IsOutTransfer(transferSign))
 				Derived::OutCont.Insert(key, std::make_shared<OutTransfer>(key,transaction,sum, date, iban, bic, cause));
 			else
-				Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));
-			
+				Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));			
 		}
 	private:
-		static uint findKeyLine(InputIterator begin, InputIterator end)
-		{
-			uint ret = 0;
-			for(auto line = begin; (line + ret) != end; ++ret)
-			{
-				if(String_::Contains(*(line + ret), "IBAN"))
-				{
-					return ret;
-				}
-			}
-			
-			return ret;
-		}
+		
 	};
 }
 

@@ -37,18 +37,29 @@ namespace Bank
 		using Type = Transfer<Direction>;
 		using ValueType = Direction;
 		inline static const std::string Identifier = "Direction";
+		inline static const std::string Id = Direction::Id; 
+		inline static constexpr int Value = Direction::Value; 		
 	};
 	
 	struct In
 	{
 		using Type = In;
 		inline static const std::string Id = "In"; 
+		inline static constexpr int Value = 1; 
 	};
 	
 	struct Out
 	{
 		using Type = Out;
 		inline static const std::string Id = "Out"; 
+		inline static constexpr int Value = -1; 
+	};
+	
+	struct Unknown
+	{
+		using Type = Unknown;
+		inline static const std::string Id = "Unknown"; 
+		inline static constexpr int Value = 0; 
 	};
 	
 	//-----------------------------------------------------------------------------------------------AccountTransfer-----------------------------------------------------------------------
