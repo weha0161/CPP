@@ -62,35 +62,38 @@ namespace String_
 		
 		return result;
 	}
+		
+	template<typename From, typename To>
+	struct Replace
+	{
+		std::string operator()(const std::string& s) const 
+		{
+			auto result = std::string(s);
+			std::replace(result.begin(), result.end(), From::Value, To::Value);
+			
+			return result;
+		}	
+	};
 	
-// 	template<class T, unsigned SIZE = 80>
-// 	std::string AsString(const T& c)
-// 	{
-// 		std::string result;
-// 		char* buf = new char[SIZE];
-// 		std::strstream str(buf,SIZE);
-// 		str<<c;
-// 		str>>result;
-// 		
-// 		return result;
-// 	};
+	using CommaToPoint = Replace<Comma,Point>;
+
 	
 	template<typename T = int>
 	struct To
 	{
-		T operator()(std::string s) { return std::stoi(s); }
+		T operator()(const std::string& s) const { return std::stoi(s); }
 	};
 	
 	template<>
 	struct To<double>
 	{
-		double operator()(std::string s) { return std::stod(s); }
+		double operator()(const std::string& s) const{ std::cout<<"DOUBLE_"<<s<<std::endl;  ;return std::stod(s); }
 	};
 	
 	template<>
 	struct To<unsigned>
 	{
-		unsigned operator()(std::string s) { return std::stol(s); }
+		unsigned operator()(const std::string& s) const { return std::stol(s); }
 	};
 	
 	template<typename T>
