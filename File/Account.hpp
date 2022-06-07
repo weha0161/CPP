@@ -8,6 +8,7 @@
 #include <iterator>
 #include <vector>
 #include <cstdlib>
+#include <tuple>
 #include <exception>
 #include <unordered_map>
 #include <boost/mpl/vector.hpp>
@@ -33,7 +34,7 @@ namespace fs = std::filesystem;
 
 namespace Bank
 {
-	template<typename Derived>
+	template<typename Derived, typename TT>
 	class Account
 	{
 	protected:		
@@ -44,12 +45,12 @@ namespace Bank
 		
 		inline static const std::string  KeysFilename = Derived::Name + ".keys";
 	public:
-		using Type = Account<Derived> ;
-		using InTransfer = AccountTransfer<Derived,Transfer<In>>;
-		using OutTransfer = AccountTransfer<Derived, Transfer<Out>>;
+		using Type = Account<Derived,TT> ;
+		using InTransfer = AccountTransfer<Derived, TT,Transfer<In>>;
+		using OutTransfer = AccountTransfer<Derived, TT,Transfer<Out>>;
 		using KeyType = Key<std::string>;
-		using ParseContIn = TransferContainer<AccountTransfer<Derived,Transfer<In>>>;
-		using ParseContOut = TransferContainer<AccountTransfer<Derived,Transfer<Out>>>;
+		using ParseContIn = TransferContainer<InTransfer>;
+		using ParseContOut = TransferContainer<OutTransfer>;
 		using QuantityType = Quantity<Sum>;
 		using InputIterator = std::vector<std::string>::const_iterator;
 		using KeyIndexType = CSV::KeyIndex<KeyType,uint>;

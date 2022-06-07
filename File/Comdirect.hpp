@@ -31,13 +31,14 @@ namespace Bank
 {
 	//-----------------------------------------------------------------------------------------------Tranfers-----------------------------------------------------------------------
 	template<unsigned int N = 0>
-	struct Comdirect: public Account<Comdirect<N>>
+	struct Comdirect: public Account<Comdirect<N>, std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>>
 	{
 		enum{ Num = N };
-		using InType = AccountTransfer<Comdirect,Transfer<In>>;
-		using OutType = AccountTransfer<Comdirect,Transfer<Out>>;
+		using TransferTypes = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>;
+		using InType = AccountTransfer<Comdirect,TransferTypes,Transfer<In>>;
+		using OutType = AccountTransfer<Comdirect,TransferTypes,Transfer<Out>>;
 		using IsOutTransferSign = T::char_<'-'>;
-		using Base = Account<Comdirect>;
+		using Base = Account<Comdirect, TransferTypes>;
 		
 		inline static T::Is_<IsOutTransferSign> IsOutTransfer;
 		inline static const std::string Name = "Comdirect";

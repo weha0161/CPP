@@ -64,10 +64,11 @@ namespace Bank
 	
 	//-----------------------------------------------------------------------------------------------AccountTransfer-----------------------------------------------------------------------
 	
-	template<typename Account, typename Direction>
+	template<typename Account, typename TupleT,typename Direction>
 	class AccountTransfer
 	{
-		using Type = AccountTransfer<Account,Direction> ;
+		using Type = AccountTransfer<Account,TupleT,Direction> ;
+		using TupleType = TupleT;
 		
 		Key<std::string> owner;
 		Entry transaction;

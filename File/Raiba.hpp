@@ -31,14 +31,15 @@ namespace fs = std::filesystem;
 namespace Bank
 {	
 	template<unsigned int N = 0>
-	struct Raiba: public Account<Raiba<N>>
+	struct Raiba: public Account<Raiba<N>, std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>>
 	{
 		enum{ Num = N };
-		using InType = AccountTransfer<Raiba,Transfer<In>>;
-		using OutType = AccountTransfer<Raiba,Transfer<Out>>;
+		using TransferTypes = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>;
+		using InType = AccountTransfer<Raiba,TransferTypes,Transfer<In>>;
+		using OutType = AccountTransfer<Raiba,TransferTypes,Transfer<Out>>;
 		using IsOutTransferSign = T::char_<'S'>;
-		using Base = Account<Raiba>;
-		friend class Account<Raiba>;
+		using Base = Account<Raiba, TransferTypes>;
+		friend class Account<Raiba, TransferTypes>;
 		
 		inline static T::Is_<IsOutTransferSign> IsOutTransfer;
 		inline static const std::string Name = "Raiba";
