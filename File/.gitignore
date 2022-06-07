@@ -1,3 +1,4 @@
 Controller.o Directory.o File.o Logger.o Main.o
 *.o
 *.txt
+Debug
