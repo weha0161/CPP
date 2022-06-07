@@ -89,7 +89,7 @@ protected:
 	{
 		Logger::Log()<<Head::Identifier<<"_"<<(*(this->keyIndices))[Head::Identifier]<<" => "<<*(begin + (*(this->keyIndices))[Head::Identifier])<<std::endl;
 		auto bT = Base::createTransfer(begin,end); 
-		auto result = std::tuple_cat(TupleType(Type(Type::Identifier)), bT);
+		auto result = std::tuple_cat(TupleType(Type(*(begin + (*(this->keyIndices))[Head::Identifier]))), bT);
 		return result;
 	} 
 	

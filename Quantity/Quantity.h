@@ -13,6 +13,7 @@ struct Quantity
 	using ValueType = T1;
 	using UnitType = U;
 	using UnitPrefix = SiPrefix;
+	using Converter = String_::To<T1>;
 	using Type = Quantity<U,SiPrefix,T1>;	
 	
     //~ const std::string UnitName() {  return UnitType::Name; }
@@ -20,8 +21,11 @@ struct Quantity
     const std::string UnitSign() { return U::Sign(); }
     const std::string SiUnit() { return UnitType::SiUnit(); }
     inline static const std::string Identifier = U::Name;
+    inline static constexpr Converter converter = Converter();
+    inline static constexpr String_::CommaToPoint commaToPoint = String_::CommaToPoint();
+    
 	explicit Quantity(const T1& v): value(v * SiPrefix::Factor) {	}
-	explicit Quantity(const std::string& s): value{} {	}
+	explicit Quantity(const std::string& s): value{converter(commaToPoint(s))} { 	}
 	
 	T1 Value() const { return value / SiPrefix::Factor;}
 	T1 PureValue() const { return value;}
