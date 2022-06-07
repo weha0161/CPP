@@ -30,11 +30,11 @@ namespace fs = std::filesystem;
 namespace Bank
 {
 	//-----------------------------------------------------------------------------------------------Tranfers-----------------------------------------------------------------------
-	template<unsigned int N = 0>
-	struct Comdirect: public Account<Comdirect<N>, std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>>
+	template<unsigned int N = 0, typename TransferT = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>>
+	struct Comdirect: public Account<Comdirect<N>, TransferT>
 	{
 		enum{ Num = N };
-		using TransferTypes = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>;
+		using TransferTypes = TransferT;
 		using InType = AccountTransfer<Comdirect,TransferTypes,Transfer<In>>;
 		using OutType = AccountTransfer<Comdirect,TransferTypes,Transfer<Out>>;
 		using IsOutTransferSign = T::char_<'-'>;

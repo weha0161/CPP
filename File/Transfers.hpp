@@ -19,16 +19,16 @@ namespace Bank
 	using DateType = DateTimes::Date::DateType;
 	
 	template<typename T>
-	class TransactionContainer
+	class Transfers
 	{
 	public:
-		using Type = TransactionContainer<T> ;
+		using Type = Transfers<T> ;
 		using ContainerType = std::vector<T>;
 		using ContainerPtr = std::shared_ptr<ContainerType>;
 		using TypePtr = std::shared_ptr<Type>;
 		using Iterator = ContainerType::const_iterator;
 
-		TransactionContainer(): transactions{std::make_shared<ContainerType>()}{}
+		Transfers(): transactions{std::make_shared<ContainerType>()}{}
 		
 // 		Type operator[](std::string s) { return Type(ContainerType(this->Begin()+1, this->End()-1)); }
 		
@@ -52,7 +52,7 @@ namespace Bank
 		}
 	private:
 		ContainerPtr transactions;
-		TransactionContainer(ContainerPtr c): transactions(c){ Logger::Log()<<"TransactionContainer: "<<*this->transactions.at(0)<<"\t"<<*this->transactions.at(0)<<std::endl;	}
+		Transfers(ContainerPtr c): transactions(c){ Logger::Log()<<"Transfers: "<<*this->transactions.at(0)<<"\t"<<*this->transactions.at(0)<<std::endl;	}
 	};
 }
 

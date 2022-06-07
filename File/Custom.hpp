@@ -28,11 +28,11 @@ namespace fs = std::filesystem;
 
 namespace Bank
 {
-	template<unsigned int N = 0>
-	struct Custom: public Account<Custom<N>, std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>>
+	template<unsigned int N = 0, typename TransferT = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>>
+	struct Custom: public Account<Custom<N>, TransferT>
 	{
 		enum{ Num = N };
-		using TransferTypes = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>;
+		using TransferTypes = TransferT;
 		using InType = AccountTransfer<Custom,TransferTypes,Transfer<In>>;
 		using OutType = AccountTransfer<Custom,TransferTypes,Transfer<Out>>;
 		using IsOutTransferSign = T::char_<'-'>;

@@ -116,7 +116,10 @@ public:
 	auto CreateTransfer(Base::InputIterator begin, Base::InputIterator end)
 	{
 		Logger::Log()<<Head::Identifier<<"_"<<(*(this->keyIndices))[Head::Identifier]<<" => "<<*(begin + (*(this->keyIndices))[Head::Identifier])<<std::endl;
-		auto t = Base::createTransfer(begin,end);
+		auto bT = Base::createTransfer(begin,end);
+		auto result = std::tuple_cat(TupleType(Type(*(begin + (*(this->keyIndices))[Head::Identifier]))), bT);
+		typename TransferType::TupleType t = result;
+		
 		//~ return std::make_shared<TransferType>("","",0.0,"");
 		return 0;
 	}

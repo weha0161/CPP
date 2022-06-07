@@ -87,7 +87,7 @@ namespace String_
 	template<>
 	struct To<double>
 	{
-		double operator()(const std::string& s) const{ std::cout<<"DOUBLE_"<<s<<std::endl;  ;return std::stod(s); }
+		double operator()(const std::string& s) const{ return std::stod(s); }
 	};
 	
 	template<>

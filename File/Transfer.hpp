@@ -14,7 +14,7 @@
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <filesystem>
-#include "TransactionContainer.hpp"
+#include "Transfers.hpp"
 #include "AccountTransfer.hpp"
 #include "../Logger/Logger.hpp"
 #include "../CSV/CSV.hpp"
@@ -41,7 +41,7 @@ namespace Bank
 		using TransferType = AccountTransfer<Account,TransferTypes,Direction> ;
 		using DataType = std::shared_ptr<TransferType>;
 		using ResultContainer = Cont<DataType> ;
-		using ContainerType = TransactionContainer<DataType>;
+		using ContainerType = Transfers<DataType>;
 		using Iterator = ContainerType::Iterator;
 		
 		Key<std::string> owner;

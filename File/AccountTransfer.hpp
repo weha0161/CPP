@@ -14,7 +14,7 @@
 #include <boost/mpl/for_each.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <filesystem>
-#include "TransactionContainer.hpp"
+#include "Transfers.hpp"
 #include "../Logger/Logger.hpp"
 #include "../CSV/CSV.hpp"
 #include "../Quantity/Quantity.h"
@@ -68,7 +68,6 @@ namespace Bank
 	class AccountTransfer
 	{
 		using Type = AccountTransfer<Account,TupleT,Direction> ;
-		using TupleType = TupleT;
 		
 		Key<std::string> owner;
 		Entry transaction;
@@ -81,6 +80,7 @@ namespace Bank
 	protected:
 		using CSVSeparator = T::char_<';'> ;
 	public:
+		using TupleType = TupleT;
 		using AccountType = Account ;
 		using DirectionType = Direction ;
 		using KeyType = Key<std::string>;
