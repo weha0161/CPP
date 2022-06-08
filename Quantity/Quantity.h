@@ -24,6 +24,7 @@ struct Quantity
     inline static constexpr Converter converter = Converter();
     inline static constexpr String_::CommaToPoint commaToPoint = String_::CommaToPoint();
     
+	Quantity(): value(0 * SiPrefix::Factor) {	}
 	explicit Quantity(const T1& v): value(v * SiPrefix::Factor) {	}
 	explicit Quantity(const std::string& s): value{converter(commaToPoint(s))} { 	}
 	

@@ -115,6 +115,7 @@ class IBAN: public Element
 public:
 	inline static const std::string Identifier = "IBAN";
 	IBAN(std::string s): Element(s){ };
+	IBAN(): Element(""){ };
 	IBAN* DoCreate(){return this;};
 };
 
@@ -123,6 +124,7 @@ class BIC: public Element
 public:
 	inline static const std::string Identifier = "BIC";
 	BIC(std::string s): Element(s){};
+	BIC(): Element(""){ };
 	BIC* DoCreate(){return this;};
 };
 
@@ -142,6 +144,7 @@ class Entry: public Element
 public:
        inline static const std::string Identifier = "Entry";
        Entry(std::string s): Element(s){};
+       Entry(): Element(""){};
        Entry* DoCreate(){return this;};
 };
 

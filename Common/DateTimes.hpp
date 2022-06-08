@@ -94,6 +94,7 @@ namespace DateTimes
 							Logger::Log()<<day->Value()<<"\t"<<month->Value()<<std::endl;
 						}; 
 		Date(uint d, uint m, uint y): Date(std::string(), d,m, y) { };
+		Date(): Date(std::string(), 0,0, 0) { };
 		Date* DoCreate(){return this;};
 
 		std::string TimeString()
