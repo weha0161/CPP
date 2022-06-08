@@ -16,8 +16,8 @@
 #include "../Logger/Logger.hpp"
 #include "../Typelist/Typelist.h"
 
-#ifndef TRANSFERCONTAINER_HPP
-#define TRANSFERCONTAINER_HPP
+#ifndef TRANSFERITEMCONTAINER_HPP
+#define TRANSFERITEMCONTAINER_HPP
 
 //---------------------------------------------------------------------------------------------------CounterContainer----------------------------------------------------------------------------------------
 

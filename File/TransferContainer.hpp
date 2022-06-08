@@ -24,8 +24,8 @@
 #include "../String/String_.hpp"
 
 
-#ifndef TRANSFER_HPP
-#define TRANSFER_HPP
+#ifndef TRANSFERCONTAINER_HPP
+#define TRANSFERCONTAINER_HPP
 
 namespace fs = std::filesystem;
 
