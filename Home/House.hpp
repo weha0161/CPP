@@ -66,13 +66,13 @@ private:
 		auto outFile = std::ofstream("out.txt");
 		auto inFile = std::ofstream("//home//markus//Downloads//in.txt");
 		auto keyFileN = std::string("//home//markus//Downloads//Keys.txt");
-		auto out = Transfers<Bank::Raiba<0>>();
-		auto in = Transfers<Bank::Raiba<0>, Bank::In>();
-		std::cout<<"\n-------------------------------------------------------- Transfers IN --------------------------------------------------------------"<<std::endl;
-		auto raibaOut = Transfers<Bank::Raiba<0>, Bank::Out>();
-		auto rbo = raibaOut();
+// 		auto out = Transfers<Bank::Raiba<0>>();
+// 		auto in = Transfers<Bank::Raiba<0>, Bank::In>();
+// 		std::cout<<"\n-------------------------------------------------------- Transfers IN --------------------------------------------------------------"<<std::endl;
+// 		auto raibaOut = Transfers<Bank::Raiba<0>, Bank::Out>();
+// 		auto rbo = raibaOut();
 		auto keys = FileSystem::ReadLines(keyFileN);
-		rbo.Display(inFile,keys);
+// 		rbo.Display(inFile,keys);
 		
 		StageContainerType::Instance().Display(std::cout);
 		CounterConatinerType::Instance().Display(std::cout);

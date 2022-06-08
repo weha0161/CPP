@@ -28,13 +28,12 @@ namespace fs = std::filesystem;
 
 namespace Bank
 {
-	template<unsigned int N = 0, typename TransferT = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>>
+	template<unsigned int N = 0, typename TransferT = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction<Bank::Unknown>>>
 	struct Custom: public Account<Custom<N>, TransferT>
 	{
 		enum{ Num = N };
 		using TransferTypes = TransferT;
-		using InType = AccountTransfer<Custom,TransferTypes,Transfer<In>>;
-		using OutType = AccountTransfer<Custom,TransferTypes,Transfer<Out>>;
+		using TransferType = Transfer<Custom,TransferTypes,Direction<Custom>>;
 		using IsOutTransferSign = T::char_<'-'>;
 		using Base = Account<Custom, TransferTypes>;
 		
@@ -48,13 +47,12 @@ namespace Bank
 		inline static constexpr unsigned int HeaderLength = 15;
 		inline static constexpr unsigned int TrailerLength = 4;
 		
-		inline static Base::ParseContIn InCont = typename Base::ParseContIn();
-		inline static Base::ParseContOut OutCont = typename Base::ParseContOut();
+		inline static Base::ParseContainer Cont = typename Base::ParseContainer();
 		Custom(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : Base(k,c,v, d, i, b) {};		
 		
 		static void Display(std::ostream& os)
 		{
-			InCont.Display(os);
+			Cont.Display(os);
 		}
 		
 		static void ProcessValues(Base::InputIterator begin, Base::InputIterator end)
@@ -72,8 +70,8 @@ namespace Bank
 				auto iban =  Extract<IBAN>(transaction);
 				auto bic = Extract<BIC>(transaction);
 
-				InCont.Insert(key, std::make_shared<typename Base::InTransfer>(key,transaction,sum, date, iban, bic));
-				OutCont.Insert(key, std::make_shared<typename Base::OutTransfer>(key,transaction,sum, date, iban, bic));
+				Cont.Insert(key, std::make_shared<typename Base::InTransfer>(key,transaction,sum, date, iban, bic));
+				//~ OutCont.Insert(key, std::make_shared<typename Base::OutTransfer>(key,transaction,sum, date, iban, bic));
 				
 				auto q = std::string(*(begin + QuantityIdx));
 				Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(q.cbegin()+1));

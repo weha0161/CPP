@@ -30,13 +30,12 @@ namespace fs = std::filesystem;
 
 namespace Bank
 {	
-	template<unsigned int N = 0, typename TransferT = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>>
+	template<unsigned int N = 0, typename TransferT = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction<Bank::Unknown>>>
 	struct Raiba: public Account<Raiba<N>, TransferT>
 	{
 		enum{ Num = N };
 		using TransferTypes = TransferT;
-		using InType = AccountTransfer<Raiba,TransferTypes,Transfer<In>>;
-		using OutType = AccountTransfer<Raiba,TransferTypes,Transfer<Out>>;
+		using TransferType = Transfer<Raiba,TransferTypes,Direction<Raiba>>;
 		using IsOutTransferSign = T::char_<'S'>;
 		using Base = Account<Raiba, TransferTypes>;
 		friend class Account<Raiba, TransferTypes>;
@@ -53,17 +52,14 @@ namespace Bank
 		inline static constexpr unsigned int HeaderLength = 16;
 		inline static constexpr unsigned int TrailerLength = 3;
 		
-		inline static Base::ParseContIn InCont = typename Base::ParseContIn();
-		inline static Base::ParseContOut OutCont = typename Base::ParseContOut();
+		inline static Base::ParseContainer Cont = typename Base::ParseContainer();
+		//~ inline static Base::ParseContOut OutCont = typename Base::ParseContOut();
 		Raiba(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : Base(k,c,v, d, i, b) {};
 		
 		static void Display(std::ostream& os)
 		{
-			os<<"IN"<<std::endl;
-			InCont.Display(os);
-			
-			os<<"OUT"<<std::endl;
-			OutCont.Display(os);
+			os<<"CONT"<<std::endl;
+			Cont.Display(os);
 		}
 		
 		static void ProcessValues(Base::InputIterator begin, Base::InputIterator end)

@@ -30,17 +30,6 @@ namespace fs = std::filesystem;
 
 namespace Bank
 {
-	template<typename Direction>
-	struct Transfer
-	{
-		Transfer(std::string s){};
-		using Type = Transfer<Direction>;
-		using ValueType = Direction;
-		inline static const std::string Identifier = "Direction";
-		inline static const std::string Id = Direction::Id; 
-		inline static constexpr int Value = Direction::Value; 		
-	};
-	
 	struct In
 	{
 		using Type = In;
@@ -62,12 +51,29 @@ namespace Bank
 		inline static constexpr int Value = 0; 
 	};
 	
-	//-----------------------------------------------------------------------------------------------AccountTransfer-----------------------------------------------------------------------
+	template<typename AccountT>
+	struct DirectionBase
+	{
+		DirectionBase(std::string s){};
+		using Type = DirectionBase<AccountT>;
+		using AccountType = AccountT;
+		inline static const std::string Identifier = "Direction";
+		inline static const std::string Id = Unknown::Id; 
+		inline static constexpr int Value = Unknown::Value; 		
+	};
+	
+	template<typename AccountT>
+	struct Direction: public DirectionBase<AccountT>
+	{
+		Direction(std::string s): DirectionBase<AccountT>(s){};
+	};
+	
+	//-----------------------------------------------------------------------------------------------Transfer-----------------------------------------------------------------------
 	
 	template<typename Account, typename TupleT,typename Direction>
-	class AccountTransfer
+	class Transfer
 	{
-		using Type = AccountTransfer<Account,TupleT,Direction> ;
+		using Type = Transfer<Account,TupleT,Direction> ;
 		
 		Key<std::string> owner;
 		Entry transaction;
@@ -86,7 +92,7 @@ namespace Bank
 		using KeyType = Key<std::string>;
 		using QunatityType = Quantity<Sum>;
 		
-		AccountTransfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC", std::string cause_ = "") : owner(k), transaction(c), date(Parsers::Parser<std::string,DateTimes::Date,std::string>::Parse(d)), value(v), iban(i), bic(b), cause(cause_) { 	};
+		Transfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC", std::string cause_ = "") : owner(k), transaction(c), date(Parsers::Parser<std::string,DateTimes::Date,std::string>::Parse(d)), value(v), iban(i), bic(b), cause(cause_) { 	};
 		
 		const KeyType& GetOwner() const { return owner; }
 		const Entry& GetTransaction() const { return transaction; }

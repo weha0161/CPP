@@ -36,9 +36,9 @@ namespace Bank
 	template<typename Account, typename Direction, template<typename> class Cont = std::vector>
 	class AccountEndpoint
 	{
-		using TransferTypes = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>;
+		using TransferTypes = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction<Bank::Unknown>>;
 		using Type = AccountEndpoint<Account,Direction> ;
-		using TransferType = AccountTransfer<Account,TransferTypes,Direction> ;
+		using TransferType = Transfer<Account,TransferTypes,Direction> ;
 		using DataType = std::shared_ptr<TransferType>;
 		using ResultContainer = Cont<DataType> ;
 		using ContainerType = Transfers<DataType>;
@@ -172,7 +172,7 @@ namespace Bank
 	};
 		
 	template<typename T, typename TT,typename D>
-	std::ostream& operator<<(std::ostream& out, const AccountTransfer<T,TT,D>& s)
+	std::ostream& operator<<(std::ostream& out, const Transfer<T,TT,D>& s)
 	{
 		out<<std::setw(30)<<std::left<<s.GetOwner()<<std::setw(60)<<s.GetTransaction()<<std::setw(20)<<std::right<<s.GetDate()<<std::setw(10)<<std::setprecision(2)<<std::fixed<<s.GetQuantity()<<"\n";
 		return out<<std::setw(30)<<std::left<<s.GetIBAN()<<std::setw(60)<<s.GetBIC()<<std::setw(20);		

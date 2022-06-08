@@ -30,13 +30,12 @@ namespace fs = std::filesystem;
 namespace Bank
 {
 	//-----------------------------------------------------------------------------------------------Tranfers-----------------------------------------------------------------------
-	template<unsigned int N = 0, typename TransferT = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>>
+	template<unsigned int N = 0, typename TransferT = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction<Bank::Unknown>>>
 	struct Comdirect: public Account<Comdirect<N>, TransferT>
 	{
 		enum{ Num = N };
 		using TransferTypes = TransferT;
-		using InType = AccountTransfer<Comdirect,TransferTypes,Transfer<In>>;
-		using OutType = AccountTransfer<Comdirect,TransferTypes,Transfer<Out>>;
+		using TransferType = Transfer<Comdirect,TransferTypes,Direction<Comdirect>>;
 		using IsOutTransferSign = T::char_<'-'>;
 		using Base = Account<Comdirect, TransferTypes>;
 		
@@ -50,17 +49,13 @@ namespace Bank
 		inline static constexpr unsigned int HeaderLength = 5;
 		inline static constexpr unsigned int TrailerLength = 23;
 		
-		inline static Base::ParseContIn InCont = typename Base::ParseContIn();
-		inline static Base::ParseContOut OutCont = typename Base::ParseContOut();
+		inline static Base::ParseContainer Cont = typename Base::ParseContainer();
 		Comdirect(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : Base(k,c,v, d, i, b) {};
 		
 		static void Display(std::ostream& os)
 		{
 			os<<"IN"<<std::endl;
-			InCont.Display(os);
-			
-			os<<"OUT"<<std::endl;
-			OutCont.Display(os);
+			Cont.Display(os);
 		}
 		
 		using TextSeparator = T::char_<' '> ;

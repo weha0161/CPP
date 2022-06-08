@@ -46,17 +46,15 @@ namespace Bank
 		inline static const std::string  KeysFilename = Derived::Name + ".keys";
 	public:
 		using Type = Account<Derived,TransferT> ;
-		using InTransfer = AccountTransfer<Derived, TransferT,Transfer<In>>;
-		using OutTransfer = AccountTransfer<Derived, TransferT,Transfer<Out>>;
+		using TransferType = Transfer<Derived, TransferT,Direction<Derived>>;
 		using KeyType = Key<std::string>;
-		using ParseContIn = TransferContainer<InTransfer>;
-		using ParseContOut = TransferContainer<OutTransfer>;
+		using ParseContainer = TransferContainer<TransferType>;
 		using QuantityType = Quantity<Sum>;
 		using InputIterator = std::vector<std::string>::const_iterator;
 		using KeyIndexType = CSV::KeyIndex<KeyType,uint>;
 		using KeyIndexContainerType = CSV::KeyIndexContainer<Derived, std::string,uint>;
 		using KeyIndexContainerPtrType = std::shared_ptr<KeyIndexContainerType>;
-		using TransferItemContainerType = TransferItemContainer<KeyIndexContainerType,Typelist<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Transfer<Bank::Unknown>>>::ContainerType;
+		using TransferItemContainerType = TransferItemContainer<KeyIndexContainerType,Typelist<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction<Bank::Unknown>>>::ContainerType;
 		
 		static void Parse(InputIterator begin, InputIterator end)
 		{
@@ -87,7 +85,7 @@ namespace Bank
 							//~ else
 								//~ Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));
 							
-							TransferItemContainerType::Instance().template CreateTransfer<OutTransfer>(values.cbegin(),values.end());
+							TransferItemContainerType::Instance().template CreateTransfer<TransferType>(values.cbegin(),values.end());
 						}
 						
 						return;
@@ -164,53 +162,53 @@ namespace Bank
 		
 		static void InsertInContainer(std::string key, std::string transaction, double sum, std::string date, std::string iban, std::string bic, char transferSign, std::string cause = "")
 		{
-			if(Derived::IsOutTransfer(transferSign))
-				Derived::OutCont.Insert(key, std::make_shared<OutTransfer>(key,transaction,sum, date, iban, bic, cause));
-			else
-				Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));			
+			//~ if(Derived::IsOutTransfer(transferSign))
+				//~ Derived::OutCont.Insert(key, std::make_shared<OutTransfer>(key,transaction,sum, date, iban, bic, cause));
+			//~ else
+				//~ Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));			
 		}
 	private:
 		
 	};
 }
 
-template<typename A, typename Direction>
+template<typename A, typename DirectionT>
 struct Get{};
 
 template<typename A>
 struct Get<A, Bank::Out>
 {
-	Bank::AccountEndpoint<A, Bank::Transfer<Bank::Out>> operator()(typename A::KeyType k)
+	Bank::AccountEndpoint<A, Bank::Direction<Bank::Out>> operator()(typename A::KeyType k)
 	{
-		return A::OutCont[k];
+		return A::Cont[k];
 	}
 };
 
 template<typename A>
 struct Get<A, Bank::In>
 {
-	Bank::AccountEndpoint<A, Bank::Transfer<Bank::In>> operator()(typename A::KeyType k)
+	Bank::AccountEndpoint<A, Bank::Direction<Bank::In>> operator()(typename A::KeyType k)
 	{
-		return A::InCont[k];
+		return A::Cont[k];
 	}
 };
 
-template<typename A, typename Direction = Bank::Out>
-struct Transfers
-{
-	const typename A::ParseContOut& operator()()
-	{
-		return A::OutCont;
-	}
-};
+//~ template<typename A, typename Direction = Bank::Out>
+//~ struct Transfers
+//~ {
+	//~ const typename A::ParseContOut& operator()()
+	//~ {
+		//~ return A::OutCont;
+	//~ }
+//~ };
 
-template<typename A>
-struct Transfers<A, Bank::In>
-{
-	const typename A::ParseContIn& operator()()
-	{
-		return A::InCont;
-	}
-};
+//~ template<typename A>
+//~ struct Transfers<A, Bank::In>
+//~ {
+	//~ const typename A::ParseContainer& operator()()
+	//~ {
+		//~ return A::InCont;
+	//~ }
+//~ };
 
 #endif

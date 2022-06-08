@@ -81,16 +81,16 @@ int main()
 	
 	std::cout<<"\n-------------------------------------------------------- Transfers OUT --------------------------------------------------------------"<<std::endl;
 
-	auto out = Transfers<Bank::Raiba<0>>();
-	auto com1 = out();
-	com1.Display(outFile);
-	com1.DisplayKeys(keyFile);
+	//~ auto out = Transfers<Bank::Raiba<0>>();
+	//~ auto com1 = out();
+	//~ com1.Display(outFile);
+	//~ com1.DisplayKeys(keyFile);
 	
 	
-	std::cout<<"\n-------------------------------------------------------- Transfers IN --------------------------------------------------------------"<<std::endl;
-	auto in = Transfers<Bank::Raiba<0>, Bank::In>();
-	auto com2 = in();
-	com2.Display(inFile);
+	//~ std::cout<<"\n-------------------------------------------------------- Transfers IN --------------------------------------------------------------"<<std::endl;
+	//~ auto in = Transfers<Bank::Raiba<0>, Bank::In>();
+	//~ auto com2 = in();
+	//~ com2.Display(inFile);
 
 	//~ std::cout<<"\n TEST GET Gemeindekasse Dettenheim"<<std::endl;
 	//~ std::cout<<"\n-------------------------------------------------------- Transfers OUT --------------------------------------------------------------"<<std::endl;
