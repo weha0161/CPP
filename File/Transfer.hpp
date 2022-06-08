@@ -52,14 +52,15 @@ namespace Bank
 	};
 	
 	template<typename AccountT>
-	struct DirectionBase
+	struct DirectionBase: public Element
 	{
-		DirectionBase(std::string s){};
+		DirectionBase(std::string s): Element(s) {};
 		using Type = DirectionBase<AccountT>;
 		using AccountType = AccountT;
 		inline static const std::string Identifier = "Direction";
 		inline static const std::string Id = Unknown::Id; 
 		inline static constexpr int Value = Unknown::Value; 		
+		DirectionBase* DoCreate(){return this;};
 	};
 	
 	template<typename AccountT>
