@@ -8,7 +8,7 @@
 #include <vector>
 #include <cstdlib>
 #include <filesystem>
-#include "AccountTransfer.hpp"
+#include "Transfer.hpp"
 #include "../CSV/CSV.hpp"
 #include "../Unit/Unit.h"
 #include "../Quantity/Quantity.h"

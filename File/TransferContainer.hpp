@@ -15,7 +15,7 @@
 #include <boost/mpl/placeholders.hpp>
 #include <filesystem>
 #include "Transfers.hpp"
-#include "AccountTransfer.hpp"
+#include "Transfer.hpp"
 #include "../Logger/Logger.hpp"
 #include "../CSV/CSV.hpp"
 #include "../Quantity/Quantity.h"

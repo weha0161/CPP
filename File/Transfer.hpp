@@ -23,8 +23,8 @@
 #include "../String/String_.hpp"
 #include "../Common/DateTimes.hpp"
 
-#ifndef ACCOUNTTRANSFER_HPP
-#define ACCOUNTTRANSFER_HPP
+#ifndef TRANSFER_HPP
+#define TRANSFER_HPP
 
 namespace fs = std::filesystem;
 
