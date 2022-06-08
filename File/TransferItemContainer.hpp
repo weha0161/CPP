@@ -120,6 +120,13 @@ public:
 		auto result = std::tuple_cat(TupleType(Type(*(begin + (*(this->keyIndices))[Head::Identifier]))), bT);
 		typename TransferType::TupleType t = result;
 		
+		auto tt = TransferType(std::move(t));
+		const auto& bic = Bank::Get<BIC>(tt);
+		
+		Logger::Log()<<Head::Identifier<<"_"<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<bic.Value<<std::endl;
+		
+		//~ auto b1 = template bic<BIC>(tt);
+		
 		//~ return std::make_shared<TransferType>("","",0.0,"");
 		return 0;
 	}
