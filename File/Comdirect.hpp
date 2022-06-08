@@ -30,7 +30,7 @@ namespace fs = std::filesystem;
 namespace Bank
 {
 	//-----------------------------------------------------------------------------------------------Tranfers-----------------------------------------------------------------------
-	template<unsigned int N = 0, typename TransferT = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction<Bank::Unknown>>>
+	template<unsigned int N = 0, typename TransferT = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction>>
 	struct Comdirect: public Account<Comdirect<N>, TransferT>
 	{
 		enum{ Num = N };

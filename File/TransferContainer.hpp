@@ -36,7 +36,7 @@ namespace Bank
 	template<typename Account, template<typename> class Cont = std::vector>
 	class AccountEndpoint
 	{
-		using TransferTypes = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction<Bank::Unknown>>;
+		using TransferTypes = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction>;
 		using Type = AccountEndpoint<Account> ;
 		using TransferType = Transfer<Account,TransferTypes> ;
 		using DataType = std::shared_ptr<TransferType>;
@@ -48,6 +48,7 @@ namespace Bank
 		IBAN iban;
 		BIC bic;
 		Quantity<Sum> total;
+		Direction direction;
 		ContainerType transactions;
 
 	protected:
@@ -68,7 +69,7 @@ namespace Bank
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetTotal() const { return total; }
-		const auto& GetDirection() const { return Direction<Bank::Unknown>::Id; }		
+		const auto& GetDirection() const { return direction.Id(); }		
 		
 		void Add(DataType t)
 		{

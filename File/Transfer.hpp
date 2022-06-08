@@ -52,27 +52,38 @@ namespace Bank
 		inline static constexpr int Id = 0; 
 	};
 	
-	template<typename AccountT>
-	struct DirectionBase: public Element
+	class DirectionBase: public Element
 	{
-		DirectionBase(std::string s): Element(s), value(Unknown::Id) {};
-		using Type = DirectionBase<AccountT>;
-		using AccountType = AccountT;
-		inline static const std::string Identifier = "Direction";
-		inline static const std::string TypeId = Unknown::TypeId; 
-		inline static constexpr int Id = Unknown::Id; 		
+	public:
+		DirectionBase(std::string s): Element(s), value(Unknown::Id), id{Unknown::Id}, typeId{Unknown::TypeId} {};
+		using Type = DirectionBase;
+		using QuantityType = Quantity<Scalar,SIPrefix<0>>;
+		inline static constexpr const char* Identifier = "Direction";
 		DirectionBase* DoCreate(){return this;};
-		
-		const auto& Value() {return this->value; }
-		
+		const auto& Value() const {	return this->value; }
+		const auto& Id() const  {	return this->id; }
+		const auto& TypeId() const  {	return this->typeId; }	
+	
 	protected:
+		std::string typeId = Unknown::TypeId; 
+		int id = Unknown::Id; 		
 		Quantity<Scalar,SIPrefix<0>,int> value;	
+	private:
 	};
 	
-	template<typename AccountT>
-	struct Direction: public DirectionBase<AccountT>
+	struct Direction: public DirectionBase
 	{
-		Direction(std::string s): DirectionBase<AccountT>(s){};
+		Direction(std::string s): DirectionBase(s){};
+		
+		template<typename DirectionT>
+		void Set()
+		{
+			this->id = DirectionT::Id;
+			this->typeId = DirectionT::TypeId;
+			this->value = QuantityType(DirectionT::id);
+			
+			Logger::Log()<<"SET_"<<this->id<<"\t"<<this->typeId<<std::endl;
+		}
 	};
 	
 	//-----------------------------------------------------------------------------------------------Transfer-----------------------------------------------------------------------
@@ -89,6 +100,7 @@ namespace Bank
 		IBAN iban;
 		BIC bic;
 		Quantity<Sum> value;
+		Direction direction;
 
 	protected:
 		using CSVSeparator = T::char_<';'> ;
@@ -107,7 +119,7 @@ namespace Bank
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetQuantity() const { ;return value; }
-		const auto& GetDirection() const { return Direction<Unknown>::Id; }		
+		const auto& GetDirection() const { return direction.Id(); }		
 
 		bool operator==(DayType d) const{ return this->date == d;};
 		bool operator==(DateTimes::Day m) const{ return this->date == m;};
