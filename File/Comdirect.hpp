@@ -35,7 +35,7 @@ namespace Bank
 	{
 		enum{ Num = N };
 		using TransferTypes = TransferT;
-		using TransferType = Transfer<Comdirect,TransferTypes,Direction<Comdirect>>;
+		using TransferType = Transfer<Comdirect,TransferTypes>;
 		using IsOutTransferSign = T::char_<'-'>;
 		using Base = Account<Comdirect, TransferTypes>;
 		

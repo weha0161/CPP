@@ -33,7 +33,7 @@ namespace Bank
 	{
 		enum{ Num = N };
 		using TransferTypes = TransferT;
-		using TransferType = Transfer<Custom,TransferTypes,Direction<Custom>>;
+		using TransferType = Transfer<Custom,TransferTypes>;
 		using IsOutTransferSign = T::char_<'-'>;
 		using Base = Account<Custom, TransferTypes>;
 		

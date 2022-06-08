@@ -33,12 +33,12 @@ namespace Bank
 {
 	//-----------------------------------------------------------------------------------------------TranferEndpoint-----------------------------------------------------------------------
 	
-	template<typename Account, typename Direction, template<typename> class Cont = std::vector>
+	template<typename Account, template<typename> class Cont = std::vector>
 	class AccountEndpoint
 	{
 		using TransferTypes = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction<Bank::Unknown>>;
-		using Type = AccountEndpoint<Account,Direction> ;
-		using TransferType = Transfer<Account,TransferTypes,Direction> ;
+		using Type = AccountEndpoint<Account> ;
+		using TransferType = Transfer<Account,TransferTypes> ;
 		using DataType = std::shared_ptr<TransferType>;
 		using ResultContainer = Cont<DataType> ;
 		using ContainerType = Transfers<DataType>;
@@ -68,7 +68,7 @@ namespace Bank
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetTotal() const { return total; }
-		const Direction& GetDirection() const { return Direction::Id; }		
+		const auto& GetDirection() const { return Direction<Bank::Unknown>::Id; }		
 		
 		void Add(DataType t)
 		{
@@ -111,7 +111,7 @@ namespace Bank
 	public:
 		using KeyType = typename T::KeyType;
 		using DataType = std::shared_ptr<T>;
-		using AccountEndpointType = AccountEndpoint<typename T::AccountType, typename T::DirectionType>;
+		using AccountEndpointType = AccountEndpoint<typename T::AccountType>;
 	private:
 		Cont<KeyType> keys;
 		TCont<KeyType, AccountEndpointType> transfers;
@@ -171,8 +171,8 @@ namespace Bank
 		}		
 	};
 		
-	template<typename T, typename TT,typename D>
-	std::ostream& operator<<(std::ostream& out, const Transfer<T,TT,D>& s)
+	template<typename T, typename TT>
+	std::ostream& operator<<(std::ostream& out, const Transfer<T,TT>& s)
 	{
 		out<<std::setw(30)<<std::left<<s.GetOwner()<<std::setw(60)<<s.GetTransaction()<<std::setw(20)<<std::right<<s.GetDate()<<std::setw(10)<<std::setprecision(2)<<std::fixed<<s.GetQuantity()<<"\n";
 		return out<<std::setw(30)<<std::left<<s.GetIBAN()<<std::setw(60)<<s.GetBIC()<<std::setw(20);		

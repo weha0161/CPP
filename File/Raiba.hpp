@@ -35,7 +35,7 @@ namespace Bank
 	{
 		enum{ Num = N };
 		using TransferTypes = TransferT;
-		using TransferType = Transfer<Raiba,TransferTypes,Direction<Raiba>>;
+		using TransferType = Transfer<Raiba,TransferTypes>;
 		using IsOutTransferSign = T::char_<'S'>;
 		using Base = Account<Raiba, TransferTypes>;
 		friend class Account<Raiba, TransferTypes>;

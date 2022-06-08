@@ -70,10 +70,10 @@ namespace Bank
 	
 	//-----------------------------------------------------------------------------------------------Transfer-----------------------------------------------------------------------
 	
-	template<typename Account, typename TupleT,typename Direction>
+	template<typename Account, typename TupleT>
 	class Transfer
 	{
-		using Type = Transfer<Account,TupleT,Direction> ;
+		using Type = Transfer<Account,TupleT> ;
 		
 		Key<std::string> owner;
 		Entry transaction;
@@ -88,7 +88,6 @@ namespace Bank
 	public:
 		using TupleType = TupleT;
 		using AccountType = Account ;
-		using DirectionType = Direction ;
 		using KeyType = Key<std::string>;
 		using QunatityType = Quantity<Sum>;
 		
@@ -101,7 +100,7 @@ namespace Bank
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
 		const Quantity<Sum>& GetQuantity() const { return value; }
-		const Direction& GetDirection() const { return Direction::Id; }		
+		const auto& GetDirection() const { return Direction<Unknown>::Id; }		
 
 		bool operator==(DayType d) const{ return this->date == d;};
 		bool operator==(DateTimes::Day m) const{ return this->date == m;};

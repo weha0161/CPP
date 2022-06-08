@@ -46,7 +46,7 @@ namespace Bank
 		inline static const std::string  KeysFilename = Derived::Name + ".keys";
 	public:
 		using Type = Account<Derived,TransferT> ;
-		using TransferType = Transfer<Derived, TransferT,Direction<Derived>>;
+		using TransferType = Transfer<Derived, TransferT>;
 		using KeyType = Key<std::string>;
 		using ParseContainer = TransferContainer<TransferType>;
 		using QuantityType = Quantity<Sum>;
@@ -178,7 +178,7 @@ struct Get{};
 template<typename A>
 struct Get<A, Bank::Out>
 {
-	Bank::AccountEndpoint<A, Bank::Direction<Bank::Out>> operator()(typename A::KeyType k)
+	Bank::AccountEndpoint<A> operator()(typename A::KeyType k)
 	{
 		return A::Cont[k];
 	}
@@ -187,7 +187,7 @@ struct Get<A, Bank::Out>
 template<typename A>
 struct Get<A, Bank::In>
 {
-	Bank::AccountEndpoint<A, Bank::Direction<Bank::In>> operator()(typename A::KeyType k)
+	Bank::AccountEndpoint<A> operator()(typename A::KeyType k)
 	{
 		return A::Cont[k];
 	}
