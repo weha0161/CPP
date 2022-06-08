@@ -34,34 +34,36 @@ namespace Bank
 	struct In
 	{
 		using Type = In;
-		inline static const std::string Id = "In"; 
-		inline static constexpr int Value = 1; 
+		inline static const std::string TypeId = "In"; 
+		inline static constexpr int Id = 1; 
 	};
 	
 	struct Out
 	{
 		using Type = Out;
-		inline static const std::string Id = "Out"; 
-		inline static constexpr int Value = -1; 
+		inline static const std::string TypeId = "Out"; 
+		inline static constexpr int Id = -1; 
 	};
 	
 	struct Unknown
 	{
 		using Type = Unknown;
-		inline static const std::string Id = "Unknown"; 
-		inline static constexpr int Value = 0; 
+		inline static const std::string TypeId = "Unknown"; 
+		inline static constexpr int Id = 0; 
 	};
 	
 	template<typename AccountT>
 	struct DirectionBase: public Element
 	{
-		DirectionBase(std::string s): Element(s), value(Unknown::Value) {};
+		DirectionBase(std::string s): Element(s), value(Unknown::Id) {};
 		using Type = DirectionBase<AccountT>;
 		using AccountType = AccountT;
 		inline static const std::string Identifier = "Direction";
-		inline static const std::string Id = Unknown::Id; 
-		inline static constexpr int Value = Unknown::Value; 		
+		inline static const std::string TypeId = Unknown::TypeId; 
+		inline static constexpr int Id = Unknown::Id; 		
 		DirectionBase* DoCreate(){return this;};
+		
+		const auto& Value() {return this->value; }
 		
 	protected:
 		Quantity<Scalar,SIPrefix<0>,int> value;	
@@ -104,7 +106,7 @@ namespace Bank
 		const DateTimes::Date& GetDate() const { return date; }
 		const IBAN& GetIBAN() const { return iban; }
 		const BIC& GetBIC() const { return bic; }
-		const Quantity<Sum>& GetQuantity() const { return value; }
+		const Quantity<Sum>& GetQuantity() const { ;return value; }
 		const auto& GetDirection() const { return Direction<Unknown>::Id; }		
 
 		bool operator==(DayType d) const{ return this->date == d;};
