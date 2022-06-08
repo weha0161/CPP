@@ -160,13 +160,7 @@ namespace Bank
 			return result;
 		}
 		
-		static void InsertInContainer(std::string key, std::string transaction, double sum, std::string date, std::string iban, std::string bic, char transferSign, std::string cause = "")
-		{
-			//~ if(Derived::IsOutTransfer(transferSign))
-				//~ Derived::OutCont.Insert(key, std::make_shared<OutTransfer>(key,transaction,sum, date, iban, bic, cause));
-			//~ else
-				//~ Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));			
-		}
+		static void InsertInContainer(std::string key, std::string transaction, double sum, std::string date, std::string iban, std::string bic, char transferSign, std::string cause = "")	{	}
 	private:
 		
 	};

@@ -53,7 +53,6 @@ namespace Bank
 		inline static constexpr unsigned int TrailerLength = 3;
 		
 		inline static Base::ParseContainer Cont = typename Base::ParseContainer();
-		//~ inline static Base::ParseContOut OutCont = typename Base::ParseContOut();
 		Raiba(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : Base(k,c,v, d, i, b) {};
 		
 		static void Display(std::ostream& os)
