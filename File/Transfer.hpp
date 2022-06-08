@@ -18,6 +18,7 @@
 #include "../Logger/Logger.hpp"
 #include "../CSV/CSV.hpp"
 #include "../Quantity/Quantity.h"
+#include "../Unit/SIPrefix.hpp"
 #include "../Typelist/Typelist.h"
 #include "../Visitor/Visitor.hpp"
 #include "../String/String_.hpp"
@@ -54,13 +55,16 @@ namespace Bank
 	template<typename AccountT>
 	struct DirectionBase: public Element
 	{
-		DirectionBase(std::string s): Element(s) {};
+		DirectionBase(std::string s): Element(s), value(Unknown::Value) {};
 		using Type = DirectionBase<AccountT>;
 		using AccountType = AccountT;
 		inline static const std::string Identifier = "Direction";
 		inline static const std::string Id = Unknown::Id; 
 		inline static constexpr int Value = Unknown::Value; 		
 		DirectionBase* DoCreate(){return this;};
+		
+	protected:
+		Quantity<Scalar,SIPrefix<0>,int> value;	
 	};
 	
 	template<typename AccountT>
