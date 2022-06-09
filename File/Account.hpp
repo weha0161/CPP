@@ -48,6 +48,7 @@ namespace Bank
 	public:
 		using Type = Account<Derived,TransferT> ;
 		using TransferType = Transfer<Derived, TransferT>;
+		using TupleType = TransferT;
 		using KeyType = Key<std::string>;
 		using ParseContainer = TransferContainer<TransferType>;
 		using QuantityType = Quantity<Sum>;
@@ -55,7 +56,7 @@ namespace Bank
 		using KeyIndexType = CSV::KeyIndex<KeyType,uint>;
 		using KeyIndexContainerType = CSV::KeyIndexContainer<Derived, std::string,uint>;
 		using KeyIndexContainerPtrType = std::shared_ptr<KeyIndexContainerType>;
-		using TransferItemContainerType = TransferItemContainer<KeyIndexContainerType,Typelist<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction>>::ContainerType;
+		using TransferItemContainerType = TransferItemContainer<KeyIndexContainerType,Typelist<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction, Entry>>::ContainerType;
 		
 		static void Parse(InputIterator begin, InputIterator end)
 		{

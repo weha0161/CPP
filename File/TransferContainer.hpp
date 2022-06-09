@@ -37,7 +37,7 @@ namespace Bank
 	template<typename Account, template<typename> class Cont = std::vector>
 	class AccountEndpoint
 	{
-		using TransferTypes = std::tuple<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction>;
+		using TransferTypes = Account::TupleType;
 		using Type = AccountEndpoint<Account> ;
 		using TransferType = Transfer<Account,TransferTypes> ;
 		using DataType = std::shared_ptr<TransferType>;
@@ -84,7 +84,7 @@ namespace Bank
 			for(auto it = this->transactions.Begin(); it != this->transactions.End(); ++it)
 			{
 				out<<"\tDate: "<<Bank::Get<DateTimes::Date>(*(*it))<<"\tSum: "<<std::setprecision(2)<<std::fixed<<Bank::Get<Quantity<Sum>>(**it)<<std::endl;
-				//~ out<<"\t"<<"\t"<<Bank::Get<Entry>(**it)<<std::endl;
+				out<<"\t"<<"\t"<<Bank::Get<Entry>(**it)<<std::endl;
 			}
 
 			out<<std::endl;
@@ -95,8 +95,8 @@ namespace Bank
 			ResultContainer result;
 			for(auto it = this->transactions.Begin(); it != this->transactions.End(); ++it)
 			{
-				//~ if(String_::Contains(Bank::Get<Entry>(*(*it)).Value, name))
-					//~ result.push_back(*it);
+				if(String_::Contains(Bank::Get<Entry>(*(*it)).Value, name))
+					result.push_back(*it);
 			}
 			
 			return result;
