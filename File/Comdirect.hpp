@@ -42,13 +42,7 @@ namespace Bank
 		inline static T::Is_<IsOutTransferSign> IsOutTransfer;
 		inline static const std::string Name = "Comdirect";
 		inline static const std::string Filename = "Umsaetze_DE832004113306947527";
-		inline static constexpr unsigned int OwnerIdx = 3;
-		inline static constexpr unsigned int TranactionIdx = 3;
-		inline static constexpr unsigned int DateIdx = 0;
-		inline static constexpr unsigned int QuantityIdx = 4;
-		inline static constexpr unsigned int HeaderLength = 5;
-		inline static constexpr unsigned int TrailerLength = 23;
-		
+				
 		inline static Base::ParseContainer Cont = typename Base::ParseContainer();
 		Comdirect(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : Base(k,c,v, d, i, b) {};
 		
@@ -62,21 +56,23 @@ namespace Bank
 		
 		static void ProcessValues(Base::InputIterator begin, Base::InputIterator end)
 		{
-			auto keyLine = *(begin + OwnerIdx);
+			//~ auto keyLine = *(begin + OwnerIdx);
+			auto keyLine = *(begin);
 			if(keyLine != "")
 			{
-				auto key = ExtractKey(keyLine);
-				auto date = *(begin + DateIdx);
-				auto transaction = *(begin + TranactionIdx);
+				//~ auto key = ExtractKey(keyLine);
+				//~ auto date = *(begin + DateIdx);
+				//~ auto transaction = *(begin);
+				//~ auto transaction = *(begin + TranactionIdx);
 				
-				auto n = Base::GetNumericValue(*(begin + QuantityIdx));
-				auto sum = n != "" ? std::stod(n) : 0.0 ;
+				//~ auto n = Base::GetNumericValue(*(begin + QuantityIdx));
+				//~ auto sum = n != "" ? std::stod(n) : 0.0 ;
 			
-				auto iban =  Extract<IBAN>(transaction);
-				auto bic = Extract<BIC>(transaction);
+				//~ auto iban =  Extract<IBAN>(transaction);
+				//~ auto bic = Extract<BIC>(transaction);
 								
-				auto q = std::string(*(begin + QuantityIdx));
-				Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(q.cbegin()+1), String_::Remove<T::char_<'"'>>(transaction));
+				//~ auto q = std::string(*(begin + QuantityIdx));
+				//~ Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(q.cbegin()+1), String_::Remove<T::char_<'"'>>(transaction));
 			}
 				
 		}		

@@ -43,15 +43,7 @@ namespace Bank
 		inline static T::Is_<IsOutTransferSign> IsOutTransfer;
 		inline static const std::string Name = "Raiba";
 		inline static const std::string Filename = "Umsaetze_DE19660623660009232702";
-		inline static constexpr unsigned int OwnerIdx = 4;
-		inline static constexpr unsigned int TranactionIdx = 9;
-		inline static constexpr unsigned int IBANIdx = 6;
-		inline static constexpr unsigned int BICIdx = 7;
-		inline static constexpr unsigned int DateIdx = 0;
-		inline static constexpr unsigned int QuantityIdx = 12;
-		inline static constexpr unsigned int HeaderLength = 16;
-		inline static constexpr unsigned int TrailerLength = 3;
-		
+				
 		inline static Base::ParseContainer Cont = typename Base::ParseContainer();
 		Raiba(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : Base(k,c,v, d, i, b) {};
 		
@@ -63,36 +55,36 @@ namespace Bank
 		
 		static void ProcessValues(Base::InputIterator begin, Base::InputIterator end)
 		{
-			auto keyLine = *(begin + OwnerIdx);
-			if(keyLine != "")
-			{
-				auto key = keyLine;
-				auto date = *(begin + DateIdx);
-				auto transaction = *(begin + TranactionIdx);
+			//~ auto keyLine = *(begin + OwnerIdx);
+			//~ if(keyLine != "")
+			//~ {
+				//~ auto key = keyLine;
+				//~ auto date = *(begin + DateIdx);
+				//~ auto transaction = *(begin + TranactionIdx);
 				
-				auto val = *(begin + QuantityIdx);
-				std::string::iterator end_pos = std::remove(val.begin(), val.end(), ' ');
-				val.erase(end_pos, val.end());
+				//~ auto val = *(begin + QuantityIdx);
+				//~ std::string::iterator end_pos = std::remove(val.begin(), val.end(), ' ');
+				//~ val.erase(end_pos, val.end());
 
 				
-				auto valString = *(end-2);
+				//~ auto valString = *(end-2);
 				//~ parser.Parse(transaction);
-				Logger::Log()<<"TRANSACTION:\n"<<transaction<<std::endl;
-				valString = String_::Remove<T::char_<','>>(valString);
-				valString = String_::Remove<T::char_<'.'>>(valString);
+				//~ Logger::Log()<<"TRANSACTION:\n"<<transaction<<std::endl;
+				//~ valString = String_::Remove<T::char_<','>>(valString);
+				//~ valString = String_::Remove<T::char_<'.'>>(valString);
 				
-				if(isdigit(valString.at(0)))
-				{
-					auto sum = std::stod(valString) / 100;
+				//~ if(isdigit(valString.at(0)))
+				//~ {
+					//~ auto sum = std::stod(valString) / 100;
 				
-					auto iban =  *(begin + IBANIdx);
-					auto bic =  *(begin + BICIdx);
+					//~ auto iban =  *(begin + IBANIdx);
+					//~ auto bic =  *(begin + BICIdx);
 					
-					std::string sign = *(end-1);
-					Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0], transaction);
-					Logger::Log()<<"VAL:\n"<<valString<<std::endl;
-				}
-			}
+					//~ std::string sign = *(end-1);
+					//~ Base::InsertInContainer(key,transaction,sum, date, iban, bic,sign[0], transaction);
+					//~ Logger::Log()<<"VAL:\n"<<valString<<std::endl;
+				//~ }
+			//~ }
 		}						
 		
 	protected:
