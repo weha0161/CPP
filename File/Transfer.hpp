@@ -92,8 +92,6 @@ namespace Bank
 			this->id = DirectionT::Id;
 			this->typeId = DirectionT::TypeId;
 			this->value = QuantityType(DirectionT::Id);
-			
-			Logger::Log()<<"SET______"<<this->id<<"\t"<<this->typeId<<"\t"<<this->value<<std::endl;
 		}
 	};
 	
@@ -109,16 +107,15 @@ namespace Bank
 	template<typename Account, typename TupleT>
 	class Transfer
 	{
-		using Type = Transfer<Account,TupleT> ;
-	protected:
-		using CSVSeparator = T::char_<';'> ;
 	public:
+		using CSVSeparator = T::char_<';'> ;
+		using Type = Transfer<Account,TupleT> ;
 		using TupleType = TupleT;
 		using AccountType = Account ;
 		using KeyType = Key<std::string>;
 		using QunatityType = Quantity<Sum>;
 		
-		Transfer(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC", std::string cause_ = "") : owner(k), transaction(c), date(Parsers::Parser<std::string,DateTimes::Date,std::string>::Parse(d)), value(v), iban(i), bic(b), cause(cause_) { 	};
+		Transfer() = delete;
 		Transfer(const TupleType& t) : transferItems(t) { 	};
 		Transfer(TupleType&& t) : transferItems{std::move(t)} { 	};
 
@@ -132,19 +129,9 @@ namespace Bank
 		bool operator==(DateType date) const{ return std::get<DateTimes::Date>(transferItems) == date;};
 	private:
 		template<typename ItemT, typename A, typename T>
-		//~ template<typename ItemT, typename A, typename T>
 		friend const ItemT& Get(Transfer<A,T>const& t);
 		
 		TupleType transferItems;
-		
-		Key<std::string> owner;
-		Entry transaction;
-		Entry cause;
-		DateTimes::Date date;
-		IBAN iban;
-		BIC bic;
-		Quantity<Sum> value;
-		Direction direction;
 	};
 }
 
