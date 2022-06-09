@@ -82,8 +82,8 @@ namespace Bank
 			out<<"Owner: "<<owner<<"\tIBAN: "<<iban<<"\tBIC: "<<bic<<std::endl;
 			for(auto it = this->transactions.Begin(); it != this->transactions.End(); ++it)
 			{
-				out<<"\tDate: "<<(*it)->GetDate()<<"\tSum: "<<std::setprecision(2)<<std::fixed<<(*it)->GetQuantity()<<std::endl;
-				out<<"\t"<<"\t"<<(*it)->GetCause()<<std::endl;
+				out<<"\tDate: "<<Bank::Get<DateTimes::Date>(*(*it))<<"\tSum: "<<std::setprecision(2)<<std::fixed<<Bank::Get<Quantity<Sum>>(**it)<<std::endl;
+				//~ out<<"\t"<<"\t"<<Bank::Get<Entry>(**it)<<std::endl;
 			}
 
 			out<<std::endl;
@@ -94,8 +94,8 @@ namespace Bank
 			ResultContainer result;
 			for(auto it = this->transactions.Begin(); it != this->transactions.End(); ++it)
 			{
-				if(String_::Contains((*it)->GetCause().Value, name))
-					result.push_back(*it);
+				//~ if(String_::Contains(Bank::Get<Entry>(*(*it)).Value, name))
+					//~ result.push_back(*it);
 			}
 			
 			return result;
