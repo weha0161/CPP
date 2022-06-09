@@ -18,6 +18,7 @@
 #include <filesystem>
 #include "TransferItemContainer.hpp"
 #include "JSONParser.hpp"
+#include "Direction.hpp"
 #include "../Logger/Logger.hpp"
 #include "../Wrapper/Wrapper.hpp"
 #include "../CSV/CSV.hpp"

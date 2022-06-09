@@ -16,6 +16,7 @@
 #include <filesystem>
 #include "Transfers.hpp"
 #include "Transfer.hpp"
+#include "Direction.hpp"
 #include "../Logger/Logger.hpp"
 #include "../CSV/CSV.hpp"
 #include "../Quantity/Quantity.h"

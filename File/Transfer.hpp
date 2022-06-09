@@ -30,71 +30,7 @@
 namespace fs = std::filesystem;
 
 namespace Bank
-{
-	struct In
-	{
-		using Type = In;
-		inline static const std::string TypeId = "In"; 
-		inline static constexpr int Id = 1; 
-	};
-	
-	struct Out
-	{
-		using Type = Out;
-		inline static const std::string TypeId = "Out"; 
-		inline static constexpr int Id = -1; 
-	};
-	
-	struct Unknown
-	{
-		using Type = Unknown;
-		inline static const std::string TypeId = "Unknown"; 
-		inline static constexpr int Id = 0; 
-	};
-	
-	class DirectionBase: public Element
-	{
-	public:
-		DirectionBase(std::string s): Element(s), value(Unknown::Id), id{Unknown::Id}, typeId{Unknown::TypeId} {};
-		using Type = DirectionBase;
-		using QuantityType = Quantity<Scalar,SIPrefix<0>>;
-		inline static constexpr const char* Identifier = "Direction";
-		DirectionBase* DoCreate(){return this;};
-		const auto& Value() const {	return this->value; }
-		const auto& Id() const  {	return this->id; }
-		const auto& TypeId() const  {	return this->typeId; }	
-	
-	protected:
-		std::string typeId = Unknown::TypeId; 
-		int id = Unknown::Id; 		
-		Quantity<Scalar,SIPrefix<0>,int> value;	
-	private:
-	};
-	
-	struct Direction: public DirectionBase
-	{
-		Direction(std::string s): DirectionBase(s){ this->template Set<Out>();};
-		Direction(): DirectionBase(""){ };
-		
-		template<typename AccountT>
-		void Update()
-		{
-			this->id = AccountT::Id;
-			this->typeId = AccountT::TypeId;
-			this->value = QuantityType(AccountT::Id);
-			
-			Logger::Log()<<"SET______"<<this->id<<"\t"<<this->typeId<<"\t"<<this->value<<std::endl;
-		}
-		
-		template<typename DirectionT>
-		void Set()
-		{
-			this->id = DirectionT::Id;
-			this->typeId = DirectionT::TypeId;
-			this->value = QuantityType(DirectionT::Id);
-		}
-	};
-	
+{	
 	//-----------------------------------------------------------------------------------------------Transfer-----------------------------------------------------------------------
 	template<typename Account, typename TupleT>	class Transfer;
 	

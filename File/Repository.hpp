@@ -21,6 +21,7 @@
 #include "TransferContainer.hpp"
 #include "Raiba.hpp"
 #include "Custom.hpp"
+#include "Direction.hpp"
 #include "../Typelist/Typelist.h"
 #include "../Home/CounterContainer.hpp"
 #include "../Home/StageContainer.hpp"

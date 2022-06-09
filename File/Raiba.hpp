@@ -14,6 +14,7 @@
 #include <boost/mpl/placeholders.hpp>
 #include <filesystem>
 #include "Account.hpp"
+#include "Direction.hpp"
 #include "../Logger/Logger.hpp"
 #include "../CSV/CSV.hpp"
 #include "../Quantity/Quantity.h"
