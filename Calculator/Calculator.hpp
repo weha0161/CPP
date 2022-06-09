@@ -106,10 +106,11 @@ namespace Calculator
 			auto account = raiba(PropertyTax::AccountKey);
 			account.Display(std::cout);
 			auto water = account.GetCause(PropertyTax::CauseString);
+			using QuantityType = Quantity<Sum>; 
 			auto totalSum = Quantity<Sum>(0); 
 			
 			for(auto w : water)
-				totalSum = totalSum + w->GetQuantity();
+				totalSum = totalSum + Bank::Get<QuantityType>(*w);
 			
 			Logger::Log()<<totalSum;
 			
@@ -131,15 +132,16 @@ namespace Calculator
 			auto account = raiba(Sewage::AccountKey);
 			account.Display(std::cout);
 			auto sewage = account.GetCause(Sewage::CauseString);
+			using QuantityType = Quantity<Sum>; 
 			auto totalSum = Quantity<Sum>(0); 
 			
 			for(auto s : sewage)
-				totalSum = totalSum + s->GetQuantity();
+				totalSum = totalSum + Bank::Get<QuantityType>(*s);
 			
 			auto invoice = account.GetCause(Sewage::InvoiceString);
-			totalSum= totalSum + invoice.at(0)->GetQuantity();
+			totalSum= totalSum + Bank::Get<QuantityType>(*(invoice.at(0)));
 			
-				Logger::Log()<<"WATER sum"<<totalSum<<std::endl;
+			Logger::Log()<<"WATER sum"<<totalSum<<std::endl;
 			auto cwb = Stage::ColdWaterCounter::Instance().ConsumptionssBegin();
 			auto hwb = Stage::HotWaterCounter::Instance().ConsumptionssBegin();
 			auto water = CWA::Instance().ConsumptionssBegin();
