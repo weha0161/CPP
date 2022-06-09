@@ -122,14 +122,14 @@ namespace Bank
 		Transfer(const TupleType& t) : transferItems(t) { 	};
 		Transfer(TupleType&& t) : transferItems{std::move(t)} { 	};
 
-		bool operator==(DayType d) const{ return this->date == d;};
-		bool operator==(DateTimes::Day m) const{ return this->date == m;};
-		bool operator==(MonthType m) const{ return this->date == m;};
-		bool operator==(DateTimes::Month m) const{ return this->date == m;};
-		bool operator==(YearType y) const{ return this->date == y;};
-		bool operator==(DateTimes::Year y) const{ return this->date == y;};
-		bool operator==(DateTimes::Date date) const{ return this->date == date;};
-		bool operator==(DateType date) const{ return this->date == date;};
+		bool operator==(DayType d) const{ return std::get<DateTimes::Date>(transferItems) == d;};
+		bool operator==(DateTimes::Day m) const{ return std::get<DateTimes::Date>(transferItems) == m;};
+		bool operator==(MonthType m) const{ return std::get<DateTimes::Date>(transferItems) == m;};
+		bool operator==(DateTimes::Month m) const{ return std::get<DateTimes::Date>(transferItems) == m;};
+		bool operator==(YearType y) const{ return std::get<DateTimes::Date>(transferItems) == y;};
+		bool operator==(DateTimes::Year y) const{ return std::get<DateTimes::Date>(transferItems) == y;};
+		bool operator==(DateTimes::Date date) const{ return std::get<DateTimes::Date>(transferItems) == date;};
+		bool operator==(DateType date) const{ return std::get<DateTimes::Date>(transferItems) == date;};
 	private:
 		template<typename ItemT, typename A, typename T>
 		//~ template<typename ItemT, typename A, typename T>
