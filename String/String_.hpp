@@ -21,7 +21,7 @@ namespace String_
 	using Space = T::char_<' '> ;
 	using Comma = T::char_<','> ;
 	using Semicolon = T::char_<';'> ;
-	using Point = T::char_<';'> ;
+	using Point = T::char_<'.'> ;
 	
 	T::Is_<Delimiter> isDelimiter;
 	T::IsNot_<Delimiter> isNotDelimiter;
