@@ -69,12 +69,8 @@ class TransferItemContainer: public TransferItemContainer<KeyIndexContainerType,
 			typename TransferType::TupleType t = result;
 			
 			auto tt = TransferType(std::move(t));
-			const auto& bic = Bank::Get<BIC>(tt);
-			
-			Logger::Log()<<Type::Identifier<<"_"<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<bic.Value<<std::endl;
 						
-			//~ return std::make_shared<TransferType>("","",0.0,"");
-			return 0;
+			return std::make_shared<TransferType>(std::move(tt));
 		}
 		
 		template<typename T>

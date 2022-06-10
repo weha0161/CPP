@@ -88,8 +88,10 @@ namespace Bank
 							//~ else
 								//~ Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));
 							
-						Logger::Log()<<"Updatet____ Keys from Line:\n\t"<<*it<<std::endl;
-							TransferItemContainerType::Instance().template CreateTransfer<TransferType>(values.cbegin(),values.end());
+							auto tt = TransferItemContainerType::Instance().template CreateTransfer<TransferType>(values.cbegin(),values.end());
+							const auto& q = Bank::Get<QuantityType>(*tt);
+			 			Logger::Log<Error>()<<Derived::Name<<": q "<<q<<std::endl;
+
 						}
 						
 						return;
