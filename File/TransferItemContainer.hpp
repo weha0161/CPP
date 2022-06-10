@@ -37,7 +37,7 @@ class TransferItemContainer: public TransferItemContainer<KeyIndexContainerType,
 		{
 			Logger::Log()<<Type::Identifier<<"_"<<(*(this->keyIndices))[Type::Identifier]<<" => "<<*(begin + (*(this->keyIndices))[Type::Identifier])<<std::endl;
 			auto bT = Base::createTransfer(begin,end); 
-			auto result = std::tuple_cat(TupleType(Type(*(begin + (*(this->keyIndices))[Type::Identifier]))), bT);
+			auto result = std::tuple_cat(bT, TupleType(Type(*(begin + (*(this->keyIndices))[Type::Identifier]))));
 			return result;
 		} 
 		
@@ -65,16 +65,14 @@ class TransferItemContainer: public TransferItemContainer<KeyIndexContainerType,
 		{
 			Logger::Log()<<Type::Identifier<<"_"<<(*(this->keyIndices))[Type::Identifier]<<" => "<<*(begin + (*(this->keyIndices))[Type::Identifier])<<std::endl;
 			auto bT = Base::createTransfer(begin,end);
-			auto result = std::tuple_cat(TupleType(Type(*(begin + (*(this->keyIndices))[Type::Identifier]))), bT);
-			//~ typename TransferType::TupleType t = result;
+			auto result = std::tuple_cat(bT, TupleType(Type(*(begin + (*(this->keyIndices))[Type::Identifier]))));
+			typename TransferType::TupleType t = result;
 			
-			//~ auto tt = TransferType(std::move(t));
-			//~ const auto& bic = Bank::Get<BIC>(tt);
+			auto tt = TransferType(std::move(t));
+			const auto& bic = Bank::Get<BIC>(tt);
 			
-			//~ Logger::Log()<<Type::Identifier<<"_"<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<bic.Value<<std::endl;
-			
-			//~ auto b1 = template bic<BIC>(tt);
-			
+			Logger::Log()<<Type::Identifier<<"_"<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<bic.Value<<std::endl;
+						
 			//~ return std::make_shared<TransferType>("","",0.0,"");
 			return 0;
 		}
