@@ -182,7 +182,7 @@ struct Get{};
 template<typename A>
 struct Get<A, Bank::Out>
 {
-	Bank::AccountEndpoint<A> operator()(typename A::KeyType k)
+	Bank::TransferEndpoint<A> operator()(typename A::KeyType k)
 	{
 		return A::Cont[k];
 	}
@@ -191,7 +191,7 @@ struct Get<A, Bank::Out>
 template<typename A>
 struct Get<A, Bank::In>
 {
-	Bank::AccountEndpoint<A> operator()(typename A::KeyType k)
+	Bank::TransferEndpoint<A> operator()(typename A::KeyType k)
 	{
 		return A::Cont[k];
 	}

@@ -41,7 +41,7 @@ namespace Bank
 	public:
 		using KeyType = typename T::KeyType;
 		using DataType = std::shared_ptr<T>;
-		using AccountEndpointType = AccountEndpoint<typename T::AccountType>;
+		using AccountEndpointType = TransferEndpoint<typename T::AccountType>;
 	private:
 		Cont<KeyType> keys;
 		TCont<KeyType, AccountEndpointType> transfers;

@@ -35,10 +35,10 @@ namespace Bank
 	//-----------------------------------------------------------------------------------------------TranferEndpoint-----------------------------------------------------------------------
 	
 	template<typename Account, template<typename> class Cont = std::vector>
-	class AccountEndpoint
+	class TransferEndpoint
 	{
 		using TransferTypes = Account::TupleType;
-		using Type = AccountEndpoint<Account> ;
+		using Type = TransferEndpoint<Account> ;
 		using TransferType = Transfer<Account,TransferTypes> ;
 		using DataType = std::shared_ptr<TransferType>;
 		using ResultContainer = Cont<DataType> ;
@@ -58,13 +58,13 @@ namespace Bank
 		using KeyType = Key<std::string>;
 		using QunatityType = Quantity<Sum>;
 		
-		AccountEndpoint(std::string ownerKey, std::string i = "IBAN", std::string b = "BIC") : owner(ownerKey), iban(i), bic(b) { };
-		AccountEndpoint(const DataType t) : owner(t->GetOwner()), iban(t->GetIBAN()), bic(t->GetBIC()), total(t->GetQuantity()) 
+		TransferEndpoint(std::string ownerKey, std::string i = "IBAN", std::string b = "BIC") : owner(ownerKey), iban(i), bic(b) { };
+		TransferEndpoint(const DataType t) : owner(t->GetOwner()), iban(t->GetIBAN()), bic(t->GetBIC()), total(t->GetQuantity()) 
 		{ 
 			this->transactions = ContainerType();
 			this->transactions.Add(t);
 		};
-		AccountEndpoint():owner("ownerKey"), iban("i"), bic("b"), total(0) { };
+		TransferEndpoint():owner("ownerKey"), iban("i"), bic("b"), total(0) { };
 		
 		const KeyType& GetOwner() const { return owner; }
 		const IBAN& GetIBAN() const { return iban; }
