@@ -61,7 +61,7 @@ namespace Bank
 			//~ {
 				//~ auto key = keyLine;
 				//~ auto date = *(begin + DateIdx);
-				//~ auto transaction = *(begin + TranactionIdx);
+				auto transaction = *(begin);
 				
 				//~ auto val = *(begin + QuantityIdx);
 				//~ std::string::iterator end_pos = std::remove(val.begin(), val.end(), ' ');
@@ -69,7 +69,7 @@ namespace Bank
 
 				
 				//~ auto valString = *(end-2);
-				//~ parser.Parse(transaction);
+				parser.Parse(transaction);
 				//~ Logger::Log()<<"TRANSACTION:\n"<<transaction<<std::endl;
 				//~ valString = String_::Remove<T::char_<','>>(valString);
 				//~ valString = String_::Remove<T::char_<'.'>>(valString);

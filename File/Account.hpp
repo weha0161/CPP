@@ -45,6 +45,7 @@ namespace Bank
 		BIC bic;
 		
 		inline static const std::string  KeysFilename = Derived::Name + ".keys";
+		inline static constexpr uint TransferItemsCount = std::tuple_size_v<TransferT>;
 	public:
 		using Type = Account<Derived,TransferT> ;
 		using TransferType = Transfer<Derived, TransferT>;
@@ -56,7 +57,7 @@ namespace Bank
 		using KeyIndexType = CSV::KeyIndex<KeyType,uint>;
 		using KeyIndexContainerType = CSV::KeyIndexContainer<Derived, std::string,uint>;
 		using KeyIndexContainerPtrType = std::shared_ptr<KeyIndexContainerType>;
-		using TransferItemContainerType = TransferItemContainer<KeyIndexContainerType,Typelist<IBAN,BIC,DateTimes::Date, Quantity<Sum>, Bank::Direction, Entry>>::ContainerType;
+		using TransferItemContainerType = TransferItemContainer<KeyIndexContainerType,TupleType>::ContainerType;
 		
 		static void Parse(InputIterator begin, InputIterator end)
 		{
@@ -87,6 +88,7 @@ namespace Bank
 							//~ else
 								//~ Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));
 							
+						Logger::Log()<<"Updatet____ Keys from Line:\n\t"<<*it<<std::endl;
 							TransferItemContainerType::Instance().template CreateTransfer<TransferType>(values.cbegin(),values.end());
 						}
 						
