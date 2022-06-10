@@ -95,6 +95,10 @@ namespace Bank
 						return;
 						//~ Derived::ProcessValues(values.cbegin(), values.cend());					
 					}
+					else
+					{
+			 			Logger::Log<Error>()<<Derived::Name<<": KeyLine not found"<<std::endl;
+					}
 					//~ if (values.size() < MaxIdx)
 						//~ continue;										
 				}
