@@ -2,7 +2,7 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
-// #include <strstream>
+#include <typeinfo>
 #include "../Wrapper/Wrapper.hpp"
 #include "../Traits/Traits.h"
 #include "../Typelist/Typelist.h"
@@ -27,25 +27,29 @@ namespace String_
 	T::IsNot_<Delimiter> isNotDelimiter;
 		
 	template<typename Type = Delimiter>
-	std::vector<std::string> Split(const std::string str)
+	std::vector<std::string> Split(const std::string strT)
 	{
 		std::vector<std::string> result;		
-		using iter = std::string::const_iterator;
+		auto token = std::string(1,Type::Value);
+		auto str = std::string(strT);
 		
-		iter i = str.begin();
-		
-		while(i != str.end())
+		while(str.size())
 		{
-			i = std::find_if(i, str.end(), [](auto c){ return Type::Value != c; });
-			
-			iter j = std::find_if(i, str.end(), [](auto c){ return Type::Value == c; });
-			
-			if(i != str.end())
-				result.push_back(std::string(i,j));
-			
-			i = j;
-		}
+			int index = str.find(token);
+			if(index!=std::string::npos)
+			{
+				result.push_back(str.substr(0,index));
+				str = str.substr(index+token.size());
 				
+				if(str.size()==0)
+					result.push_back(str);
+			}
+			else
+			{
+				result.push_back(str);
+				str = "";
+			}
+		}
 		return result;
 	};
 	
@@ -77,23 +81,45 @@ namespace String_
 	
 	using CommaToPoint = Replace<Comma,Point>;
 
+	template<typename>	struct To;
+	
+	template<typename T>
+	struct ToBase
+	{
+		using Type = T;
+		
+		T operator()(const std::string& s) const 
+		{ 
+			try
+			{
+				 return To<T>::Cast(s);
+			}
+			catch(const std::exception& e)
+			{
+				Logger::Log<Error>()<<"Cant cast from "<<s<<" to "<<typeid(T).name()<<std::endl;
+				Logger::Log<Error>()<<e.what()<<std::endl;
+			}
+			
+			return T{};
+		}
+	};
 	
 	template<typename T = int>
-	struct To
+	struct To: public ToBase<T>
 	{
-		T operator()(const std::string& s) const { return std::stoi(s); }
+		T static Cast(const std::string& s)  { return std::stoi(s); }
 	};
 	
 	template<>
-	struct To<double>
+	struct To<double>: public ToBase<double>
 	{
-		double operator()(const std::string& s) const{ return std::stod(s); }
+		double static Cast(const std::string& s) { return std::stod(s); }
 	};
 	
 	template<>
-	struct To<unsigned>
+	struct To<unsigned>: public ToBase<unsigned>
 	{
-		unsigned operator()(const std::string& s) const { return std::stol(s); }
+		unsigned static Cast(const std::string& s)  { return std::stol(s); }
 	};
 	
 	template<typename T>
