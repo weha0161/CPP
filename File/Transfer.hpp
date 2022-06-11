@@ -63,12 +63,26 @@ namespace Bank
 		bool operator==(DateTimes::Year y) const{ return std::get<DateTimes::Date>(transferItems) == y;};
 		bool operator==(DateTimes::Date date) const{ return std::get<DateTimes::Date>(transferItems) == date;};
 		bool operator==(DateType date) const{ return std::get<DateTimes::Date>(transferItems) == date;};
+		
+		std::ostream& Display(std::ostream& os) const 
+		{
+			os<<"\tDate: "<<Bank::Get<DateTimes::Date>(*this)<<"\tSum: "<<std::setprecision(2)<<std::fixed<<Bank::Get<Quantity<Sum>>(*this)<<std::endl;
+			os<<"\t"<<"\t"<<Bank::Get<Entry>(*this)<<std::endl;
+			
+			return os;
+		}
 	private:
 		template<typename ItemT, typename A, typename T>
 		friend const ItemT& Get(Transfer<A,T>const& t);
 		
 		TupleType transferItems;
 	};
+	
+	template<typename A, typename TT>
+	std::ostream& operator<<(std::ostream& out, const Transfer<A,TT>& s)
+	{
+		return s.Display(out);		
+	}
 }
 
 

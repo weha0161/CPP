@@ -89,10 +89,8 @@ namespace DateTimes
 						Element(s),
 						day(std::make_shared<DateTimes::Day>(d)),
 						month{std::make_shared<DateTimes::Month>(m)},
-						year{std::make_shared<DateTimes::Year>(y)} 
-						{
-							Logger::Log()<<day->Value()<<"\t"<<month->Value()<<std::endl;
-						}; 
+						year{std::make_shared<DateTimes::Year>(y)} 		{						}; 
+						
 		Date(uint d, uint m, uint y): Date(std::string(), d,m, y) { };
 		Date(): Date(std::string(), 0,0, 0) { };
 		Date* DoCreate(){return this;};

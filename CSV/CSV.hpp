@@ -172,7 +172,6 @@ private:
 		void operator()(Type) const
 		{
 			RegisterImpl(Type::Identifier, CreatePolicy<Type>::DoCreate);
-			Logger::Log<Debug>()<<"Register: "<< Type::Identifier<<std::endl;
 		};
 	};
 	

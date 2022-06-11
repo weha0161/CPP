@@ -47,12 +47,11 @@ namespace Bank
 		void Add(T t){ this->transactions->push_back(t); }
 		void Display()
 		{ 
-			for(auto i : *(this->transactions))
-			Logger::Log()<<*i<<std::endl;
+			
 		}
 	private:
 		ContainerPtr transactions;
-		Transfers(ContainerPtr c): transactions(c){ Logger::Log()<<"Transfers: "<<*this->transactions.at(0)<<"\t"<<*this->transactions.at(0)<<std::endl;	}
+		Transfers(ContainerPtr c): transactions(c){ }
 	};
 }
 

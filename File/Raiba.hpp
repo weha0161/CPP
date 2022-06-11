@@ -50,7 +50,6 @@ namespace Bank
 		
 		static void Display(std::ostream& os)
 		{
-			os<<"CONT"<<std::endl;
 			Cont.Display(os);
 		}
 		

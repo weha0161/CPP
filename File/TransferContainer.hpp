@@ -100,13 +100,6 @@ namespace Bank
 			}
 		}		
 	};
-		
-	template<typename T, typename TT>
-	std::ostream& operator<<(std::ostream& out, const Transfer<T,TT>& s)
-	{
-		out<<std::setw(30)<<std::left<<s.GetOwner()<<std::setw(60)<<s.GetTransaction()<<std::setw(20)<<std::right<<s.GetDate()<<std::setw(10)<<std::setprecision(2)<<std::fixed<<s.GetQuantity()<<"\n";
-		return out<<std::setw(30)<<std::left<<s.GetIBAN()<<std::setw(60)<<s.GetBIC()<<std::setw(20);		
-	}
 }
 
 

@@ -35,7 +35,6 @@ class TransferItemContainer: public TransferItemContainer<KeyIndexContainerType,
 		
 		auto createTransfer(Base::InputIterator begin, Base::InputIterator end) 
 		{
-			Logger::Log()<<Type::Identifier<<"_"<<(*(this->keyIndices))[Type::Identifier]<<" => "<<*(begin + (*(this->keyIndices))[Type::Identifier])<<std::endl;
 			auto bT = Base::createTransfer(begin,end); 
 			auto result = std::tuple_cat(bT, TupleType(Type(*(begin + (*(this->keyIndices))[Type::Identifier]))));
 			return result;
@@ -56,14 +55,12 @@ class TransferItemContainer: public TransferItemContainer<KeyIndexContainerType,
 			
 		void Read(const std::string& sourcePath = ".")
 		{
-			Logger::Log()<<Type::Identifier<<std::endl;
 			Base::Read();		
 		}
 		
 		template<typename TransferType>
 		auto CreateTransfer(Base::InputIterator begin, Base::InputIterator end)
 		{
-			Logger::Log()<<Type::Identifier<<"_"<<(*(this->keyIndices))[Type::Identifier]<<" => "<<*(begin + (*(this->keyIndices))[Type::Identifier])<<std::endl;
 			auto bT = Base::createTransfer(begin,end);
 			auto result = std::tuple_cat(bT, TupleType(Type(*(begin + (*(this->keyIndices))[Type::Identifier]))));
 			typename TransferType::TupleType t = result;
@@ -104,7 +101,6 @@ class TransferItemContainer<KeyIndexContainerType, Tuple, 0>
 		KeyIndexContainerPtrType keyIndices;
 		auto createTransfer(InputIterator begin, InputIterator end) 
 		{ 
-			Logger::Log()<<Type::Identifier<<"_"<<(*(this->keyIndices))[Type::Identifier]<<" => "<<*(begin + (*(this->keyIndices))[Type::Identifier])<<std::endl;
 			return TupleType(Type(Type::Identifier));
 		}
 		
@@ -123,7 +119,6 @@ class TransferItemContainer<KeyIndexContainerType, Tuple, 0>
 		
 		void Read(const std::string& sourcePath = ".")
 		{
-			Logger::Log()<<Type::Identifier<<std::endl;
 		}
 		
 		void setKeyIndexContainer(KeyIndexContainerPtrType ptr){ this->keyIndices = ptr; }
