@@ -75,6 +75,7 @@ namespace Bank
 					
 					if(keyIndices->UpdateKeys(values))
 					{
+						uint valueCount = values.size();
 						Logger::Log()<<"Updatet Keys from Line:\n\t"<<*it<<std::endl;
 						keyIndices->Display(std::cout);
 										
@@ -82,16 +83,20 @@ namespace Bank
 						for(;it != end; ++it)
 						{
 							auto values = String_::Split<CSVSeparator>(String_::Remove<String_::CR>(*it));
+							if(valueCount != values.size())
+							{
+					 			Logger::Log<Error>()<<Derived::Name<<": Not enough values to create a transfer in line"<<*it<<std::endl;
+					 			Logger::Log(values.cbegin(),values.cend());
+					 			continue;
+							}
+							
+							auto tt = TransferItemContainerType::Instance().template CreateTransfer<TransferType>(values.cbegin(),values.end());
 							
 							//~ if(Derived::IsOutTransfer(transferSign))
 								//~ Derived::OutCont.Insert(key, std::make_shared<OutTransfer>(key,transaction,sum, date, iban, bic, cause));
 							//~ else
 								//~ Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));
 							
-							auto tt = TransferItemContainerType::Instance().template CreateTransfer<TransferType>(values.cbegin(),values.end());
-							const auto& q = Bank::Get<QuantityType>(*tt);
-			 			Logger::Log<Error>()<<Derived::Name<<": q "<<q<<std::endl;
-
 						}
 						
 						return;
