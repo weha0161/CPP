@@ -90,10 +90,10 @@ namespace Bank
 							
 							auto tt = TransferItemContainerType::Instance().template CreateTransfer<TransferType>(values.cbegin(),values.end());
 							std::cout<<*tt<<std::endl;
-							Derived::Cont.Insert(Key(Bank::Get<IBAN>(*tt).Value), tt);
+							Derived::cont.Insert(Key(Bank::Get<IBAN>(*tt).Value), tt);
 						}
 						
-						Derived::Cont.Display(std::cout);
+						Derived::cont.Display(std::cout);
 						
 						return;
 						//~ Derived::ProcessValues(values.cbegin(), values.cend());					

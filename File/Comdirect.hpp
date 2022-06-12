@@ -39,44 +39,21 @@ namespace Bank
 		using TransferType = Transfer<Comdirect,TransferTypes>;
 		using IsOutTransferSign = T::char_<'-'>;
 		using Base = Account<Comdirect, TransferTypes>;
+		friend class Account<Comdirect, TransferTypes>;
 		
 		inline static T::Is_<IsOutTransferSign> IsOutTransfer;
 		inline static const std::string Name = "Comdirect";
 		inline static const std::string Filename = "Umsaetze_DE832004113306947527";
 				
-		inline static Base::ParseContainer Cont = typename Base::ParseContainer();
 		Comdirect(std::string k, std::string c, double v, std::string d, std::string i = "IBAN", std::string b = "BIC") : Base(k,c,v, d, i, b) {};
 		
-		static void Display(std::ostream& os)
+		static std::ostream& Display(std::ostream& os)
 		{
-			os<<"IN"<<std::endl;
-			Cont.Display(os);
+			return cont.Display(os);
 		}
 		
 		using TextSeparator = T::char_<' '> ;
-		
-		static void ProcessValues(Base::InputIterator begin, Base::InputIterator end)
-		{
-			//~ auto keyLine = *(begin + OwnerIdx);
-			auto keyLine = *(begin);
-			if(keyLine != "")
-			{
-				//~ auto key = ExtractKey(keyLine);
-				//~ auto date = *(begin + DateIdx);
-				//~ auto transaction = *(begin);
-				//~ auto transaction = *(begin + TranactionIdx);
 				
-				//~ auto n = Base::GetNumericValue(*(begin + QuantityIdx));
-				//~ auto sum = n != "" ? std::stod(n) : 0.0 ;
-			
-				//~ auto iban =  Extract<IBAN>(transaction);
-				//~ auto bic = Extract<BIC>(transaction);
-								
-				//~ auto q = std::string(*(begin + QuantityIdx));
-				//~ Base::InsertInContainer(key,transaction,sum, date, iban, bic, *(q.cbegin()+1), String_::Remove<T::char_<'"'>>(transaction));
-			}
-				
-		}		
 		
 	protected:
 		template<typename T>
@@ -104,7 +81,8 @@ namespace Bank
 			return vals.begin()->second;
 		}
 		
-		
+	private:
+		inline static Base::ParseContainer cont = typename Base::ParseContainer();
 	};
 }
 
