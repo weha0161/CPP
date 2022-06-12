@@ -6,6 +6,21 @@
 #include <vector>
 #include <cstdlib>
 #include <unordered_map>
+#include <cassert>
+
+#ifndef NDEBUG
+#   define ASSERT(condition, message) \
+    do { \
+        if (! (condition)) { \
+            std::cerr << "Assertion `" #condition "` failed in " << __FILE__ \
+                      << " line " << __LINE__ << ": " << message << std::endl; \
+            std::terminate(); \
+        } \
+    } while (false)
+#else
+#   define ASSERT(condition, message) do { } while (false)
+#endif
+
 
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
@@ -78,6 +93,15 @@ class Logger
 			for(auto i = begin; i != end; ++i, ++j)
 				Logger::Log<LogPolicy>()<<"\t"<<j<<" :"<<*i<<std::endl;
 		};
+		
+        //~ template<typename Iterator,class LogPolicy = Debug>
+        static void Log(bool is, std::string file = std::string(__FILE__),  int line = __LINE__)
+        {
+			auto s = file + " " + std::to_string(line);
+			assert(is);
+		};
+		
+		
 };
 
 // template<class A>
