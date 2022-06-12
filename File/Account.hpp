@@ -90,13 +90,10 @@ namespace Bank
 							
 							auto tt = TransferItemContainerType::Instance().template CreateTransfer<TransferType>(values.cbegin(),values.end());
 							std::cout<<*tt<<std::endl;
-							//~ tt->Display(std::cout);
-							//~ if(Derived::IsOutTransfer(transferSign))
-								//~ Derived::OutCont.Insert(key, std::make_shared<OutTransfer>(key,transaction,sum, date, iban, bic, cause));
-							//~ else
-								//~ Derived::InCont.Insert(key,  std::make_shared<InTransfer>(key,transaction,sum, date, iban, bic, cause));
-							
+							Derived::Cont.Insert(Key(Bank::Get<IBAN>(*tt).Value), tt);
 						}
+						
+						Derived::Cont.Display(std::cout);
 						
 						return;
 						//~ Derived::ProcessValues(values.cbegin(), values.cend());					

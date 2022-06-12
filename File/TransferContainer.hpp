@@ -62,7 +62,7 @@ namespace Bank
 		const Cont<KeyType>& Keys() { return keys; }
 		const AccountEndpointType& operator[](KeyType k) { return this->transfers[k]; }
 				
-		void Display(std::ostream& out) const
+		std::ostream& Display(std::ostream& out) const
 		{
 			for(auto p : this->transfers)
 			{
@@ -74,9 +74,11 @@ namespace Bank
 				
 				out<<std::endl;
 			}
+			
+			return out;
 		}
 		
-		void Display(std::ostream& out, const std::vector<std::string>& keys)
+		std::ostream& Display(std::ostream& out, const std::vector<std::string>& keys)
 		{
 			for(auto k : keys)
 			{
@@ -90,14 +92,18 @@ namespace Bank
 				out<<"\nTotal: "<<std::setprecision(2)<<std::fixed<<p.GetTotal()<<std::endl;
 				out<<std::endl;
 			}
+			
+			return out;
 		}
 		
-		void DisplayKeys(std::ostream& out) const
+		std::ostream& DisplayKeys(std::ostream& out) const
 		{
 			for(auto p : this->transfers)
 			{
 				out<<p.first<<std::endl;				
 			}
+			
+			return out;
 		}		
 	};
 }
