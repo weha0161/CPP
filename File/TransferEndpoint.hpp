@@ -59,7 +59,7 @@ namespace Bank
 		using QunatityType = Quantity<Sum>;
 		
 		TransferEndpoint(std::string ownerKey, std::string i = "IBAN", std::string b = "BIC") : owner(ownerKey), iban(i), bic(b) { };
-		TransferEndpoint(const DataType t) : owner(t->GetOwner()), iban(t->GetIBAN()), bic(t->GetBIC()), total(t->GetQuantity()) 
+		TransferEndpoint(const DataType t) : iban(Bank::Get<IBAN>(*t)), bic(Bank::Get<BIC>(*t)), total(Bank::Get<Quantity<Sum>>(*t)) //,owner(t->GetOwner())
 		{ 
 			this->transactions = ContainerType();
 			this->transactions.Add(t);
@@ -75,10 +75,10 @@ namespace Bank
 		void Add(DataType t)
 		{
 			this->transactions.Add(t);
-			this->total = this->total + t->GetQuantity();
+			this->total = this->total + Bank::Get<Quantity<Sum>>(*t);
 		}
 		
-		void Display(std::ostream& out)
+		std::ostream& Display(std::ostream& out)
 		{
 			out<<"Owner: "<<owner<<"\tIBAN: "<<iban<<"\tBIC: "<<bic<<std::endl;
 			for(auto it = this->transactions.Begin(); it != this->transactions.End(); ++it)
@@ -87,7 +87,7 @@ namespace Bank
 				out<<"\t"<<"\t"<<Bank::Get<Entry>(**it)<<std::endl;
 			}
 
-			out<<std::endl;
+			return out<<std::endl;
 		}
 		
 		ResultContainer GetCause(std::string name = "")
