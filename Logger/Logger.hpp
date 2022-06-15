@@ -25,17 +25,26 @@
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
 
-struct Debug
+template<typename Derived>
+struct LogTypeBase
+{
+	static std::ostream& Log(std::ostream& os)
+	{
+		return os<<Derived::Identifier;
+	};
+};
+
+struct Debug: LogTypeBase<Debug>
 {
     static constexpr const char* Identifier ="[DEBUG]: ";
 };
 
-struct Info
+struct Info: LogTypeBase<Info>
 {
     static constexpr const char* Identifier ="[Info]: ";
 };
 
-struct Error
+struct Error: LogTypeBase<Debug>
 {
     static constexpr const char* Identifier ="[ERROR]: ";
 };
@@ -74,12 +83,7 @@ class Logger
         template<class LogPolicy = Debug>
         static std::ostream& Log()
         {
-//             if(!this->file.good())
-//                 throw std::ios_base::failure(this->logFileName);
-			
-			return Logger::Instance().out<<LogPolicy::Identifier;
-			
-//             this->file<<message<<std::endl;
+			return LogPolicy::Log(Logger::Instance().out);
         };
 		
         template<typename Iterator,class LogPolicy = Debug>
@@ -92,16 +96,7 @@ class Logger
 			
 			for(auto i = begin; i != end; ++i, ++j)
 				Logger::Log<LogPolicy>()<<"\t"<<j<<" :"<<*i<<std::endl;
-		};
-		
-        //~ template<typename Iterator,class LogPolicy = Debug>
-        static void Log(bool is, std::string file = std::string(__FILE__),  int line = __LINE__)
-        {
-			auto s = file + " " + std::to_string(line);
-			assert(is);
-		};
-		
-		
+		};		
 };
 
 // template<class A>
