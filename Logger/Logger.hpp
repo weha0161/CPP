@@ -99,6 +99,12 @@ class Logger
 		};		
 };
 
+#ifndef NDEBUG
+#   define LOG(message) Logger::Log()<<"File: "<<__FILE__ << " line " << __LINE__ << ": " << message << std::endl; 
+#else
+#   define LOG(message) 
+#endif
+
 // template<class A>
 // std::ostream& operator<<(std::ostream& out, const Logger& logger)
 // {
