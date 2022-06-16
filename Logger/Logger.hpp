@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <unordered_map>
 #include <cassert>
+#include "LogExpression.hpp"
 
 #ifndef NDEBUG
 #   define ASSERT(condition, message) \
@@ -59,20 +60,16 @@ class Logger
         Logger()
         {
             out<<"Logger started"<<std::endl;
-//             this->logFileName = "Logging.txt";
-//             this->file.close();
-        //     this->file.clear();
-//             this->file.open(this->logFileName);
-//             if(!this->file.good())
-//                 throw std::ios_base::failure(this->logFileName);
+            this->logFileName = "Logging.txt";
+			this->file.clear();
+            this->file.open(this->logFileName);
+            if(!this->file.good())
+                 throw std::ios_base::failure(this->logFileName);
         }
         Logger(const Logger&) = delete;
         void operator=(const Logger&) = delete;
         
-        virtual ~Logger()
-        {  
-            this->file.close();
-        };
+        virtual ~Logger(){ this->file.close();  };
     public: 
         static Logger& Instance()
         {
@@ -83,7 +80,11 @@ class Logger
         template<class LogPolicy = Debug>
         static std::ostream& Log()
         {
-			return LogPolicy::Log(Logger::Instance().out);
+				return LogPolicy::Log(Logger::Instance().file);
+			//~ #ifndef NDEBUG
+			//~ #else
+				//~ return LogPolicy::Log(Logger::Instance().out);
+			//~ #endif
         };
 		
         template<typename Iterator,class LogPolicy = Debug>
@@ -104,25 +105,6 @@ class Logger
 #else
 #   define LOG(message) 
 #endif
-
-// template<class A>
-// std::ostream& operator<<(std::ostream& out, const Logger& logger)
-// {
-// 	return m.Display(out);
-// }
-
-// template<class LogPolicy = DebugPolicy>
-// void Logger::SetLogFile(const std::string fileName)
-// {
-//     this->logFileName = fileName;
-// };
-
-// template<class LogPolicy = DebugPolicy>
-// const std::string& Logger::GetLogFileName() const
-// {
-//     return this->logFileName;
-// };
-
 
 template<typename T>
 struct DebugDeleter 
