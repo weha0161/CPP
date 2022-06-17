@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <cassert>
 #include "LogExpression.hpp"
+#include "../Wrapper/Wrapper.hpp"
 
 #ifndef NDEBUG
 #   define ASSERT(condition, message) \
@@ -104,13 +105,20 @@ class Logger
         static std::ostream& Log(Vals ...vals)
         {
 			if constexpr (std::is_same<Debug,LogPolicy>::value)
-			{
-				LogPolicy::Log(Logger::Instance().file);
-				return log(Logger::Instance().file,vals...);
-			}
+				return log(LogPolicy::Log(Logger::Instance().file),vals...);
 
-			LogPolicy::Log(Logger::Instance().out);
-			return log(Logger::Instance().out,vals...);
+			return log(LogPolicy::Log(Logger::Instance().out),vals...);
+        };
+        
+        template<char C, class LogPolicy = Debug, typename ...Vals>
+        static std::ostream& Log(Vals ...vals)
+        {
+			T::char_<C> TC;
+			std::cout<<C<<std::endl;
+			if constexpr (std::is_same<Debug,LogPolicy>::value)
+				return log(LogPolicy::Log(Logger::Instance().file),vals...);
+
+			return log(LogPolicy::Log(Logger::Instance().out),vals...);
         };
 		
         template<typename Iterator,class LogPolicy = Debug>

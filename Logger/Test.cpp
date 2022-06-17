@@ -3,6 +3,8 @@
 #include "Logger.hpp"
 #include <typeinfo>
 #include <typeindex>
+#include "../Wrapper/Wrapper.hpp"
+
 
 int main()
 {       
@@ -25,6 +27,7 @@ int main()
 	
 	Logger::Log(1,2,3.9,"Test");
 	Logger::Log<Error>(1,2,3.9,"Test");
+	Logger::Log<';', Debug >(1,2,3.9,"Test");
 	
 	std::cout<<typeid(le5).name()<<std::endl;
 	
