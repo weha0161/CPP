@@ -42,7 +42,7 @@ int main()
  	std::cout<<"M4: \n"<<m4<<std::endl;
 	
 	M m5 = M(2,2);
-	M m6 = (m1 + m3) + m4 + m2;	
+	M m6 = (m1 + m3) + (m4 + m2) + (m1 + m3 + m4 + m2);	
 
 	std::cout<<"Get m1,2,3,4 +  (1,1): "<<m6.Get(1,1)<<std::endl;
 
