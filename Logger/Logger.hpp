@@ -103,6 +103,12 @@ class Logger
         template<class LogPolicy = Debug, typename ...Vals>
         static std::ostream& Log(Vals ...vals)
         {
+			if constexpr (std::is_same<Debug,LogPolicy>::value)
+			{
+				LogPolicy::Log(Logger::Instance().file);
+				return log(Logger::Instance().file,vals...);
+			}
+
 			LogPolicy::Log(Logger::Instance().out);
 			return log(Logger::Instance().out,vals...);
         };

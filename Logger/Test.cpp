@@ -24,6 +24,7 @@ int main()
 	auto le5 = le4<<le1<<le4<<le1<<le2;
 	
 	Logger::Log(1,2,3.9,"Test");
+	Logger::Log<Error>(1,2,3.9,"Test");
 	
 	std::cout<<typeid(le5).name()<<std::endl;
 	
