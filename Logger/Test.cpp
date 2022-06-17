@@ -23,6 +23,8 @@ int main()
 	auto le4 = le<<le3;
 	auto le5 = le4<<le1<<le4<<le1<<le2;
 	
+	Logger::Log(1,2,3.9,"Test");
+	
 	std::cout<<typeid(le5).name()<<std::endl;
 	
 	std::cout<<"END"<<std::endl;

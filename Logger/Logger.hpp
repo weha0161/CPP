@@ -70,6 +70,19 @@ class Logger
         void operator=(const Logger&) = delete;
         
         virtual ~Logger(){ this->file.close();  };
+        
+        template<typename T>
+        static std::ostream& log(std::ostream& os,T t)
+        {
+			return os<<" "<<t<<std::endl;
+        };
+        
+        template<typename T, typename ...Ts>
+        static std::ostream& log(std::ostream& os,T t, Ts ...ts)
+        {
+			os<<" "<<t;;
+			return log(os,ts...);
+        };
     public: 
         static Logger& Instance()
         {
@@ -85,6 +98,13 @@ class Logger
 			//~ #else
 				//~ return LogPolicy::Log(Logger::Instance().out);
 			//~ #endif
+        };
+        
+        template<class LogPolicy = Debug, typename ...Vals>
+        static std::ostream& Log(Vals ...vals)
+        {
+			LogPolicy::Log(Logger::Instance().out);
+			return log(Logger::Instance().out,vals...);
         };
 		
         template<typename Iterator,class LogPolicy = Debug>
