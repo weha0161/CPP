@@ -4,6 +4,7 @@
 #include <vector>
 #include <typeinfo>
 #include "../Wrapper/Wrapper.hpp"
+#include "../Logger/Logger.hpp"
 #include "../Traits/Traits.h"
 #include "../Typelist/Typelist.h"
 
