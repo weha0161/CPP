@@ -20,58 +20,54 @@ std::ostream& operator<<(std::ostream& out, const BinaryExpression<A>& m)
 //AdditionExpression
 
 template<class M1, class M2> 
-inline BinaryExpression<AdditionExpression<Matrix<M1>, Matrix<M2>>> operator+(const Matrix<M1>& m1, const Matrix<M2>& m2)
+inline decltype(auto) operator+(const Matrix<M1>& m1, const Matrix<M2>& m2)
 {
-	Logger::Log<Debug>()<<"operator+(const Matrix<M1>& m1, const Matrix<M2>& m2)\n m1: "<<m1.Get(1,1)<<" m2: "<<m2.Get(1,1)<<std::endl;
 	return BinaryExpression<AdditionExpression<Matrix<M1>, Matrix<M2>>>(m1, m2);
 }
 
 template<class Expr, class M> 
-inline BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>> operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
+inline decltype(auto) operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
 {
-	Logger::Log<Debug>()<<"operator+(const BinaryExpression<Expr>& expr, const Matrix<M>& m)\n expr: "<<expr.Get(1,1)<<" m2: "<<m.Get(1,1)<<std::endl;
 	return BinaryExpression<AdditionExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
 }
 
 template<class M, class Expr> 
-inline BinaryExpression<AdditionExpression<Matrix<M>, BinaryExpression<Expr>>> operator+(const Matrix<M>& m, const BinaryExpression<Expr>& expr)
+inline decltype(auto) operator+(const Matrix<M>& m, const BinaryExpression<Expr>& expr)
 {
-	Logger::Log<Debug>()<<"BinaryExpression<AdditionExpression<Matrix<M>, BinaryExpression<Expr>>> operator+(const Matrix<M>& m, const BinaryExpression<Expr>& expr)"<<expr.Get(1,1)<<" m2: "<<m.Get(1,1)<<std::endl;
 	return BinaryExpression<AdditionExpression<Matrix<M>,BinaryExpression<Expr>>>(m, expr);
 }
 
 template<class Expr1, class Expr2> 
-inline BinaryExpression<AdditionExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>> operator+(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2>& expr2)
+inline decltype(auto) operator+(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2>& expr2)
 {
-	Logger::Log<Debug>()<<"BinaryExpression<AdditionExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>> operator+(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2>& expr2)"<<expr1.Get(1,1)<<" m2: "<<expr2.Get(1,1)<<std::endl;
 	return BinaryExpression<AdditionExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>>(expr1, expr2);
 }
 
 //MultiplicationExpression
 
 template<class M1, class M2> 
-inline BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)
+inline decltype(auto) operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)
 {
 	Logger::Log<Debug>()<<"BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
 	return BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>>(m1, m2);
 }
 
 template<class Expr, class M> 
-inline BinaryExpression<MultiplicationExpression<BinaryExpression<Expr>, Matrix<M>>> operator*(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
+inline decltype(auto) operator*(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
 {
 	Logger::Log<Debug>()<<"BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
 	return BinaryExpression<MultiplicationExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
 }
 
 template<class M, class Expr> 
-inline BinaryExpression<MultiplicationExpression<Matrix<M>, BinaryExpression<Expr>>> operator*(const Matrix<M>& m, const BinaryExpression<Expr>& expr)
+inline decltype(auto) operator*(const Matrix<M>& m, const BinaryExpression<Expr>& expr)
 {
 	Logger::Log<Debug>()<<"BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
 	return BinaryExpression<MultiplicationExpression<Matrix<M>,BinaryExpression<Expr>>>(m, expr);
 }
 
 template<class Expr1, class Expr2> 
-inline BinaryExpression<MultiplicationExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>> operator*(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2>& expr2)
+inline decltype(auto) operator*(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2>& expr2)
 {
 	Logger::Log<Debug>()<<"BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
 	return BinaryExpression<MultiplicationExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>>(expr1, expr2);
