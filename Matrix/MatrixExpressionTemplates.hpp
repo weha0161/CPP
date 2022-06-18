@@ -121,44 +121,33 @@ struct MULTIPLY_RESULT_TYPE
 
 struct RectMultiplyGetElement
 {
-	template<class IndexType_, class ResultType, class LeftType, class RightType, class LeftCacheMatrixType, class RightCacheMatrixType>
-	static typename ResultType::ElementType Get(const IndexType_& i, const IndexType_& j, const ResultType* res, const LeftType& leftType, const RightType& rightType, LeftCacheMatrixType* leftCache = 0, RightCacheMatrixType* rightCache = 0)
+	template<class IndexType_, class ResultType, class LeftType, class RightType>
+	static typename ResultType::ElementType Get(const IndexType_& i, const IndexType_& j, const ResultType* res, const LeftType& leftType, const RightType& rightType)
 	{
 		using Config = ResultType::Config;
 		using ElementType = Config::ElementType;
 		using IndexType = Config::IndexType;
 		
-		Logger::Log<Debug>()<<"RectMultiplyGetElement"<<std::endl;
+		Logger::Log<Debug>()<<"RectMultiplyGetElement_"<<leftType.Cols()<<std::endl;
 		
 		ElementType result = ElementType(0);
 		
-		for(IndexType k = leftType.Cols(); --k;)
-			result += getCachedElement(i,k,leftType,leftCache) * getCachedElement(k,j,rightType,rightCache);
+		for(IndexType k = 0; k < leftType.Cols(); ++k)
+		{
+			result += getCachedElement(i,k,leftType) * getCachedElement(k,j,rightType);
+			Logger::Log("k", k, "left", getCachedElement(i,k,leftType), getCachedElement(k,j,rightType), getCachedElement(i,k,leftType) * getCachedElement(k,j,rightType), result);
+		}
 		
-		return leftType.Get(i,j) + rightType.Get(i,j);
+		return result;
 	}
 	
 private:
-	template<class IndexType_, class MatrixType, class CacheType>
-	static typename MatrixType::ElementType getCachedElement(const IndexType_& i, const IndexType_& j, const MatrixType& matrix, CacheType* cache)
-	{
-		Logger::Log<Debug>()<<"cache == 0: "<<(cache == 0)<<std::endl;
-		if(cache == 0) return matrix.Get(i,j);
-		else
-		{
-			typename CacheType::ElementType& tmp = cache->Get(i,j);
-			if(!tmp.isHit())
-				tmp.Set(matrix.Get(i,j));
-			return tmp.Get();
-		}
-	}	
+	template<class IndexType_, class MatrixType>
+	static typename MatrixType::ElementType getCachedElement(const IndexType_& i, const IndexType_& j, const MatrixType& matrix){	return matrix.Get(i,j); }	
 };
 
 template<class A, class B>
-struct MATRIX_MULTIPLY_GET_ELEMENT
-{
-	using RET = RectMultiplyGetElement;
-};
+struct MATRIX_MULTIPLY_GET_ELEMENT{	using RET = RectMultiplyGetElement; };
 
 template<class A, class B>
 class MultiplicationExpression
@@ -175,57 +164,26 @@ public:
 	using IndexType = Config::IndexType;
 	
 private:
-	using LeftCacheMatrixType = CACHE_MATRIX_TYPE<LeftMatrixType>::RET;
-	using RightCacheMatrixType = CACHE_MATRIX_TYPE<RightMatrixType>::RET;
-	
 	const LeftType& left_;
 	const RightType& right_;
-	
-	LeftCacheMatrixType* leftCacheMatrix_;
-	RightCacheMatrixType* rightCacheMatrix_;
 	
 protected:
 	const IndexType rows_, cols_;
 	
 public:
 	template<class M1, class M2>
-	MultiplicationExpression(const Matrix<M1>& m1, const Matrix<M2>& m2): left_(m1), leftCacheMatrix_(0), rightCacheMatrix_(0),right_(m2), rows_(m1.Rows()), cols_(m2.Cols())
-	{
-		Logger::Log<Debug>()<<"MultiplicationExpression(const Matrix<M1>& m1, const Matrix<M2>& m2): left_(m1), leftCacheMatrix_(0), rightCacheMatrix_(0),right_(m2), rows_(m1.Rows()), cols_(m2.Cols())"<<std::endl;
-		ParameterCheck(m1, m2);
-	}
+	MultiplicationExpression(const Matrix<M1>& m1, const Matrix<M2>& m2): left_(m1),right_(m2), rows_(m1.Rows()), cols_(m2.Cols()){	ParameterCheck(m1, m2);	}
 	
 	template<class Expr, class M2>
-	MultiplicationExpression(const BinaryExpression<Expr>& expr, const Matrix<M2>& m2): left_(expr), right_(m2), rightCacheMatrix_(0) , rows_(expr.Rows()), cols_(m2.Cols())
-	{
-		Logger::Log<Debug>()<<"MultiplicationExpression GET"<<std::endl;
-		ParameterCheck(expr, m2);
-		leftCacheMatrix_=new LeftMatrixType(expr.Rows(), expr.Cols());
-	}
+	MultiplicationExpression(const BinaryExpression<Expr>& expr, const Matrix<M2>& m2): left_(expr), right_(m2), rows_(expr.Rows()), cols_(m2.Cols()){	ParameterCheck(expr, m2); }
 	
 	template<class M1, class Expr>
-	MultiplicationExpression(const Matrix<M1>& m1, const BinaryExpression<Expr> expr): left_(m1), leftCacheMatrix_(0), right_(expr), rows_(m1.Rows()), cols_(expr.Cols())
-	{
-		ParameterCheck(m1, expr);
-		rightCacheMatrix_= new RightMatrixType(expr.Rows(), expr.Cols());
-	}
+	MultiplicationExpression(const Matrix<M1>& m1, const BinaryExpression<Expr> expr): left_(m1), right_(expr), rows_(m1.Rows()), cols_(expr.Cols()){	ParameterCheck(m1, expr); }
 	
 	template<class Expr1, class Expr2>
-	MultiplicationExpression(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2> expr2): left_(expr1), right_(expr2), rows_(expr1.Rows()), cols_(expr2.Cols())
-	{
-		ParameterCheck(expr1, expr2);
-		leftCacheMatrix_= new LeftMatrixType(expr1.Rows(), expr1.Cols());
-		rightCacheMatrix_= new RightCacheMatrixType(expr2.Rows(), expr2.Cols());
-	}	
+	MultiplicationExpression(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2> expr2): left_(expr1), right_(expr2), rows_(expr1.Rows()), cols_(expr2.Cols()){	ParameterCheck(expr1, expr2); }	
 	
-	ElementType Get(const IndexType& i, const IndexType& j) const
-	{
-		Logger::Log<Debug>()<<"MultiplicationExpression GET"<<std::endl;
-		Logger::Log<Debug>()<<(this->leftCacheMatrix_ == 0)<<std::endl;
-		Logger::Log<Debug>()<<(this->rightCacheMatrix_ == 0)<<std::endl;
-		return MATRIX_MULTIPLY_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_, leftCacheMatrix_, rightCacheMatrix_);
-// 		return 0;
-	}
+	ElementType Get(const IndexType& i, const IndexType& j) const {	return MATRIX_MULTIPLY_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_);	}
 	
 	IndexType Rows() const { return rows_ ;}
 	IndexType Cols() const { return cols_ ;}
