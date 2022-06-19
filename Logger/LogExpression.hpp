@@ -25,11 +25,11 @@ class LogSumExpression
 		const E2& e2;
 };
 
-template<typename T>
-inline LogSumExpression<LogExpression<T>,LogExpression<T>> operator<<( const LogExpression<T>& e1, const LogExpression<T>& e2)	{ std::cout<<"LogExp e1 "<<e1.Value()<<" e2 "<<e2.Value()<<std::endl;	return {e1,e2}; }
+//~ template<typename T>
+//~ inline LogSumExpression<LogExpression<T>,LogExpression<T>> operator<<( const LogExpression<T>& e1, const LogExpression<T>& e2)	{ std::cout<<"LogExp e1 "<<e1.Value()<<" e2 "<<e2.Value()<<std::endl;	return {e1,e2}; }
 
-template<typename E1, typename E2>
-inline LogSumExpression<E1,E2> operator<<( const E1& e1, const E2& e2)	{ std::cout<<"LogSum e1 "<<e1.Value()<<" e2 "<<e2.Value()<<std::endl; return {e1,e2}; }
+//~ template<typename E1, typename E2>
+//~ inline LogSumExpression<E1,E2> operator<<( const E1& e1, const E2& e2)	{ std::cout<<"LogSum e1 "<<e1.Value()<<" e2 "<<e2.Value()<<std::endl; return {e1,e2}; }
 
 //~ template<typename E>
 //~ inline std::ostream& operator<<( std::ostream& os, const E& e)	{ return os<<e.Value(); }
