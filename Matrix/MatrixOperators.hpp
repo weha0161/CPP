@@ -1,3 +1,4 @@
+#include <memory>
 #include "MatrixExpressionTemplates.hpp"
 #include "../Logger/Logger.hpp"
 #include "Matrix.hpp"
@@ -48,29 +49,25 @@ inline decltype(auto) operator+(const BinaryExpression<Expr1>& expr1, const Bina
 template<class M1, class M2> 
 inline decltype(auto) operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)
 {
-	Logger::Log<Debug>()<<"BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
-	return BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>>(m1, m2);
+	return std::make_shared<BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>>>(m1, m2);
 }
 
 template<class Expr, class M> 
-inline decltype(auto) operator*(const BinaryExpression<Expr>& expr, const Matrix<M>& m)
+inline decltype(auto) operator*(std::shared_ptr<BinaryExpression<Expr>> expr, const Matrix<M>& m)
 {
-	Logger::Log<Debug>()<<"BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
-	return BinaryExpression<MultiplicationExpression<BinaryExpression<Expr>, Matrix<M>>>(expr, m);
+	return std::make_shared<BinaryExpression<MultiplicationExpression<BinaryExpression<Expr>, Matrix<M>>>>(*expr, m);
 }
 
 template<class M, class Expr> 
-inline decltype(auto) operator*(const Matrix<M>& m, const BinaryExpression<Expr>& expr)
+inline decltype(auto) operator*(const Matrix<M>& m, std::shared_ptr<BinaryExpression<Expr>> expr)
 {
-	Logger::Log<Debug>()<<"BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
-	return BinaryExpression<MultiplicationExpression<Matrix<M>,BinaryExpression<Expr>>>(m, expr);
+	return std::make_shared<BinaryExpression<MultiplicationExpression<Matrix<M>,BinaryExpression<Expr>>>>(m, *expr);
 }
 
 template<class Expr1, class Expr2> 
-inline decltype(auto) operator*(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2>& expr2)
+inline decltype(auto) operator*(std::shared_ptr<BinaryExpression<Expr1>> expr1, std::shared_ptr<BinaryExpression<Expr2>> expr2)
 {
-	Logger::Log<Debug>()<<"BinaryExpression<MultiplicationExpression<Matrix<M1>, Matrix<M2>>> operator*(const Matrix<M1>& m1, const Matrix<M2>& m2)"<<std::endl;
-	return BinaryExpression<MultiplicationExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>>(expr1, expr2);
+	return std::make_shared<BinaryExpression<MultiplicationExpression<BinaryExpression<Expr1>, BinaryExpression<Expr2>>>>(*expr1, *expr2);
 }
 
 #endif

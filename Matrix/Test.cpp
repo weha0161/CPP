@@ -32,25 +32,36 @@ int main()
 	M m4 = M(2,2);
 	M m2 = M(2,2);
 	m1.InitElements(1);
-	m3.InitElements(2);
-	m4.InitElements(4);
 	m2.InitElements(2);
+	m3.InitElements(3);
+	m4.InitElements(4);
 	
  	std::cout<<"M1: \n"<<m1<<std::endl;
  	std::cout<<"M2: \n"<<m2<<std::endl;
  	std::cout<<"M3: \n"<<m3<<std::endl;
  	std::cout<<"M4: \n"<<m4<<std::endl;
 	
-	M m5 = M(2,2);
-	M m6 = (m1 + m3) + (m4 + m2) + (m1 + m3 + m4 + m2);	
+	//~ M m5 = M(2,2);
+	//~ M m6 = (m1 + m3);	
+	//~ M m6 = (m1 + m3) + (m4 + m2) + (m1 + m3 + m4 + m2);	
 
-	std::cout<<"Get m1,2,3,4 +  (1,1): "<<m6.Get(1,1)<<std::endl;
+	//~ std::cout<<"Get m1,2,3,4 +  (1,1): "<<m6.Get(1,1)<<std::endl;
 
 	//~ std::cout<<typeid(m6).name()<<std::endl;
 	
  	std::cout<<"Multiplication: \n"<<std::endl;
-	auto m9 = m1 * m1;
+	//~ auto m9 = m2 * m4;
 	//~ std::cout<<"Get m3 (1,1): "<<m9.Get(1,1)<<std::endl;
+	//~ std::cout<<"Get m3 (1,1): "<<m9.Get(0,0)<<std::endl;
+	
+	//~ auto m10 = m9 * m1;
+	//~ auto m10 = m9 * m9;
+	auto m8 = (m1 * m1) *(m1 * m1);
+	std::cout<<"Get m3 (1,1): "<<m8->Get(0,0)<<std::endl;
+	auto m9 = m1 *(m1 * m1);
+	std::cout<<"Get m3 (1,1): "<<m9->Get(0,1)<<std::endl;
+	auto m10 = m1 * m1 * m1 * m1;
+	std::cout<<"Get m3 (1,1): "<<m10->Get(0,1)<<std::endl;
 	
 	
 	std::cout<<"END"<<std::endl;
