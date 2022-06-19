@@ -58,7 +58,12 @@ int main()
 	auto m10 = m1 * m1 * m1 * m1;
 	std::cout<<"Get m3 (1,1): "<<m10->Get(0,1)<<std::endl;
 	
+ 	std::cout<<"Multiplication Scalar: \n"<<std::endl;
 	
+	auto s = T::int_<-1>();
+	std::cout<<"Get m3 (1,1): "<<s.Value<<std::endl;
+	auto m11 = s  * m1;
+	std::cout<<"Get m3 (1,1): "<<m10->Get(0,1)<<std::endl;
 	std::cout<<"END"<<std::endl;
 
     return 0;
