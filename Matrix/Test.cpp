@@ -41,21 +41,16 @@ int main()
  	std::cout<<"M3: \n"<<m3<<std::endl;
  	std::cout<<"M4: \n"<<m4<<std::endl;
 	
-	//~ M m5 = M(2,2);
-	//~ M m6 = (m1 + m3);	
-	//~ M m6 = (m1 + m3) + (m4 + m2) + (m1 + m3 + m4 + m2);	
-
-	//~ std::cout<<"Get m1,2,3,4 +  (1,1): "<<m6.Get(1,1)<<std::endl;
-
-	//~ std::cout<<typeid(m6).name()<<std::endl;
+ 	std::cout<<"Additiom: \n"<<std::endl;
+	auto m5 = (m1 + m1)  + (m1 + m1);
+	std::cout<<"Get m3 (1,1): "<<m5->Get(0,0)<<std::endl;
+	auto m6 = m1  + (m1 + m1);
+	std::cout<<"Get m3 (1,1): "<<m6->Get(0,1)<<std::endl;
+	auto m7 = m1 + m1 + m1 + m1;
+	std::cout<<"Get m3 (1,1): "<<m7->Get(0,1)<<std::endl;
 	
  	std::cout<<"Multiplication: \n"<<std::endl;
-	//~ auto m9 = m2 * m4;
-	//~ std::cout<<"Get m3 (1,1): "<<m9.Get(1,1)<<std::endl;
-	//~ std::cout<<"Get m3 (1,1): "<<m9.Get(0,0)<<std::endl;
 	
-	//~ auto m10 = m9 * m1;
-	//~ auto m10 = m9 * m9;
 	auto m8 = (m1 * m1) *(m1 * m1);
 	std::cout<<"Get m3 (1,1): "<<m8->Get(0,0)<<std::endl;
 	auto m9 = m1 *(m1 * m1);

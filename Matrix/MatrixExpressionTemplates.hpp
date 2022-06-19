@@ -76,37 +76,22 @@ protected:
 public:
 	AdditionExpression(const LeftType& m1, const RightType& m2): left_(m1), right_(m2), rows_(m1.Rows()), cols_(m1.Cols())
 	{
-		Logger::Log<Debug>()<<"AdditionExpression\n m1: "<<m1.Get(1,1)<<" m2: "<<m2.Get(1,1)<<std::endl;
-		if(m1.Cols() != m2.Cols() || m1.Rows() != m2.Rows()) throw "argument matrices are incompatible";
+		if(m1.Cols() != m2.Cols() || m1.Rows() != m2.Rows()) 
+			throw "argument matrices are incompatible";
 	}
 	
 	template<class C, class D>
-	AdditionExpression(const AdditionExpression<C,D>& expr)
-	{ 
-		Logger::Log<Debug>()<<"AdditionExpression(const AdditionExpression<C,D>& expr)"<<std::endl;
-	}
+	AdditionExpression(const AdditionExpression<C,D>& expr){ 	}
 	
 	template<class C, class D>
-	AdditionExpression<C,D> operator=(const AdditionExpression<C,D> expr)
-	{ 
-		Logger::Log<Debug>()<<"AdditionExpression<C,D> operator=(const AdditionExpression<C,D> expr)"<<std::endl;
-		return *this; 
-	}
+	AdditionExpression<C,D> operator=(const AdditionExpression<C,D> expr)	{ 	return *this; 	}
 	
-	ElementType Get(const IndexType& i, const IndexType& j) const
-	{
-// 		Logger::Log<Debug>()<<"AdditionExpression GET: "<<i<<","<<j<<std::endl;
-		return MATRIX_ADD_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_);
-	}
+	ElementType Get(const IndexType& i, const IndexType& j) const {	return MATRIX_ADD_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_);	}
 	
 	IndexType Rows() const { return rows_ ;}
 	IndexType Cols() const { return cols_ ;}
 	
-	~AdditionExpression()
-	{
-		Logger::Log<Debug>()<<"!!!!AdditionExpression Destructor!!!"<<std::endl;
-		Logger::Log<Debug>()<<"AdditionExpression\n m1: "<<left_.Get(1,1)<<" m2: "<<right_.Get(1,1)<<std::endl;
-	}
+	~AdditionExpression(){	}
 };
 
 //----------------------------------------------------------------------------------------------------MultiplicationExpression--------------------------------------
@@ -125,19 +110,10 @@ struct RectMultiplyGetElement
 		using Config = ResultType::Config;
 		using ElementType = Config::ElementType;
 		using IndexType = Config::IndexType;
-		
-		//~ Logger::Log<Debug>()<<"RectMultiplyGetElement_"<<leftType.Cols()<<std::endl;
-		
-		//~ Logger::Log("right",  getCachedElement(0,0,rightType));
-		//~ Logger::Log("right",  leftType.Get(0,0));
-		//~ Logger::Log("left", getCachedElement(0,0,leftType));
 		ElementType result = ElementType(0);
 		
 		for(IndexType k = 0; k < leftType.Cols(); ++k)
-		{
 			result += getCachedElement(i,k,leftType) * getCachedElement(k,j,rightType);
-			//~ Logger::Log("k", k, "left", getCachedElement(i,k,leftType), getCachedElement(k,j,rightType), getCachedElement(i,k,leftType) * getCachedElement(k,j,rightType), result);
-		}
 		
 		return result;
 	}

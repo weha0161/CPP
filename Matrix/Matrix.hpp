@@ -36,7 +36,6 @@ protected:
 public:
 	Array(const IndexType& row, const IndexType& col): row(row), col( col) 
 	{ 
-		Logger::Log()<<"Array Contructor"<<std::endl;
 		assert(row > 0);
 		assert(col > 0);
 		
@@ -48,22 +47,12 @@ public:
 	}
 	
 	template<class A>
-	Array(const Array<A>& a)
-	{ 
-		Logger::Log<Debug>()<<"Array(const Array<A>& a)"<<std::endl;
-	}
+	Array(const Array<A>& a){ 	}
 	
 	template<class A>
-	Array& operator=(const Array<A>& a)
-	{ 
-		Logger::Log<Debug>()<<"Array& operator=(const Array<A>& a)"<<std::endl;
-		return *this; 
-	}
+	Array& operator=(const Array<A>& a){ 		return *this; 	}
 	
-	~Array()
-	{
-		Logger::Log<Debug>()<<"Array Destructor"<<std::endl;
-	}
+	~Array(){	}
 	
 	const IndexType& Rows() const { return row; }
 	const IndexType& Cols() const { return col; }
@@ -76,7 +65,6 @@ public:
 	
 	ElementType Get(const IndexType& i, const IndexType& j) const 
 	{
-// 		Logger::Log<Debug>()<<"Get i:"<<i<<" j: "<<j<<std::endl;
 		checkBounds(i, j);
 		return elements.at(i).at(j);
 	}
@@ -227,43 +215,14 @@ public:
 	Matrix(IndexType rows = 0, IndexType cols = 0, ElementType InitElement = ElementType()): CheckedMatrix(rows, cols) { this->InitElements(InitElement); }
 	
 	template<class A>
-	Matrix(const Matrix<A>& m)
-	{ 
-		Logger::Log<Debug>()<<"Matrix(const Matrix<A>& m)"<<std::endl;
-	}
+	Matrix(const Matrix<A>& m){ 	}
 	
-	~Matrix()
-	{ 
-		Logger::Log<Debug>()<<"DESTRUCTOR Matrix"<<std::endl;
-	}
+	~Matrix()	{ 	}
 	
 	template<class Expr>
-	Matrix(const BinaryExpression<Expr>& expr): CheckedMatrix(expr.Rows(), expr.Cols())
-	{ 
-		Logger::Log<Debug>()<<"Matrix(const BinaryExpression<Expr>& expr)"<<std::endl;
-		expr.Assign(this);
-	}
+	Matrix(const BinaryExpression<Expr>& expr): CheckedMatrix(expr.Rows(), expr.Cols())	{ 		expr.Assign(this);}
 	
-	CommaInitializer operator=(const ElementType& v)
-	{ 
-		Logger::Log<Debug>()<<"MCommaInitializer operator=(const ElementType& v)"<<std::endl;
-		return CommaInitializer(*this,v); 
-	}
-	
-	template<class Expr>
-	Matrix& operator=(const BinaryExpression<Expr>& expr)
-	{ 
-		Logger::Log<Debug>()<<"Matrix& operator=(const BinaryExpression<Expr>& expr): "<<expr.Get(1,1)<<std::endl;
-		expr.Assign(this);
-		return *this; 
-	}
-	
-	template<class C, class D>
-	Matrix& operator=(const AdditionExpression<C,D> expr)
-	{ 
-		Logger::Log<Debug>()<<"AdditionExpression<C,D> operator=(const AdditionExpression<C,D> expr)"<<std::endl;
-		return *this; 
-	}
+	CommaInitializer operator=(const ElementType& v){	return CommaInitializer(*this,v); }	
 	
 	template<class A>
 	Matrix& operator=(const Matrix<A>& m)
@@ -284,6 +243,16 @@ public:
 
 		return out;
 	}
+private:	
+	template<class Expr>
+	Matrix& operator=(const BinaryExpression<Expr>& expr)
+	{ 
+		expr.Assign(this);
+		return *this; 
+	}
+	
+	template<class C, class D>
+	Matrix& operator=(const AdditionExpression<C,D> expr) {	return *this; }
 };
 
 #endif
