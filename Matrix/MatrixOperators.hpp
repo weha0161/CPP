@@ -51,6 +51,7 @@ inline decltype(auto) operator*(const T::int_<N>& s, const Matrix<M2>& m2)
 {
 	auto m1 = Matrix<M2>(m2.Rows(), m2.Cols());
 	m1.InitElements(s.Value);
+        m1.ScalarMultiplication =  true;
 	return std::make_shared<BinaryExpression<MultiplicationExpression<Matrix<M2>, Matrix<M2>>>>(m1, m2);
 }
 
