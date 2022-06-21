@@ -218,7 +218,7 @@ public:
 	Matrix(const Matrix<A>& m){ 	}
 	
 	~Matrix()	{ 	}
-	
+	bool constexpr ScalarMultiplication =  false;
 	template<class Expr>
 	Matrix(const BinaryExpression<Expr>& expr): CheckedMatrix(expr.Rows(), expr.Cols())	{ 		expr.Assign(this);}
 	
