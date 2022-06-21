@@ -166,7 +166,10 @@ public:
 	
 	template<class Expr1, class Expr2>
 	MultiplicationExpression(const BinaryExpression<Expr1>& expr1, const BinaryExpression<Expr2> expr2): left_(expr1), right_(expr2), rows_(expr1.Rows()), cols_(expr2.Cols()){	ParameterCheck(expr1, expr2); }
-	ElementType Get(const IndexType& i, const IndexType& j) const {//if	return MATRIX_MULTIPLY_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_);	}
+	ElementType Get(const IndexType& i, const IndexType& j) const 
+	{	if (LeftType::Config::ScalarMultiplication)
+			return -2;
+		return MATRIX_MULTIPLY_GET_ELEMENT<LeftType, RightType>::RET::Get(i, j, this, left_, right_);	}
 	
 	IndexType Rows() const { return rows_ ;}
 	IndexType Cols() const { return cols_ ;}
