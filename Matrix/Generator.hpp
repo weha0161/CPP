@@ -52,7 +52,7 @@ private:
 		using Row = RowT;
 		using CommaInitializer = DenseCCommaInitializer<Generator>;
 		using MatrixType =  Matrix<BoundsChecker<Array<Generator>>>;
-                using MultiplicationType =  MatrixType;
+                bool constexpr ScalarMultiplication =  false;
 		using DSLFeatures = ParsedDSL;
 	};
 	
